@@ -1,0 +1,39 @@
+@startuml crawling
+title Crawling Code
+
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF00
+skinparam shadowing false
+
+box "DL4SE" #LightGray
+    participant "Database" as DB
+    participant "Crawler" as Crawler
+end box
+participant "GHS API" as GHS
+participant "GitHub" as GH
+
+Crawler -> GHS: GET /api/r/search
+rnote right
+Params:
+# language
+# created min
+# sort by created
+# page
+end note
+GHS -> Crawler: results
+loop for each result
+    Crawler -\ GH: clone repo
+    GH -/ Crawler
+    loop for each file
+        alt #LightGreen language supported
+            Crawler -> DB: parse file and store data
+        else #LightCoral
+            rnote over Crawler
+                Ignore this file
+                for now, we may
+                parse it later
+                during update
+            end note
+        end
+    end
+end
+@enduml
