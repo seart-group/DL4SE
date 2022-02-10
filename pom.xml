@@ -1,9 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+    
   <groupId>usi.si.seart</groupId>
   <artifactId>dl4se</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>dl4se</name>
+    
+  <name>DL4SE Dataset Hub</name>
+  <description>
+    Building Training Datasets for Deep Learning Models in Software Engineering.
+  </description>
+  <inceptionYear>2021</inceptionYear>
+  <organization>
+    <name>SEART</name>
+    <url>https://seart.si.usi.ch/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/seart-group/DL4SE/blob/main/LICENSE</url>
+    </license>
+  </licenses>
 </project>
