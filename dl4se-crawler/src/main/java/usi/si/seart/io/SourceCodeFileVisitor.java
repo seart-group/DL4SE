@@ -37,7 +37,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SourceCodeFileVisitor extends SimpleFileVisitor<Path> {
 
-    PathMatcher includeMatcher;
+    PathMatcher matcher;
     List<File> visited;
 
     public SourceCodeFileVisitor(String... extensions) {
@@ -47,13 +47,13 @@ public class SourceCodeFileVisitor extends SimpleFileVisitor<Path> {
             glob += "\\.";
             glob += "{" + String.join(",", extensions) + "}";
         }
-        this.includeMatcher = FileSystems.getDefault().getPathMatcher(glob);
+        this.matcher = FileSystems.getDefault().getPathMatcher(glob);
         this.visited = new ArrayList<>();
     }
 
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-        if (includeMatcher.matches(path.getFileName())) {
+        if (matcher.matches(path.getFileName())) {
             log.debug("Marking path: {}", path);
             visited.add(new File(path.toUri()));
         }
