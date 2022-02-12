@@ -12,7 +12,14 @@ import java.util.List;
 @SuppressWarnings("ConstantConditions")
 class ExtensionBasedFileVisitorTest {
 
-    Path resources = Path.of(this.getClass().getResource("/").getPath());
+    Path resources = Path.of(this.getClass().getResource("/code").getPath());
+
+    /*
+     * code:
+     * - java: 8
+     * - python: 4
+     * - other: 4
+     */
 
     @Test
     @SneakyThrows
@@ -20,7 +27,7 @@ class ExtensionBasedFileVisitorTest {
         ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor();
         Files.walkFileTree(resources, visitor);
         List<File> files = visitor.getVisited();
-        Assertions.assertTrue(files.size() > 16);
+        Assertions.assertEquals(16, files.size());
     }
 
     @Test
