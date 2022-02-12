@@ -23,7 +23,7 @@ import java.util.List;
  * Use as follows:
  * <pre>{@code
  *     // This visitor matches all Java, Python and C files
- *     SourceCodeFileVisitor visitor = new SourceCodeFileVisitor("java", "py", "c");
+ *     ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java", "py", "c");
  *     Files.walkFileTree(Path.of("/start/path"), visitor);
  *     List<File> javaFiles = visitor.getVisited();
  * }</pre>

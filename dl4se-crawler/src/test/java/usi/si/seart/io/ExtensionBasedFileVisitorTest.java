@@ -40,4 +40,9 @@ class ExtensionBasedFileVisitorTest {
         List<File> files = visitor.getVisited();
         Assertions.assertEquals(12, files.size());
     }
+
+    @Test
+    void nullExtensionTest() {
+        Assertions.assertThrows(NullPointerException.class, () -> new ExtensionBasedFileVisitor(null));
+    }
 }
