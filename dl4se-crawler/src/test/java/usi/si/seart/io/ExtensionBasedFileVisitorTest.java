@@ -10,14 +10,14 @@ import java.nio.file.Path;
 import java.util.List;
 
 @SuppressWarnings("ConstantConditions")
-class SourceCodeFileVisitorTest {
+class ExtensionBasedFileVisitorTest {
 
     Path resources = Path.of(this.getClass().getResource("/").getPath());
 
     @Test
     @SneakyThrows
     void noExtensionTest() {
-        SourceCodeFileVisitor visitor = new SourceCodeFileVisitor();
+        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor();
         Files.walkFileTree(resources, visitor);
         List<File> files = visitor.getVisited();
         Assertions.assertTrue(files.size() > 16);
@@ -26,7 +26,7 @@ class SourceCodeFileVisitorTest {
     @Test
     @SneakyThrows
     void oneExtensionTest() {
-        SourceCodeFileVisitor visitor = new SourceCodeFileVisitor("java");
+        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java");
         Files.walkFileTree(resources, visitor);
         List<File> files = visitor.getVisited();
         Assertions.assertEquals(8, files.size());
@@ -35,7 +35,7 @@ class SourceCodeFileVisitorTest {
     @Test
     @SneakyThrows
     void twoExtensionTest() {
-        SourceCodeFileVisitor visitor = new SourceCodeFileVisitor("java", "py");
+        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java", "py");
         Files.walkFileTree(resources, visitor);
         List<File> files = visitor.getVisited();
         Assertions.assertEquals(12, files.size());

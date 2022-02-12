@@ -35,12 +35,12 @@ import java.util.List;
 @Slf4j
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SourceCodeFileVisitor extends SimpleFileVisitor<Path> {
+public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
     PathMatcher matcher;
     List<File> visited;
 
-    public SourceCodeFileVisitor(String... extensions) {
+    public ExtensionBasedFileVisitor(String... extensions) {
         super();
         String glob = "glob:*";
         if (extensions.length > 0) {
