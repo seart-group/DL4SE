@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.model.code.File;
@@ -68,14 +69,14 @@ public class GitRepo {
     Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     @ToString.Exclude
-    List<File> files = new ArrayList<>();
+    @Singular
+    List<File> files;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     @ToString.Exclude
-    List<Function> functions = new ArrayList<>();
+    @Singular
+    List<Function> functions;
 
     @Override
     public boolean equals(Object o) {

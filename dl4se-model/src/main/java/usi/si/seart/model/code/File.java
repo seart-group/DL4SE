@@ -1,10 +1,10 @@
 package usi.si.seart.model.code;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +13,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,8 +29,8 @@ public class File extends Code {
     String path;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    List<Function> functions = new ArrayList<>();
+    @Singular
+    List<Function> functions;
 
     @Override
     public int hashCode() {
