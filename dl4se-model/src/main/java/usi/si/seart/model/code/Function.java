@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,5 +33,23 @@ public class Function extends Code {
     @Override
     public int hashCode() {
         return Objects.hash(repo, file, content);
+    }
+
+    public String toString() {
+        return "Function(id=" + this.id +
+                ", repo=" + this.repo +
+                ", file=" + this.file +
+                ", language=" + this.language +
+                ", content=" + this.content +
+                ", contentHash=" + this.contentHash +
+                ", ast=" + this.ast +
+                ", astHash=" + this.astHash +
+                ", isParsed=" + this.isParsed +
+                ", tokens=" + this.tokens +
+                ", lines=" + this.lines +
+                ", characters=" + this.characters +
+                ", isTest=" + this.isTest +
+                ", isBoilerplate" + this.isBoilerplate +
+                ", containsNonAscii=" + this.containsNonAscii + ")";
     }
 }

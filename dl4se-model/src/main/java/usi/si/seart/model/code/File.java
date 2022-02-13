@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -32,11 +31,27 @@ public class File extends Code {
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    @ToString.Exclude
     List<Function> functions = new ArrayList<>();
 
     @Override
     public int hashCode() {
         return Objects.hash(repo, path);
+    }
+
+    public String toString() {
+        return "File(id=" + this.id +
+                ", repo=" + this.repo +
+                ", language=" + this.language +
+                ", path=" + this.path +
+                ", content=" + this.content +
+                ", contentHash=" + this.contentHash +
+                ", ast=" + this.ast +
+                ", astHash=" + this.astHash +
+                ", isParsed=" + this.isParsed +
+                ", tokens=" + this.tokens +
+                ", lines=" + this.lines +
+                ", characters=" + this.characters +
+                ", isTest=" + this.isTest +
+                ", containsNonAscii=" + this.containsNonAscii + ")";
     }
 }
