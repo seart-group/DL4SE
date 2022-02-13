@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Slf4j
 @UtilityClass
@@ -24,22 +24,21 @@ public class GitUtils {
      * Example usage:
      *
      * <pre>{@code
-     *     File ghs = GitUtils.cloneRepository("seart-group/ghs");
+     *     Path ghs = GitUtils.cloneRepository("seart-group/ghs");
      * }</pre>
      *
      * @see Files#createTempDirectory(String, java.nio.file.attribute.FileAttribute[]) Files.createTempDirectory
      * @param name The full GitHub repository name.
      * @return Reference to the directory containing the clone contents.
-     * @throws GitAPIException
-     * In case an error occurs with JGit (i.e. specified remote is invalid).
+     * @throws GitAPIException In case an error occurs with JGit (i.e. specified remote is invalid).
      */
     @SneakyThrows({IOException.class})
-    public File cloneRepository(String name) throws GitAPIException {
+    public Path cloneRepository(String name) throws GitAPIException {
         log.debug("Started Cloning: {}", name);
-        File dir = Files.createTempDirectory("dl4se").toFile();
+        Path dir = Files.createTempDirectory("dl4se");
         Git.cloneRepository()
                 .setURI(String.format(gitHubLinkPattern, name))
-                .setDirectory(dir)
+                .setDirectory(dir.toFile())
                 .call();
         log.debug("Finished Cloning: {}", name);
         return dir;

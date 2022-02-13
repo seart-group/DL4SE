@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -38,7 +37,7 @@ import java.util.List;
 public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
     PathMatcher matcher;
-    List<File> visited;
+    List<Path> visited;
 
     public ExtensionBasedFileVisitor(String... extensions) {
         super();
@@ -55,7 +54,7 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
         if (matcher.matches(path.getFileName())) {
             log.debug("Marking path: {}", path);
-            visited.add(new File(path.toUri()));
+            visited.add(path);
         }
         return FileVisitResult.CONTINUE;
     }

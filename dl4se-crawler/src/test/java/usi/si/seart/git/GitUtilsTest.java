@@ -11,12 +11,12 @@ import java.io.File;
 
 class GitUtilsTest {
 
-    final File tmp = new File(System.getProperty("java.io.tmpdir"));
+    private final File tmp = new File(System.getProperty("java.io.tmpdir"));
 
     @Test
     @SneakyThrows
     void cloneRepositoryTest() {
-        File repo = GitUtils.cloneRepository("dabico/dl4se-crawler-test");
+        File repo = GitUtils.cloneRepository("dabico/dl4se-crawler-test").toFile();
         Assertions.assertTrue(repo.exists());
         Assertions.assertTrue(repo.isDirectory());
         File[] repoFiles = repo.listFiles();
