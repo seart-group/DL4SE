@@ -19,12 +19,15 @@ public class GitUtils {
     /**
      * Wrapper for JGit API, allowing for more straight-forward use.
      * Clones a repository based on its full name: {user}/{repo}.
+     * The directory containing the cloned contents is kept in the system-specific temporary directory.
+     * To ease access (and subsequent clean-up), a reference to this directory is returned.
      * Example usage:
      *
      * <pre>{@code
      *     File ghs = GitUtils.cloneRepository("seart-group/ghs");
      * }</pre>
      *
+     * @see Files#createTempDirectory(String, java.nio.file.attribute.FileAttribute[]) Files.createTempDirectory
      * @param name The full GitHub repository name.
      * @return Reference to the directory containing the clone contents.
      * @throws GitAPIException
