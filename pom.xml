@@ -25,7 +25,22 @@
 
   <modules>
     <module>dl4se-crawler</module>
+    <module>dl4se-model</module>
   </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.22</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
