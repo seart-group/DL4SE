@@ -1,8 +1,6 @@
 package usi.si.seart.git;
 
-import lombok.AccessLevel;
 import lombok.SneakyThrows;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
@@ -14,10 +12,9 @@ import java.nio.file.Files;
 
 @Slf4j
 @UtilityClass
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GitUtils {
 
-    String linkPattern = "https://github.com/%s.git";
+    private final String gitHubLinkPattern = "https://github.com/%s.git";
 
     /**
      * Wrapper for JGit API, allowing for more straight-forward use.
@@ -38,7 +35,7 @@ public class GitUtils {
         log.debug("Started Cloning: {}", name);
         File dir = Files.createTempDirectory("dl4se").toFile();
         Git.cloneRepository()
-                .setURI(String.format(linkPattern, name))
+                .setURI(String.format(gitHubLinkPattern, name))
                 .setDirectory(dir)
                 .call();
         log.debug("Finished Cloning: {}", name);
