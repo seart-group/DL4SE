@@ -26,6 +26,9 @@ public class Function extends Code {
     @JoinColumn(name="file_id", nullable=false)
     File file;
 
+    @Column(name = "is_boilerplate", nullable = false)
+    Boolean isBoilerplate;
+
     @Override
     public int hashCode() {
         return Objects.hash(repo, file, content);
