@@ -15,4 +15,16 @@ class StringUtilsTest {
                 StringUtils.sha256("Hello World!")
         );
     }
+
+    @Test
+    void containsNonAsciiTest() {
+        String str1 = "Ovo je proba";
+        String str2 = "Ово је проба";
+        String str3 = "Ovo je проба";
+        String str4 = "Ово је proba";
+        Assertions.assertFalse(StringUtils.containsNonAscii(str1));
+        Assertions.assertTrue(StringUtils.containsNonAscii(str2));
+        Assertions.assertTrue(StringUtils.containsNonAscii(str3));
+        Assertions.assertTrue(StringUtils.containsNonAscii(str4));
+    }
 }
