@@ -20,11 +20,12 @@ import java.util.List;
  * of the extensions specified in the constructor.
  * Creating with no extensions specified will match all files.
  * Use as follows:
+ *
  * <pre>{@code
  *     // This visitor matches all Java, Python and C files
  *     ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java", "py", "c");
  *     Files.walkFileTree(Path.of("/start/path"), visitor);
- *     List<File> javaFiles = visitor.getVisited();
+ *     List<Path> javaFiles = visitor.getVisited();
  * }</pre>
  *
  * @see java.nio.file.SimpleFileVisitor SimpleFileVisitor
