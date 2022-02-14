@@ -1,22 +1,23 @@
 package usi.si.seart.git;
 
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.nio.file.Path;
 
 class GitUtilsTest {
 
-    private final File tmp = new File(System.getProperty("java.io.tmpdir"));
+    @TempDir
+    private Path tmp;
 
     @Test
     @SneakyThrows
     void cloneRepositoryTest() {
-        File repo = GitUtils.cloneRepository("dabico/dl4se-crawler-test").toFile();
+        File repo = GitUtils.cloneRepository("dabico/dl4se-crawler-test", tmp).toFile();
         Assertions.assertTrue(repo.exists());
         Assertions.assertTrue(repo.isDirectory());
         File[] repoFiles = repo.listFiles();
@@ -26,17 +27,6 @@ class GitUtilsTest {
 
     @Test
     void cloneFailTest() {
-        Assertions.assertThrows(GitAPIException.class, () -> GitUtils.cloneRepository("dabico/dl4se-crawler"));
-    }
-
-    @AfterEach
-    @SneakyThrows
-    @SuppressWarnings({"ConstantConditions"})
-    void tearDown() {
-        for (File file : tmp.listFiles()) {
-            if (file.isDirectory() && file.getName().startsWith("dl4se")) {
-                FileUtils.deleteDirectory(file);
-            }
-        }
+        Assertions.assertThrows(GitAPIException.class, () -> GitUtils.cloneRepository("dabico/dl4se-crawler", tmp));
     }
 }
