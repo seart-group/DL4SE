@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 @UtilityClass
 public class PathUtils {
@@ -18,6 +19,7 @@ public class PathUtils {
      */
     @SneakyThrows
     public void forceDelete(Path file) {
+        Objects.requireNonNull(file);
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("rm", "-rf", file.getFileName().toString());
         builder.directory(file.getParent().toFile());
