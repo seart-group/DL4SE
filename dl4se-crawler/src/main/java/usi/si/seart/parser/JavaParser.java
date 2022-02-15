@@ -3,6 +3,8 @@ package usi.si.seart.parser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.CallableDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import lombok.SneakyThrows;
@@ -73,6 +75,17 @@ public class JavaParser extends AbstractParser {
 
         @Override
         public void visit(MethodDeclaration declaration, Object arg) {
+            visit(declaration);
+            super.visit(declaration, arg);
+        }
+
+        @Override
+        public void visit(ConstructorDeclaration declaration, Object arg) {
+            visit(declaration);
+            super.visit(declaration, arg);
+        }
+
+        private void visit(CallableDeclaration<?> declaration) {
             Function function = Function.builder().build();
 
             String functionContents = declaration.toString();
@@ -92,11 +105,11 @@ public class JavaParser extends AbstractParser {
             function.setIsTest(JavaParser.this.file.getIsTest());
             // TODO: 15.02.22 Other determiners for test functions?
 
-            // TODO: 15.02.22 Counting boilerplate
+            function.setIsBoilerplate(NodeUtils.isBoilerplate(declaration));
+            // TODO: 15.02.22 Other determiners for boilerplate functions?
 
             function.setFile(JavaParser.this.file);
             JavaParser.this.file.getFunctions().add(function);
-            super.visit(declaration, arg);
         }
     }
 }
