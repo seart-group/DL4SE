@@ -29,7 +29,7 @@ import java.util.List;
  * }</pre>
  *
  * @see java.nio.file.SimpleFileVisitor SimpleFileVisitor
- * @see java.nio.file.Files Files
+ * @see java.nio.file.Files#walkFileTree(Path, java.nio.file.FileVisitor) Files.walkFileTree
  * @author dabico
  */
 @Slf4j

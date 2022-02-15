@@ -10,7 +10,7 @@ import java.util.Objects;
 public class PathUtils {
 
     /**
-     * File utility used to forcefully delete a directory and all its contents.
+     * Path utility used to forcefully delete a directory and all its contents.
      *
      * @implNote We suppress throws of {@link java.io.IOException IOException} and {@link InterruptedException}.
      * @author dabico
