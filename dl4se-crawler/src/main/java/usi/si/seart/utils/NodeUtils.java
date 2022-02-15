@@ -2,6 +2,8 @@ package usi.si.seart.utils;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CallableDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import lombok.experimental.UtilityClass;
 
 import java.util.Spliterator;
@@ -24,5 +26,14 @@ public class NodeUtils {
         return node.getRange()
                 .map(range -> (long)(range.end.line + 1 - range.begin.line))
                 .orElse(0L);
+    }
+
+    public boolean isBoilerplate(CallableDeclaration<?> node) {
+        String name = node.getNameAsString();
+        return node instanceof ConstructorDeclaration ||
+                name.startsWith("set") ||
+                name.startsWith("get") ||
+                name.equals("builder") ||
+                name.equals("build");
     }
 }
