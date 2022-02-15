@@ -71,12 +71,12 @@ public class GitRepo {
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @Singular
-    List<File> files;
+    List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @Singular
-    List<Function> functions;
+    List<Function> functions = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
