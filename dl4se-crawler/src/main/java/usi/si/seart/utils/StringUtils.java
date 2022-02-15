@@ -21,7 +21,7 @@ public class StringUtils {
      * @author user1452273
      * @author dabico
      */
-    @SneakyThrows({NoSuchAlgorithmException.class})
+    @SneakyThrows
     public static String sha256(String input) {
         Objects.requireNonNull(input);
         MessageDigest md = MessageDigest.getInstance("SHA-256");
