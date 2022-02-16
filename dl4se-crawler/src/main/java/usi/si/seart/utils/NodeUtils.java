@@ -28,11 +28,15 @@ public class NodeUtils {
                 .orElse(0L);
     }
 
+    // TODO: 15.02.22 Other determiners for boilerplate functions?
     public boolean isBoilerplate(CallableDeclaration<?> node) {
         String name = node.getNameAsString();
         return node instanceof ConstructorDeclaration ||
                 name.startsWith("set") ||
                 name.startsWith("get") ||
+                name.equals("equals") ||
+                name.equals("hashCode") ||
+                name.equals("toString") ||
                 name.equals("builder") ||
                 name.equals("build");
     }
