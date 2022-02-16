@@ -17,8 +17,7 @@ public class StringUtils {
      * @param input An input {@link String} of arbitrary length.
      * @return The SHA-256 hashing algorithm result.
      * @apiNote We suppress throws of {@link NoSuchAlgorithmException}.
-     * @see <a href="https://stackoverflow.com/a/11009612/17173324">Stack Overflow Thread</a>
-     * @author user1452273
+     * @see <a href="https://www.baeldung.com/sha-256-hashing-java#message-digest">Baeldung Guide</a>
      * @author dabico
      */
     @SneakyThrows
@@ -26,7 +25,7 @@ public class StringUtils {
         Objects.requireNonNull(input);
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder();
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (byte b : hash) {
             String hex = Integer.toHexString(0xff & b);
             if (hex.length() == 1) hexString.append('0');
