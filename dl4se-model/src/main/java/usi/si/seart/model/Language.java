@@ -1,5 +1,6 @@
 package usi.si.seart.model;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +29,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@TypeDefs(@TypeDef(name = "string-array", typeClass = StringArrayType.class))
 public class Language {
 
     @Id
@@ -34,8 +39,9 @@ public class Language {
     @Column(unique = true, nullable = false)
     String name;
 
-    @Column(unique = true, nullable = false)
-    String extension;
+    @Type(type = "string-array")
+    @Column(columnDefinition = "text[]")
+    String[] extensions;
 
     @Override
     public boolean equals(Object o) {
@@ -47,6 +53,6 @@ public class Language {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, extension);
+        return name.hashCode();
     }
 }
