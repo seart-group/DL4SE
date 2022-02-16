@@ -35,7 +35,7 @@ public class StringUtils {
     }
 
     /**
-     * Utility function used to check if an input string contains any non-ASCII characters.
+     * Used to check if an input String contains any non-ASCII characters.
      *
      * @param input The input {@link String} to check against.
      * @return Whether it contains non-ASCII characters.
@@ -44,5 +44,36 @@ public class StringUtils {
     public static boolean containsNonAscii(String input) {
         Objects.requireNonNull(input);
         return input.chars().anyMatch(ch -> ch > 127);
+    }
+
+    /**
+     * Used to normalize white spaces in a String. For a passed input we replace all consecutive occurrences of
+     * whitespace characters as defined by {@link Character#isWhitespace(char) Character.isWhiteSpace} with a single
+     * space character. Before returning, the resulting String is also stripped of any leading or trailing whitespaces.
+     *
+     * @param input An input {@link String}.
+     * @return The space-normalized input.
+     * @author dabico
+     */
+    public static String normalizeSpace(String input) {
+        Objects.requireNonNull(input);
+        if (input.isBlank()) return "";
+
+        StringBuilder builder = new StringBuilder(input.length());
+        boolean lastWasWhitespace = false;
+        for (int i = 0; i < input.length(); i++) {
+            char current = input.charAt(i);
+            if (Character.isWhitespace(current)) {
+                if (!lastWasWhitespace) {
+                    lastWasWhitespace = true;
+                    builder.append(' ');
+                }
+            } else {
+                lastWasWhitespace = false;
+                builder.append(current);
+            }
+        }
+
+        return builder.toString().trim();
     }
 }
