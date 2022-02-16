@@ -39,7 +39,7 @@ public class GitRepo {
     @GeneratedValue
     Long id;
 
-    @Column(nullable = false, length = 140)
+    @Column(unique = true, nullable = false, length = 140)
     String name;
 
     String license;
@@ -88,6 +88,6 @@ public class GitRepo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return name.hashCode();
     }
 }
