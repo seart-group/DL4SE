@@ -21,7 +21,7 @@ public class StringUtils {
      * @author dabico
      */
     @SneakyThrows
-    public static String sha256(String input) {
+    public String sha256(String input) {
         Objects.requireNonNull(input);
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));
@@ -41,7 +41,7 @@ public class StringUtils {
      * @return Whether it contains non-ASCII characters.
      * @author dabico
      */
-    public static boolean containsNonAscii(String input) {
+    public boolean containsNonAscii(String input) {
         Objects.requireNonNull(input);
         return input.chars().anyMatch(ch -> ch > 127);
     }
@@ -55,7 +55,7 @@ public class StringUtils {
      * @return The space-normalized input.
      * @author dabico
      */
-    public static String normalizeSpace(String input) {
+    public String normalizeSpace(String input) {
         Objects.requireNonNull(input);
         if (input.isBlank()) return "";
 
