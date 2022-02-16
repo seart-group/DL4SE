@@ -1,4 +1,4 @@
-package usi.si.seart.git;
+package usi.si.seart.utils;
 
 import lombok.SneakyThrows;
 import org.eclipse.jgit.api.errors.GitAPIException;

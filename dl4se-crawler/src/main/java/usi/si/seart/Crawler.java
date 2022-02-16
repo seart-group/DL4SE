@@ -2,7 +2,7 @@ package usi.si.seart;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import usi.si.seart.git.GitUtils;
+import usi.si.seart.utils.GitUtils;
 import usi.si.seart.io.ExtensionBasedFileVisitor;
 import usi.si.seart.model.code.File;
 import usi.si.seart.parser.JavaParser;
