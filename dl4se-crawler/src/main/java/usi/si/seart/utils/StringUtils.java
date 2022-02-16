@@ -35,16 +35,14 @@ public class StringUtils {
     }
 
     /**
-     * Wrapper function for RegEx used to check if an input string contains any non-ASCII characters.
+     * Utility function used to check if an input string contains any non-ASCII characters.
      *
      * @param input The input {@link String} to check against.
      * @return Whether it contains non-ASCII characters.
-     * @see <a href="https://stackoverflow.com/a/3585284/17173324">Stack Overflow Thread</a>
-     * @author Arne Deutsch
      * @author dabico
      */
     public static boolean containsNonAscii(String input) {
         Objects.requireNonNull(input);
-        return !input.matches("\\A\\p{ASCII}*\\z");
+        return input.chars().anyMatch(ch -> ch > 127);
     }
 }
