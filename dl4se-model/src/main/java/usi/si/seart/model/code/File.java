@@ -34,8 +34,16 @@ public class File extends Code {
     List<Function> functions = new ArrayList<>();
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        File file = (File) o;
+        return id != null && Objects.equals(id, file.id);
+    }
+
+    @Override
     public int hashCode() {
-        return Objects.hash(repo, path);
+        return Objects.hash(repo.getName(), path, contentHash, getClass().hashCode());
     }
 
     public String toString() {
