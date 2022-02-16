@@ -18,7 +18,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -48,16 +47,14 @@ public abstract class Code {
     @Column(name = "content_hash", nullable = false)
     String contentHash;
 
-    @Column(nullable = false)
     String ast;
 
-    @Column(name = "ast_hash", nullable = false)
+    @Column(name = "ast_hash")
     String astHash;
 
     @Column(name = "is_parsed", nullable = false, columnDefinition = "boolean default false")
     Boolean isParsed = false;
 
-    @Column(nullable = false)
     Long tokens;
 
     @Column(nullable = false)
