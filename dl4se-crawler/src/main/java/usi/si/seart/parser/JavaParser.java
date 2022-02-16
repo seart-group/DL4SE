@@ -42,9 +42,9 @@ public class JavaParser extends AbstractParser {
             log.error("Parsing failed for: " + path, ex);
             this.file.setIsParsed(false);
             String fileContents = Files.readString(path, StandardCharsets.UTF_8);
+            String normalized = StringUtils.normalizeSpace(fileContents);
             this.file.setContent(fileContents);
-            // TODO: 15.02.22 Normalize code before calling the hashing alg?
-            this.file.setContentHash(StringUtils.sha256(fileContents));
+            this.file.setContentHash(StringUtils.sha256(normalized));
             this.file.setLines(fileContents.lines().count());
             this.file.setCharacters(fileContents.chars().count());
         }
@@ -59,7 +59,7 @@ public class JavaParser extends AbstractParser {
             String fileContents = declaration.toString();
             String normalized = StringUtils.normalizeSpace(fileContents);
             JavaParser.this.file.setContent(fileContents);
-            JavaParser.this.file.setContentHash(StringUtils.sha256(fileContents));
+            JavaParser.this.file.setContentHash(StringUtils.sha256(normalized));
 
             // ast and ast hash
 
@@ -88,10 +88,12 @@ public class JavaParser extends AbstractParser {
 
         private void visit(CallableDeclaration<?> declaration) {
             Function function = Function.builder().build();
+            function.setIsParsed(true);
 
             String functionContents = declaration.toString();
+            String normalized = StringUtils.normalizeSpace(functionContents);
             function.setContent(functionContents);
-            function.setContentHash(StringUtils.sha256(functionContents));
+            function.setContentHash(StringUtils.sha256(normalized));
 
             // ast and ast hash
 
