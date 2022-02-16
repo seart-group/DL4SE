@@ -2,6 +2,7 @@ package usi.si.seart.model.code;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,7 +53,8 @@ public abstract class Code {
     @Column(name = "ast_hash")
     String astHash;
 
-    @Column(name = "is_parsed", nullable = false, columnDefinition = "boolean default false")
+    @Column(name = "is_parsed", nullable = false)
+    @Builder.Default
     Boolean isParsed = false;
 
     Long tokens;
@@ -64,7 +66,8 @@ public abstract class Code {
     Long characters;
 
     @Column(name = "is_test", nullable = false)
-    Boolean isTest;
+    @Builder.Default
+    Boolean isTest = false;
 
     @Column(name = "contains_non_ascii", nullable = false)
     Boolean containsNonAscii;

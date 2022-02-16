@@ -59,13 +59,14 @@ public class GitRepo {
     @Column(nullable = false)
     Long stars;
 
-    @Column(name = "last_update", columnDefinition = "TIMESTAMP", nullable = false)
+    @Column(name = "last_update", nullable = false, columnDefinition = "TIMESTAMP")
     LocalDateTime lastUpdate;
 
     @Column(name = "last_commit_sha", nullable = false, length = 40)
     String lastCommitSHA;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    @Column(name = "is_deleted", nullable = false)
+    @Builder.Default
     Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
