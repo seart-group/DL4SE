@@ -57,6 +57,7 @@ public class JavaParser extends AbstractParser {
         @Override
         public void visit(CompilationUnit declaration, Object arg) {
             String fileContents = declaration.toString();
+            String normalized = StringUtils.normalizeSpace(fileContents);
             JavaParser.this.file.setContent(fileContents);
             JavaParser.this.file.setContentHash(StringUtils.sha256(fileContents));
 
