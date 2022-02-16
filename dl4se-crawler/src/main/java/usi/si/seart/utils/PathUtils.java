@@ -62,7 +62,9 @@ public class PathUtils {
      * @param file Path to file that we are testing against.
      * @return Whether the file in question is a test file.
      */
-    // TODO: 15.02.22 Generalize to other languages
+    // TODO: 16.02.22
+    //  Other determiners for test functions?
+    //  Generalize to other languages?
     public boolean isTestFile(Path file) {
         return testPathMatcher.matches(file);
     }

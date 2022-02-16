@@ -31,25 +31,25 @@ public class JavaParser extends AbstractParser {
     @SneakyThrows
     public File parse(Path path) {
         String relativeFilePath = FileSystems.getDefault().getSeparator() + clonePath.relativize(path);
-        this.file.setPath(relativeFilePath);
-        this.file.setIsTest(PathUtils.isTestFile(path));
+        fileBuilder.path(relativeFilePath);
+        fileBuilder.isTest(PathUtils.isTestFile(path));
 
         try {
             CompilationUnit compilationUnit = StaticJavaParser.parse(path.toFile());
-            this.file.setIsParsed(true);
+            fileBuilder.isParsed(true);
             new VoidVisitor().visit(compilationUnit, null);
         } catch (ParseProblemException ex) {
             log.error("Parsing failed for: " + path, ex);
-            this.file.setIsParsed(false);
+            fileBuilder.isParsed(false);
             String fileContents = Files.readString(path, StandardCharsets.UTF_8);
             String normalized = StringUtils.normalizeSpace(fileContents);
-            this.file.setContent(fileContents);
-            this.file.setContentHash(StringUtils.sha256(normalized));
-            this.file.setLines(fileContents.lines().count());
-            this.file.setCharacters(fileContents.chars().count());
+            fileBuilder.content(fileContents);
+            fileBuilder.contentHash(StringUtils.sha256(normalized));
+            fileBuilder.lines(fileContents.lines().count());
+            fileBuilder.characters(fileContents.chars().count());
         }
 
-        return this.file;
+        return buildAll();
     }
 
     private class VoidVisitor extends VoidVisitorAdapter<Object> {
@@ -58,18 +58,16 @@ public class JavaParser extends AbstractParser {
         public void visit(CompilationUnit declaration, Object arg) {
             String fileContents = declaration.toString();
             String normalized = StringUtils.normalizeSpace(fileContents);
-            JavaParser.this.file.setContent(fileContents);
-            JavaParser.this.file.setContentHash(StringUtils.sha256(normalized));
+            fileBuilder.content(fileContents);
+            fileBuilder.contentHash(StringUtils.sha256(normalized));
 
             // ast and ast hash
 
-            JavaParser.this.file.setTokens(NodeUtils.countTokens(declaration));
-            JavaParser.this.file.setLines(NodeUtils.countLines(declaration));
-            JavaParser.this.file.setCharacters(fileContents.chars().count());
+            fileBuilder.tokens(NodeUtils.countTokens(declaration));
+            fileBuilder.lines(NodeUtils.countLines(declaration));
+            fileBuilder.characters(fileContents.chars().count());
 
-            JavaParser.this.file.setContainsNonAscii(
-                    StringUtils.containsNonAscii(fileContents)
-            );
+            fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
 
             super.visit(declaration, arg);
         }
@@ -87,32 +85,25 @@ public class JavaParser extends AbstractParser {
         }
 
         private void visit(CallableDeclaration<?> declaration) {
-            Function function = Function.builder().build();
-            function.setIsParsed(true);
+            Function.FunctionBuilder<?, ?> functionBuilder = Function.builder();
+            functionBuilder.isParsed(true);
 
             String functionContents = declaration.toString();
             String normalized = StringUtils.normalizeSpace(functionContents);
-            function.setContent(functionContents);
-            function.setContentHash(StringUtils.sha256(normalized));
+            functionBuilder.content(functionContents);
+            functionBuilder.contentHash(StringUtils.sha256(normalized));
 
             // ast and ast hash
 
-            function.setTokens(NodeUtils.countTokens(declaration));
-            function.setLines(NodeUtils.countLines(declaration));
-            function.setCharacters(functionContents.chars().count());
+            functionBuilder.tokens(NodeUtils.countTokens(declaration));
+            functionBuilder.lines(NodeUtils.countLines(declaration));
+            functionBuilder.characters(functionContents.chars().count());
 
-            function.setContainsNonAscii(
-                    StringUtils.containsNonAscii(functionContents)
-            );
+            functionBuilder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
 
-            function.setIsTest(JavaParser.this.file.getIsTest());
-            // TODO: 15.02.22 Other determiners for test functions?
+            functionBuilder.isBoilerplate(NodeUtils.isBoilerplate(declaration));
 
-            function.setIsBoilerplate(NodeUtils.isBoilerplate(declaration));
-            // TODO: 15.02.22 Other determiners for boilerplate functions?
-
-            function.setFile(JavaParser.this.file);
-            JavaParser.this.file.getFunctions().add(function);
+            functionBuilders.add(functionBuilder);
         }
     }
 }
