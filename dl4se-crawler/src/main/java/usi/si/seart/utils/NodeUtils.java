@@ -17,17 +17,17 @@ import java.util.stream.StreamSupport;
 public class NodeUtils {
 
     public String getAstHash(Node node) {
-        List<String> types = getAstTypeNames(node, new ArrayList<>());
-        return StringUtils.sha256(String.join("", types));
+        StringBuilder builder = new StringBuilder();
+        getAstTypeNames(node, builder);
+        return StringUtils.sha256(builder.toString());
     }
 
-    private List<String> getAstTypeNames(Node node, List<String> types) {
-        types.add(node.getMetaModel().getTypeName());
+    private void getAstTypeNames(Node node, StringBuilder builder) {
+        builder.append(node.getMetaModel().getTypeName());
         List<Node> children = node.getChildNodes();
         for (Node child : children) {
-            getAstTypeNames(child, types);
+            getAstTypeNames(child, builder);
         }
-        return types;
     }
 
     public Tuple<Long, Long> countTokens(Node node) {
