@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.printer.XmlPrinter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.code.File;
@@ -22,6 +23,8 @@ import java.nio.file.Path;
 
 @Slf4j
 public class JavaParser extends AbstractParser {
+
+    private static final XmlPrinter astPrinter = new XmlPrinter(true);
 
     public JavaParser(Path clonePath) {
         super(clonePath);
@@ -61,7 +64,8 @@ public class JavaParser extends AbstractParser {
             fileBuilder.content(fileContents);
             fileBuilder.contentHash(StringUtils.sha256(normalized));
 
-            // ast and ast hash
+            fileBuilder.ast(astPrinter.output(declaration));
+            fileBuilder.astHash(NodeUtils.getAstHash(declaration));
 
             fileBuilder.tokens(NodeUtils.countTokens(declaration));
             fileBuilder.lines(NodeUtils.countLines(declaration));
@@ -93,7 +97,8 @@ public class JavaParser extends AbstractParser {
             functionBuilder.content(functionContents);
             functionBuilder.contentHash(StringUtils.sha256(normalized));
 
-            // ast and ast hash
+            functionBuilder.ast(astPrinter.output(declaration));
+            functionBuilder.astHash(NodeUtils.getAstHash(declaration));
 
             functionBuilder.tokens(NodeUtils.countTokens(declaration));
             functionBuilder.lines(NodeUtils.countLines(declaration));
