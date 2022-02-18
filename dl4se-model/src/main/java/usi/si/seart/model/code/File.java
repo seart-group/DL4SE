@@ -1,6 +1,7 @@
 package usi.si.seart.model.code;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,10 @@ public class File extends Code {
 
     @Column(nullable = false)
     String path;
+
+    @Column(name = "is_parsed", nullable = false)
+    @Builder.Default
+    Boolean isParsed = false;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
     @Singular

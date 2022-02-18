@@ -90,7 +90,6 @@ public class JavaParser extends AbstractParser {
 
         private void visit(CallableDeclaration<?> declaration) {
             Function.FunctionBuilder<?, ?> functionBuilder = Function.builder();
-            functionBuilder.isParsed(true);
 
             String functionContents = declaration.toString();
             String normalized = StringUtils.normalizeSpace(functionContents);

@@ -53,10 +53,6 @@ public abstract class Code {
     @Column(name = "ast_hash")
     String astHash;
 
-    @Column(name = "is_parsed", nullable = false)
-    @Builder.Default
-    Boolean isParsed = false;
-
     Long tokens;
 
     @Column(nullable = false)
