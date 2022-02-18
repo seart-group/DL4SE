@@ -6,11 +6,27 @@ import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import lombok.experimental.UtilityClass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Spliterator;
 import java.util.stream.StreamSupport;
 
 @UtilityClass
 public class NodeUtils {
+
+    public String getAstHash(Node node) {
+        List<String> types = getAstTypeNames(node, new ArrayList<>());
+        return StringUtils.sha256(String.join("", types));
+    }
+
+    private List<String> getAstTypeNames(Node node, List<String> types) {
+        types.add(node.getMetaModel().getTypeName());
+        List<Node> children = node.getChildNodes();
+        for (Node child : children) {
+            getAstTypeNames(child, types);
+        }
+        return types;
+    }
 
     // TODO: 15.02.22 Should we count whitespaces and EOF as tokens?
     public Long countTokens(Node node) {

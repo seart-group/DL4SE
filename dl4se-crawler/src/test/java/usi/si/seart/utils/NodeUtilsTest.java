@@ -59,4 +59,16 @@ class NodeUtilsTest {
         Assertions.assertTrue(NodeUtils.isBoilerplate(md5));
         Assertions.assertTrue(NodeUtils.isBoilerplate(cd));
     }
+
+    @Test
+    void getAstHash() {
+        MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){ x += 1; }");
+        MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5; }");
+        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5L; }");
+        String hash1 = NodeUtils.getAstHash(md1);
+        String hash2 = NodeUtils.getAstHash(md2);
+        String hash3 = NodeUtils.getAstHash(md3);
+        Assertions.assertEquals(hash1, hash2);
+        Assertions.assertNotEquals(hash2, hash3);
+    }
 }
