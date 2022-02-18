@@ -17,10 +17,11 @@ class GitUtilsTest {
     @Test
     @SneakyThrows
     void cloneRepositoryTest() {
-        File repo = GitUtils.cloneRepository("dabico/dl4se-crawler-test", tmp).toFile();
-        Assertions.assertTrue(repo.exists());
-        Assertions.assertTrue(repo.isDirectory());
-        File[] repoFiles = repo.listFiles();
+        GitUtils.cloneRepository("dabico/dl4se-crawler-test", tmp);
+        File directory = tmp.toFile();
+        Assertions.assertTrue(directory.exists());
+        Assertions.assertTrue(directory.isDirectory());
+        File[] repoFiles = directory.listFiles();
         Assertions.assertNotNull(repoFiles);
         Assertions.assertEquals(4, repoFiles.length); // README, LICENSE, .git, .gitignore
     }
