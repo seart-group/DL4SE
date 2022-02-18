@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import usi.si.seart.collection.Tuple;
 
 class NodeUtilsTest {
 
@@ -31,11 +32,13 @@ class NodeUtilsTest {
      * - }
      * - [EOF]
      * Total: 17
+     * Non Space: 11
      */
     @Test
     void countTokens() {
-        long tokens = NodeUtils.countTokens(compilationUnit);
-        Assertions.assertEquals(17, tokens);
+        Tuple<Long, Long> tokens = NodeUtils.countTokens(compilationUnit);
+        Assertions.assertEquals(17, tokens.getLeft());
+        Assertions.assertEquals(11, tokens.getRight());
     }
 
     @Test

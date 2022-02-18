@@ -53,7 +53,8 @@ public abstract class Code {
     @Column(name = "ast_hash")
     String astHash;
 
-    Long tokens;
+    Long totalTokens;
+    Long codeTokens;
 
     @Column(nullable = false)
     Long lines;

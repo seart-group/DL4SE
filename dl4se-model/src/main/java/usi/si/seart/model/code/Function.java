@@ -51,7 +51,8 @@ public class Function extends Code {
                 ", contentHash=" + this.contentHash +
                 ", ast=" + this.ast +
                 ", astHash=" + this.astHash +
-                ", tokens=" + this.tokens +
+                ", totalTokens=" + this.totalTokens +
+                ", codeTokens=" + this.codeTokens +
                 ", lines=" + this.lines +
                 ", characters=" + this.characters +
                 ", isTest=" + this.isTest +

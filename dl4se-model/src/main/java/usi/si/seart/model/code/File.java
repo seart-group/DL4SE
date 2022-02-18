@@ -61,7 +61,8 @@ public class File extends Code {
                 ", ast=" + this.ast +
                 ", astHash=" + this.astHash +
                 ", isParsed=" + this.isParsed +
-                ", tokens=" + this.tokens +
+                ", totalTokens=" + this.totalTokens +
+                ", codeTokens=" + this.codeTokens +
                 ", lines=" + this.lines +
                 ", characters=" + this.characters +
                 ", isTest=" + this.isTest +

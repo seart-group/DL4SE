@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 import usi.si.seart.utils.NodeUtils;
+import usi.si.seart.collection.Tuple;
 import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
@@ -67,7 +68,10 @@ public class JavaParser extends AbstractParser {
             fileBuilder.ast(astPrinter.output(declaration));
             fileBuilder.astHash(NodeUtils.getAstHash(declaration));
 
-            fileBuilder.tokens(NodeUtils.countTokens(declaration));
+            Tuple<Long, Long> tokensCount = NodeUtils.countTokens(declaration);
+            fileBuilder.totalTokens(tokensCount.getLeft());
+            fileBuilder.codeTokens(tokensCount.getRight());
+
             fileBuilder.lines(NodeUtils.countLines(declaration));
             fileBuilder.characters(fileContents.chars().count());
 
@@ -99,7 +103,10 @@ public class JavaParser extends AbstractParser {
             functionBuilder.ast(astPrinter.output(declaration));
             functionBuilder.astHash(NodeUtils.getAstHash(declaration));
 
-            functionBuilder.tokens(NodeUtils.countTokens(declaration));
+            Tuple<Long, Long> tokensCount = NodeUtils.countTokens(declaration);
+            functionBuilder.totalTokens(tokensCount.getLeft());
+            functionBuilder.codeTokens(tokensCount.getRight());
+
             functionBuilder.lines(NodeUtils.countLines(declaration));
             functionBuilder.characters(functionContents.chars().count());
 

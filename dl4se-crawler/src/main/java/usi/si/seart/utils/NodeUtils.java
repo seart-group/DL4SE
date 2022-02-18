@@ -5,10 +5,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import lombok.experimental.UtilityClass;
+import usi.si.seart.collection.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Spliterator;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @UtilityClass
@@ -28,14 +30,20 @@ public class NodeUtils {
         return types;
     }
 
-    // TODO: 15.02.22 Should we count whitespaces and EOF as tokens?
-    public Long countTokens(Node node) {
-        return node.getTokenRange()
+    public Tuple<Long, Long> countTokens(Node node) {
+        List<JavaToken> tokens = node.getTokenRange()
                 .map(range -> {
                     Spliterator<JavaToken> spliterator = range.spliterator();
-                    return StreamSupport.stream(spliterator, true).count();
+                    return StreamSupport.stream(spliterator, true);
                 })
-                .orElse(0L);
+                .map(stream -> stream.collect(Collectors.toList()))
+                .orElse(new ArrayList<>());
+        Long allTokens = (long) tokens.size();
+        Long nonCodeTokens = tokens.stream()
+                .map(JavaToken::getCategory)
+                .filter(JavaToken.Category::isWhitespaceOrComment)
+                .count();
+        return Tuple.of(allTokens, allTokens - nonCodeTokens);
     }
 
     public Long countLines(Node node) {
