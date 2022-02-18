@@ -46,7 +46,6 @@ public class Function extends Code {
     public String toString() {
         return "Function(id=" + this.id +
                 ", repo=" + this.repo +
-                ", file=" + this.file +
                 ", language=" + this.language +
                 ", content=" + this.content +
                 ", contentHash=" + this.contentHash +
