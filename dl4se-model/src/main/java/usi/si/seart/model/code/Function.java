@@ -6,9 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import usi.si.seart.model.type.StringEnumType;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,14 +28,18 @@ import java.util.Objects;
 @SuperBuilder
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@TypeDefs(@TypeDef(name = "string-enum", typeClass = StringEnumType.class))
 public class Function extends Code {
 
     @ManyToOne(optional = false)
     @JoinColumn(name="file_id", nullable=false)
     File file;
 
-    @Column(name = "is_boilerplate", nullable = false)
-    Boolean isBoilerplate;
+    @Basic
+    @Enumerated(EnumType.STRING)
+    @Type(type = "string-enum")
+    @Column(name = "boilerplate_type")
+    Boilerplate boilerplateType;
 
     @Override
     public boolean equals(Object o) {
@@ -56,7 +67,7 @@ public class Function extends Code {
                 ", lines=" + this.lines +
                 ", characters=" + this.characters +
                 ", isTest=" + this.isTest +
-                ", isBoilerplate=" + this.isBoilerplate +
+                ", boilerplateType=" + this.boilerplateType.getValue() +
                 ", containsNonAscii=" + this.containsNonAscii + ")";
     }
 }

@@ -112,7 +112,7 @@ public class JavaParser extends AbstractParser {
 
             functionBuilder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
 
-            functionBuilder.isBoilerplate(NodeUtils.isBoilerplate(declaration));
+            functionBuilder.boilerplateType(NodeUtils.getBoilerplateType(declaration));
 
             functionBuilders.add(functionBuilder);
         }

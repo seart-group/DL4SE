@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import lombok.experimental.UtilityClass;
 import usi.si.seart.collection.Tuple;
+import usi.si.seart.model.code.Boilerplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,16 +53,17 @@ public class NodeUtils {
                 .orElse(0L);
     }
 
-    // TODO: 15.02.22 Other determiners for boilerplate functions?
-    public boolean isBoilerplate(CallableDeclaration<?> node) {
+    public Boilerplate getBoilerplateType(CallableDeclaration<?> node) {
+        if (node instanceof ConstructorDeclaration) return Boilerplate.CONSTRUCTOR;
         String name = node.getNameAsString();
-        return node instanceof ConstructorDeclaration ||
-                name.startsWith("set") ||
-                name.startsWith("get") ||
-                name.equals("equals") ||
-                name.equals("hashCode") ||
-                name.equals("toString") ||
-                name.equals("builder") ||
-                name.equals("build");
+        if (name.startsWith("set")) return Boilerplate.SETTER;
+        if (name.startsWith("get")) return Boilerplate.GETTER;
+        switch (name) {
+            case "builder": return Boilerplate.BUILDER;
+            case "equals": return Boilerplate.EQUALS;
+            case "hashCode": return Boilerplate.HASH_CODE;
+            case "toString": return Boilerplate.TO_STRING;
+            default: return null;
+        }
     }
 }

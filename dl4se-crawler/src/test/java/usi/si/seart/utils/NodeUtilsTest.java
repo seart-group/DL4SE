@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import usi.si.seart.collection.Tuple;
+import usi.si.seart.model.code.Boilerplate;
 
 class NodeUtilsTest {
 
@@ -53,14 +54,18 @@ class NodeUtilsTest {
         MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void setX(){}");
         MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void getX(){}");
         MethodDeclaration md4 = StaticJavaParser.parseMethodDeclaration("public void builder(){}");
-        MethodDeclaration md5 = StaticJavaParser.parseMethodDeclaration("public void build(){}");
+        MethodDeclaration md5 = StaticJavaParser.parseMethodDeclaration("public void toString(){}");
+        MethodDeclaration md6 = StaticJavaParser.parseMethodDeclaration("public void equals(){}");
+        MethodDeclaration md7 = StaticJavaParser.parseMethodDeclaration("public void hashCode(){}");
         ConstructorDeclaration cd = new ConstructorDeclaration();
-        Assertions.assertFalse(NodeUtils.isBoilerplate(md1));
-        Assertions.assertTrue(NodeUtils.isBoilerplate(md2));
-        Assertions.assertTrue(NodeUtils.isBoilerplate(md3));
-        Assertions.assertTrue(NodeUtils.isBoilerplate(md4));
-        Assertions.assertTrue(NodeUtils.isBoilerplate(md5));
-        Assertions.assertTrue(NodeUtils.isBoilerplate(cd));
+        Assertions.assertNull(NodeUtils.getBoilerplateType(md1));
+        Assertions.assertEquals(Boilerplate.SETTER, NodeUtils.getBoilerplateType(md2));
+        Assertions.assertEquals(Boilerplate.GETTER, NodeUtils.getBoilerplateType(md3));
+        Assertions.assertEquals(Boilerplate.BUILDER, NodeUtils.getBoilerplateType(md4));
+        Assertions.assertEquals(Boilerplate.TO_STRING, NodeUtils.getBoilerplateType(md5));
+        Assertions.assertEquals(Boilerplate.EQUALS, NodeUtils.getBoilerplateType(md6));
+        Assertions.assertEquals(Boilerplate.HASH_CODE, NodeUtils.getBoilerplateType(md7));
+        Assertions.assertEquals(Boilerplate.CONSTRUCTOR, NodeUtils.getBoilerplateType(cd));
     }
 
     @Test
