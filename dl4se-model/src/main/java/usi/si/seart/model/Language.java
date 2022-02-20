@@ -40,7 +40,7 @@ public class Language {
     String name;
 
     @Type(type = "string-array")
-    @Column(columnDefinition = "text[]")
+    @Column(columnDefinition = "text[]", nullable = false)
     String[] extensions;
 
     @Override
