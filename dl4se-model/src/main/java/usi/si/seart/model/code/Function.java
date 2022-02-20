@@ -67,7 +67,7 @@ public class Function extends Code {
                 ", lines=" + this.lines +
                 ", characters=" + this.characters +
                 ", isTest=" + this.isTest +
-                ", boilerplateType=" + this.boilerplateType.getValue() +
+                ", boilerplateType=" + this.boilerplateType +
                 ", containsNonAscii=" + this.containsNonAscii + ")";
     }
 }
