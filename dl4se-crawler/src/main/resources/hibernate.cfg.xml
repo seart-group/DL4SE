@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Connection Settings -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/dl4se</property>
+        <property name="connection.username">dl4se_admin</property>
+        <property name="connection.password">Lugano2022</property>
+
+        <!-- JDBC Connection Pool -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL Dialect -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
+
+        <!-- Second Level Cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.DisabledCaching</property>
+
+        <!-- Logging -->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="use_sql_comments">true</property>
+
+        <!-- Schema Creation -->
+        <property name="hbm2ddl.auto">create</property>
+
+        <!-- Entity Mappings -->
+        <mapping class="usi.si.seart.model.GitRepo"/>
+        <mapping class="usi.si.seart.model.Language"/>
+        <mapping class="usi.si.seart.model.code.Code"/>
+        <mapping class="usi.si.seart.model.code.File"/>
+        <mapping class="usi.si.seart.model.code.Function"/>
+    </session-factory>
+</hibernate-configuration>
