@@ -58,6 +58,25 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>4.7.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>update</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <changeLogFile>src/main/resources/liquibase/changelog-master.xml</changeLogFile>
+          <driver>org.postgresql.Driver</driver>
+          <url>jdbc:postgresql://localhost:5432/dl4se</url>
+          <username>dl4se_admin</username>
+          <password>Lugano2022</password>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.2.1</version>
