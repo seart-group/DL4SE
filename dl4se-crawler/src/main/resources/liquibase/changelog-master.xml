@@ -7,8 +7,9 @@
 
     <changeSet id="0" author="dabico">
         <sqlFile path="00_init.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
-        <comment>Initialize Tables</comment>
+        <comment>Initialize Tables and Data</comment>
     </changeSet>
+    <!-- OTHER SCRIPTS GO HERE, USE ABOVE AS TEMPLATE -->
 
 </databaseChangeLog>
 

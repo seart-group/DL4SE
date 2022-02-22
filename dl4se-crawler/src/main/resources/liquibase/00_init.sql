@@ -63,3 +63,8 @@ ALTER TABLE "file" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("file_id") references "file" ("id");
+
+-- ADD LANGUAGES
+INSERT INTO language(id, name, extensions)
+VALUES
+    (nextval('hibernate_sequence'), 'Java', '{java}');
