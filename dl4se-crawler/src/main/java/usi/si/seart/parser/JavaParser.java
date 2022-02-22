@@ -57,6 +57,7 @@ public class JavaParser extends AbstractParser {
             fileBuilder.contentHash(StringUtils.sha256(normalized));
             fileBuilder.lines(fileContents.lines().count());
             fileBuilder.characters(fileContents.chars().count());
+            fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
         }
 
         return buildAll();
