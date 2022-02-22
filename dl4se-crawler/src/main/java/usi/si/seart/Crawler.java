@@ -21,6 +21,7 @@ import usi.si.seart.parser.Parser;
 import usi.si.seart.utils.GitUtils;
 import usi.si.seart.utils.PathUtils;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -97,12 +98,14 @@ public class Crawler {
         log.info("Mining repository: {} [Last Update: {}]", name, item.getPushedAt());
         try {
             GitUtils.cloneRepository(name, cloneDir);
+            // TODO: 21.02.22 Use the Git object obtained from the previous line to update the date and commit SHA
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
             List<Path> paths = visitor.getVisited();
             for (Path path : paths) {
-                Parser parser = new JavaParser(cloneDir);
+                Parser parser = JavaParser.getInstance();
                 File file = parser.parse(path);
+                file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(path));
                 log.trace(file.toString());
             }
         } catch (GitAPIException ex) {
