@@ -7,6 +7,9 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import usi.si.seart.collection.utils.SetUtils;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
@@ -36,9 +39,16 @@ public class Crawler {
     static String startUrl = "http://localhost:8080/api/r/search";
     static LocalDate startDate = LocalDate.of(2008, 1, 1);
 
-    static Set<Language> languages = Set.of(
-            Language.builder().name("Java").extensions(new String[]{"java"}).build()
-    );
+    static {
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        languages = session.createQuery("SELECT l from Language l", Language.class)
+                .stream()
+                .collect(Collectors.toSet());
+        session.close();
+    }
+
+    static Set<Language> languages;
 
     static Set<String> languageNames = languages.stream()
             .map(Language::getName)
