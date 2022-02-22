@@ -8,8 +8,12 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 import usi.si.seart.utils.NodeUtils;
@@ -18,25 +22,27 @@ import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JavaParser extends AbstractParser {
 
-    private static final XmlPrinter astPrinter = new XmlPrinter(true);
+    @Getter
+    static JavaParser instance = new JavaParser();
+    static XmlPrinter astPrinter = new XmlPrinter(true);
+    static Language language = initializeLanguage("Java");
 
-    public JavaParser(Path clonePath) {
-        super(clonePath);
+    private JavaParser() {
+        super();
     }
 
     @Override
     @SneakyThrows
     public File parse(Path path) {
-        String relativeFilePath = FileSystems.getDefault().getSeparator() + clonePath.relativize(path);
-        fileBuilder.path(relativeFilePath);
         fileBuilder.isTest(PathUtils.isTestFile(path));
+        fileBuilder.language(language);
 
         try {
             CompilationUnit compilationUnit = StaticJavaParser.parse(path.toFile());
@@ -94,6 +100,7 @@ public class JavaParser extends AbstractParser {
 
         private void visit(CallableDeclaration<?> declaration) {
             Function.FunctionBuilder<?, ?> functionBuilder = Function.builder();
+            functionBuilder.language(language);
 
             String functionContents = declaration.toString();
             String normalized = StringUtils.normalizeSpace(functionContents);
