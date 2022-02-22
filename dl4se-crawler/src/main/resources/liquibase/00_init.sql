@@ -17,6 +17,7 @@ CREATE TABLE "git_repo" (
     "contributors" bigint NOT NULL,
     "issues" bigint NOT NULL,
     "stars" bigint NOT NULL,
+    "last_commit_sha" text NOT NULL,
     "last_update" timestamp NOT NULL,
     "is_deleted" boolean NOT NULL
 );
