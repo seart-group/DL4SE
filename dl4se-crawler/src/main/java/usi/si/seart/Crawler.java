@@ -24,11 +24,11 @@ import usi.si.seart.utils.PathUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -56,7 +56,7 @@ public class Crawler {
 
     static String[] extensions = languages.stream()
             .map(Language::getExtensions)
-            .flatMap(Stream::of)
+            .flatMap(Collection::stream)
             .toArray(String[]::new);
 
     public static void main(String[] args) {
@@ -111,6 +111,5 @@ public class Crawler {
         } finally {
             PathUtils.forceDelete(cloneDir);
         }
-        PathUtils.forceDelete(clone);
     }
 }

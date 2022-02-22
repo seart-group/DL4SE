@@ -1,6 +1,6 @@
 package usi.si.seart.model;
 
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,7 +30,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@TypeDefs(@TypeDef(name = "string-array", typeClass = StringArrayType.class))
+@TypeDefs(@TypeDef(name = "list-array", typeClass = ListArrayType.class))
 public class Language {
 
     @Id
@@ -39,9 +40,10 @@ public class Language {
     @Column(unique = true, nullable = false)
     String name;
 
-    @Type(type = "string-array")
+    @Type(type = "list-array")
     @Column(columnDefinition = "text[]", nullable = false)
-    String[] extensions;
+    @ToString.Exclude
+    List<String> extensions;
 
     @Override
     public boolean equals(Object o) {
