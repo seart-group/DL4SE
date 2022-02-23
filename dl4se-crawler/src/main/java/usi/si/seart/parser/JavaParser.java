@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import usi.si.seart.exception.ParsingException;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
@@ -21,8 +22,6 @@ import usi.si.seart.collection.Tuple;
 import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Slf4j
@@ -40,7 +39,7 @@ public class JavaParser extends AbstractParser {
 
     @Override
     @SneakyThrows
-    public File parse(Path path) {
+    public File parse(Path path) throws ParsingException {
         fileBuilder.isTest(PathUtils.isTestFile(path));
         fileBuilder.language(language);
 
@@ -50,14 +49,7 @@ public class JavaParser extends AbstractParser {
             new VoidVisitor().visit(compilationUnit, null);
         } catch (ParseProblemException ex) {
             log.error("Parsing failed for: " + path, ex);
-            fileBuilder.isParsed(false);
-            String fileContents = Files.readString(path, StandardCharsets.UTF_8);
-            String normalized = StringUtils.normalizeSpace(fileContents);
-            fileBuilder.content(fileContents);
-            fileBuilder.contentHash(StringUtils.sha256(normalized));
-            fileBuilder.lines(fileContents.lines().count());
-            fileBuilder.characters(fileContents.chars().count());
-            fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
+            throw new ParsingException(ex.getMessage(), ex.getCause());
         }
 
         return buildAll();

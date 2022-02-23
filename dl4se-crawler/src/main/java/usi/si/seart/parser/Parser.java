@@ -11,7 +11,7 @@ public interface Parser {
     static Parser getParser(Language language) {
         switch (language.getName()) {
             case "Java": return JavaParser.getInstance();
-            default: throw new UnsupportedOperationException();
+            default: return FallbackParser.getInstance();
         }
     }
 }
