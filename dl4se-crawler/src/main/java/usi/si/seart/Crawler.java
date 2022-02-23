@@ -9,24 +9,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import usi.si.seart.collection.utils.SetUtils;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
 import usi.si.seart.io.ExtensionBasedFileVisitor;
+import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.parser.JavaParser;
 import usi.si.seart.parser.Parser;
 import usi.si.seart.utils.GitUtils;
+import usi.si.seart.utils.HibernateUtils;
 import usi.si.seart.utils.PathUtils;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -43,12 +47,15 @@ public class Crawler {
     static LocalDate startDate = LocalDate.of(2008, 1, 1);
 
     static {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        languages = session.createQuery("SELECT l from Language l", Language.class)
-                .stream()
-                .collect(Collectors.toSet());
-        session.close();
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            languages = session.createQuery("SELECT l FROM Language l", Language.class)
+                    .stream()
+                    .collect(Collectors.toSet());
+        } catch (HibernateException ex) {
+            log.error("Could not open session for initialization:", ex);
+            log.error("Aborting...");
+            System.exit(1);
+        }
     }
 
     static Set<Language> languages;
@@ -119,6 +126,11 @@ public class Crawler {
                 repoBuilder.file(file);
                 repoBuilder.functions(file.getFunctions());
             }
+
+            GitRepo repo = repoBuilder.build();
+            repo.getFiles().forEach(file -> file.setRepo(repo));
+            repo.getFunctions().forEach(function -> function.setRepo(repo));
+            HibernateUtils.saveRepo(repo);
         } catch (GitAPIException ex) {
             log.error("Error while cloning: {}", name);
             log.error("Error stack trace:", ex);
