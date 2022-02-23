@@ -60,14 +60,31 @@ public class Crawler {
 
     static Set<Language> languages;
 
+    static {
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            languages = session.createQuery("SELECT l FROM Language l", Language.class)
+                    .stream()
+                    .collect(Collectors.toSet());
+        } catch (HibernateException ex) {
+            log.error("Could not open session for initialization:", ex);
+            log.error("Aborting...");
+            System.exit(1);
+        }
+    }
+
+    static Map<String, Language> extensionToLanguage = languages.stream().flatMap(language -> {
+        List<Map.Entry<String, Language>> entries = new ArrayList<>();
+        for (String extension : language.getExtensions()) {
+            entries.add(Map.entry(extension, language));
+        }
+        return entries.stream();
+    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    static String[] extensions = extensionToLanguage.keySet().toArray(new String[0]);
+
     static Set<String> languageNames = languages.stream()
             .map(Language::getName)
             .collect(Collectors.toSet());
-
-    static String[] extensions = languages.stream()
-            .map(Language::getExtensions)
-            .flatMap(Collection::stream)
-            .toArray(String[]::new);
 
     public static void main(String[] args) {
         HttpClient client = new HttpClient();
