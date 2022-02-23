@@ -70,6 +70,24 @@ public class PathUtils {
     }
 
     /**
+     * Path utility used to extract the file extension.
+     *
+     * @param file Path to file that we are testing against.
+     * @return The file extension string. If the file has no extension, then an empty string is returned.
+     */
+    public String getExtension(Path file) {
+        Objects.requireNonNull(file);
+        String path = file.getFileName().toString();
+        if (path.contains(".")) {
+            int extStart = path.lastIndexOf(".") + 1;
+            if (extStart < path.length() && extStart > 0) {
+                return path.substring(extStart);
+            }
+        }
+        return "";
+    }
+
+    /**
      * Path utility used to forcefully delete a directory and all its contents.
      *
      * @implNote We suppress throws of {@link java.io.IOException IOException} and {@link InterruptedException}.
