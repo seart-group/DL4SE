@@ -6,7 +6,9 @@ import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -94,11 +96,19 @@ public class Crawler {
             return;
         }
 
+        GitRepo.GitRepoBuilder repoBuilder = item.toGitRepoBuilder();
+
         Path cloneDir = Files.createTempDirectory(tempPrefix);
         log.info("Mining repository: {} [Last Update: {}]", name, item.getPushedAt());
         try {
-            GitUtils.cloneRepository(name, cloneDir);
-            // TODO: 21.02.22 Use the Git object obtained from the previous line to update the date and commit SHA
+            Git git = GitUtils.cloneRepository(name, cloneDir);
+            for (RevCommit latest: git.log().setMaxCount(1).call()) {
+                repoBuilder.lastCommitSHA(latest.getName());
+                repoBuilder.lastUpdate(
+                        LocalDateTime.ofInstant(Instant.ofEpochSecond(latest.getCommitTime()), ZoneId.of("UTC"))
+                );
+            }
+
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
             List<Path> paths = visitor.getVisited();
@@ -106,7 +116,8 @@ public class Crawler {
                 Parser parser = JavaParser.getInstance();
                 File file = parser.parse(path);
                 file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(path));
-                log.trace(file.toString());
+                repoBuilder.file(file);
+                repoBuilder.functions(file.getFunctions());
             }
         } catch (GitAPIException ex) {
             log.error("Error while cloning: {}", name);
