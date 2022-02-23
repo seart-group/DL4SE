@@ -12,13 +12,14 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import usi.si.seart.collection.utils.SetUtils;
+import usi.si.seart.exception.ParsingException;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
 import usi.si.seart.io.ExtensionBasedFileVisitor;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
-import usi.si.seart.parser.JavaParser;
+import usi.si.seart.parser.FallbackParser;
 import usi.si.seart.parser.Parser;
 import usi.si.seart.utils.GitUtils;
 import usi.si.seart.utils.HibernateUtils;
@@ -31,7 +32,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,18 +46,6 @@ public class Crawler {
     static String tempPrefix = "dl4se";
     static String startUrl = "http://localhost:8080/api/r/search";
     static LocalDate startDate = LocalDate.of(2008, 1, 1);
-
-    static {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
-            languages = session.createQuery("SELECT l FROM Language l", Language.class)
-                    .stream()
-                    .collect(Collectors.toSet());
-        } catch (HibernateException ex) {
-            log.error("Could not open session for initialization:", ex);
-            log.error("Aborting...");
-            System.exit(1);
-        }
-    }
 
     static Set<Language> languages;
 
@@ -136,14 +125,7 @@ public class Crawler {
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
             List<Path> paths = visitor.getVisited();
-            for (Path path : paths) {
-                Parser parser = JavaParser.getInstance();
-                File file = parser.parse(path);
-                file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(path));
-                repoBuilder.file(file);
-                repoBuilder.functions(file.getFunctions());
-            }
-
+            paths.forEach(path -> parseFile(cloneDir, path, repoBuilder));
             GitRepo repo = repoBuilder.build();
             repo.getFiles().forEach(file -> file.setRepo(repo));
             repo.getFunctions().forEach(function -> function.setRepo(repo));
@@ -154,5 +136,23 @@ public class Crawler {
         } finally {
             PathUtils.forceDelete(cloneDir);
         }
+    }
+
+    private static void parseFile(Path cloneDir, Path path, GitRepo.GitRepoBuilder repoBuilder) {
+        String extension = PathUtils.getExtension(path);
+        Language language = extensionToLanguage.get(extension);
+        Parser parser;
+        File file;
+        try {
+            parser = Parser.getParser(language);
+            file = parser.parse(path);
+        } catch (ParsingException ignored) {
+            parser = FallbackParser.getInstance();
+            file = parser.parse(path);
+            file.setLanguage(language);
+        }
+        file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(path));
+        repoBuilder.file(file);
+        repoBuilder.functions(file.getFunctions());
     }
 }
