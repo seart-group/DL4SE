@@ -10,8 +10,8 @@ public interface Parser {
 
     static Parser getParser(Language language) {
         switch (language.getName()) {
-            case "Java": return JavaParser.getInstance();
-            default: return FallbackParser.getInstance();
+            case "Java": return new JavaParser(language);
+            default: return new FallbackParser(language);
         }
     }
 }

@@ -8,10 +8,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.exception.ParsingException;
 import usi.si.seart.model.Language;
@@ -22,23 +19,20 @@ import usi.si.seart.collection.Tuple;
 import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JavaParser extends AbstractParser {
 
-    @Getter
-    static JavaParser instance = new JavaParser();
-    static XmlPrinter astPrinter = new XmlPrinter(true);
-    static Language language = initializeLanguage("Java");
+    private static final XmlPrinter astPrinter = new XmlPrinter(true);
 
-    private JavaParser() {
-        super();
+    public JavaParser(Language language) {
+        super(language);
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({FileNotFoundException.class})
     public File parse(Path path) throws ParsingException {
         fileBuilder.isTest(PathUtils.isTestFile(path));
         fileBuilder.language(language);
@@ -52,7 +46,7 @@ public class JavaParser extends AbstractParser {
             throw new ParsingException(ex.getMessage(), ex.getCause());
         }
 
-        return buildAll();
+        return buildFileAndFunctions();
     }
 
     private class VoidVisitor extends VoidVisitorAdapter<Object> {

@@ -138,20 +138,20 @@ public class Crawler {
         }
     }
 
-    private static void parseFile(Path cloneDir, Path path, GitRepo.GitRepoBuilder repoBuilder) {
-        String extension = PathUtils.getExtension(path);
+    private static void parseFile(Path cloneDir, Path filePath, GitRepo.GitRepoBuilder repoBuilder) {
+        String extension = PathUtils.getExtension(filePath);
         Language language = extensionToLanguage.get(extension);
-        Parser parser;
+
+        Parser parser = Parser.getParser(language);
         File file;
         try {
-            parser = Parser.getParser(language);
-            file = parser.parse(path);
+            file = parser.parse(filePath);
         } catch (ParsingException ignored) {
-            parser = FallbackParser.getInstance();
-            file = parser.parse(path);
-            file.setLanguage(language);
+            parser = new FallbackParser(language);
+            file = parser.parse(filePath);
         }
-        file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(path));
+
+        file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(filePath));
         repoBuilder.file(file);
         repoBuilder.functions(file.getFunctions());
     }
