@@ -48,16 +48,20 @@ public class GitRepo {
     Boolean isFork;
 
     @Column(nullable = false)
-    Long commits;
+    @Builder.Default
+    Long commits = 0L;
 
     @Column(nullable = false)
-    Long contributors;
+    @Builder.Default
+    Long contributors = 0L;
 
     @Column(nullable = false)
-    Long issues;
+    @Builder.Default
+    Long issues = 0L;
 
     @Column(nullable = false)
-    Long stars;
+    @Builder.Default
+    Long stars = 0L;
 
     @Column(name = "last_update", nullable = false, columnDefinition = "TIMESTAMP")
     LocalDateTime lastUpdate;
