@@ -13,33 +13,25 @@ class NodeUtilsTest {
 
     CompilationUnit compilationUnit = StaticJavaParser.parse("class X { java.util.Y y; }");
 
-    /*
-     * Tokens:
-     * - class
-     * - [ ]
-     * - X
-     * - [ ]
-     * - {
-     * - [ ]
-     * - java
-     * - .
-     * - util
-     * - .
-     * - Y
-     * - [ ]
-     * - y
-     * - ;
-     * - [ ]
-     * - }
-     * - [EOF]
-     * Total: 17
-     * Non Space: 11
-     */
     @Test
     void countTokens() {
         Tuple<Long, Long> tokens = NodeUtils.countTokens(compilationUnit);
         Assertions.assertEquals(17, tokens.getLeft());
         Assertions.assertEquals(11, tokens.getRight());
+
+        MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration(
+                "public void method(){\n// This is a single line comment\n}"
+        );
+        tokens = NodeUtils.countTokens(md1);
+        Assertions.assertEquals(24, tokens.getLeft());
+        Assertions.assertEquals(7, tokens.getRight());
+
+        MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration(
+                "public void method(){\n/* This is a\n* multi line comment\n*/\n}"
+        );
+        tokens = NodeUtils.countTokens(md2);
+        Assertions.assertEquals(28, tokens.getLeft());
+        Assertions.assertEquals(7, tokens.getRight());
     }
 
     @Test

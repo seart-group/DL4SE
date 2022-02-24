@@ -10,6 +10,7 @@ import usi.si.seart.model.code.Boilerplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -35,16 +36,28 @@ public class NodeUtils {
         List<JavaToken> tokens = node.getTokenRange()
                 .map(range -> {
                     Spliterator<JavaToken> spliterator = range.spliterator();
-                    return StreamSupport.stream(spliterator, true);
+                    return StreamSupport.stream(spliterator, true).collect(Collectors.toList());
                 })
-                .map(stream -> stream.collect(Collectors.toList()))
                 .orElse(new ArrayList<>());
-        Long allTokens = (long) tokens.size();
-        Long nonCodeTokens = tokens.stream()
-                .map(JavaToken::getCategory)
-                .filter(JavaToken.Category::isWhitespaceOrComment)
-                .count();
-        return Tuple.of(allTokens, allTokens - nonCodeTokens);
+
+        Map<Boolean, List<JavaToken>> partition = tokens.stream()
+                .collect(Collectors.partitioningBy(token -> token.getCategory().isWhitespaceOrComment()));
+
+        Long codeTokens = (long) partition.get(false).size();
+        Long nonCodeTokens = partition.get(true).stream().mapToLong(token -> {
+            JavaToken.Category category = token.getCategory();
+            if (category.isWhitespace()) {
+                return 1L;
+            } else {
+                String text = token.getText();
+                String normalized = StringUtils.normalizeSpace(text);
+                String[] words = normalized.split("\\s");
+                long spaces = words.length - 1L;
+                return words.length + spaces;
+            }
+        }).sum();
+
+        return Tuple.of(codeTokens + nonCodeTokens, codeTokens);
     }
 
     public Long countLines(Node node) {
