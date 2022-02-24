@@ -55,6 +55,11 @@ public class Tuple<L, R> implements Map.Entry<L, R> {
         throw new UnsupportedOperationException("Tuple values are not modifiable!");
     }
 
+    @Override
+    public String toString() {
+        return String.format("(%s, %s)", left.toString(), right.toString());
+    }
+
     public static <L, R> Tuple<L, R> of(L left, R right) {
         return new Tuple<>(left, right);
     }
