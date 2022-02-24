@@ -43,11 +43,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Crawler {
 
-    // TODO: 17.02.22 Parametrize these in the settings
-    static String tempPrefix = "dl4se";
-    static String startUrl = "http://localhost:8080/api/r/search";
-    static LocalDate startDate = LocalDate.of(2008, 1, 1);
-
     static Set<Language> languages;
 
     static {
@@ -78,9 +73,9 @@ public class Crawler {
 
     public static void main(String[] args) {
         HttpClient client = new HttpClient();
-        String nextUrl = startUrl;
-        // The default starting date, will be overridden with job value stored in the DB
-        LocalDate lastUpdate = startDate;
+        String nextUrl = CrawlerProperties.ghsSearchUrl;
+        LocalDate lastUpdate = CrawlerProperties.startDate;
+        // TODO: 25.02.22 Query DB for last CrawlJob date
         do {
             nextUrl = iterate(client, nextUrl, lastUpdate);
         } while (nextUrl != null);
@@ -112,7 +107,7 @@ public class Crawler {
 
         GitRepo.GitRepoBuilder repoBuilder = item.toGitRepoBuilder();
 
-        Path cloneDir = Files.createTempDirectory(tempPrefix);
+        Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         log.info("Mining repository: {} [Last Update: {}]", name, item.getPushedAt());
         try {
             Git git = GitUtils.cloneRepository(name, cloneDir);
