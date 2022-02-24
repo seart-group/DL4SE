@@ -32,6 +32,13 @@ class NodeUtilsTest {
         tokens = NodeUtils.countTokens(md2);
         Assertions.assertEquals(28, tokens.getLeft());
         Assertions.assertEquals(7, tokens.getRight());
+
+        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration(
+                "/** * This is a java documentation comment */\npublic void method(){}"
+        );
+        tokens = NodeUtils.countTokens(md3);
+        Assertions.assertEquals(26, tokens.getLeft());
+        Assertions.assertEquals(7, tokens.getRight());
     }
 
     @Test
