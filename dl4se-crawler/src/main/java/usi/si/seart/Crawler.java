@@ -11,6 +11,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.SetUtils;
 import usi.si.seart.exception.ParsingException;
 import usi.si.seart.http.HttpClient;
@@ -62,12 +63,12 @@ public class Crawler {
     }
 
     static Map<String, Language> extensionToLanguage = languages.stream().flatMap(language -> {
-        List<Map.Entry<String, Language>> entries = new ArrayList<>();
-        for (String extension : language.getExtensions()) {
-            entries.add(Map.entry(extension, language));
+        List<Tuple<String, Language>> entries = new ArrayList<>();
+        for (String extension: language.getExtensions()) {
+            entries.add(Tuple.of(extension, language));
         }
         return entries.stream();
-    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
 
     static String[] extensions = extensionToLanguage.keySet().toArray(new String[0]);
 
