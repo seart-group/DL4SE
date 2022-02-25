@@ -147,6 +147,7 @@ public class Crawler {
             file = parser.parse(filePath);
         }
 
+        if (file == null) return;
         file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(filePath));
         repoBuilder.file(file);
         repoBuilder.functions(file.getFunctions());

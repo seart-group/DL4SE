@@ -1,16 +1,18 @@
 package usi.si.seart.parser;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.CharacterCodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 public class FallbackParser extends AbstractParser {
 
     public FallbackParser(Language language) {
@@ -23,14 +25,20 @@ public class FallbackParser extends AbstractParser {
         fileBuilder.isTest(PathUtils.isTestFile(path));
         fileBuilder.language(language);
 
-        String fileContents = Files.readString(path, StandardCharsets.UTF_8);
-        String normalized = StringUtils.normalizeSpace(fileContents); // TODO: Should we do this?
-        fileBuilder.content(fileContents);
-        fileBuilder.contentHash(StringUtils.sha256(normalized));
-        fileBuilder.lines(fileContents.lines().count());
-        fileBuilder.characters(fileContents.chars().count());
-        fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
+        try {
+            String fileContents = Files.readString(path);
+            String normalized = StringUtils.normalizeSpace(fileContents);
 
-        return buildFileAndFunctions();
+            fileBuilder.content(fileContents);
+            fileBuilder.contentHash(StringUtils.sha256(normalized));
+            fileBuilder.lines(fileContents.lines().count());
+            fileBuilder.characters(fileContents.chars().count());
+            fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
+
+            return buildFileAndFunctions();
+        } catch (CharacterCodingException ex) {
+            log.error("Could not read file: " + path, ex);
+            return null;
+        }
     }
 }
