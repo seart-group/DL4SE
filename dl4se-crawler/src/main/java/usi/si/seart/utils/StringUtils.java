@@ -3,6 +3,8 @@ package usi.si.seart.utils;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,13 +16,13 @@ public class StringUtils {
     /**
      * Simple implementation of the SHA-256 algorithm.
      *
-     * @param input An input {@link String} of arbitrary length.
-     * @return The SHA-256 hashing algorithm result.
-     * @apiNote We suppress throws of {@link NoSuchAlgorithmException}.
+     * @param input An input {@code String} of arbitrary length.
+     * @return A 64-character {@code String} representing the hashing algorithm result.
+     * @implNote We suppress throws of {@link NoSuchAlgorithmException}.
      * @see <a href="https://www.baeldung.com/sha-256-hashing-java#message-digest">Baeldung Guide</a>
      * @author dabico
      */
-    @SneakyThrows
+    @SneakyThrows({NoSuchAlgorithmException.class})
     public String sha256(String input) {
         Objects.requireNonNull(input);
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -35,10 +37,10 @@ public class StringUtils {
     }
 
     /**
-     * Used to check if an input String contains any non-ASCII characters.
+     * Used to check if an input {@code String} contains any non-ASCII characters.
      *
-     * @param input The input {@link String} to check against.
-     * @return Whether it contains non-ASCII characters.
+     * @param input The input {@code String} to check against.
+     * @return {@code true} if it contains any non-ASCII characters, {@code false} otherwise.
      * @author dabico
      */
     public boolean containsNonAscii(String input) {
@@ -47,11 +49,12 @@ public class StringUtils {
     }
 
     /**
-     * Used to normalize white spaces in a String. For a passed input we replace all consecutive occurrences of
+     * Used to normalize white spaces in a {@code String}. For a passed input we replace all consecutive occurrences of
      * whitespace characters as defined by {@link Character#isWhitespace(char) Character.isWhiteSpace} with a single
-     * space character. Before returning, the resulting String is also stripped of any leading or trailing whitespaces.
+     * space character. Before returning, the resulting {@code String} is also stripped of any leading or trailing
+     * whitespaces.
      *
-     * @param input An input {@link String}.
+     * @param input An input {@code String}.
      * @return The space-normalized input.
      * @author dabico
      */
@@ -75,5 +78,21 @@ public class StringUtils {
         }
 
         return builder.toString().trim();
+    }
+
+    /**
+     * Used to read any arbitrary {@code InputStream} into a {@code String}.
+     *
+     * @param inputStream An {@code InputStream}.
+     * @return The stream contents as a {@code String}.
+     * @apiNote Intended to be used for processing the STD/ERR output of a {@link java.lang.Process Process}.
+     * @implNote We suppress throws of {@link IOException}.
+     * @author dabico
+     * @see <a href="https://www.baeldung.com/convert-input-stream-to-string#converting-with-java-9---inputstreamreadallbytes">Baeldung Guide</a>
+     */
+    @SneakyThrows({IOException.class})
+    public String fromInputStream(InputStream inputStream) {
+        Objects.requireNonNull(inputStream);
+        return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
     }
 }

@@ -3,6 +3,9 @@ package usi.si.seart.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 class StringUtilsTest {
 
     @Test
@@ -40,5 +43,13 @@ class StringUtilsTest {
         Assertions.assertEquals(input2, StringUtils.normalizeSpace(input4));
         Assertions.assertEquals(input2, StringUtils.normalizeSpace(input5));
         Assertions.assertEquals(input2, StringUtils.normalizeSpace(input6));
+    }
+
+    @Test
+    void fromInputStreamTest() {
+        String expected = "abcd1234";
+        InputStream inputStream = new ByteArrayInputStream(expected.getBytes());
+        String actual = StringUtils.fromInputStream(inputStream);
+        Assertions.assertEquals(expected, actual);
     }
 }
