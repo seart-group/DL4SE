@@ -10,7 +10,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import usi.si.seart.exception.ParsingException;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;

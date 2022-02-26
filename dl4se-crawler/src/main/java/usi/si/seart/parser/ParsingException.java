@@ -1,4 +1,4 @@
-package usi.si.seart.exception;
+package usi.si.seart.parser;
 
 public class ParsingException extends RuntimeException {
 

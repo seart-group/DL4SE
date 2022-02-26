@@ -13,7 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.SetUtils;
-import usi.si.seart.exception.ParsingException;
+import usi.si.seart.parser.ParsingException;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
 import usi.si.seart.io.ExtensionBasedFileVisitor;
