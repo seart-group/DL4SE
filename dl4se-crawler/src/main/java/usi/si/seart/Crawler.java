@@ -6,13 +6,12 @@ import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.revwalk.RevCommit;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.SetUtils;
+import usi.si.seart.git.Git;
+import usi.si.seart.git.GitException;
 import usi.si.seart.parser.ParsingException;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
@@ -22,17 +21,13 @@ import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.parser.FallbackParser;
 import usi.si.seart.parser.Parser;
-import usi.si.seart.utils.GitUtils;
 import usi.si.seart.utils.HibernateUtils;
 import usi.si.seart.utils.PathUtils;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -110,13 +105,10 @@ public class Crawler {
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         log.info("Mining repository: {} [Last Update: {}]", name, item.getPushedAt());
         try {
-            Git git = GitUtils.cloneRepository(name, cloneDir);
-            for (RevCommit latest: git.log().setMaxCount(1).call()) {
-                repoBuilder.lastCommitSHA(latest.getName());
-                repoBuilder.lastUpdate(
-                        LocalDateTime.ofInstant(Instant.ofEpochSecond(latest.getCommitTime()), ZoneId.of("UTC"))
-                );
-            }
+            Git git = new Git(name, cloneDir, true);
+            Git.Commit latest = git.getLastCommitInfo();
+            repoBuilder.lastCommitSHA(latest.getSha());
+            repoBuilder.lastUpdate(latest.getLastUpdate());
 
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
@@ -126,8 +118,8 @@ public class Crawler {
             repo.getFiles().forEach(file -> file.setRepo(repo));
             repo.getFunctions().forEach(function -> function.setRepo(repo));
             HibernateUtils.saveRepo(repo);
-        } catch (GitAPIException ex) {
-            log.error("Error while cloning: {}", name);
+        } catch (GitException ex) {
+            log.error("Git operation error for: {}", name);
             log.error("Error stack trace:", ex);
         } finally {
             PathUtils.forceDelete(cloneDir);
