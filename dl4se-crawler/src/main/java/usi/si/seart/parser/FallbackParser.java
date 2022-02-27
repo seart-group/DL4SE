@@ -1,6 +1,5 @@
 package usi.si.seart.parser;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
@@ -8,7 +7,6 @@ import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -20,7 +18,6 @@ public class FallbackParser extends AbstractParser {
     }
 
     @Override
-    @SneakyThrows({IOException.class})
     public File parse(Path path) {
         fileBuilder.isTest(PathUtils.isTestFile(path));
         fileBuilder.language(language);
@@ -36,7 +33,7 @@ public class FallbackParser extends AbstractParser {
             fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
 
             return buildFileAndFunctions();
-        } catch (CharacterCodingException ex) {
+        } catch (IOException ex) {
             log.error("Could not read file: " + path, ex);
             return null;
         }

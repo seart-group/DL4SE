@@ -8,7 +8,6 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
@@ -31,7 +30,6 @@ public class JavaParser extends AbstractParser {
     }
 
     @Override
-    @SneakyThrows({FileNotFoundException.class})
     public File parse(Path path) throws ParsingException {
         fileBuilder.isTest(PathUtils.isTestFile(path));
         fileBuilder.language(language);
@@ -40,7 +38,7 @@ public class JavaParser extends AbstractParser {
             CompilationUnit compilationUnit = StaticJavaParser.parse(path.toFile());
             fileBuilder.isParsed(true);
             new VoidVisitor().visit(compilationUnit, null);
-        } catch (ParseProblemException ex) {
+        } catch (ParseProblemException | FileNotFoundException ex) {
             log.error("Parsing failed for: " + path, ex);
             throw new ParsingException(ex.getMessage(), ex.getCause());
         }
