@@ -58,11 +58,7 @@
           </execution>
         </executions>
         <configuration>
-          <changeLogFile>src/main/resources/liquibase/changelog-master.xml</changeLogFile>
-          <driver>org.postgresql.Driver</driver>
-          <url>jdbc:postgresql://localhost:5432/dl4se</url>
-          <username>dl4se_admin</username>
-          <password>Lugano2022</password>
+          <propertyFile>src/main/resources/liquibase.properties</propertyFile>
         </configuration>
       </plugin>
       <plugin>
