@@ -14,6 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <app.mainClass>usi.si.seart.Crawler</app.mainClass>
   </properties>
 
   <dependencies>
@@ -73,7 +74,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>usi.si.seart.Crawler</mainClass>
+          <mainClass>${app.mainClass}</mainClass>
         </configuration>
       </plugin>
     </plugins>
