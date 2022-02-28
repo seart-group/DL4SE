@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.SetUtils;
 import usi.si.seart.git.Git;
@@ -39,32 +37,24 @@ import java.util.stream.Collectors;
 public class Crawler {
 
     static Set<Language> languages;
+    static String[] extensions;
+    static Set<String> languageNames;
+    static Map<String, Language> extensionToLanguage;
 
     static {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
-            languages = session.createQuery("SELECT l FROM Language l", Language.class)
-                    .stream()
-                    .collect(Collectors.toSet());
-        } catch (HibernateException ex) {
-            log.error("Could not open session for initialization:", ex);
-            log.error("Aborting...");
-            System.exit(1);
-        }
+        languages = HibernateUtils.getLanguages();
+        extensionToLanguage = languages.stream().flatMap(language -> {
+            List<Tuple<String, Language>> entries = new ArrayList<>();
+            for (String extension: language.getExtensions()) {
+                entries.add(Tuple.of(extension, language));
+            }
+            return entries.stream();
+        }).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
+        extensions = extensionToLanguage.keySet().toArray(new String[0]);
+        languageNames = languages.stream()
+                .map(Language::getName)
+                .collect(Collectors.toSet());
     }
-
-    static Map<String, Language> extensionToLanguage = languages.stream().flatMap(language -> {
-        List<Tuple<String, Language>> entries = new ArrayList<>();
-        for (String extension: language.getExtensions()) {
-            entries.add(Tuple.of(extension, language));
-        }
-        return entries.stream();
-    }).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
-
-    static String[] extensions = extensionToLanguage.keySet().toArray(new String[0]);
-
-    static Set<String> languageNames = languages.stream()
-            .map(Language::getName)
-            .collect(Collectors.toSet());
 
     public static void main(String[] args) {
         HttpClient client = new HttpClient();

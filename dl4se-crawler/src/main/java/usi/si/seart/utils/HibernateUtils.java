@@ -10,21 +10,23 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import usi.si.seart.model.GitRepo;
+import usi.si.seart.model.Language;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @UtilityClass
 public class HibernateUtils {
 
     @Getter
-    private static SessionFactory factory;
+    private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
-    static {
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (HibernateException ex) {
-            log.error("Error creating the session factory:", ex);
-            log.error("Aborting...");
-            System.exit(1);
+    public static Set<Language> getLanguages() {
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            return session.createQuery("SELECT l FROM Language l", Language.class)
+                    .stream()
+                    .collect(Collectors.toSet());
         }
     }
 
