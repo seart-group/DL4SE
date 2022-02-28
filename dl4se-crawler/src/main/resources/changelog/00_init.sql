@@ -2,6 +2,12 @@
 CREATE SEQUENCE hibernate_sequence START 1 INCREMENT 1;
 
 -- TABLES
+CREATE TABLE "crawl_job" (
+    "id" bigint PRIMARY KEY NOT NULL,
+    "checkpoint" timestamp NOT NULL,
+    "job_type" text NOT NULL
+);
+
 CREATE TABLE "language" (
     "id" bigint PRIMARY KEY NOT NULL,
     "name" text NOT NULL,

@@ -1,5 +1,6 @@
 drop table "databasechangeloglock";
 drop table "databasechangelog";
+drop table "crawl_job";
 drop table "function";
 drop table "file";
 drop table "language";
