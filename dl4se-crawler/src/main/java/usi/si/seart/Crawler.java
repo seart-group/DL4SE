@@ -70,7 +70,7 @@ public class Crawler {
     @SneakyThrows
     private static String iterate(HttpClient client, String link, LocalDate lastUpdate) {
         GenericUrl requestUrl = new GenericUrl(link)
-                .set("pushedAtMin", lastUpdate.toString())
+                .set("committedMin", lastUpdate.toString())
                 .set("sort", "pushedAt");
         HttpResponse response = client.getRequest(requestUrl);
         List<GhsGitRepo> items = client.getSearchResults(response);
