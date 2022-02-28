@@ -33,22 +33,27 @@ import java.util.List;
  * @author dabico
  */
 @Slf4j
-@Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
     PathMatcher matcher;
+
+    @Getter
     List<Path> visited;
 
     public ExtensionBasedFileVisitor(String... extensions) {
         super();
-        String glob = "glob:*";
-        if (extensions.length > 0) {
-            glob += "\\.";
-            glob += "{" + String.join(",", extensions) + "}";
-        }
-        this.matcher = FileSystems.getDefault().getPathMatcher(glob);
+        this.matcher = compileMatcher(extensions);
         this.visited = new ArrayList<>();
+    }
+
+    private PathMatcher compileMatcher(String... extensions) {
+        StringBuilder sb = new StringBuilder("glob:*");
+        if (extensions.length > 0) {
+            String extStr = String.join(",", extensions);
+            sb.append("\\.{").append(extStr).append("}");
+        }
+        return FileSystems.getDefault().getPathMatcher(sb.toString());
     }
 
     @Override
