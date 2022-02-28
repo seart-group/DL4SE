@@ -30,11 +30,6 @@
         <property name="hbm2ddl.auto">none</property>
 
         <!-- Entity Mappings -->
-        <mapping class="usi.si.seart.model.GitRepo"/>
-        <mapping class="usi.si.seart.model.Language"/>
-        <mapping class="usi.si.seart.model.code.Code"/>
-        <mapping class="usi.si.seart.model.code.File"/>
-        <mapping class="usi.si.seart.model.code.Function"/>
-        <mapping class="usi.si.seart.model.job.CrawlJob"/>
+        <mapping package="usi.si.seart.model"/>
     </session-factory>
 </hibernate-configuration>
