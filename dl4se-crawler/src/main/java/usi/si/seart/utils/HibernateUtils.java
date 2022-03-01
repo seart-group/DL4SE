@@ -3,8 +3,6 @@ package usi.si.seart.utils;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.HibernateException;
-import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -53,17 +51,24 @@ public class HibernateUtils {
         }
     }
 
-    public static void saveRepo(GitRepo repo) {
+    public static void save(CrawlJob crawlJob) {
+        saveOrUpdate(crawlJob);
+    }
+
+    public static void save(GitRepo repo) {
+        saveOrUpdate(repo);
+    }
+
+    private static void saveOrUpdate(Object obj) {
         Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            log.debug("Saving: {}", repo);
-            session.saveOrUpdate(repo);
+            session.saveOrUpdate(obj);
             session.flush();
             transaction.commit();
-            log.debug("Saved: {}", repo.getName());
-        } catch (PropertyValueException ex) {
-            log.error("Error while persisting: {}", repo);
+            log.debug("Saved: {}", obj);
+        } catch (Exception ex) {
+            log.error("Error while persisting: {}", obj);
             log.error("Error stack trace:", ex);
             session.flush();
             transaction.rollback();
