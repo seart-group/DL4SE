@@ -8,8 +8,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.SetUtils;
+import usi.si.seart.converter.DateToLDTConverter;
 import usi.si.seart.git.Git;
 import usi.si.seart.git.GitException;
+import usi.si.seart.model.job.CrawlJob;
 import usi.si.seart.parser.ParsingException;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
@@ -26,6 +28,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,12 +40,16 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Crawler {
 
+    static CrawlJob lastJob;
+
     static Set<Language> languages;
     static String[] extensions;
     static Set<String> languageNames;
     static Map<String, Language> extensionToLanguage;
 
     static {
+        lastJob = HibernateUtils.getLastJob();
+
         languages = HibernateUtils.getLanguages();
         extensionToLanguage = languages.stream().flatMap(language -> {
             List<Tuple<String, Language>> entries = new ArrayList<>();
@@ -60,8 +67,8 @@ public class Crawler {
     public static void main(String[] args) {
         HttpClient client = new HttpClient();
         String nextUrl = CrawlerProperties.ghsSearchUrl;
-        LocalDate lastUpdate = CrawlerProperties.startDate;
-        // TODO: 25.02.22 Query DB for last CrawlJob date
+        LocalDate lastUpdate = lastJob.getCheckpoint().toLocalDate();
+        log.info("Last mining checkpoint: {}", lastUpdate);
         do {
             nextUrl = iterate(client, nextUrl, lastUpdate);
         } while (nextUrl != null);
@@ -106,7 +113,11 @@ public class Crawler {
             GitRepo repo = repoBuilder.build();
             repo.getFiles().forEach(file -> file.setRepo(repo));
             repo.getFunctions().forEach(function -> function.setRepo(repo));
-            HibernateUtils.saveRepo(repo);
+            HibernateUtils.save(repo);
+
+            LocalDateTime ghsTimestamp = DateToLDTConverter.getInstance().convert(item.getPushedAt());
+            lastJob.setCheckpoint(ghsTimestamp);
+            HibernateUtils.save(lastJob);
         } catch (GitException ex) {
             log.error("Git operation error for: {}", name);
             log.error("Error stack trace:", ex);
