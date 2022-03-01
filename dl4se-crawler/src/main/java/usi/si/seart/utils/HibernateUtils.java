@@ -51,6 +51,14 @@ public class HibernateUtils {
         }
     }
 
+    public static Optional<GitRepo> getRepo(String name) {
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            return session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
+                    .setParameter("name", name)
+                    .uniqueResultOptional();
+        }
+    }
+
     public static void save(CrawlJob crawlJob) {
         saveOrUpdate(crawlJob);
     }
