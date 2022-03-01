@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,9 +84,7 @@ public class Crawler {
     @SneakyThrows
     private static void mineRepositoryData(GhsGitRepo item) {
         String name = item.getName();
-        boolean skip = languageNames.contains(item.getMainLanguage());
-        skip |= SetUtils.intersection(languageNames, item.getLanguages().keySet()).isEmpty();
-        if (skip) {
+        if (shouldSkip(item)) {
             log.debug("Skipping: {}. No files of interest found!", name);
             return;
         }
@@ -133,5 +132,12 @@ public class Crawler {
         file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(filePath));
         repoBuilder.file(file);
         repoBuilder.functions(file.getFunctions());
+    }
+
+    private static boolean shouldSkip(GhsGitRepo item) {
+        Set<String> repoLanguages = new HashSet<>();
+        repoLanguages.add(item.getMainLanguage());
+        repoLanguages.addAll(item.getLanguages().keySet());
+        return SetUtils.intersection(languageNames, repoLanguages).isEmpty();
     }
 }
