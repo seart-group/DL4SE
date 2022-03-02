@@ -10,6 +10,7 @@ import usi.si.seart.converter.DateToLDTConverter;
 import usi.si.seart.model.GitRepo;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,6 +48,13 @@ public class GhsGitRepo {
     Boolean isArchived;
     Map<String, Long> languages;
     Set<String> labels;
+
+    public Set<String> getRepoLanguages() {
+        Set<String> repoLanguages = new HashSet<>();
+        repoLanguages.add(mainLanguage);
+        repoLanguages.addAll(languages.keySet());
+        return repoLanguages;
+    }
 
     public GitRepo.GitRepoBuilder toGitRepoBuilder() {
         GitRepo.GitRepoBuilder builder = GitRepo.builder();
