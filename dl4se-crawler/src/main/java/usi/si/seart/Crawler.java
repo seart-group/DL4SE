@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
-import usi.si.seart.collection.utils.SetUtils;
+import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.DateToLDTConverter;
 import usi.si.seart.git.Git;
 import usi.si.seart.git.GitException;
@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,8 +42,9 @@ public class Crawler {
     static CrawlJob lastJob;
 
     static Set<Language> languages;
+    static Set<String> names;
     static String[] extensions;
-    static Set<String> languageNames;
+    static Map<String, Language> nameToLanguage;
     static Map<String, Language> extensionToLanguage;
 
     static {
@@ -59,9 +59,9 @@ public class Crawler {
             return entries.stream();
         }).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
         extensions = extensionToLanguage.keySet().toArray(new String[0]);
-        languageNames = languages.stream()
-                .map(Language::getName)
-                .collect(Collectors.toSet());
+        nameToLanguage = languages.stream().map(language -> Tuple.of(language.getName(), language))
+                .collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
+        names = nameToLanguage.keySet();
     }
 
     public static void main(String[] args) {
@@ -91,7 +91,11 @@ public class Crawler {
     @SneakyThrows
     private static void mineRepositoryData(GhsGitRepo item) {
         String name = item.getName();
-        if (shouldSkip(item)) {
+
+        Set<String> ghsLanguages = item.getRepoLanguages();
+        Set<String> supported = CollectionUtils.intersection(names, ghsLanguages);
+
+        if (supported.isEmpty()) {
             log.debug("Skipping: {}. No files of interest found!", name);
             return;
         }
@@ -143,12 +147,5 @@ public class Crawler {
         file.setPath(FileSystems.getDefault().getSeparator() + cloneDir.relativize(filePath));
         repoBuilder.file(file);
         repoBuilder.functions(file.getFunctions());
-    }
-
-    private static boolean shouldSkip(GhsGitRepo item) {
-        Set<String> repoLanguages = new HashSet<>();
-        repoLanguages.add(item.getMainLanguage());
-        repoLanguages.addAll(item.getLanguages().keySet());
-        return SetUtils.intersection(languageNames, repoLanguages).isEmpty();
     }
 }
