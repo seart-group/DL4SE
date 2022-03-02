@@ -37,7 +37,7 @@ public class CollectionUtils {
      * @param <V> The value type.
      * @return The {@code Set} of values that are mapped my the keys.
      */
-    public <K, V> Set<V> getAllKeysFrom(Map<K, V> map, Collection<K> keys) {
+    public <K, V> Set<V> getAllValuesFrom(Map<K, V> map, Collection<K> keys) {
         Set<V> values = new HashSet<>(keys.size());
         for (K key: keys) {
             V value = map.get(key);

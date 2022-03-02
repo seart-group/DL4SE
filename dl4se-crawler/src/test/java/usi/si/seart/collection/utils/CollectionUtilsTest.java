@@ -25,8 +25,8 @@ class CollectionUtilsTest {
         Set<Integer> keys = Set.of(0, 1, 2, 3, 4);
         Set<Integer> values = Set.of(5, 6, 7, 8, 9);
 
-        Assertions.assertEquals(values, CollectionUtils.getAllKeysFrom(map, keys));
-        Assertions.assertEquals(Set.of(5, 6, 7), CollectionUtils.getAllKeysFrom(map, Set.of(0, 1, 2)));
-        Assertions.assertEquals(Set.of(), CollectionUtils.getAllKeysFrom(map, Set.of(5, 6, 7)));
+        Assertions.assertEquals(values, CollectionUtils.getAllValuesFrom(map, keys));
+        Assertions.assertEquals(Set.of(5, 6, 7), CollectionUtils.getAllValuesFrom(map, Set.of(0, 1, 2)));
+        Assertions.assertEquals(Set.of(), CollectionUtils.getAllValuesFrom(map, Set.of(5, 6, 7)));
     }
 }

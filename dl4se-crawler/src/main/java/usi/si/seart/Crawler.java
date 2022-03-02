@@ -101,7 +101,7 @@ public class Crawler {
         }
 
         GitRepo.GitRepoBuilder repoBuilder = item.toGitRepoBuilder();
-        Set<Language> repoLanguages = CollectionUtils.getAllKeysFrom(nameToLanguage, supported);
+        Set<Language> repoLanguages = CollectionUtils.getAllValuesFrom(nameToLanguage, supported);
         repoBuilder.languages(repoLanguages);
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
