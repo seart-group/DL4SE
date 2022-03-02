@@ -28,6 +28,11 @@ CREATE TABLE "git_repo" (
     "is_deleted" boolean NOT NULL
 );
 
+CREATE TABLE "git_repo_language" (
+    "repo_id" bigint NOT NULL,
+    "lang_id" bigint NOT NULL
+);
+
 CREATE TABLE "file" (
     "id" bigint PRIMARY KEY NOT NULL,
     "repo_id" bigint NOT NULL,
@@ -65,6 +70,8 @@ CREATE TABLE "function" (
 );
 
 -- FOREIGN KEYS
+ALTER TABLE "git_repo_language" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id");
+ALTER TABLE "git_repo_language" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "file" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id");
 ALTER TABLE "file" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id");

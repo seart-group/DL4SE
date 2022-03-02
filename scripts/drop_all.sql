@@ -3,6 +3,7 @@ drop table "databasechangelog";
 drop table "crawl_job";
 drop table "function";
 drop table "file";
+drop table "git_repo_language";
 drop table "language";
 drop table "git_repo";
 drop sequence "hibernate_sequence";

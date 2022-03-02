@@ -17,9 +17,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "language")
@@ -44,6 +47,10 @@ public class Language {
     @Column(columnDefinition = "text[]", nullable = false)
     @ToString.Exclude
     List<String> extensions;
+
+    @ManyToMany(mappedBy = "languages")
+    @ToString.Exclude
+    Set<GitRepo> repos = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
