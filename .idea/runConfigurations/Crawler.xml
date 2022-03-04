@@ -3,6 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="usi.si.seart.Crawler" />
     <module name="dl4se-crawler" />
     <option name="PROGRAM_PARAMETERS" value="seart-group/ghs" />
+    <option name="VM_PARAMETERS" value="-Xss16m" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="usi.si.seart.*" />

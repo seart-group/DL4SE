@@ -74,6 +74,9 @@
           </execution>
         </executions>
         <configuration>
+          <arguments>
+            <argument>-Xss16m</argument>
+          </arguments>
           <mainClass>${app.mainClass}</mainClass>
         </configuration>
       </plugin>
