@@ -24,6 +24,36 @@ plantuml -tsvg ./* -output "out"
 
 [Link to current relational rendition](https://dbdiagram.io/d/6202862685022f4ee55b0274)
 
+## DB
+
+First create the user:
+```postgresql
+CREATE ROLE dl4se_admin WITH
+	LOGIN
+	NOSUPERUSER
+	CREATEDB
+	NOCREATEROLE
+	INHERIT
+	NOREPLICATION
+	CONNECTION LIMIT -1;
+```
+
+Then create the DB:
+```postgresql
+CREATE DATABASE dl4se
+    WITH 
+    OWNER = dl4se_admin
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+```
+
+To terminate all sessions related to the DB:
+```postgresql
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname = 'dl4se';
+```
+
 ## Maven
 
 ### Adding modules
