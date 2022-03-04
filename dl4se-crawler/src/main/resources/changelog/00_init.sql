@@ -78,6 +78,13 @@ ALTER TABLE "function" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("file_id") references "file" ("id");
 
+-- INDEXES
+CREATE INDEX "git_repo_language_idx" ON "git_repo_language" (repo_id, lang_id);
+CREATE INDEX "file_repo_id_idx" ON "file" (repo_id);
+CREATE INDEX "file_lang_id_idx" ON "file" (lang_id);
+CREATE INDEX "function_repo_id_idx" ON "function" (repo_id);
+CREATE INDEX "function_lang_id_idx" ON "function" (lang_id);
+
 -- ADD LANGUAGES
 INSERT INTO language(id, name, extensions)
 VALUES
