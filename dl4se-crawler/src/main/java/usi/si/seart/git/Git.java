@@ -105,7 +105,7 @@ public class Git {
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public class Commit {
         String sha;
-        LocalDateTime lastUpdate;
+        LocalDateTime timestamp;
 
         private Commit() throws GitException {
             Process process = executeGitCommand("log", "-1", "--format=%H%n%at");
@@ -115,7 +115,7 @@ public class Git {
             List<String> outputLines = stdOut.lines().collect(Collectors.toList());
             this.sha = outputLines.get(0);
             Instant lastUpdateInstant = Instant.ofEpochSecond(Integer.parseInt(outputLines.get(1)));
-            this.lastUpdate = LocalDateTime.ofInstant(lastUpdateInstant, ZoneId.of("UTC"));
+            this.timestamp = LocalDateTime.ofInstant(lastUpdateInstant, ZoneId.of("UTC"));
         }
     }
 

@@ -58,7 +58,7 @@ class GitTest {
         Git git = new Git(testRepoName, tmp, true);
         Git.Commit commit = git.getLastCommitInfo();
         Assertions.assertEquals("010e305c9818d7d8a985e91cf60739ac3b66d24e", commit.getSha());
-        Assertions.assertEquals(LocalDateTime.of(2022, 2, 12, 20, 19, 51), commit.getLastUpdate());
+        Assertions.assertEquals(LocalDateTime.of(2022, 2, 12, 20, 19, 51), commit.getTimestamp());
     }
 
     @Test

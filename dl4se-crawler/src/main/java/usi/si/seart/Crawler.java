@@ -110,7 +110,7 @@ public class Crawler {
             Git git = new Git(name, cloneDir, true);
             Git.Commit latest = git.getLastCommitInfo();
             repoBuilder.lastCommitSHA(latest.getSha());
-            repoBuilder.lastUpdate(latest.getLastUpdate());
+            repoBuilder.lastUpdate(latest.getTimestamp());
 
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
