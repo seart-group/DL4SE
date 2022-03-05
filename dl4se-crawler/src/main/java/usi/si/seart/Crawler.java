@@ -11,20 +11,19 @@ import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.DateToLDTConverter;
 import usi.si.seart.git.Git;
 import usi.si.seart.git.GitException;
-import usi.si.seart.model.job.CrawlJob;
-import usi.si.seart.parser.ParsingException;
 import usi.si.seart.http.HttpClient;
 import usi.si.seart.http.payload.GhsGitRepo;
 import usi.si.seart.io.ExtensionBasedFileVisitor;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
+import usi.si.seart.model.job.CrawlJob;
 import usi.si.seart.parser.FallbackParser;
 import usi.si.seart.parser.Parser;
+import usi.si.seart.parser.ParsingException;
 import usi.si.seart.utils.HibernateUtils;
 import usi.si.seart.utils.PathUtils;
 
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -125,7 +124,16 @@ public class Crawler {
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
             List<Path> paths = visitor.getVisited();
-            paths.forEach(path -> parseFile(cloneDir, path, repoBuilder));
+
+            for (Path path: paths) {
+                File file = parseFile(path);
+                if (file != null) {
+                    file.setPath(cloneDir.relativize(path).toString());
+                    repoBuilder.file(file);
+                    repoBuilder.functions(file.getFunctions());
+                }
+            }
+
             GitRepo repo = repoBuilder.build();
             repo.getFiles().forEach(file -> file.setRepo(repo));
             repo.getFunctions().forEach(function -> function.setRepo(repo));
@@ -141,7 +149,7 @@ public class Crawler {
         }
     }
 
-    private static void parseFile(Path cloneDir, Path filePath, GitRepo.GitRepoBuilder repoBuilder) {
+    private static File parseFile(Path filePath) {
         String extension = PathUtils.getExtension(filePath);
         Language language = extensionToLanguage.get(extension);
 
@@ -154,9 +162,6 @@ public class Crawler {
             file = parser.parse(filePath);
         }
 
-        if (file == null) return;
-        file.setPath(cloneDir.relativize(filePath).toString());
-        repoBuilder.file(file);
-        repoBuilder.functions(file.getFunctions());
+        return file;
     }
 }
