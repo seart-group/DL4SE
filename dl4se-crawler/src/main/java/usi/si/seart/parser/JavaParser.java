@@ -38,9 +38,9 @@ public class JavaParser extends AbstractParser {
             CompilationUnit compilationUnit = StaticJavaParser.parse(path.toFile());
             fileBuilder.isParsed(true);
             new VoidVisitor().visit(compilationUnit, null);
-        } catch (ParseProblemException | FileNotFoundException ex) {
-            log.error("Parsing failed for: " + path, ex);
-            throw new ParsingException(ex.getMessage(), ex.getCause());
+        } catch (ParseProblemException | FileNotFoundException | StackOverflowError thr) {
+            log.error("Parsing failed for: " + path, thr);
+            throw new ParsingException(thr.getMessage(), thr.getCause());
         }
 
         return buildFileAndFunctions();
