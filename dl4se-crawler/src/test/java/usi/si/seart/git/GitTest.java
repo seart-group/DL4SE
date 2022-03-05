@@ -21,6 +21,10 @@ class GitTest {
     Path tmp;
     // https://github.com/dabico/dl4se-test
     String testRepoName = "dabico/dl4se-test";
+    // https://github.com/dabico/dl4se-empty
+    String emptyRepoName = "dabico/dl4se-empty";
+    // https://github.com/dabico/dl4se-history
+    String historyRepoName = "dabico/dl4se-history";
 
     @Test
     @SneakyThrows({GitException.class})
@@ -64,10 +68,52 @@ class GitTest {
     @Test
     @SneakyThrows({GitException.class})
     void getLastCommitEmptyRepoTest() {
-        // https://github.com/dabico/dl4se-empty
-        String emptyRepoName = "dabico/dl4se-empty";
         Git git = new Git(emptyRepoName, tmp);
         Assertions.assertThrows(GitException.class, git::getLastCommitInfo);
+    }
+
+
+    @Test
+    @SneakyThrows({GitException.class})
+    void getDiffLowerBoundOnly() {
+        Git git = new Git(historyRepoName, tmp);
+        Git.Diff diff = git.getDiff("a09ccdf24ed65e184a6c79afcd4f1e2cfaf17554");
+        // Expected diff output:
+        // A       .gitignore
+        // R065    file_04.java    dir/file_04.java
+        // R100    file_05.java    dir/file_05.java
+        // D       file_01.java
+        // R100    file_02.java    file_02_renamed.java
+        // M       file_03.java
+        Assertions.assertEquals(1, diff.getAdded().size());
+        Assertions.assertEquals(1, diff.getDeleted().size());
+        Assertions.assertEquals(1, diff.getModified().size());
+        Assertions.assertEquals(2, diff.getRenamed().size());
+        Assertions.assertEquals(1, diff.getEdited().size());
+    }
+
+    @Test
+    @SneakyThrows({GitException.class})
+    void getDiffTest() {
+        Git git = new Git(historyRepoName, tmp);
+        Git.Diff diff = git.getDiff(
+                "0b0bfc50b8deba916463e100b4a5b7b051be888f",
+                "72bd80eb2f591c09b1d87edb296536c476bb5d64"
+        );
+        // Expected diff output:
+        // D       file_01.java
+        // R100    file_02.java    file_02_renamed.java
+        // M       file_03.java
+        Assertions.assertEquals(1, diff.getDeleted().size());
+        Assertions.assertEquals(1, diff.getModified().size());
+        Assertions.assertEquals(1, diff.getRenamed().size());
+    }
+
+    @Test
+    @SneakyThrows({GitException.class})
+    void gitDiffBadSHATest() {
+        Git git = new Git(testRepoName, tmp);
+        Assertions.assertThrows(GitException.class, () -> git.getDiff(""));
     }
 
     @Test

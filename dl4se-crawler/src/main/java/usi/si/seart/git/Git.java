@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -120,6 +122,90 @@ public class Git {
             this.sha = outputLines.get(0);
             Instant lastUpdateInstant = Instant.ofEpochSecond(Integer.parseInt(outputLines.get(1)));
             this.timestamp = LocalDateTime.ofInstant(lastUpdateInstant, ZoneId.of("UTC"));
+        }
+    }
+
+    /**
+     * Used to retrieve a summary of changes made between the specified commit and the repository {@code HEAD}.
+     *
+     * @param startSHA The start commit SHA.
+     * @return A {@code Diff} object, summarizing the different types of changes made to the files.
+     * @throws GitException If the commit SHA is malformed or invalid.
+     * @see <a href="https://git-scm.com/docs/git-diff">Git Diff Documentation</a>
+     */
+    public Git.Diff getDiff(String startSHA) throws GitException {
+        return getDiff(startSHA, "HEAD");
+    }
+
+    /**
+     * Used to retrieve a summary of changes made between two specified commits.
+     * The changelist excludes changes from the starting commit, but includes those made in the end commit.
+     *
+     * @param startSHA The start commit SHA.
+     * @param endSHA The end commit SHA.
+     * @return A {@code Diff} object, summarizing the different types of changes made to the files.
+     * @throws GitException If either of the commit SHAs is malformed or invalid.
+     * @see <a href="https://git-scm.com/docs/git-diff">Git Diff Documentation</a>
+     */
+    public Git.Diff getDiff(String startSHA, String endSHA) throws GitException {
+        return new Diff(startSHA, endSHA);
+    }
+
+    /**
+     * Class used to represent a {@code diff}: the changes made between commits.
+     * It serves as a container for 5 types of file changes:
+     * <ul>
+     *     <li>{@code added} files ({@code A})</li>
+     *     <li>{@code deleted} files ({@code D})</li>
+     *     <li>{@code modified} files ({@code M})</li>
+     *     <li>{@code renamed} files ({@code R100})</li>
+     *     <li>{@code edited} files ({@code R0XX})</li>
+     * </ul>
+     */
+    @Getter
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    public class Diff {
+        List<Path> added = new ArrayList<>();
+        List<Path> deleted = new ArrayList<>();
+        List<Path> modified = new ArrayList<>();
+        Map<Path, Path> renamed = new HashMap<>();
+        Map<Path, Path> edited = new HashMap<>();
+
+        private Diff(String startSHA, String endSHA) throws GitException {
+            Process process = executeGitCommand("diff", "--name-status", startSHA, endSHA);
+            checkFailure(process);
+
+            String stdOut = StringUtils.fromInputStream(process.getInputStream());
+            stdOut.lines().forEach(line -> {
+                String[] tokens = line.split("\t");
+                String type = tokens[0];
+                Path path;
+                Path other;
+                switch (type) {
+                    case "A":
+                        path = Path.of(tokens[1]);
+                        added.add(path);
+                        break;
+                    case "D":
+                        path = Path.of(tokens[1]);
+                        deleted.add(path);
+                        break;
+                    case "M":
+                        path = Path.of(tokens[1]);
+                        modified.add(path);
+                        break;
+                    case "R100":
+                        path = Path.of(tokens[1]);
+                        other = Path.of(tokens[2]);
+                        renamed.put(path, other);
+                        break;
+                    default:
+                        path = Path.of(tokens[1]);
+                        other = Path.of(tokens[2]);
+                        edited.put(path, other);
+                        break;
+                }
+            });
         }
     }
 
