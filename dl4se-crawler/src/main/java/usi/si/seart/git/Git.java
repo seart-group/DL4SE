@@ -90,17 +90,21 @@ public class Git {
     /**
      * Used to retrieve information regarding the latest project {@code Commit} made on the default branch.
      *
-     * @implNote I used a dedicated class here as opposed to a {@link usi.si.seart.collection.Tuple Tuple} to allow for
-     * extensibility in the future. Given that we use {@code git log} we can extract all other kinds of information,
-     * such as the commit title, message, information about the author etc.
      * @return A {@code Commit} object, containing the latest commit information.
      * @throws GitException If the repository is empty (has no commits).
-     * @see <a href="https://www.git-scm.com/docs/git-log">Git Log Command</a>
+     * @see <a href="https://www.git-scm.com/docs/git-log">Git Log Documentation</a>
      */
     public Git.Commit getLastCommitInfo() throws GitException {
         return new Commit();
     }
 
+    /**
+     * Class used to represent a Git commit.
+     *
+     * @implNote I used a dedicated class here as opposed to a {@link usi.si.seart.collection.Tuple Tuple} to allow for
+     * extensibility in the future. Given that we use {@code git log} we can extract all other kinds of information,
+     * such as the commit title, message, information about the author etc.
+     */
     @Getter
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public class Commit {
