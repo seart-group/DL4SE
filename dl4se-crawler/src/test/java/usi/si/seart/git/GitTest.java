@@ -111,6 +111,19 @@ class GitTest {
 
     @Test
     @SneakyThrows({GitException.class})
+    void getDiffTestSameSHA() {
+        Git git = new Git(historyRepoName, tmp);
+        String lastCommitSha = "acc183db71da297ae441cba9849a555382ab9f75";
+        Git.Diff diff = git.getDiff(lastCommitSha, lastCommitSha);
+        Assertions.assertEquals(0, diff.getAdded().size());
+        Assertions.assertEquals(0, diff.getDeleted().size());
+        Assertions.assertEquals(0, diff.getModified().size());
+        Assertions.assertEquals(0, diff.getRenamed().size());
+        Assertions.assertEquals(0, diff.getEdited().size());
+    }
+
+    @Test
+    @SneakyThrows({GitException.class})
     void gitDiffBadSHATest() {
         Git git = new Git(testRepoName, tmp);
         Assertions.assertThrows(GitException.class, () -> git.getDiff(""));
