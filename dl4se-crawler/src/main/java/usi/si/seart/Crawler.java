@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,7 @@ public class Crawler {
     @SneakyThrows
     private static void mineRepositoryData(GhsGitRepo item) {
         String name = item.getName();
+        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
 
         Set<String> ghsLanguages = item.getRepoLanguages();
         Set<String> supported = CollectionUtils.intersection(names, ghsLanguages);
@@ -105,12 +107,20 @@ public class Crawler {
         repoBuilder.languages(repoLanguages);
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
-        log.info("Mining repository: {} [Last Update: {}]", name, item.getPushedAt());
+        log.info("Mining repository: {} [Last Update: {}]", name, lastUpdateGhs);
         try {
             Git git = new Git(name, cloneDir, true);
             Git.Commit latest = git.getLastCommitInfo();
             repoBuilder.lastCommitSHA(latest.getSha());
             repoBuilder.lastUpdate(latest.getTimestamp());
+
+            Optional<GitRepo> optional = HibernateUtils.getRepo(name);
+            if (optional.isPresent()) {
+                GitRepo existing = optional.get();
+                String lastSHADB = existing.getLastCommitSHA();
+                if (lastSHADB.equals(latest.getSha())) return;
+                HibernateUtils.delete(existing);
+            }
 
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             Files.walkFileTree(cloneDir, visitor);
@@ -121,8 +131,7 @@ public class Crawler {
             repo.getFunctions().forEach(function -> function.setRepo(repo));
             HibernateUtils.save(repo);
 
-            LocalDateTime ghsTimestamp = DateToLDTConverter.getInstance().convert(item.getPushedAt());
-            lastJob.setCheckpoint(ghsTimestamp);
+            lastJob.setCheckpoint(lastUpdateGhs);
             HibernateUtils.save(lastJob);
         } catch (GitException ex) {
             log.error("Git operation error for: {}", name);

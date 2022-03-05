@@ -84,4 +84,18 @@ public class HibernateUtils {
             session.close();
         }
     }
+
+    public static void delete(GitRepo repo) {
+        deleteCascade(repo);
+    }
+
+    private static void deleteCascade(Object obj) {
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(obj);
+            session.flush();
+            transaction.commit();
+            log.debug("Deleted: {}", obj);
+        }
+    }
 }
