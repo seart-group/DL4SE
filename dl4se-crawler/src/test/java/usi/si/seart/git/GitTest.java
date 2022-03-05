@@ -75,7 +75,7 @@ class GitTest {
 
     @Test
     @SneakyThrows({GitException.class})
-    void getDiffLowerBoundOnly() {
+    void getDiffLowerBound() {
         Git git = new Git(historyRepoName, tmp);
         Git.Diff diff = git.getDiff("a09ccdf24ed65e184a6c79afcd4f1e2cfaf17554");
         // Expected diff output:
@@ -94,7 +94,7 @@ class GitTest {
 
     @Test
     @SneakyThrows({GitException.class})
-    void getDiffTest() {
+    void getDiffTestLowerAndUpperBound() {
         Git git = new Git(historyRepoName, tmp);
         Git.Diff diff = git.getDiff(
                 "0b0bfc50b8deba916463e100b4a5b7b051be888f",
