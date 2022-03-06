@@ -78,7 +78,6 @@ public class HibernateUtils {
         } catch (Exception ex) {
             log.error("Error while persisting: {}", obj);
             log.error("Error stack trace:", ex);
-            session.flush();
             transaction.rollback();
         } finally {
             session.close();
