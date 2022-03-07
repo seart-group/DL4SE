@@ -122,16 +122,10 @@ public class Crawler {
             }
 
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
-            Files.walkFileTree(cloneDir, visitor);
-            List<Path> paths = visitor.getVisited();
-
-            for (Path path: paths) {
-                File file = parseFile(path);
-                if (file != null) {
-                    file.setPath(cloneDir.relativize(path).toString());
-                    repoBuilder.file(file);
-                    repoBuilder.functions(file.getFunctions());
-                }
+            List<File> files = parseFiles(cloneDir, visitor);
+            for (File file: files) {
+                repoBuilder.file(file);
+                repoBuilder.functions(file.getFunctions());
             }
 
             GitRepo repo = repoBuilder.build();
@@ -147,6 +141,23 @@ public class Crawler {
         } finally {
             PathUtils.forceDelete(cloneDir);
         }
+    }
+
+    @SneakyThrows
+    private static List<File> parseFiles(Path dirPath, ExtensionBasedFileVisitor visitor) {
+        Files.walkFileTree(dirPath, visitor);
+        List<Path> paths = visitor.getVisited();
+        List<File> parsedFiles = new ArrayList<>(paths.size());
+
+        for (Path path: paths) {
+            File parsedFile = parseFile(path);
+            if (parsedFile != null) {
+                parsedFile.setPath(dirPath.relativize(path).toString());
+                parsedFiles.add(parsedFile);
+            }
+        }
+
+        return parsedFiles;
     }
 
     private static File parseFile(Path filePath) {
