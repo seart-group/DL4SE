@@ -14,6 +14,7 @@ import usi.si.seart.model.code.File;
 import usi.si.seart.model.job.CrawlJob;
 import usi.si.seart.model.job.Job;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,6 +78,10 @@ public class HibernateUtils {
         saveOrUpdate(repo);
     }
 
+    public static void save(File file) {
+        saveOrUpdate(file);
+    }
+
     private static void saveOrUpdate(Object obj) {
         Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -96,6 +101,10 @@ public class HibernateUtils {
 
     public static void delete(GitRepo repo) {
         deleteCascade(repo);
+    }
+
+    public static void delete(File file) {
+        deleteCascade(file);
     }
 
     private static void deleteCascade(Object obj) {
