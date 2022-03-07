@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import usi.si.seart.CrawlerProperties;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
+import usi.si.seart.model.code.File;
 import usi.si.seart.model.job.CrawlJob;
 import usi.si.seart.model.job.Job;
 
@@ -55,6 +56,15 @@ public class HibernateUtils {
         try (Session session = HibernateUtils.getFactory().openSession()) {
             return session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
                     .setParameter("name", name)
+                    .uniqueResultOptional();
+        }
+    }
+
+    public static Optional<File> getFile(GitRepo repo, Path path) {
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            return session.createQuery("SELECT f FROM File f WHERE f.repo = :repo AND f.path = :path", File.class)
+                    .setParameter("repo", repo)
+                    .setParameter("path", path.toString())
                     .uniqueResultOptional();
         }
     }
