@@ -3,6 +3,7 @@ package usi.si.seart.utils;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -55,9 +56,13 @@ public class HibernateUtils {
 
     public static Optional<GitRepo> getRepo(String name) {
         try (Session session = HibernateUtils.getFactory().openSession()) {
-            return session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
+            Optional<GitRepo> result = session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
                     .setParameter("name", name)
                     .uniqueResultOptional();
+            return result.map(repo -> {
+                Hibernate.initialize(repo.getLanguages());
+                return repo;
+            });
         }
     }
 
