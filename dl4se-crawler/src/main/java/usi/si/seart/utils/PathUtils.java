@@ -31,8 +31,7 @@ public class PathUtils {
 
 
     /**
-     * Path utility used to determine if a file is indeed a Java test file.
-     * We define test files as files whose:
+     * Determine if a file is indeed a <em>test</em> file. We define test files as files whose:
      *
      * <ul>
      *     <li>
@@ -57,50 +56,49 @@ public class PathUtils {
      * </ul>
      *
      * @implNote We keep the matching restrictive to minimise the amount of false positives.
-     * For instance, using a more general pattern {@code **test**} would match non-conforming cases like
+     * For instance, using a more general pattern like {@code **test**} would match non-conforming cases such as
      * {@code /src/latest/App.java}.
-     * @param file Path to file that we are testing against.
-     * @return Whether the file in question is a test file.
+     * @param path {@code Path} that we are testing against.
+     * @return Whether the path in question matches the definition of a test file.
      */
-    // TODO: 16.02.22
-    //  Other determiners for test functions?
-    //  Generalize to other languages?
-    public boolean isTestFile(Path file) {
-        return testPathMatcher.matches(file);
+    //TODO 08.03.22: Switch pattern matching based on extension
+    public boolean isTestFile(Path path) {
+        return testPathMatcher.matches(path);
     }
 
     /**
-     * Path utility used to extract the file extension.
+     * Extract the file extension for a given file path.
      *
-     * @param file Path to file that we are testing against.
-     * @return The file extension string. If the file has no extension, then an empty string is returned.
+     * @param path {@code Path} that we are testing against.
+     * @return The file extension {@code String}. If the file has no extension or is a directory, then an empty
+     * string is returned.
      */
-    public String getExtension(Path file) {
-        Objects.requireNonNull(file);
-        String path = file.getFileName().toString();
-        if (path.contains(".")) {
-            int extStart = path.lastIndexOf(".") + 1;
-            if (extStart < path.length() && extStart > 0) {
-                return path.substring(extStart);
+    public String getExtension(Path path) {
+        Objects.requireNonNull(path);
+        String fileName = path.getFileName().toString();
+        if (fileName.contains(".")) {
+            int extStart = fileName.lastIndexOf(".") + 1;
+            if (extStart < fileName.length() && extStart > 0) {
+                return fileName.substring(extStart);
             }
         }
         return "";
     }
 
     /**
-     * Path utility used to forcefully delete a directory and all its contents.
+     * Forcefully delete a file, or a directory and all its contents.
      *
      * @implNote We suppress throws of {@link java.io.IOException IOException} and {@link InterruptedException}.
-     * @author dabico
+     * @param path {@code Path} to file or directory that we wish to delete.
      * @see ProcessBuilder
      * @see <a href="https://www.baeldung.com/run-shell-command-in-java#ProcessBuilder">Run Shell Commands in Java</a>
      */
     @SneakyThrows
-    public void forceDelete(Path file) {
-        Objects.requireNonNull(file);
+    public void forceDelete(Path path) {
+        Objects.requireNonNull(path);
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("rm", "-rf", file.getFileName().toString());
-        builder.directory(file.getParent().toFile());
+        builder.command("rm", "-rf", path.getFileName().toString());
+        builder.directory(path.getParent().toFile());
         Process process = builder.start();
         process.waitFor();
     }
