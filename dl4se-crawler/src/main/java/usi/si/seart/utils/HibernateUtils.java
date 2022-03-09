@@ -53,7 +53,7 @@ public class HibernateUtils {
         }
     }
 
-    public Optional<GitRepo> getRepo(String name) {
+    public Optional<GitRepo> getRepoByName(String name) {
         try (Session session = factory.openSession()) {
             Optional<GitRepo> result = session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
                     .setParameter("name", name)
