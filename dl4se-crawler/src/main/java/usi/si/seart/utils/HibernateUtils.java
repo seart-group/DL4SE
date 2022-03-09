@@ -3,6 +3,7 @@ package usi.si.seart.utils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -86,19 +87,15 @@ public class HibernateUtils {
     }
 
     private void saveOrUpdate(Object obj) {
-        Session session = factory.openSession();
-        Transaction transaction = session.beginTransaction();
-        try {
+        Transaction transaction = null;
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
             session.saveOrUpdate(obj);
             session.flush();
             transaction.commit();
-            log.debug("Saved: {}", obj);
-        } catch (Exception ex) {
-            log.error("Error while persisting: {}", obj);
-            log.error("Error stack trace:", ex);
-            transaction.rollback();
-        } finally {
-            session.close();
+        } catch (HibernateException ex) {
+            log.error("Error while persisting: " + obj, ex);
+            if (transaction != null) transaction.rollback();
         }
     }
 
