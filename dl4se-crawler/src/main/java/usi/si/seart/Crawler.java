@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,15 +43,22 @@ public class Crawler {
     static CrawlJob lastJob;
 
     static Set<Language> languages;
+
     static Set<String> names;
-    static String[] extensions;
     static Map<String, Language> nameToLanguage;
+
+    static String[] extensions;
     static Map<String, Language> extensionToLanguage;
 
     static {
         lastJob = HibernateUtils.getLastJob();
 
         languages = HibernateUtils.getLanguages();
+
+        nameToLanguage = languages.stream().map(language -> Tuple.of(language.getName(), language))
+                .collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
+        names = nameToLanguage.keySet();
+
         extensionToLanguage = languages.stream().flatMap(language -> {
             List<Tuple<String, Language>> entries = new ArrayList<>();
             for (String extension: language.getExtensions()) {
@@ -58,10 +66,7 @@ public class Crawler {
             }
             return entries.stream();
         }).collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
-        extensions = extensionToLanguage.keySet().toArray(new String[0]);
-        nameToLanguage = languages.stream().map(language -> Tuple.of(language.getName(), language))
-                .collect(Collectors.toMap(Tuple::getKey, Tuple::getValue));
-        names = nameToLanguage.keySet();
+        extensions = extensionToLanguage.keySet().toArray(String[]::new);
     }
 
     public static void main(String[] args) {
@@ -83,26 +88,157 @@ public class Crawler {
         HttpResponse response = client.getRequest(requestUrl);
         List<GhsGitRepo> items = client.getSearchResults(response);
         Map<String, String> links = client.getNavigationLinks(response);
-        items.forEach(Crawler::mineRepositoryData);
+        items.forEach(Crawler::checkRepoData);
         response.disconnect();
         return links.get("next");
     }
 
-    @SneakyThrows
-    private static void mineRepositoryData(GhsGitRepo item) {
+    private static void checkRepoData(GhsGitRepo item) {
         String name = item.getName();
         LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
 
-        Set<String> ghsLanguages = item.getRepoLanguages();
-        Set<String> supported = CollectionUtils.intersection(names, ghsLanguages);
+        Set<String> repoLanguageNames = CollectionUtils.intersection(names, item.getRepoLanguages());
+        Set<Language> repoLanguages = CollectionUtils.getAllValuesFrom(nameToLanguage, repoLanguageNames);
 
-        if (supported.isEmpty()) {
+        if (repoLanguages.isEmpty()) {
             log.debug("Skipping: {}. No files of interest found!", name);
             return;
         }
 
+        Optional<GitRepo> optional = HibernateUtils.getRepo(name);
+        if (optional.isPresent()) {
+            GitRepo repo = optional.get();
+            item.update(repo);
+            updateRepoData(repo, repoLanguages);
+        } else {
+            mineRepoData(item, repoLanguages);
+        }
+
+        lastJob.setCheckpoint(lastUpdateGhs);
+        HibernateUtils.save(lastJob);
+    }
+
+    @SneakyThrows
+    private static void updateRepoData(GitRepo repo, Set<Language> repoLanguages) {
+        String name = repo.getName();
+        LocalDateTime lastUpdate = repo.getLastUpdate();
+
+        log.info("Updating repository: {} [Last Update: {}]", name, lastUpdate);
+        Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
+        try {
+            Git git = new Git(name, cloneDir, lastUpdate);
+
+            // MINE ANY MISSING INFORMATION FOR NEWLY INTRODUCED LANGUAGES
+            Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
+            if (!notMined.isEmpty()) {
+                String[] target = notMined.stream()
+                        .map(Language::getExtensions)
+                        .flatMap(Collection::stream)
+                        .toArray(String[]::new);
+                ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(target);
+                List<File> files = parseFiles(cloneDir, visitor);
+                for (File file : files) {
+                    file.setRepo(repo);
+                    file.getFunctions().forEach(function -> function.setRepo(repo));
+                    HibernateUtils.save(file);
+                }
+                repo.setLanguages(repoLanguages);
+                HibernateUtils.save(repo);
+            }
+
+            // IF THERE ARE NO NEW COMMITS, END HERE
+            Git.Commit latest = git.getLastCommitInfo();
+            if (!repo.getLastUpdate().isBefore(latest.getTimestamp())) return;
+
+            Git.Diff diff = git.getDiff(repo.getLastCommitSHA());
+
+            Set<String> extensions = repoLanguages.stream()
+                    .map(Language::getExtensions)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toSet());
+
+            // PARSE AND SAVE ADDED FILES
+            diff.getAdded().stream()
+                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
+                    .forEach(path -> addFile(repo, path, cloneDir));
+            // DELETE REMOVED FILES
+            diff.getDeleted().stream()
+                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
+                    .forEach(path -> deleteFile(repo, path));
+            // REMOVE EXISTING, THEN RE-PARSE MODIFIED FILES
+            diff.getModified().stream()
+                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
+                    .forEach(path -> {
+                        deleteFile(repo, path);
+                        addFile(repo, path, cloneDir);
+                    });
+            // GET EXISTING, CHANGE PATH TO MATCH RENAME
+            diff.getRenamed().entrySet()
+                    .stream()
+                    .filter(entry -> {
+                        String keyExt = PathUtils.getExtension(entry.getKey());
+                        String valExt = PathUtils.getExtension(entry.getValue());
+                        return extensions.containsAll(Set.of(keyExt, valExt));
+                    })
+                    .forEach(entry -> renameFile(repo, entry.getKey(), entry.getValue()));
+            // REMOVE EXISTING, THEN RE-PARSE EDITED FILES
+            diff.getEdited().entrySet()
+                    .stream()
+                    .filter(entry -> {
+                        String keyExt = PathUtils.getExtension(entry.getKey());
+                        String valExt = PathUtils.getExtension(entry.getValue());
+                        return extensions.containsAll(Set.of(keyExt, valExt));
+                    })
+                    .forEach(entry -> {
+                        deleteFile(repo, entry.getKey());
+                        addFile(repo, entry.getValue(), cloneDir);
+                    });
+
+            repo.setLastCommitSHA(latest.getSha());
+            repo.setLastUpdate(latest.getTimestamp());
+            HibernateUtils.save(repo);
+        } catch (GitException ex) {
+            log.error("Git operation error for: {}", name);
+            log.error("Error stack trace:", ex);
+        } finally {
+            PathUtils.forceDelete(cloneDir);
+        }
+    }
+
+    private static void addFile(GitRepo repo, Path filePath, Path dirPath) {
+        Path absolute = dirPath.resolve(filePath);
+        File file = parseFile(absolute);
+        if (file != null) {
+            file.setPath(filePath.toString());
+            file.setRepo(repo);
+            file.getFunctions().forEach(function -> function.setRepo(repo));
+            HibernateUtils.save(file);
+        }
+    }
+
+    private static void deleteFile(GitRepo repo, Path filePath) {
+        Optional<File> existing = HibernateUtils.getFile(repo, filePath);
+        if (existing.isPresent()) {
+            File oldFile = existing.get();
+            HibernateUtils.delete(oldFile);
+        }
+    }
+
+    private static void renameFile(GitRepo repo, Path oldFilePath, Path newFilePath) {
+        Optional<File> existing = HibernateUtils.getFile(repo, oldFilePath);
+        if (existing.isPresent()) {
+            File file = existing.get();
+            file.setPath(newFilePath.toString());
+            HibernateUtils.save(file);
+        }
+    }
+
+    @SneakyThrows
+    private static void mineRepoData(GhsGitRepo item, Set<Language> repoLanguages) {
+        String name = item.getName();
+        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
+
         GitRepo.GitRepoBuilder repoBuilder = item.toGitRepoBuilder();
-        Set<Language> repoLanguages = CollectionUtils.getAllValuesFrom(nameToLanguage, supported);
         repoBuilder.languages(repoLanguages);
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
@@ -113,14 +249,10 @@ public class Crawler {
             repoBuilder.lastCommitSHA(latest.getSha());
             repoBuilder.lastUpdate(latest.getTimestamp());
 
-            Optional<GitRepo> optional = HibernateUtils.getRepo(name);
-            if (optional.isPresent()) {
-                GitRepo existing = optional.get();
-                String lastSHADB = existing.getLastCommitSHA();
-                if (lastSHADB.equals(latest.getSha())) return;
-                HibernateUtils.delete(existing);
-            }
-
+            String[] extensions = repoLanguages.stream()
+                    .map(Language::getExtensions)
+                    .flatMap(Collection::stream)
+                    .toArray(String[]::new);
             ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
             List<File> files = parseFiles(cloneDir, visitor);
             for (File file: files) {
@@ -132,9 +264,6 @@ public class Crawler {
             repo.getFiles().forEach(file -> file.setRepo(repo));
             repo.getFunctions().forEach(function -> function.setRepo(repo));
             HibernateUtils.save(repo);
-
-            lastJob.setCheckpoint(lastUpdateGhs);
-            HibernateUtils.save(lastJob);
         } catch (GitException ex) {
             log.error("Git operation error for: {}", name);
             log.error("Error stack trace:", ex);

@@ -70,4 +70,12 @@ public class GhsGitRepo {
         builder.lastCommitSHA(lastCommitSHA);
         return builder;
     }
+
+    public void update(GitRepo repo) {
+        repo.setLicense(license);
+        if (commits != null) repo.setCommits(commits);
+        if (contributors != null) repo.setContributors(contributors);
+        if (totalIssues != null) repo.setIssues(totalIssues);
+        if (stargazers != null) repo.setStars(stargazers);
+    }
 }
