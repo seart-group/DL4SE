@@ -1,5 +1,8 @@
 package usi.si.seart.converter;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -12,6 +15,7 @@ import java.util.Objects;
  * @param <A> The type to convert from
  * @param <B> The type to convert to
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Converter<A, B> {
 
     private Converter<B, A> reverse;

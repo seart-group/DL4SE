@@ -1,11 +1,14 @@
 package usi.si.seart.converter;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateToLDTConverter extends Converter<Date, LocalDateTime> {
 
     @Getter
