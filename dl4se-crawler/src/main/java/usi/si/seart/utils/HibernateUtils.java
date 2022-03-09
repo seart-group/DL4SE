@@ -1,6 +1,5 @@
 package usi.si.seart.utils;
 
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -24,11 +23,10 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class HibernateUtils {
 
-    @Getter
     private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
-    public static CrawlJob getLastJob() {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
+    public CrawlJob getLastJob() {
+        try (Session session = factory.openSession()) {
             Optional<CrawlJob> lastJobOptional = session.createQuery(
                     "SELECT c FROM CrawlJob c WHERE c.jobType = usi.si.seart.model.job.Job.CODE", CrawlJob.class
             ).uniqueResultOptional();
@@ -46,16 +44,16 @@ public class HibernateUtils {
         }
     }
 
-    public static Set<Language> getLanguages() {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
+    public Set<Language> getLanguages() {
+        try (Session session = factory.openSession()) {
             return session.createQuery("SELECT l FROM Language l", Language.class)
                     .stream()
                     .collect(Collectors.toSet());
         }
     }
 
-    public static Optional<GitRepo> getRepo(String name) {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
+    public Optional<GitRepo> getRepo(String name) {
+        try (Session session = factory.openSession()) {
             Optional<GitRepo> result = session.createQuery("SELECT r FROM GitRepo r WHERE r.name = :name", GitRepo.class)
                     .setParameter("name", name)
                     .uniqueResultOptional();
@@ -66,8 +64,8 @@ public class HibernateUtils {
         }
     }
 
-    public static Optional<File> getFile(GitRepo repo, Path path) {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
+    public Optional<File> getFile(GitRepo repo, Path path) {
+        try (Session session = factory.openSession()) {
             return session.createQuery("SELECT f FROM File f WHERE f.repo = :repo AND f.path = :path", File.class)
                     .setParameter("repo", repo)
                     .setParameter("path", path.toString())
@@ -75,19 +73,19 @@ public class HibernateUtils {
         }
     }
 
-    public static void save(CrawlJob crawlJob) {
+    public void save(CrawlJob crawlJob) {
         saveOrUpdate(crawlJob);
     }
 
-    public static void save(GitRepo repo) {
+    public void save(GitRepo repo) {
         saveOrUpdate(repo);
     }
 
-    public static void save(File file) {
+    public void save(File file) {
         saveOrUpdate(file);
     }
 
-    private static void saveOrUpdate(Object obj) {
+    private void saveOrUpdate(Object obj) {
         Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
@@ -104,16 +102,16 @@ public class HibernateUtils {
         }
     }
 
-    public static void delete(GitRepo repo) {
+    public void delete(GitRepo repo) {
         deleteCascade(repo);
     }
 
-    public static void delete(File file) {
+    public void delete(File file) {
         deleteCascade(file);
     }
 
-    private static void deleteCascade(Object obj) {
-        try (Session session = HibernateUtils.getFactory().openSession()) {
+    private void deleteCascade(Object obj) {
+        try (Session session = factory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.delete(obj);
             session.flush();
