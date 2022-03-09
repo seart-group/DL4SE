@@ -84,6 +84,7 @@ CREATE INDEX "file_repo_id_idx" ON "file" (repo_id);
 CREATE INDEX "file_lang_id_idx" ON "file" (lang_id);
 CREATE INDEX "function_repo_id_idx" ON "function" (repo_id);
 CREATE INDEX "function_lang_id_idx" ON "function" (lang_id);
+CREATE INDEX "function_file_id_idx" ON "function" (file_id);
 
 -- ADD LANGUAGES
 INSERT INTO language(id, name, extensions)
