@@ -137,7 +137,11 @@ public class Crawler {
 
             // MINE ANY MISSING INFORMATION FOR NEWLY INTRODUCED LANGUAGES
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
-            if (!notMined.isEmpty()) mineRepoDataForLanguages(repo, cloneDir, notMined);
+            if (!notMined.isEmpty()) {
+                mineRepoDataForLanguages(repo, cloneDir, notMined);
+                repo.setLanguages(repoLanguages);
+                HibernateUtils.save(repo);
+            }
 
             // IF THERE ARE NO NEW COMMITS, END HERE
             Git.Commit latest = git.getLastCommitInfo();
@@ -187,7 +191,6 @@ public class Crawler {
                         addFile(repo, entry.getValue(), cloneDir);
                     });
 
-            repo.setLanguages(repoLanguages);
             repo.setLastCommitSHA(latest.getSha());
             repo.setLastUpdate(latest.getTimestamp());
 
