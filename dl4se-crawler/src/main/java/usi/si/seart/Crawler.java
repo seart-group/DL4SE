@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.DateToLDTConverter;
+import usi.si.seart.converter.GhsToGitRepoConverter;
 import usi.si.seart.git.Git;
 import usi.si.seart.git.GitException;
 import usi.si.seart.http.HttpClient;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -105,14 +107,19 @@ public class Crawler {
             return;
         }
 
-        Optional<GitRepo> optional = HibernateUtils.getRepo(name);
+        Optional<GitRepo> optional = HibernateUtils.getRepoByName(name);
+        GitRepo repo;
+        BiConsumer<GitRepo, Set<Language>> operation;
         if (optional.isPresent()) {
-            GitRepo repo = optional.get();
+            repo = optional.get();
             item.update(repo);
-            updateRepoData(repo, repoLanguages);
+            operation = Crawler::updateRepoData;
         } else {
-            mineRepoData(item, repoLanguages);
+            repo = GhsToGitRepoConverter.getInstance().convert(item);
+            HibernateUtils.save(repo);
+            operation = Crawler::mineRepoData;
         }
+        operation.accept(repo, repoLanguages);
 
         lastJob.setCheckpoint(lastUpdateGhs);
         HibernateUtils.save(lastJob);
@@ -130,21 +137,7 @@ public class Crawler {
 
             // MINE ANY MISSING INFORMATION FOR NEWLY INTRODUCED LANGUAGES
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
-            if (!notMined.isEmpty()) {
-                String[] target = notMined.stream()
-                        .map(Language::getExtensions)
-                        .flatMap(Collection::stream)
-                        .toArray(String[]::new);
-                ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(target);
-                List<File> files = parseFiles(cloneDir, visitor);
-                for (File file : files) {
-                    file.setRepo(repo);
-                    file.getFunctions().forEach(function -> function.setRepo(repo));
-                    HibernateUtils.save(file);
-                }
-                repo.setLanguages(repoLanguages);
-                HibernateUtils.save(repo);
-            }
+            if (!notMined.isEmpty()) mineRepoDataForLanguages(repo, cloneDir, notMined);
 
             // IF THERE ARE NO NEW COMMITS, END HERE
             Git.Commit latest = git.getLastCommitInfo();
@@ -194,8 +187,10 @@ public class Crawler {
                         addFile(repo, entry.getValue(), cloneDir);
                     });
 
+            repo.setLanguages(repoLanguages);
             repo.setLastCommitSHA(latest.getSha());
             repo.setLastUpdate(latest.getTimestamp());
+
             HibernateUtils.save(repo);
         } catch (GitException ex) {
             log.error("Git operation error for: {}", name);
@@ -234,35 +229,22 @@ public class Crawler {
     }
 
     @SneakyThrows
-    private static void mineRepoData(GhsGitRepo item, Set<Language> repoLanguages) {
-        String name = item.getName();
-        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
-
-        GitRepo.GitRepoBuilder repoBuilder = item.toGitRepoBuilder();
-        repoBuilder.languages(repoLanguages);
+    private static void mineRepoData(GitRepo repo, Set<Language> repoLanguages) {
+        String name = repo.getName();
+        LocalDateTime lastUpdateGhs = repo.getLastUpdate();
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         log.info("Mining repository: {} [Last Update: {}]", name, lastUpdateGhs);
         try {
             Git git = new Git(name, cloneDir, true);
             Git.Commit latest = git.getLastCommitInfo();
-            repoBuilder.lastCommitSHA(latest.getSha());
-            repoBuilder.lastUpdate(latest.getTimestamp());
 
-            String[] extensions = repoLanguages.stream()
-                    .map(Language::getExtensions)
-                    .flatMap(Collection::stream)
-                    .toArray(String[]::new);
-            ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
-            List<File> files = parseFiles(cloneDir, visitor);
-            for (File file: files) {
-                repoBuilder.file(file);
-                repoBuilder.functions(file.getFunctions());
-            }
+            mineRepoDataForLanguages(repo, cloneDir, repoLanguages);
 
-            GitRepo repo = repoBuilder.build();
-            repo.getFiles().forEach(file -> file.setRepo(repo));
-            repo.getFunctions().forEach(function -> function.setRepo(repo));
+            repo.setLanguages(repoLanguages);
+            repo.setLastCommitSHA(latest.getSha());
+            repo.setLastUpdate(latest.getTimestamp());
+
             HibernateUtils.save(repo);
         } catch (GitException ex) {
             log.error("Git operation error for: {}", name);
@@ -273,20 +255,23 @@ public class Crawler {
     }
 
     @SneakyThrows
-    private static List<File> parseFiles(Path dirPath, ExtensionBasedFileVisitor visitor) {
+    private static void mineRepoDataForLanguages(GitRepo repo, Path dirPath, Set<Language> languages) {
+        String[] extensions = languages.stream()
+                .map(Language::getExtensions)
+                .flatMap(Collection::stream)
+                .toArray(String[]::new);
+        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
         Files.walkFileTree(dirPath, visitor);
         List<Path> paths = visitor.getVisited();
-        List<File> parsedFiles = new ArrayList<>(paths.size());
-
         for (Path path: paths) {
-            File parsedFile = parseFile(path);
-            if (parsedFile != null) {
-                parsedFile.setPath(dirPath.relativize(path).toString());
-                parsedFiles.add(parsedFile);
+            File file = parseFile(path);
+            if (file != null) {
+                file.setPath(dirPath.relativize(path).toString());
+                file.setRepo(repo);
+                file.getFunctions().forEach(function -> function.setRepo(repo));
+                HibernateUtils.save(file);
             }
         }
-
-        return parsedFiles;
     }
 
     private static File parseFile(Path filePath) {
