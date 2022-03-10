@@ -105,7 +105,7 @@ public class HibernateUtils {
             session.flush();
             transaction.commit();
         } catch (PersistenceException ex) {
-            log.error("Exception occurred while deleting GitRepo["+id+"]!", ex);
+            log.error("Exception occurred while deleting GitRepo[id="+id+"]!", ex);
             if (transaction != null) transaction.rollback();
         } finally {
             session.close();
@@ -124,7 +124,7 @@ public class HibernateUtils {
             session.flush();
             transaction.commit();
         } catch (PersistenceException ex) {
-            log.error("Exception occurred while deleting File["+id+"]!", ex);
+            log.error("Exception occurred while deleting File[repo.id="+id+", path="+path+"]!", ex);
             if (transaction != null) transaction.rollback();
         } finally {
             session.close();
@@ -144,7 +144,7 @@ public class HibernateUtils {
             session.flush();
             transaction.commit();
         } catch (PersistenceException ex) {
-            log.error("Exception occurred while updating File["+id+"]!", ex);
+            log.error("Exception occurred while updating File[repo.id="+id+", path="+before+"]!", ex);
             if (transaction != null) transaction.rollback();
         } finally {
             session.close();
