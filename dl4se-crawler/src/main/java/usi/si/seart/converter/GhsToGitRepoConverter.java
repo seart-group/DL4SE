@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import usi.si.seart.http.payload.GhsGitRepo;
 import usi.si.seart.model.GitRepo;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
 
@@ -28,9 +30,10 @@ public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
         if (issues != null) builder.issues(issues);
         Long stars = ghsGitRepo.getStargazers();
         if (stars != null) builder.stars(stars);
-
-        builder.lastUpdate(DateToLDTConverter.getInstance().convert(ghsGitRepo.getPushedAt()));
-        builder.lastCommitSHA(ghsGitRepo.getLastCommitSHA());
+        LocalDateTime lastUpdate = DateToLDTConverter.getInstance().convert(ghsGitRepo.getPushedAt());
+        if (lastUpdate != null) builder.lastUpdate(lastUpdate);
+        String lastCommitSHA = ghsGitRepo.getLastCommitSHA();
+        if (lastCommitSHA != null) builder.lastCommitSHA(lastCommitSHA);
 
         return builder.build();
     }
