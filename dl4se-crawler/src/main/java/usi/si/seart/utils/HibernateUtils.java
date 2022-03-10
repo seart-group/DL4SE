@@ -87,8 +87,9 @@ public class HibernateUtils {
     }
 
     private void saveOrUpdate(Object obj) {
+        Session session = factory.openSession();
         Transaction transaction = null;
-        try (Session session = factory.openSession()) {
+        try {
             transaction = session.beginTransaction();
             session.saveOrUpdate(obj);
             session.flush();
@@ -96,6 +97,8 @@ public class HibernateUtils {
         } catch (PersistenceException ex) {
             log.error("Error while persisting: " + obj, ex);
             if (transaction != null) transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 
