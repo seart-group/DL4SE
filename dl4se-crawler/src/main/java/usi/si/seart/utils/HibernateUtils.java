@@ -3,7 +3,6 @@ package usi.si.seart.utils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -15,6 +14,7 @@ import usi.si.seart.model.code.File;
 import usi.si.seart.model.job.CrawlJob;
 import usi.si.seart.model.job.Job;
 
+import javax.persistence.PersistenceException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Set;
@@ -93,7 +93,7 @@ public class HibernateUtils {
             session.saveOrUpdate(obj);
             session.flush();
             transaction.commit();
-        } catch (HibernateException ex) {
+        } catch (PersistenceException ex) {
             log.error("Error while persisting: " + obj, ex);
             if (transaction != null) transaction.rollback();
         }
