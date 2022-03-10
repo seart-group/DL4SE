@@ -92,12 +92,19 @@ public class Crawler {
         Map<String, String> links = client.getNavigationLinks(response);
         items.forEach(Crawler::checkRepoData);
         response.disconnect();
+        saveProgress();
         return links.get("next");
+    }
+
+    private static void saveProgress() {
+        log.debug("Saving progress...");
+        HibernateUtils.save(lastJob);
     }
 
     private static void checkRepoData(GhsGitRepo item) {
         String name = item.getName();
         LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
+        lastJob.setCheckpoint(lastUpdateGhs);
 
         Set<String> repoLanguageNames = CollectionUtils.intersection(names, item.getRepoLanguages());
         Set<Language> repoLanguages = CollectionUtils.getAllValuesFrom(nameToLanguage, repoLanguageNames);
@@ -119,10 +126,8 @@ public class Crawler {
             HibernateUtils.save(repo);
             operation = Crawler::mineRepoData;
         }
+        
         operation.accept(repo, repoLanguages);
-
-        lastJob.setCheckpoint(lastUpdateGhs);
-        HibernateUtils.save(lastJob);
     }
 
     @SneakyThrows
