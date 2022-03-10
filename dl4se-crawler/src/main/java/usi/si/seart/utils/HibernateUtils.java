@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @UtilityClass
+@SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class HibernateUtils {
 
     private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
@@ -65,15 +66,6 @@ public class HibernateUtils {
         }
     }
 
-    public Optional<File> getFile(GitRepo repo, Path path) {
-        try (Session session = factory.openSession()) {
-            return session.createQuery("SELECT f FROM File f WHERE f.repo = :repo AND f.path = :path", File.class)
-                    .setParameter("repo", repo)
-                    .setParameter("path", path.toString())
-                    .uniqueResultOptional();
-        }
-    }
-
     public void save(CrawlJob crawlJob) {
         saveOrUpdate(crawlJob);
     }
@@ -102,21 +94,60 @@ public class HibernateUtils {
         }
     }
 
-    public void delete(GitRepo repo) {
-        deleteCascade(repo);
-    }
-
-    public void delete(File file) {
-        deleteCascade(file);
-    }
-
-    private void deleteCascade(Object obj) {
-        try (Session session = factory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.delete(obj);
+    public void deleteRepoById(Long id) {
+        Session session = factory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM GitRepo WHERE id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             session.flush();
             transaction.commit();
-            log.debug("Deleted: {}", obj);
+        } catch (PersistenceException ex) {
+            log.error("Exception occurred while deleting GitRepo["+id+"]!", ex);
+            if (transaction != null) transaction.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void deleteFileByRepoIdAndPath(Long id, Path path) {
+        Session session = factory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM File WHERE repo.id = :id AND path = :path")
+                    .setParameter("id", id)
+                    .setParameter("path", path.toString())
+                    .executeUpdate();
+            session.flush();
+            transaction.commit();
+        } catch (PersistenceException ex) {
+            log.error("Exception occurred while deleting File["+id+"]!", ex);
+            if (transaction != null) transaction.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateFilePathByRepoId(Long id, Path before, Path after) {
+        Session session = factory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.createQuery("UPDATE File SET path = :after WHERE repo.id = :id AND path = :before")
+                    .setParameter("id", id)
+                    .setParameter("before", before.toString())
+                    .setParameter("after", after.toString())
+                    .executeUpdate();
+            session.flush();
+            transaction.commit();
+        } catch (PersistenceException ex) {
+            log.error("Exception occurred while updating File["+id+"]!", ex);
+            if (transaction != null) transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 }

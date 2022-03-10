@@ -215,20 +215,11 @@ public class Crawler {
     }
 
     private static void deleteFile(GitRepo repo, Path filePath) {
-        Optional<File> existing = HibernateUtils.getFile(repo, filePath);
-        if (existing.isPresent()) {
-            File oldFile = existing.get();
-            HibernateUtils.delete(oldFile);
-        }
+        HibernateUtils.deleteFileByRepoIdAndPath(repo.getId(), filePath);
     }
 
     private static void renameFile(GitRepo repo, Path oldFilePath, Path newFilePath) {
-        Optional<File> existing = HibernateUtils.getFile(repo, oldFilePath);
-        if (existing.isPresent()) {
-            File file = existing.get();
-            file.setPath(newFilePath.toString());
-            HibernateUtils.save(file);
-        }
+        HibernateUtils.updateFilePathByRepoId(repo.getId(), oldFilePath, newFilePath);
     }
 
     @SneakyThrows
