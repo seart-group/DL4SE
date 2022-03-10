@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.Boilerplate;
+import usi.si.seart.model.code.Code;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 import usi.si.seart.utils.PathUtils;
@@ -42,7 +43,6 @@ public class JavaParser extends AbstractParser {
     @Override
     public File parse(Path path) throws ParsingException {
         fileBuilder.isTest(PathUtils.isTestFile(path));
-        fileBuilder.language(language);
 
         try {
             CompilationUnit compilationUnit = StaticJavaParser.parse(path.toFile());
@@ -60,22 +60,7 @@ public class JavaParser extends AbstractParser {
 
         @Override
         public void visit(CompilationUnit declaration, Object arg) {
-            String fileContents = declaration.toString();
-            String normalized = StringUtils.normalizeSpace(fileContents);
-            fileBuilder.content(fileContents);
-            fileBuilder.contentHash(StringUtils.sha256(normalized));
-
-            fileBuilder.ast(astPrinter.output(declaration));
-            fileBuilder.astHash(getAstHash(declaration));
-
-            Tuple<Long, Long> tokensCount = countTokens(declaration);
-            fileBuilder.totalTokens(tokensCount.getLeft());
-            fileBuilder.codeTokens(tokensCount.getRight());
-
-            fileBuilder.lines(countLines(declaration));
-            fileBuilder.characters(fileContents.chars().count());
-
-            fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
+            copyToBuilder(declaration, fileBuilder);
 
             super.visit(declaration, arg);
         }
@@ -92,31 +77,35 @@ public class JavaParser extends AbstractParser {
             super.visit(declaration, arg);
         }
 
-        //TODO 10.03.22: EXTRACT CODE DUPLICATE AS NEW METHOD
         private void visit(CallableDeclaration<?> declaration) {
             Function.FunctionBuilder<?, ?> functionBuilder = Function.builder();
-            functionBuilder.language(language);
 
-            String functionContents = declaration.toString();
-            String normalized = StringUtils.normalizeSpace(functionContents);
-            functionBuilder.content(functionContents);
-            functionBuilder.contentHash(StringUtils.sha256(normalized));
-
-            functionBuilder.ast(astPrinter.output(declaration));
-            functionBuilder.astHash(getAstHash(declaration));
-
-            Tuple<Long, Long> tokensCount = countTokens(declaration);
-            functionBuilder.totalTokens(tokensCount.getLeft());
-            functionBuilder.codeTokens(tokensCount.getRight());
-
-            functionBuilder.lines(countLines(declaration));
-            functionBuilder.characters(functionContents.chars().count());
-
-            functionBuilder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
+            copyToBuilder(declaration, functionBuilder);
 
             functionBuilder.boilerplateType(getBoilerplateType(declaration));
 
             functionBuilders.add(functionBuilder);
+        }
+
+        private void copyToBuilder(Node node, Code.CodeBuilder<?, ?> builder) {
+            builder.language(language);
+
+            String functionContents = node.toString();
+            String normalized = StringUtils.normalizeSpace(functionContents);
+            builder.content(functionContents);
+            builder.contentHash(StringUtils.sha256(normalized));
+
+            builder.ast(astPrinter.output(node));
+            builder.astHash(getAstHash(node));
+
+            Tuple<Long, Long> tokensCount = countTokens(node);
+            builder.totalTokens(tokensCount.getLeft());
+            builder.codeTokens(tokensCount.getRight());
+
+            builder.lines(countLines(node));
+            builder.characters(functionContents.chars().count());
+
+            builder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
         }
     }
 
