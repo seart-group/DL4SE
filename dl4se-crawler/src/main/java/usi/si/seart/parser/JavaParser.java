@@ -1,24 +1,34 @@
 package usi.si.seart.parser;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.model.Language;
+import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
-import usi.si.seart.utils.NodeUtils;
 import usi.si.seart.utils.PathUtils;
 import usi.si.seart.utils.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 public class JavaParser extends AbstractParser {
@@ -56,13 +66,13 @@ public class JavaParser extends AbstractParser {
             fileBuilder.contentHash(StringUtils.sha256(normalized));
 
             fileBuilder.ast(astPrinter.output(declaration));
-            fileBuilder.astHash(NodeUtils.getAstHash(declaration));
+            fileBuilder.astHash(getAstHash(declaration));
 
-            Tuple<Long, Long> tokensCount = NodeUtils.countTokens(declaration);
+            Tuple<Long, Long> tokensCount = countTokens(declaration);
             fileBuilder.totalTokens(tokensCount.getLeft());
             fileBuilder.codeTokens(tokensCount.getRight());
 
-            fileBuilder.lines(NodeUtils.countLines(declaration));
+            fileBuilder.lines(countLines(declaration));
             fileBuilder.characters(fileContents.chars().count());
 
             fileBuilder.containsNonAscii(StringUtils.containsNonAscii(fileContents));
@@ -82,6 +92,7 @@ public class JavaParser extends AbstractParser {
             super.visit(declaration, arg);
         }
 
+        //TODO 10.03.22: EXTRACT CODE DUPLICATE AS NEW METHOD
         private void visit(CallableDeclaration<?> declaration) {
             Function.FunctionBuilder<?, ?> functionBuilder = Function.builder();
             functionBuilder.language(language);
@@ -92,20 +103,112 @@ public class JavaParser extends AbstractParser {
             functionBuilder.contentHash(StringUtils.sha256(normalized));
 
             functionBuilder.ast(astPrinter.output(declaration));
-            functionBuilder.astHash(NodeUtils.getAstHash(declaration));
+            functionBuilder.astHash(getAstHash(declaration));
 
-            Tuple<Long, Long> tokensCount = NodeUtils.countTokens(declaration);
+            Tuple<Long, Long> tokensCount = countTokens(declaration);
             functionBuilder.totalTokens(tokensCount.getLeft());
             functionBuilder.codeTokens(tokensCount.getRight());
 
-            functionBuilder.lines(NodeUtils.countLines(declaration));
+            functionBuilder.lines(countLines(declaration));
             functionBuilder.characters(functionContents.chars().count());
 
             functionBuilder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
 
-            functionBuilder.boilerplateType(NodeUtils.getBoilerplateType(declaration));
+            functionBuilder.boilerplateType(getBoilerplateType(declaration));
 
             functionBuilders.add(functionBuilder);
+        }
+    }
+
+    static String getAstHash(Node node) {
+        StringBuilder builder = new StringBuilder();
+        getAstTypeNames(node, builder);
+        return StringUtils.sha256(builder.toString());
+    }
+
+    private static void getAstTypeNames(Node node, StringBuilder builder) {
+        builder.append(node.getMetaModel().getTypeName());
+        List<Node> children = node.getChildNodes();
+        for (Node child : children) {
+            getAstTypeNames(child, builder);
+        }
+    }
+
+    static Tuple<Long, Long> countTokens(Node node) {
+        if (node instanceof CompilationUnit) {
+            return rangeLength(node);
+        } else if (node instanceof CallableDeclaration) {
+            return countTokens((CallableDeclaration<?>) node);
+        } else {
+            throw new UnsupportedOperationException("Token counting is not supported at this granularity level!");
+        }
+    }
+
+    private static Tuple<Long, Long> countTokens(CallableDeclaration<?> cd) {
+        Tuple<Long, Long> count = rangeLength(cd);
+        Optional<Comment> comment = cd.getComment();
+
+        if (comment.isPresent()) {
+            String jdoc = comment.get().toString();
+            Long jdocLen = countWordsAndSpaces(jdoc);
+            count = Tuple.of(count.getLeft() + jdocLen, count.getRight());
+        }
+
+        return count;
+    }
+
+    private static Tuple<Long, Long> rangeLength(Node node) {
+        List<JavaToken> tokens = getNodeTokens(node);
+        Map<Boolean, List<JavaToken>> partition = tokens.stream()
+                .collect(Collectors.partitioningBy(token -> token.getCategory().isWhitespaceOrComment()));
+
+        long codeTokens = partition.get(false).size();
+        long nonCodeTokens = partition.get(true).stream().mapToLong(token -> {
+            JavaToken.Category category = token.getCategory();
+            if (category.isWhitespace()) {
+                return 1L;
+            } else {
+                return countWordsAndSpaces(token.getText());
+            }
+        }).sum();
+
+        return Tuple.of(codeTokens + nonCodeTokens, codeTokens);
+    }
+
+    private static List<JavaToken> getNodeTokens(Node node) {
+        return node.getTokenRange()
+                .map(range -> {
+                    Spliterator<JavaToken> spliterator = range.spliterator();
+                    return StreamSupport.stream(spliterator, true).collect(Collectors.toList());
+                })
+                .orElse(new ArrayList<>());
+    }
+
+    private static long countWordsAndSpaces(String input) {
+        if (input.isBlank()) return 0L;
+        String normalized = StringUtils.normalizeSpace(input);
+        String[] words = normalized.split("\\s");
+        long spaces = words.length - 1L;
+        return words.length + spaces;
+    }
+
+    static Long countLines(Node node) {
+        return node.getRange()
+                .map(range -> (long)(range.end.line + 1 - range.begin.line))
+                .orElse(0L);
+    }
+
+    static Boilerplate getBoilerplateType(CallableDeclaration<?> node) {
+        if (node instanceof ConstructorDeclaration) return Boilerplate.CONSTRUCTOR;
+        String name = node.getNameAsString();
+        if (name.startsWith("set")) return Boilerplate.SETTER;
+        if (name.startsWith("get")) return Boilerplate.GETTER;
+        switch (name) {
+            case "builder": return Boilerplate.BUILDER;
+            case "equals": return Boilerplate.EQUALS;
+            case "hashCode": return Boilerplate.HASH_CODE;
+            case "toString": return Boilerplate.TO_STRING;
+            default: return null;
         }
     }
 }
