@@ -172,7 +172,7 @@ public class Git {
         Map<Path, Path> edited = new HashMap<>();
 
         private Diff(String startSHA, String endSHA) throws GitException {
-            Process process = executeGitCommand("diff", "--name-status", startSHA, endSHA);
+            Process process = executeGitCommand("diff", "--name-status", "--diff-filter=ADMRC", startSHA, endSHA);
             checkFailure(process);
 
             String output = StringUtils.fromInputStream(process.getInputStream());
