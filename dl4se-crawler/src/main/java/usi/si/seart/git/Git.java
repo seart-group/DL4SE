@@ -110,7 +110,6 @@ public class Git {
     @Getter
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public class Commit {
-        String raw;
         String sha;
         LocalDateTime timestamp;
 
@@ -118,16 +117,11 @@ public class Git {
             Process process = executeGitCommand("log", "-1", "--format=%H%n%at");
             checkFailure(process);
 
-            this.raw = StringUtils.fromInputStream(process.getInputStream());
-            List<String> outputLines = this.raw.lines().collect(Collectors.toList());
+            String output = StringUtils.fromInputStream(process.getInputStream());
+            List<String> outputLines = output.lines().collect(Collectors.toList());
             this.sha = outputLines.get(0);
             Instant lastUpdateInstant = Instant.ofEpochSecond(Integer.parseInt(outputLines.get(1)));
             this.timestamp = LocalDateTime.ofInstant(lastUpdateInstant, ZoneId.of("UTC"));
-        }
-
-        @Override
-        public String toString() {
-            return raw;
         }
     }
 
@@ -171,7 +165,6 @@ public class Git {
     @Getter
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public class Diff {
-        String raw;
         List<Path> added = new ArrayList<>();
         List<Path> deleted = new ArrayList<>();
         List<Path> modified = new ArrayList<>();
@@ -182,8 +175,8 @@ public class Git {
             Process process = executeGitCommand("diff", "--name-status", startSHA, endSHA);
             checkFailure(process);
 
-            this.raw = StringUtils.fromInputStream(process.getInputStream());
-            this.raw.lines().forEach(line -> {
+            String output = StringUtils.fromInputStream(process.getInputStream());
+            output.lines().forEach(line -> {
                 String[] tokens = line.split("\t");
                 String type = tokens[0];
                 Path path;
@@ -213,11 +206,6 @@ public class Git {
                         break;
                 }
             });
-        }
-
-        @Override
-        public String toString() {
-            return raw;
         }
     }
 
