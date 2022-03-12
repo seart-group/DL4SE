@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @UtilityClass
@@ -25,6 +26,8 @@ public class CollectionUtils {
      */
     @SuppressWarnings("unchecked")
     public <T> T[] merge(T[] array1, T[] array2) {
+        Objects.requireNonNull(array1);
+        Objects.requireNonNull(array2);
         List<T> merged = new ArrayList<>(array1.length + array2.length);
         merged.addAll(Arrays.asList(array1));
         merged.addAll(Arrays.asList(array2));
@@ -42,6 +45,8 @@ public class CollectionUtils {
      * @return The intersection of the two sets.
      */
     public <T> Set<T> intersection(Set<T> set1, Set<T> set2) {
+        Objects.requireNonNull(set1);
+        Objects.requireNonNull(set2);
         Set<T> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);
         return intersection;
@@ -58,6 +63,8 @@ public class CollectionUtils {
      * @return The difference of the first and second set.
      */
     public <T> Set<T> difference(Set<T> set1, Set<T> set2) {
+        Objects.requireNonNull(set1);
+        Objects.requireNonNull(set2);
         Set<T> difference = new HashSet<>(set1);
         difference.removeAll(set2);
         return difference;
@@ -75,6 +82,8 @@ public class CollectionUtils {
      * @return The {@code Set} of values that are mapped my the keys.
      */
     public <K, V> Set<V> getAllValuesFrom(Map<K, V> map, Collection<K> keys) {
+        Objects.requireNonNull(map);
+        Objects.requireNonNull(keys);
         Set<V> values = new HashSet<>(keys.size());
         for (K key: keys) {
             V value = map.get(key);
