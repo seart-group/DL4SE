@@ -233,12 +233,11 @@ public class Git {
 
     @SneakyThrows({IOException.class, InterruptedException.class})
     private Process executeGitCommand(String... args) {
-        List<String> commands = new ArrayList<>();
-        commands.add("git");
-        commands.addAll(Arrays.asList(args));
+        List<String> command = new ArrayList<>();
+        command.add("git");
+        command.addAll(Arrays.asList(args));
 
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.command(commands);
+        ProcessBuilder builder = new ProcessBuilder(command);
         builder.directory(localDir.toFile());
         Process process = builder.start();
         process.waitFor();
