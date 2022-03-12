@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
@@ -19,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +48,8 @@ public class Language {
     @Type(type = "list-array")
     @Column(columnDefinition = "text[]", nullable = false)
     @ToString.Exclude
-    List<String> extensions;
+    @Singular
+    List<String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")
     @ToString.Exclude
