@@ -72,10 +72,9 @@ class GitTest {
         Assertions.assertThrows(GitException.class, git::getLastCommitInfo);
     }
 
-
     @Test
     @SneakyThrows({GitException.class})
-    void getDiffLowerBound() {
+    void getDiffLowerBoundTest() {
         Git git = new Git(historyRepoName, tmp);
         Git.Diff diff = git.getDiff("a09ccdf24ed65e184a6c79afcd4f1e2cfaf17554");
         // Expected diff output:
@@ -94,7 +93,7 @@ class GitTest {
 
     @Test
     @SneakyThrows({GitException.class})
-    void getDiffTestLowerAndUpperBound() {
+    void getDiffTestLowerAndUpperBoundTest() {
         Git git = new Git(historyRepoName, tmp);
         Git.Diff diff = git.getDiff(
                 "0b0bfc50b8deba916463e100b4a5b7b051be888f",
@@ -111,7 +110,7 @@ class GitTest {
 
     @Test
     @SneakyThrows({GitException.class})
-    void getDiffTestSameSHA() {
+    void getDiffSameSHATest() {
         Git git = new Git(historyRepoName, tmp);
         String lastCommitSha = "acc183db71da297ae441cba9849a555382ab9f75";
         Git.Diff diff = git.getDiff(lastCommitSha, lastCommitSha);
