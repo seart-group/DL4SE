@@ -2,11 +2,9 @@ package usi.si.seart.collection.utils;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -19,8 +17,8 @@ public class CollectionUtils {
      * followed by the elements from the second array, preserving their original order of appearance. Does not modify
      * the contents of the arrays passed as arguments.
      *
-     * @param array1 The first {@link java.lang.reflect.Array Array}.
-     * @param array2 The second {@link java.lang.reflect.Array Array}.
+     * @param array1 The first {@link Array}.
+     * @param array2 The second {@link Array}.
      * @param <T> The type of elements in both arrays.
      * @return The merged array.
      */
@@ -28,10 +26,11 @@ public class CollectionUtils {
     public <T> T[] merge(T[] array1, T[] array2) {
         Objects.requireNonNull(array1);
         Objects.requireNonNull(array2);
-        List<T> merged = new ArrayList<>(array1.length + array2.length);
-        merged.addAll(Arrays.asList(array1));
-        merged.addAll(Arrays.asList(array2));
-        return (T[]) merged.toArray();
+        Class<?> type = array1.getClass().getComponentType();
+        T[] merged = (T[]) Array.newInstance(type, array1.length + array2.length);
+        System.arraycopy(array1, 0, merged, 0, array1.length);
+        System.arraycopy(array2, 0, merged, array1.length, array2.length);
+        return merged;
     }
 
     /**
