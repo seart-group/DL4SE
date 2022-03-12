@@ -16,6 +16,17 @@ class CollectionUtilsTest {
     Set<String> strs1 = Set.of("this", "is", "a", "utils", "test");
     Set<String> strs2 = Set.of("this", "is", "another", "test");
 
+    @Test
+    void mergeTest() {
+        Integer[] empty = new Integer[]{};
+        Integer[] arr1 = new Integer[] {1, 2, 3};
+        Integer[] arr2 = new Integer[] {4, 5, 6};
+        Assertions.assertArrayEquals(empty, CollectionUtils.merge(empty, empty));
+        Assertions.assertArrayEquals(arr1, CollectionUtils.merge(empty, arr1));
+        Assertions.assertArrayEquals(arr1, CollectionUtils.merge(arr1, empty));
+        Assertions.assertArrayEquals(new Integer[] {1, 2, 3, 4, 5, 6}, CollectionUtils.merge(arr1, arr2));
+        Assertions.assertArrayEquals(new Integer[] {1, 2, 3, 1, 2, 3}, CollectionUtils.merge(arr1, arr1));
+    }
 
     @Test
     void intersectionTest() {

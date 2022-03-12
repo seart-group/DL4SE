@@ -2,13 +2,34 @@ package usi.si.seart.collection.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @UtilityClass
 public class CollectionUtils {
+
+    /**
+     * Helper method used to merge two arrays into one. The resulting array contains elements from the first array,
+     * followed by the elements from the second array, preserving their original order of appearance. Does not modify
+     * the contents of the arrays passed as arguments.
+     *
+     * @param array1 The first {@link java.lang.reflect.Array Array}.
+     * @param array2 The second {@link java.lang.reflect.Array Array}.
+     * @param <T> The type of elements in both arrays.
+     * @return The merged array.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T[] merge(T[] array1, T[] array2) {
+        List<T> merged = new ArrayList<>(array1.length + array2.length);
+        merged.addAll(Arrays.asList(array1));
+        merged.addAll(Arrays.asList(array2));
+        return (T[]) merged.toArray();
+    }
 
     /**
      * Helper method used for calculating the intersection of two sets: a set of shared items between both sets.
