@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import usi.si.seart.collection.utils.CollectionUtils;
+import usi.si.seart.model.Language;
 import usi.si.seart.utils.StringUtils;
 
 import java.io.IOException;
@@ -13,13 +15,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Class used for interacting with the Git versioning system of a project.
+ * Class used for interacting with the Git version control system.
  *
  * @author dabico
  */
@@ -127,6 +131,7 @@ public class Git {
 
     /**
      * Used to retrieve a summary of changes made between the specified commit and the repository {@code HEAD}.
+     * The changelist excludes changes from the starting commit.
      *
      * @param startSHA The start commit SHA.
      * @return A {@code Diff} object, summarizing the different types of changes made to the files.
@@ -134,7 +139,27 @@ public class Git {
      * @see <a href="https://git-scm.com/docs/git-diff">Git Diff Documentation</a>
      */
     public Git.Diff getDiff(String startSHA) throws GitException {
-        return getDiff(startSHA, "HEAD");
+        return new Diff(startSHA, "HEAD");
+    }
+
+    /**
+     * Used to retrieve a summary of changes made between the specified commit and the repository {@code HEAD}.
+     * The changelist excludes changes from the starting commit, and is limited to files whose language is contained in
+     * the supplied {@code Language} set.
+     *
+     * @param startSHA The start commit SHA.
+     * @param languages The set of languages to filter by.
+     * @return A {@code Diff} object, summarizing the different types of changes made to the files.
+     * @throws GitException If the commit SHA is malformed or invalid.
+     * @see <a href="https://git-scm.com/docs/git-diff">Git Diff Documentation</a>
+     */
+    public Git.Diff getDiff(String startSHA, Set<Language> languages) throws GitException {
+        String[] extensions = languages.stream()
+                .map(Language::getExtensions)
+                .flatMap(Collection::stream)
+                .map(ext -> "***." + ext)
+                .toArray(String[]::new);
+        return new Diff(startSHA, "HEAD", extensions);
     }
 
     /**
@@ -149,6 +174,27 @@ public class Git {
      */
     public Git.Diff getDiff(String startSHA, String endSHA) throws GitException {
         return new Diff(startSHA, endSHA);
+    }
+
+    /**
+     * Used to retrieve a summary of changes made between two specified commits.
+     * The changelist excludes changes from the starting commit, but includes those made in the end commit.
+     * It is also limited to files whose language is contained in the supplied {@code Language} set.
+     *
+     * @param startSHA The start commit SHA.
+     * @param endSHA The end commit SHA.
+     * @param languages The set of languages to filter by.
+     * @return A {@code Diff} object, summarizing the different types of changes made to the files.
+     * @throws GitException If either of the commit SHAs is malformed or invalid.
+     * @see <a href="https://git-scm.com/docs/git-diff">Git Diff Documentation</a>
+     */
+    public Git.Diff getDiff(String startSHA, String endSHA, Set<Language> languages) throws GitException {
+        String[] extensions = languages.stream()
+                .map(Language::getExtensions)
+                .flatMap(Collection::stream)
+                .map(ext -> "***." + ext)
+                .toArray(String[]::new);
+        return new Diff(startSHA, endSHA, extensions);
     }
 
     /**
@@ -173,6 +219,16 @@ public class Git {
 
         private Diff(String startSHA, String endSHA) throws GitException {
             Process process = executeGitCommand("diff", "--name-status", "--diff-filter=ADMRC", startSHA, endSHA);
+            processOutput(process);
+        }
+
+        private Diff(String startSHA, String endSHA, String... extensions) throws GitException {
+            String[] base = new String[] { "diff", "--name-status", "--diff-filter=ADMRC", startSHA, endSHA, "--" };
+            Process process = executeGitCommand(CollectionUtils.merge(base, extensions));
+            processOutput(process);
+        }
+
+        private void processOutput(Process process) throws GitException {
             checkFailure(process);
 
             String output = StringUtils.fromInputStream(process.getInputStream());

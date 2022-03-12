@@ -126,7 +126,7 @@ public class Crawler {
             HibernateUtils.save(repo);
             operation = Crawler::mineRepoData;
         }
-        
+
         operation.accept(repo, repoLanguages);
     }
 
@@ -140,7 +140,6 @@ public class Crawler {
         try {
             Git git = new Git(name, cloneDir, lastUpdate);
 
-            // MINE ANY MISSING INFORMATION FOR NEWLY INTRODUCED LANGUAGES
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
                 mineRepoDataForLanguages(repo, cloneDir, notMined);
@@ -148,56 +147,22 @@ public class Crawler {
                 HibernateUtils.save(repo);
             }
 
-            // IF THERE ARE NO NEW COMMITS, END HERE
             Git.Commit latest = git.getLastCommitInfo();
-            if (!repo.getLastUpdate().isBefore(latest.getTimestamp())) return;
-
-            Git.Diff diff = git.getDiff(repo.getLastCommitSHA());
-
-            Set<String> extensions = repoLanguages.stream()
-                    .map(Language::getExtensions)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
-
-            // PARSE AND SAVE ADDED FILES
-            diff.getAdded().stream()
-                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
-                    .forEach(path -> addFile(repo, path, cloneDir));
-            // DELETE REMOVED FILES
-            diff.getDeleted().stream()
-                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
-                    .forEach(path -> deleteFile(repo, path));
-            // REMOVE EXISTING, THEN RE-PARSE MODIFIED FILES
-            diff.getModified().stream()
-                    .filter(path -> extensions.contains(PathUtils.getExtension(path)))
-                    .forEach(path -> {
-                        deleteFile(repo, path);
-                        addFile(repo, path, cloneDir);
-                    });
-            // GET EXISTING, CHANGE PATH TO MATCH RENAME
-            diff.getRenamed().entrySet()
-                    .stream()
-                    .filter(entry -> {
-                        String keyExt = PathUtils.getExtension(entry.getKey());
-                        String valExt = PathUtils.getExtension(entry.getValue());
-                        return extensions.containsAll(Set.of(keyExt, valExt));
-                    })
-                    .forEach(entry -> renameFile(repo, entry.getKey(), entry.getValue()));
-            // REMOVE EXISTING, THEN RE-PARSE EDITED FILES
-            diff.getEdited().entrySet()
-                    .stream()
-                    .filter(entry -> {
-                        String keyExt = PathUtils.getExtension(entry.getKey());
-                        String valExt = PathUtils.getExtension(entry.getValue());
-                        return extensions.containsAll(Set.of(keyExt, valExt));
-                    })
-                    .forEach(entry -> {
-                        deleteFile(repo, entry.getKey());
-                        addFile(repo, entry.getValue(), cloneDir);
-                    });
-
             repo.setLastCommitSHA(latest.getSha());
             repo.setLastUpdate(latest.getTimestamp());
+
+            Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
+            diff.getAdded().forEach(path -> addFile(repo, path, cloneDir));
+            diff.getDeleted().forEach(path -> deleteFile(repo, path));
+            diff.getModified().forEach(path -> {
+                deleteFile(repo, path);
+                addFile(repo, path, cloneDir);
+            });
+            diff.getRenamed().forEach((key, value) -> renameFile(repo, key, value));
+            diff.getEdited().forEach((key, value) -> {
+                deleteFile(repo, key);
+                addFile(repo, value, cloneDir);
+            });
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {
