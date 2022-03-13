@@ -223,6 +223,8 @@ class GitTest {
     void gitDiffBadSHATest() {
         Git git = new Git(testRepoName, tmp);
         Assertions.assertThrows(GitException.class, () -> git.getDiff(""));
+        Assertions.assertThrows(GitException.class, () -> git.getDiff("0000000"));
+        Assertions.assertThrows(GitException.class, () -> git.getDiff("0000000000000000000000000000000000000000"));
     }
 
     @Test
