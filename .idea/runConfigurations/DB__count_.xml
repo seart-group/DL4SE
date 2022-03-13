@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DB [count]" type="DatabaseScript">
+    <script-file value="$PROJECT_DIR$/scripts/count_all.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="a61d5f14-374f-4355-aaf7-4fcfaa934247" namespace="database/&quot;dl4se&quot;" />
+    <method v="2" />
+  </configuration>
+</component>
