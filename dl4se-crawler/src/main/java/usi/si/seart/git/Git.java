@@ -71,6 +71,16 @@ public class Git {
         else regularClone();
     }
 
+    private void regularClone() throws GitException {
+        Process process = executeGitCommand("clone", url, ".");
+        checkFailure(process);
+    }
+
+    private void shallowClone() throws GitException {
+        Process process = executeGitCommand("clone", url, "--depth=1", ".");
+        checkFailure(process);
+    }
+
     /**
      * Creates a new {@code Git} object, performing a shallow clone operation.
      * Clones a repository based on its full name: {@code {user}/{repo}}, into a directory of our choosing.
@@ -91,6 +101,11 @@ public class Git {
         this.localDir = localDir;
         this.url = String.format(repoLinkPattern, name);
         shallowCloneSince(since);
+    }
+
+    private void shallowCloneSince(LocalDateTime since) throws GitException {
+        Process process = executeGitCommand("clone", url , "--shallow-since="+since, ".");
+        checkFailure(process);
     }
 
     /**
@@ -263,21 +278,6 @@ public class Git {
                 }
             });
         }
-    }
-
-    private void regularClone() throws GitException {
-        Process process = executeGitCommand("clone", url, ".");
-        checkFailure(process);
-    }
-
-    private void shallowClone() throws GitException {
-        Process process = executeGitCommand("clone", url, "--depth=1", ".");
-        checkFailure(process);
-    }
-
-    private void shallowCloneSince(LocalDateTime since) throws GitException {
-        Process process = executeGitCommand("clone", url , "--shallow-since="+since, ".");
-        checkFailure(process);
     }
 
     private void checkFailure(Process process) throws GitException {
