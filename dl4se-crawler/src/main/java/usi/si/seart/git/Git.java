@@ -67,16 +67,16 @@ public class Git {
         this.name = name;
         this.localDir = localDir;
         this.url = String.format(repoLinkPattern, name);
-        if (shallow) shallowClone();
-        else regularClone();
+        if (shallow) shallow();
+        else regular();
     }
 
-    private void regularClone() throws GitException {
+    private void regular() throws GitException {
         Process process = executeGitCommand("clone", url, ".");
         checkFailure(process);
     }
 
-    private void shallowClone() throws GitException {
+    private void shallow() throws GitException {
         Process process = executeGitCommand("clone", url, "--depth=1", ".");
         checkFailure(process);
     }
@@ -100,10 +100,10 @@ public class Git {
         this.name = name;
         this.localDir = localDir;
         this.url = String.format(repoLinkPattern, name);
-        shallowCloneSince(since);
+        shallowSince(since);
     }
 
-    private void shallowCloneSince(LocalDateTime since) throws GitException {
+    private void shallowSince(LocalDateTime since) throws GitException {
         Process process = executeGitCommand("clone", url , "--shallow-since="+since, ".");
         checkFailure(process);
     }
