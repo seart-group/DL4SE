@@ -163,6 +163,7 @@ public class Crawler {
                 deleteFile(repo, key);
                 addFile(repo, value, cloneDir);
             });
+            diff.getCopied().forEach((key, value) -> addFile(repo, value, cloneDir));
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -216,13 +217,14 @@ public class Git {
 
     /**
      * Class used to represent a {@code diff}: the changes made between commits.
-     * It serves as a container for 5 types of file changes:
+     * It serves as a container for 6 types of file changes:
      * <ul>
      *     <li>{@code added} files ({@code A})</li>
      *     <li>{@code deleted} files ({@code D})</li>
      *     <li>{@code modified} files ({@code M})</li>
      *     <li>{@code renamed} files ({@code R100})</li>
      *     <li>{@code edited} files ({@code R0XX})</li>
+     *     <li>{@code copied} files ({@code CXXX})</li>
      * </ul>
      */
     @Getter
@@ -233,6 +235,31 @@ public class Git {
         List<Path> modified = new ArrayList<>();
         Map<Path, Path> renamed = new HashMap<>();
         Map<Path, Path> edited = new HashMap<>();
+        Map<Path, Path> copied = new HashMap<>();
+
+        Consumer<String> addedConsumer = singlePathConsumer(added);
+        Consumer<String> deletedConsumer = singlePathConsumer(deleted);
+        Consumer<String> modifiedConsumer = singlePathConsumer(modified);
+        Consumer<String> renamedConsumer = doublePathConsumer(renamed);
+        Consumer<String> editedConsumer = doublePathConsumer(edited);
+        Consumer<String> copiedConsumer = doublePathConsumer(copied);
+
+        private Consumer<String> singlePathConsumer(List<Path> structure) {
+            return line -> {
+                String[] tokens = line.split("\t");
+                Path path = Path.of(tokens[1]);
+                structure.add(path);
+            };
+        }
+
+        private Consumer<String> doublePathConsumer(Map<Path, Path> structure) {
+            return line -> {
+                String[] tokens = line.split("\t");
+                Path before = Path.of(tokens[1]);
+                Path after = Path.of(tokens[2]);
+                structure.put(before, after);
+            };
+        }
 
         private Diff(String startSHA, String endSHA) throws GitException {
             Process process = executeGitCommand("diff", "--name-status", "--diff-filter=ADMRC", startSHA, endSHA);
@@ -250,34 +277,20 @@ public class Git {
 
             String output = StringUtils.fromInputStream(process.getInputStream());
             output.lines().forEach(line -> {
-                String[] tokens = line.split("\t");
-                String type = tokens[0];
-                Path path;
-                Path other;
-                switch (type) {
-                    case "A":
-                        path = Path.of(tokens[1]);
-                        added.add(path);
-                        break;
-                    case "D":
-                        path = Path.of(tokens[1]);
-                        deleted.add(path);
-                        break;
-                    case "M":
-                        path = Path.of(tokens[1]);
-                        modified.add(path);
-                        break;
-                    case "R100":
-                        path = Path.of(tokens[1]);
-                        other = Path.of(tokens[2]);
-                        renamed.put(path, other);
-                        break;
+                Consumer<String> consumer;
+                char status = line.charAt(0);
+                switch (status) {
+                    case 'A': consumer = addedConsumer; break;
+                    case 'D': consumer = deletedConsumer; break;
+                    case 'M': consumer = modifiedConsumer; break;
+                    case 'C': consumer = copiedConsumer; break;
                     default:
-                        path = Path.of(tokens[1]);
-                        other = Path.of(tokens[2]);
-                        edited.put(path, other);
-                        break;
+                        String type = line.split("\t")[0];
+                        if (type.equals("R100")) consumer = renamedConsumer;
+                        else if (type.matches("R0\\d\\d")) consumer = editedConsumer;
+                        else throw new IllegalArgumentException("Unknown change type: ["+type+"], in diff line: " + line);
                 }
+                consumer.accept(line);
             });
         }
     }
