@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.model.Language;
 import usi.si.seart.utils.StringUtils;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author dabico
  */
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Git {
 
@@ -292,6 +294,8 @@ public class Git {
         List<String> command = new ArrayList<>();
         command.add("git");
         command.addAll(Arrays.asList(args));
+
+        log.debug("Executing Git Command: {}", String.join(" ", command));
 
         ProcessBuilder builder = new ProcessBuilder(command);
         builder.directory(localDir.toFile());
