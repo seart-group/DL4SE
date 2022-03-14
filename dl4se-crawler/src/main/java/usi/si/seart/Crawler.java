@@ -135,7 +135,7 @@ public class Crawler {
         String name = repo.getName();
         LocalDateTime lastUpdate = repo.getLastUpdate();
 
-        log.info("Updating repository: {} [Last Update: {}]", name, lastUpdate);
+        log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         try {
             Git git = new Git(name, cloneDir, lastUpdate);
@@ -167,8 +167,7 @@ public class Crawler {
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {
-            log.error("Git operation error for: {}", name);
-            log.error("Error stack trace:", ex);
+            log.error("Git operation error for: " + name, ex);
         } finally {
             PathUtils.forceDelete(cloneDir);
         }
@@ -199,7 +198,7 @@ public class Crawler {
         LocalDateTime lastUpdateGhs = repo.getLastUpdate();
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
-        log.info("Mining repository: {} [Last Update: {}]", name, lastUpdateGhs);
+        log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
         try {
             Git git = new Git(name, cloneDir, true);
             Git.Commit latest = git.getLastCommitInfo();
@@ -212,8 +211,7 @@ public class Crawler {
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {
-            log.error("Git operation error for: {}", name);
-            log.error("Error stack trace:", ex);
+            log.error("Git operation error for: " + name, ex);
         } finally {
             PathUtils.forceDelete(cloneDir);
         }
