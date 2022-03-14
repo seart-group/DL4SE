@@ -87,7 +87,7 @@ public class HibernateUtils {
             session.flush();
             transaction.commit();
         } catch (PersistenceException ex) {
-            log.error("Error while persisting: " + obj, ex);
+            log.error("Error while persisting: " + obj.getClass().getName(), ex);
             if (transaction != null) transaction.rollback();
         } finally {
             session.close();
