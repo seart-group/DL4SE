@@ -86,7 +86,7 @@ public class Crawler {
     private static String iterate(HttpClient client, String link, LocalDate lastUpdate) {
         GenericUrl requestUrl = new GenericUrl(link)
                 .set("committedMin", lastUpdate.toString())
-                .set("sort", "pushedAt");
+                .set("sort", "lastCommit");
         HttpResponse response = client.getRequest(requestUrl);
         List<GhsGitRepo> items = client.getSearchResults(response);
         Map<String, String> links = client.getNavigationLinks(response);
@@ -103,7 +103,7 @@ public class Crawler {
 
     private static void checkRepoData(GhsGitRepo item) {
         String name = item.getName();
-        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getPushedAt());
+        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getLastCommit());
         lastJob.setCheckpoint(lastUpdateGhs);
 
         Set<String> repoLanguageNames = CollectionUtils.intersection(names, item.getRepoLanguages());

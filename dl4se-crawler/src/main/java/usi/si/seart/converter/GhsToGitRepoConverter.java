@@ -30,7 +30,7 @@ public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
         if (issues != null) builder.issues(issues);
         Long stars = ghsGitRepo.getStargazers();
         if (stars != null) builder.stars(stars);
-        LocalDateTime lastUpdate = DateToLDTConverter.getInstance().convert(ghsGitRepo.getPushedAt());
+        LocalDateTime lastUpdate = DateToLDTConverter.getInstance().convert(ghsGitRepo.getLastCommit());
         if (lastUpdate != null) builder.lastUpdate(lastUpdate);
         String lastCommitSHA = ghsGitRepo.getLastCommitSHA();
         if (lastCommitSHA != null) builder.lastCommitSHA(lastCommitSHA);
