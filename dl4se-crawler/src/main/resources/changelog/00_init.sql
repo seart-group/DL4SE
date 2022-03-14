@@ -48,7 +48,8 @@ CREATE TABLE "file" (
     "lines" bigint NOT NULL,
     "characters" bigint NOT NULL,
     "is_test" boolean NOT NULL,
-    "contains_non_ascii" boolean NOT NULL
+    "contains_non_ascii" boolean NOT NULL,
+    UNIQUE (repo_id, path)
 );
 
 CREATE TABLE "function" (
