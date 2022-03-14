@@ -133,12 +133,12 @@ public class Crawler {
     @SneakyThrows
     private static void updateRepoData(GitRepo repo, Set<Language> repoLanguages) {
         String name = repo.getName();
-        LocalDateTime lastUpdate = repo.getLastUpdate();
+        LocalDateTime lastCommit = repo.getLastCommit();
 
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         try {
-            Git git = new Git(name, cloneDir, lastUpdate);
+            Git git = new Git(name, cloneDir, lastCommit);
 
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
@@ -148,8 +148,8 @@ public class Crawler {
             }
 
             Git.Commit latest = git.getLastCommitInfo();
+            repo.setLastCommit(latest.getTimestamp());
             repo.setLastCommitSHA(latest.getSha());
-            repo.setLastUpdate(latest.getTimestamp());
 
             Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
             diff.getAdded().forEach(path -> addFile(repo, path, cloneDir));
@@ -195,7 +195,7 @@ public class Crawler {
     @SneakyThrows
     private static void mineRepoData(GitRepo repo, Set<Language> repoLanguages) {
         String name = repo.getName();
-        LocalDateTime lastUpdateGhs = repo.getLastUpdate();
+        LocalDateTime lastUpdateGhs = repo.getLastCommit();
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
@@ -206,8 +206,8 @@ public class Crawler {
             mineRepoDataForLanguages(repo, cloneDir, repoLanguages);
 
             repo.setLanguages(repoLanguages);
+            repo.setLastCommit(latest.getTimestamp());
             repo.setLastCommitSHA(latest.getSha());
-            repo.setLastUpdate(latest.getTimestamp());
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {
