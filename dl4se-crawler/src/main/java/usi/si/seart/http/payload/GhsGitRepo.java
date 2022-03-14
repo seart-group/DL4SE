@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import usi.si.seart.converter.DateToLDTConverter;
 import usi.si.seart.model.GitRepo;
 
 import java.util.Date;
@@ -54,21 +53,6 @@ public class GhsGitRepo {
         repoLanguages.add(mainLanguage);
         repoLanguages.addAll(languages.keySet());
         return repoLanguages;
-    }
-
-    public GitRepo.GitRepoBuilder toGitRepoBuilder() {
-        GitRepo.GitRepoBuilder builder = GitRepo.builder();
-
-        builder.name(name);
-        builder.license(license);
-        builder.isFork(isFork);
-        if (commits != null) builder.commits(commits);
-        if (contributors != null) builder.contributors(contributors);
-        if (totalIssues != null) builder.issues(totalIssues);
-        if (stargazers != null) builder.stars(stargazers);
-        builder.lastUpdate(DateToLDTConverter.getInstance().convert(pushedAt));
-        builder.lastCommitSHA(lastCommitSHA);
-        return builder;
     }
 
     public void update(GitRepo repo) {
