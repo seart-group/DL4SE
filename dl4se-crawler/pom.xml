@@ -48,6 +48,20 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <systemProperties>
+            <db.password>password123</db.password>
+          </systemProperties>
+          <environmentVariables>
+            <DB_USER>dabico</DB_USER>
+            <DB_SERVER>server.si.usi.ch</DB_SERVER>
+            <DB_PORT>12345</DB_PORT>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>4.7.1</version>

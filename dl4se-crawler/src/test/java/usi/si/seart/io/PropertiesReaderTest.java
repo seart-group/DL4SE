@@ -1,43 +1,19 @@
 package usi.si.seart.io;
 
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 class PropertiesReaderTest {
 
     PropertiesReader propertiesReader = new PropertiesReader("reader.properties");
 
-    static String user = "dabico";
-    static String pass = "password123";
-    static String srvr = "server.si.usi.ch";
-    static String port = "12345";
-
-    @BeforeAll
-    static void beforeAll() {
-        setEnvVar("DB_USER", user);
-        setEnvVar("DB_SERVER", srvr);
-        setEnvVar("DB_PORT", port);
-        System.setProperty("db.password", pass);
-    }
-
-    // https://stackoverflow.com/a/40682052/17173324
-    @SneakyThrows
-    @SuppressWarnings("unchecked")
-    private static void setEnvVar(String key, String value) {
-        Map<String, String> env = System.getenv();
-        Class<?> cl = env.getClass();
-        Field field = cl.getDeclaredField("m");
-        field.setAccessible(true);
-        Map<String, String> writableEnv = (Map<String, String>) field.get(env);
-        writableEnv.put(key, value);
-    }
+    static String user = System.getenv("DB_USER");
+    static String pass = System.getProperty("db.password");
+    static String srvr = System.getenv("DB_SERVER");
+    static String port = System.getenv("DB_PORT");
 
     @Test
     void getPropertyTest() {
