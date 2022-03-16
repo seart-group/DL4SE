@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+
+  dl4se-db:
+    container_name: dl4se-db
+    image: postgres:14.2-alpine
+    networks: [dl4se-network]
+    environment:
+      TZ: UTC
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+
+networks:
+  dl4se-network:
