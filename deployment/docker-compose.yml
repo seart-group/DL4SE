@@ -17,7 +17,7 @@ services:
   dl4se-liquibase:
     container_name: dl4se-liquibase
     image: liquibase/liquibase:4.8
-    command: --url=jdbc:postgresql://dl4se-db:${DATABASE_PORT}/${DATABASE_NAME}?user=${DATABASE_USER}&password=${DATABASE_PASS} --changeLogFile=changelog.xml update
+    command: --url=jdbc:postgresql://dl4se-db:${DATABASE_PORT}/${DATABASE_NAME}?user=${DATABASE_USER}&password=${DATABASE_PASS} --changeLogFile=changelog.xml --hub-mode=off update
     volumes:
       - ../liquibase/changelog.xml:/liquibase/changelog.xml
       - ../liquibase/scripts/:/liquibase/scripts/
