@@ -1,17 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Crawler" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="usi.si.seart.Crawler" />
-    <module name="dl4se-crawler" />
-    <option name="PROGRAM_PARAMETERS" value="seart-group/ghs" />
-    <option name="VM_PARAMETERS" value="-Xss16m" />
-    <extension name="coverage">
-      <pattern>
-        <option name="PATTERN" value="usi.si.seart.*" />
-        <option name="ENABLED" value="true" />
-      </pattern>
-    </extension>
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
+  <configuration default="false" name="Crawler" type="JarApplication">
+    <option name="JAR_PATH" value="$PROJECT_DIR$/dl4se-crawler/target/dl4se-crawler-0.1-SNAPSHOT.jar" />
+    <option name="VM_PARAMETERS" value="-DDATABASE_HOST=localhost -DDATABASE_NAME=dl4se -DDATABASE_PASS=Lugano2022 -DDATABASE_PORT=5432 -DDATABASE_USER=dl4se_admin" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="CODE_SEARCH_URL" value="http://gym.si.usi.ch:48001/api/r/search" />
+    </envs>
+    <method v="2" />
   </configuration>
 </component>
