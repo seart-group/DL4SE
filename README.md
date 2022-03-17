@@ -54,6 +54,13 @@ FROM pg_stat_activity
 WHERE pg_stat_activity.datname = 'dl4se';
 ```
 
+## Liquibase
+
+To perform the migrations locally, run:
+```shell
+liquibase --url="jdbc:postgresql://localhost:5432/dl4se?user=dl4se_admin&password=Lugano2022" --changeLogFile="liquibase/changelog.xml" update
+```
+
 ## Maven
 
 ### Adding modules
@@ -67,3 +74,7 @@ mvn archetype:generate \
 -DgroupId=usi.si.seart \
 -Dversion=0.1-SNAPSHOT
 ```
+
+## Docker
+
+- [Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/)
