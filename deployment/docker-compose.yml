@@ -24,5 +24,27 @@ services:
     networks: [dl4se-network]
     depends_on: [dl4se-db]
 
+  dl4se-crawler:
+    container_name: dl4se-crawler
+    image: dl4se/dl4se-crawler
+    build:
+      context: ../
+      dockerfile: deployment/crawler/Dockerfile
+    networks: [dl4se-network]
+    environment:
+      DATABASE_HOST: dl4se-db
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      CODE_SEARCH_URL: http://gym.si.usi.ch:48001/api/r/search
+    ports:
+      - ${CRAWLER_PORT}:${CRAWLER_PORT}
+    depends_on: [dl4se-liquibase]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
 networks:
   dl4se-network:
