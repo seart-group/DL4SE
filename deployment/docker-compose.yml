@@ -32,6 +32,7 @@ services:
       dockerfile: deployment/crawler/Dockerfile
     networks: [dl4se-network]
     environment:
+      LIQUIBASE_HOST: dl4se-liquibase
       DATABASE_HOST: dl4se-db
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
