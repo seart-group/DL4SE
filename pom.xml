@@ -26,6 +26,7 @@
   <modules>
     <module>dl4se-crawler</module>
     <module>dl4se-model</module>
+    <module>dl4se-platform</module>
   </modules>
 
   <dependencies>
