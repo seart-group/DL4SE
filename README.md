@@ -74,7 +74,3 @@ mvn archetype:generate \
 -DgroupId=usi.si.seart \
 -Dversion=0.1-SNAPSHOT
 ```
-
-## Docker
-
-- [Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/)
