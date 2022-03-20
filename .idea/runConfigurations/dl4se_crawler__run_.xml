@@ -33,7 +33,6 @@
           </option>
           <option name="goals">
             <list>
-              <option value="liquibase:update" />
               <option value="exec:java" />
             </list>
           </option>
