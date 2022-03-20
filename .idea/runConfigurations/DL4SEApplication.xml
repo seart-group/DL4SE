@@ -10,13 +10,6 @@
     <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
     <option name="HIDE_BANNER" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" />
-    <envs>
-      <env name="DATABASE_HOST" value="localhost" />
-      <env name="DATABASE_NAME" value="dl4se" />
-      <env name="DATABASE_PASS" value="Lugano2022" />
-      <env name="DATABASE_PORT" value="5432" />
-      <env name="DATABASE_USER" value="dl4se_admin" />
-    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

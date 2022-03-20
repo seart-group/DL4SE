@@ -13,16 +13,16 @@
           <option name="jreName" value="#USE_PROJECT_JDK" />
           <option name="mavenProperties">
             <map>
-              <entry key="DATABASE_HOST" value="localhost" />
-              <entry key="DATABASE_NAME" value="dl4se" />
-              <entry key="DATABASE_PASS" value="Lugano2022" />
-              <entry key="DATABASE_PORT" value="5432" />
-              <entry key="DATABASE_USER" value="dl4se_admin" />
+              <entry key="DATABASE_HOST" value="${DATABASE_HOST}" />
+              <entry key="DATABASE_NAME" value="${DATABASE_NAME}" />
+              <entry key="DATABASE_PASS" value="${DATABASE_PASS}" />
+              <entry key="DATABASE_PORT" value="${DATABASE_PORT}" />
+              <entry key="DATABASE_USER" value="${DATABASE_USER}" />
             </map>
           </option>
           <option name="passParentEnv" value="true" />
           <option name="runMavenInBackground" value="true" />
-          <option name="skipTests" value="false" />
+          <option name="skipTests" value="true" />
           <option name="vmOptions" value="" />
         </MavenRunnerSettings>
       </option>
@@ -33,7 +33,10 @@
           </option>
           <option name="goals">
             <list>
+              <option value="clean" />
+              <option value="compile" />
               <option value="exec:java" />
+              <option value="-am" />
             </list>
           </option>
           <option name="pomFileName" />
