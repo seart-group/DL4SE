@@ -77,7 +77,7 @@ ALTER TABLE "file" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id") ON D
 ALTER TABLE "file" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "function" ADD FOREIGN KEY ("repo_id") REFERENCES "git_repo" ("id") ON DELETE CASCADE;
 ALTER TABLE "function" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
-ALTER TABLE "function" ADD FOREIGN KEY ("file_id") references "file" ("id") ON DELETE CASCADE;
+ALTER TABLE "function" ADD FOREIGN KEY ("file_id") REFERENCES "file" ("id") ON DELETE CASCADE;
 
 -- INDEXES
 CREATE INDEX "git_repo_language_idx" ON "git_repo_language" (repo_id, lang_id);
