@@ -20,47 +20,6 @@ plantuml -tsvg ./* -output "out"
 
 ![cleanup](https://www.plantuml.com/plantuml/svg/RLB1Rjim3BthAuZakY8zxEJ3q2NfqW8z5CYEkp0sOmkLHOsYbkNl9tcEOMTxW6s9V7fy5FqK5KLJxw0Ml3ZhMwDM7S5ktCAE6p8cVbWVKB278_rCv6iw2AUmvUQwnVgZpHlVxDYnmFhRWCV7sQ7OOSEN8dT65xFUYN_3Ql_s-VYyWlMRRJiz25uDPEGJQciRq6kceE898wq08-ot_n86doH3VbmRyWta0cP1FBmSuUlxwq3CwxkarPTq6dF6Z4BmyALGApWyVuSD1hkHJIIKkZFYMGca63VlfSLOcJKuz6t2blAo5aAb1dhhyowoA9okjsYEX48hHekGAUPoiR5k1K8nEOt6CGSuim1XtOrH0ncJmn_POGMrOqyv7xXaSmWUDZVE45aAdQqZ0oFGwJG28Zyr0J65m5BimWopkzblgpACI8CWOEucAWj1WuhJ8NAHnW8x5dGBjR_toBz8PdQNU6rzqTJEnidu0gKjpvTFS27eyNgV7orQ1OVw7_qcIVanKyYkb-BJU6O1S_kMvoc_Kk_-0000)
 
-### Database Schema
-
-[Link to current relational rendition](https://dbdiagram.io/d/6202862685022f4ee55b0274)
-
-## DB
-
-First create the user:
-```postgresql
-CREATE ROLE dl4se_admin WITH
-	LOGIN
-	NOSUPERUSER
-	CREATEDB
-	NOCREATEROLE
-	INHERIT
-	NOREPLICATION
-	CONNECTION LIMIT -1;
-```
-
-Then create the DB:
-```postgresql
-CREATE DATABASE dl4se
-    WITH 
-    OWNER = dl4se_admin
-    ENCODING = 'UTF8'
-    CONNECTION LIMIT = -1;
-```
-
-To terminate all sessions related to the DB:
-```postgresql
-SELECT pg_terminate_backend(pg_stat_activity.pid)
-FROM pg_stat_activity
-WHERE pg_stat_activity.datname = 'dl4se';
-```
-
-## Liquibase
-
-To perform the migrations locally, run:
-```shell
-liquibase --url="jdbc:postgresql://localhost:5432/dl4se?user=dl4se_admin&password=Lugano2022" --changeLogFile="liquibase/changelog.xml" update
-```
-
 ## Maven
 
 ### Adding modules
