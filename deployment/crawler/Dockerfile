@@ -12,10 +12,7 @@ COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
 RUN apk update && apk add git
 
-COPY ../../deployment/scripts/wait-service-exit.sh /wait.sh
-RUN chmod +x /wait.sh
-
-ENTRYPOINT /wait.sh $LIQUIBASE_HOST && java \
+ENTRYPOINT java \
     -DDATABASE_HOST=$DATABASE_HOST \
     -DDATABASE_NAME=$DATABASE_NAME \
     -DDATABASE_PASS=$DATABASE_PASS \

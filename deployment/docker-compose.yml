@@ -49,7 +49,9 @@ services:
       CODE_SEARCH_URL: http://gym.si.usi.ch:48001/api/r/search
     ports:
       - ${CRAWLER_PORT}:${CRAWLER_PORT}
-    depends_on: [dl4se-liquibase]
+    depends_on:
+      dl4se-liquibase:
+        condition: service_completed_successfully
     deploy:
       restart_policy:
         condition: on-failure
