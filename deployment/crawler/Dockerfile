@@ -3,8 +3,9 @@ FROM maven:3.8.4-jdk-11-slim AS build
 COPY ../../pom.xml /pom.xml
 COPY ../../dl4se-crawler /dl4se-crawler
 COPY ../../dl4se-model /dl4se-model
+COPY ../../dl4se-platform /dl4se-platform
 
-RUN mvn -e -f pom.xml clean package -Dmaven.test.skip
+RUN mvn -e -f pom.xml clean package -pl dl4se-crawler -am -DskipTests
 
 FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
 
