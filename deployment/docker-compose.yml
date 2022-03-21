@@ -33,6 +33,9 @@ services:
   dl4se-crawler:
     container_name: dl4se-crawler
     image: dl4se/dl4se-crawler:latest
+    build:
+      context: ../
+      dockerfile: deployment/crawler/Dockerfile
     networks: [dl4se-network]
     environment:
       LIQUIBASE_HOST: dl4se-liquibase
