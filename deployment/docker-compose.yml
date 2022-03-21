@@ -5,6 +5,8 @@ services:
   dl4se-db:
     container_name: dl4se-db
     image: postgres:14.2-alpine
+    volumes:
+      - data:/var/lib/postgresql/data
     networks: [dl4se-network]
     environment:
       TZ: UTC
@@ -52,6 +54,10 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+
+volumes:
+  data:
+    name: dl4se-data
 
 networks:
   dl4se-network:
