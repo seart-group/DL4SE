@@ -11,8 +11,6 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASS}
-    ports:
-      - ${DATABASE_PORT}:${DATABASE_PORT}
     healthcheck:
       test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
       start_period: 5s
