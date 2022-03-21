@@ -7,7 +7,7 @@ services:
     image: postgres:14.2-alpine
     volumes:
       - data:/var/lib/postgresql/data
-    networks: [dl4se-network]
+    networks: [ default ]
     environment:
       TZ: UTC
       POSTGRES_DB: ${DATABASE_NAME}
@@ -27,7 +27,7 @@ services:
     volumes:
       - ../liquibase/changelog.xml:/liquibase/changelog.xml
       - ../liquibase/scripts/:/liquibase/scripts/
-    networks: [dl4se-network]
+    networks: [ default ]
     depends_on:
       dl4se-db:
         condition: service_healthy
@@ -38,7 +38,7 @@ services:
     build:
       context: ../
       dockerfile: deployment/crawler/Dockerfile
-    networks: [dl4se-network]
+    networks: [ default ]
     environment:
       LIQUIBASE_HOST: dl4se-liquibase
       DATABASE_HOST: dl4se-db
@@ -60,4 +60,5 @@ volumes:
     name: dl4se-data
 
 networks:
-  dl4se-network:
+  default:
+    name: dl4se-network
