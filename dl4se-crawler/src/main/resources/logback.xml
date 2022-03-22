@@ -13,10 +13,18 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %logger{35} | %msg%n</pattern>
         </encoder>
     </appender>
+
     <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
         <Target>System.err</Target>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>logger.startsWith("usi.si.seart")</expression>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
         </filter>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %logger{35} | %file:%line | %msg%n</pattern>
