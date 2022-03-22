@@ -3,7 +3,6 @@ package usi.si.seart.io;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -32,7 +31,6 @@ import java.util.List;
  * @see java.nio.file.Files#walkFileTree(Path, java.nio.file.FileVisitor) Files.walkFileTree
  * @author dabico
  */
-@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
@@ -59,7 +57,6 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
         if (matcher.matches(path.getFileName())) {
-            log.debug("Marking path: {}", path);
             visited.add(path);
         }
         return FileVisitResult.CONTINUE;
@@ -67,7 +64,6 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFileFailed(Path path, IOException ex) {
-        log.error("Visit failed for path: " + path, ex);
         return FileVisitResult.CONTINUE;
     }
 
