@@ -97,7 +97,7 @@ public class Crawler {
     }
 
     private static void saveProgress() {
-        log.debug("Saving progress...");
+        log.debug("Saving progress... [Checkpoint: {}]", lastJob.getCheckpoint());
         HibernateUtils.save(lastJob);
     }
 
