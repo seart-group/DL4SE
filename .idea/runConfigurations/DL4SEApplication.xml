@@ -1,6 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DL4SEApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <module name="dl4se-platform" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="usi.si.seart.*" />
