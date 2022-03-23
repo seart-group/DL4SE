@@ -49,5 +49,11 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <version>${springframework.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.icegreen</groupId>
+      <artifactId>greenmail-junit5</artifactId>
+      <version>1.6.7</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
