@@ -153,3 +153,17 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+
+### OpenSSL Template
+
+*.ca
+*.crt
+*.csr
+*.der
+*.kdb
+*.org
+*.p12
+*.pem
+*.rnd
+*.ssleay
+*.smime
