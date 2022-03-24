@@ -20,6 +20,9 @@ export PLATFORM_PORT=3333                   # Optional, defaults to 8080 in app
 export PLATFORM_MAIL_ADDR=example@gmail.com # Your Gmail account
 export PLATFORM_MAIL_PASS=randomlettersabc  # 16-character generated app password
 
+export SECURITY_USER=dl4se_admin            # Name of the default user
+export SECURITY_PASS=p4sSF0rDeF4u1t         # Password for the default user
+
 export KEYSTORE_PASS=133TH4xx0RP4sS         # Password for your PKCS12 keystore
 ```
 
