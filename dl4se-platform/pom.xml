@@ -74,6 +74,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${springframework.version}</version>
         <configuration>
           <mainClass>usi.si.seart.DL4SEApplication</mainClass>
         </configuration>
