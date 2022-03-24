@@ -47,40 +47,24 @@ family said function belongs to.
 
 ## Setup
 
-In order to test the project locally, you must first create the necessary database and user.
-
-The user can be created with the following command:
-```postgresql
-CREATE ROLE dl4se_admin WITH
-    ENCRYPTED PASSWORD 'Lugano2022'
-	LOGIN
-	NOSUPERUSER
-	CREATEDB
-	NOCREATEROLE
-	INHERIT
-	NOREPLICATION
-	CONNECTION LIMIT -1;
-```
-
-After that, we can create the database:
-```postgresql
-CREATE DATABASE dl4se
-    WITH 
-    OWNER = dl4se_admin
-    ENCODING = 'UTF8'
-    CONNECTION LIMIT = -1;
-```
+In order to test the project locally, you must first create the necessary database and user. You can do so using the
+`database/create.sh` script.
 
 ## Migration
 
 Test database migrations locally using the `liquibase/migrate.sh` script.
 
-## Other
+## Cleanup
 
-Sometimes, it may be necessary to forcefully terminate all sessions related to the project database. You can do so using
-the following command:
-```postgresql
-SELECT pg_terminate_backend(pg_stat_activity.pid)
-FROM pg_stat_activity
-WHERE pg_stat_activity.datname = 'dl4se';
+To drop all the database relations, use `database/drop.sh`. To completely drop the database and remove the created role,
+use `database/clean.sh`.
+
+## Notes
+
+### Homebrew Postgres Installations
+
+If you installed Postgres via `homebrew` then for the database creation scripts to work, you need to run the following
+in your terminal:
+```shell
+/usr/local/opt/postgres/bin/createuser -s postgres
 ```
