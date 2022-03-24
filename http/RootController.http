@@ -1,2 +1,2 @@
 ### GET /
-GET http://localhost:8080/api
+GET https://localhost:8080/api
