@@ -19,7 +19,9 @@ export DATABASE_PASS=Lugano2022   # Must coincide with the password of the creat
 export PLATFORM_PORT=3333                   # Optional, defaults to 8080 in app
 export PLATFORM_MAIL_ADDR=example@gmail.com # Your Gmail account
 export PLATFORM_MAIL_PASS=randomlettersabc  # 16-character generated app password
+
+export KEYSTORE_PASS=133TH4xx0RP4sS         # Password for your PKCS12 keystore
 ```
 
-[^1]: Or whatever other file your shell uses for configuring environment variables. Note that the `liquibase/migrate.sh`
-script is configured to use `bash` by default.
+[^1]: Or whatever other file your shell uses for configuring environment variables. Note that the helper shell scripts
+are configured to use `bash` by default.
