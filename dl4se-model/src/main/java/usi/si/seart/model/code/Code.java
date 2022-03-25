@@ -19,6 +19,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -34,18 +35,21 @@ public abstract class Code {
     @GeneratedValue
     Long id;
 
+    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="repo_id", nullable=false)
+    @JoinColumn(name="repo_id")
     GitRepo repo;
 
+    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="lang_id", nullable=false)
+    @JoinColumn(name="lang_id")
     Language language;
 
-    @Column(nullable = false)
+    @NotNull
     String content;
 
-    @Column(name = "content_hash", nullable = false)
+    @NotNull
+    @Column(name = "content_hash")
     String contentHash;
 
     String ast;
@@ -59,16 +63,18 @@ public abstract class Code {
     @Column(name = "code_tokens")
     Long codeTokens;
 
-    @Column(nullable = false)
+    @NotNull
     Long lines;
 
-    @Column(nullable = false)
+    @NotNull
     Long characters;
 
-    @Column(name = "is_test", nullable = false)
+    @NotNull
+    @Column(name = "is_test")
     @Builder.Default
     Boolean isTest = false;
 
-    @Column(name = "contains_non_ascii", nullable = false)
+    @NotNull
+    @Column(name = "contains_non_ascii")
     Boolean containsNonAscii;
 }

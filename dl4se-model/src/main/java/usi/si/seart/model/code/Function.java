@@ -19,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -31,8 +32,9 @@ import java.util.Objects;
 @TypeDefs(@TypeDef(name = "string-enum", typeClass = StringEnumType.class))
 public class Function extends Code {
 
+    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="file_id", nullable=false)
+    @JoinColumn(name="file_id")
     File file;
 
     @Basic

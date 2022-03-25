@@ -22,6 +22,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,39 +45,44 @@ public class GitRepo {
     @GeneratedValue
     Long id;
 
-    @Column(unique = true, nullable = false, length = 140)
+    @NotNull
+    @Column(unique = true, length = 140)
     String name;
 
     String license;
 
-    @Column(name = "is_fork", nullable = false)
+    @NotNull
+    @Column(name = "is_fork")
     Boolean isFork;
 
-    @Column(nullable = false)
+    @NotNull
     @Builder.Default
     Long commits = 0L;
 
-    @Column(nullable = false)
+    @NotNull
     @Builder.Default
     Long contributors = 0L;
 
-    @Column(nullable = false)
+    @NotNull
     @Builder.Default
     Long issues = 0L;
 
-    @Column(nullable = false)
+    @NotNull
     @Builder.Default
     Long stars = 0L;
 
-    @Column(name = "last_commit", nullable = false, columnDefinition = "TIMESTAMP")
+    @NotNull
+    @Column(name = "last_commit", columnDefinition = "TIMESTAMP")
     @Builder.Default
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
 
-    @Column(name = "last_commit_sha", nullable = false, length = 40)
+    @NotNull
+    @Column(name = "last_commit_sha", length = 40)
     @Builder.Default
     String lastCommitSHA = "0000000000000000000000000000000000000000";
 
-    @Column(name = "is_deleted", nullable = false)
+    @NotNull
+    @Column(name = "is_deleted")
     @Builder.Default
     Boolean isDeleted = false;
 

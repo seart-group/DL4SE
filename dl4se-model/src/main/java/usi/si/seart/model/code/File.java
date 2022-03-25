@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +33,11 @@ import java.util.Objects;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class File extends Code {
 
-    @Column(nullable = false)
+    @NotBlank
     String path;
 
-    @Column(name = "is_parsed", nullable = false)
+    @NotNull
+    @Column(name = "is_parsed")
     @Builder.Default
     Boolean isParsed = false;
 

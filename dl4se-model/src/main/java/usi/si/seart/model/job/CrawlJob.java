@@ -11,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-
 import usi.si.seart.model.type.StringEnumType;
 
 import javax.persistence.Basic;
@@ -22,6 +21,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,10 +40,11 @@ public class CrawlJob {
     @GeneratedValue
     Long id;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @NotNull
+    @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime checkpoint;
 
-    @Basic
+    @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Type(type = "string-enum")
     @Column(name = "job_type")
