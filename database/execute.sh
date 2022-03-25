@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-psql -d "$DATABASE_NAME" -U "$DATABASE_USER" -c "$(echo "${BASH_SOURCE%/*}/$1" | xargs -L 1 cat)"
+SCRIPT_ABS_PATH="${BASH_SOURCE%/*}/$1" && \
+test -f "$SCRIPT_ABS_PATH"
+psql -d "$DATABASE_NAME" -U "$DATABASE_USER" -c "$(cat "$SCRIPT_ABS_PATH")"
