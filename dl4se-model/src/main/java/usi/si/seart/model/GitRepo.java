@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.Length;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
@@ -22,6 +23,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,8 +47,9 @@ public class GitRepo {
     @GeneratedValue
     Long id;
 
-    @NotNull
-    @Column(unique = true, length = 140)
+    @NotBlank
+    @Length(max = 140)
+    @Column(unique = true)
     String name;
 
     String license;
@@ -77,7 +80,8 @@ public class GitRepo {
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
 
     @NotNull
-    @Column(name = "last_commit_sha", length = 40)
+    @Length(min = 7, max = 40)
+    @Column(name = "last_commit_sha")
     @Builder.Default
     String lastCommitSHA = "0000000000000000000000000000000000000000";
 
