@@ -41,7 +41,6 @@ public class CrawlJob {
     Long id;
 
     @NotNull
-    @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime checkpoint;
 
     @Basic(optional = false)

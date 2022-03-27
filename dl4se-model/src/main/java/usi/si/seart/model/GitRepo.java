@@ -75,7 +75,7 @@ public class GitRepo {
     Long stars = 0L;
 
     @NotNull
-    @Column(name = "last_commit", columnDefinition = "TIMESTAMP")
+    @Column(name = "last_commit")
     @Builder.Default
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
 
