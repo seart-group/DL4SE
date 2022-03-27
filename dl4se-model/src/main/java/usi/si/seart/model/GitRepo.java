@@ -25,6 +25,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -58,28 +60,29 @@ public class GitRepo {
     @Column(name = "is_fork")
     Boolean isFork;
 
-    @NotNull
+    @PositiveOrZero
     @Builder.Default
     Long commits = 0L;
 
-    @NotNull
+    @PositiveOrZero
     @Builder.Default
     Long contributors = 0L;
 
-    @NotNull
+    @PositiveOrZero
     @Builder.Default
     Long issues = 0L;
 
-    @NotNull
+    @PositiveOrZero
     @Builder.Default
     Long stars = 0L;
 
     @NotNull
     @Column(name = "last_commit")
+    @PastOrPresent
     @Builder.Default
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
 
-    @NotNull
+    @NotBlank
     @Length(min = 7, max = 40)
     @Column(name = "last_commit_sha")
     @Builder.Default

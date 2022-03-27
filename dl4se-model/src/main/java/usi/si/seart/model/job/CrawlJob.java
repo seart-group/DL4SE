@@ -22,6 +22,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
 @Entity
@@ -41,6 +42,7 @@ public class CrawlJob {
     Long id;
 
     @NotNull
+    @PastOrPresent
     LocalDateTime checkpoint;
 
     @Basic(optional = false)

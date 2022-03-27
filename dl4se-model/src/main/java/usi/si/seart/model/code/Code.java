@@ -20,6 +20,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -63,10 +64,10 @@ public abstract class Code {
     @Column(name = "code_tokens")
     Long codeTokens;
 
-    @NotNull
+    @PositiveOrZero
     Long lines;
 
-    @NotNull
+    @PositiveOrZero
     Long characters;
 
     @NotNull
