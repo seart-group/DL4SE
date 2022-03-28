@@ -11,6 +11,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,6 +27,15 @@ class EmailServiceTest {
 
     @Autowired
     private EmailService.EmailServiceImpl emailService;
+
+    @TestConfiguration
+    static class EmailServiceTestContextConfiguration {
+
+        @Bean
+        public ConversionService conversionService() {
+            return new DefaultConversionService();
+        }
+    }
 
     @RegisterExtension
     private static final GreenMailExtension greenMailProxy = new GreenMailExtension(ServerSetupTest.SMTP)
