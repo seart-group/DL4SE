@@ -7,6 +7,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -35,9 +36,10 @@ public class MainConfig {
 
     @Bean
     @SneakyThrows
-    SecurityFilterChain filterChain(HttpSecurity http) {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         return http.requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .authorizeRequests(authorize -> authorize.anyRequest().permitAll())
+                .csrf(AbstractHttpConfigurer::disable)
                 .antMatcher("/**")
                 .build();
     }
