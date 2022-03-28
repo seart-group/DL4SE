@@ -1,0 +1,9 @@
+### POST /register
+POST https://localhost:8080/api/user/register
+Content-Type: application/json
+
+{
+  "email": "dozren@yahoo.com",
+  "password": "Lugano2022",
+  "organisation": "USI"
+}
