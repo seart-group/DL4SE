@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMessage;
 class EmailServiceTest {
 
     @Autowired
-    private EmailService emailService;
+    private EmailService.EmailServiceImpl emailService;
 
     @RegisterExtension
     private static final GreenMailExtension greenMailProxy = new GreenMailExtension(ServerSetupTest.SMTP)
@@ -35,19 +35,21 @@ class EmailServiceTest {
 
     @Test
     @SneakyThrows
-    void sendMessageTest() {
-        String recipient = "emadpres@dl4se.ch";
-        String subject = "DL4SE Mail Test";
-        String message = "This is a test for the Java Mail Service, using GreenMail!";
-        emailService.sendMessage(recipient, subject, message);
+    void sendVerificationEmailTest() {
+        String to = "emadpres@dl4se.ch";
+        String link = "https://localhost:8080/api/user/verify?token=1f83b5ff-a4cb-4677-bd7e-01d2e8e90f7f";
+        emailService.sendVerificationEmail(to, link);
 
         MimeMessage[] receivedMessages = greenMailProxy.getReceivedMessages();
         Assertions.assertEquals(1, receivedMessages.length);
 
         MimeMessage receivedMessage = receivedMessages[0];
+        String recipient = receivedMessage.getAllRecipients()[0].toString();
+        String body = GreenMailUtil.getBody(receivedMessage);
+        String subject = receivedMessage.getSubject();
         Assertions.assertEquals(1, receivedMessage.getAllRecipients().length);
-        Assertions.assertEquals(recipient, receivedMessage.getAllRecipients()[0].toString());
-        Assertions.assertEquals(subject, receivedMessage.getSubject());
-        Assertions.assertEquals(message, GreenMailUtil.getBody(receivedMessage));
+        Assertions.assertEquals(to, recipient);
+        Assertions.assertEquals("Complete your DL4SE registration", subject);
+        Assertions.assertTrue(body.contains(link));
     }
 }
