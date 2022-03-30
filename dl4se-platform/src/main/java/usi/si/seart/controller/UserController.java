@@ -70,7 +70,7 @@ public class UserController {
             verificationService.verify(token);
             status = HttpStatus.OK;
         } catch (IllegalStateException ex) {
-            status = HttpStatus.FORBIDDEN;
+            status = HttpStatus.GONE;
         } catch (IllegalArgumentException ex) {
             status = HttpStatus.BAD_REQUEST;
         }
