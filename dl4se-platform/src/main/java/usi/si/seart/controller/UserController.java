@@ -12,15 +12,21 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.VerificationToken;
+import usi.si.seart.security.jwt.JwtTokenProvider;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
@@ -34,10 +40,30 @@ import javax.validation.Valid;
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class UserController {
 
+    AuthenticationManager authenticationManager;
+
+    JwtTokenProvider tokenProvider;
+
     UserService userService;
     VerificationService verificationService;
     EmailService emailService;
     ConversionService conversionService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> logIn(@Valid @RequestBody LoginDto loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok("Bearer " + token);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto) {
