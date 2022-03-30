@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="UserController | POST /register" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" nameIsGenerated="true" path="$PROJECT_DIR$/http/UserController.http" requestIdentifier="POST /register" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>
