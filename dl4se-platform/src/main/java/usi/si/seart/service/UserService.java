@@ -12,7 +12,7 @@ import usi.si.seart.repository.UserRepository;
 
 public interface UserService {
 
-    User register(User user);
+    User create(User user);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,7 +23,7 @@ public interface UserService {
         UserRepository userRepository;
 
         @Override
-        public User register(User user) {
+        public User create(User user) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole(Role.USER);
             return userRepository.save(user);

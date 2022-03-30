@@ -66,13 +66,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto) {
         HttpStatus status;
         try {
-            User created = userService.register(conversionService.convert(userDto, User.class));
+            User created = userService.create(conversionService.convert(userDto, User.class));
             VerificationToken token = verificationService.generate(created);
             String link = WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(UserController.class).verifyUser(token.getValue())
+                    WebMvcLinkBuilder.methodOn(UserController.class).verify(token.getValue())
             ).toString();
             emailService.sendVerificationEmail(userDto.getEmail(), link);
             status = HttpStatus.CREATED;
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verifyUser(@RequestParam String token) {
+    public ResponseEntity<?> verify(@RequestParam String token) {
         HttpStatus status;
         try {
             verificationService.verify(token);
