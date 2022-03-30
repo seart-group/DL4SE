@@ -14,6 +14,7 @@ import usi.si.seart.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface VerificationService {
 
@@ -30,7 +31,10 @@ public interface VerificationService {
 
         @Override
         public VerificationToken generate(User user) {
-            VerificationToken token = VerificationToken.builder().user(user).build();
+            VerificationToken token = VerificationToken.builder()
+                    .user(user)
+                    .value(UUID.randomUUID().toString())
+                    .build();
             return tokenRepository.save(token);
         }
 

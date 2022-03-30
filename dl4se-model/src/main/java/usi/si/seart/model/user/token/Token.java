@@ -2,7 +2,6 @@ package usi.si.seart.model.user.token;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -43,8 +41,7 @@ public abstract class Token {
     @NotBlank
     @Size(min = 36, max = 36)
     @Column(unique = true)
-    @Builder.Default
-    String value = UUID.randomUUID().toString();
+    String value;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id")
