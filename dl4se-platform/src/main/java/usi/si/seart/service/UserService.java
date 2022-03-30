@@ -1,10 +1,9 @@
 package usi.si.seart.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import usi.si.seart.model.user.Role;
@@ -17,11 +16,11 @@ public interface UserService {
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
+    @AllArgsConstructor(onConstructor_ = @Autowired)
     class UserServiceImpl implements UserService {
 
+        PasswordEncoder passwordEncoder;
         UserRepository userRepository;
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         @Override
         public User register(User user) {
