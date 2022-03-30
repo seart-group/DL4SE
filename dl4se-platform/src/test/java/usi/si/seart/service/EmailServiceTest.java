@@ -17,6 +17,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import javax.mail.internet.MimeMessage;
 
@@ -34,6 +35,11 @@ class EmailServiceTest {
         @Bean
         public ConversionService conversionService() {
             return new DefaultConversionService();
+        }
+
+        @Bean
+        public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+            return new HandlerMappingIntrospector();
         }
     }
 
