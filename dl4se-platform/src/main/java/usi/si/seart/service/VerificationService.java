@@ -48,7 +48,6 @@ public interface VerificationService {
                 boolean valid = token.getExpires().isAfter(LocalDateTime.now(ZoneOffset.UTC));
                 if (!valid) {
                     tokenRepository.delete(token);
-                    userRepository.delete(user);
                     throw new IllegalStateException("Cannot verify user, token has expired!");
                 }
 
