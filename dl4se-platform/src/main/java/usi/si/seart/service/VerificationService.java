@@ -11,8 +11,6 @@ import usi.si.seart.model.user.token.VerificationToken;
 import usi.si.seart.repository.TokenRepository;
 import usi.si.seart.repository.UserRepository;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,8 +43,7 @@ public interface VerificationService {
                 Token token = existing.get();
                 User user = token.getUser();
 
-                boolean valid = token.getExpires().isAfter(LocalDateTime.now(ZoneOffset.UTC));
-                if (!valid) {
+                if (!token.isValid()) {
                     tokenRepository.delete(token);
                     throw new IllegalStateException("Cannot verify user, token has expired!");
                 }

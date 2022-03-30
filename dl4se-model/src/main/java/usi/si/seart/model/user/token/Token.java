@@ -22,6 +22,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -54,5 +55,9 @@ public abstract class Token {
     @PrePersist
     private void prePersist() {
         expires = calculateExpiryDate();
+    }
+
+    public boolean isValid() {
+        return expires.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 }
