@@ -21,7 +21,6 @@ import javax.persistence.PrePersist;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,7 +38,6 @@ public abstract class Token {
     Long id;
 
     @NotBlank
-    @Size(min = 36, max = 36)
     @Column(unique = true)
     String value;
 
