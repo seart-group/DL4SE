@@ -1,2 +1,3 @@
 ### GET /
 GET https://localhost:8080/api
+Authorization: Bearer {{token}}

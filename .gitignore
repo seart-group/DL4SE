@@ -167,3 +167,7 @@ buildNumber.properties
 *.rnd
 *.ssleay
 *.smime
+
+### HTTP Client
+
+*.private.env.json
