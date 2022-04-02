@@ -18,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -52,8 +53,9 @@ public abstract class Token {
 
     protected abstract LocalDateTime calculateExpiryDate();
 
+    @PreUpdate
     @PrePersist
-    private void prePersist() {
+    private void beforeSaving() {
         expires = calculateExpiryDate();
     }
 

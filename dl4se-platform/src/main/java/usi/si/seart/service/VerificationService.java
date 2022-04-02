@@ -16,7 +16,8 @@ import java.util.UUID;
 
 public interface VerificationService {
 
-    VerificationToken generate(User user);
+    Token generate(User user);
+    Token refresh(String tokenValue);
     void verify(String tokenValue);
 
     @Service
@@ -28,7 +29,7 @@ public interface VerificationService {
         UserRepository userRepository;
 
         @Override
-        public VerificationToken generate(User user) {
+        public Token generate(User user) {
             VerificationToken token = VerificationToken.builder()
                     .user(user)
                     .value(UUID.randomUUID().toString())
@@ -44,13 +45,24 @@ public interface VerificationService {
                 User user = token.getUser();
 
                 if (!token.isValid()) {
-                    tokenRepository.delete(token);
                     throw new IllegalStateException("Cannot verify user, token has expired!");
                 }
 
                 user.setVerified(true);
                 tokenRepository.delete(token);
                 userRepository.save(user);
+            } else {
+                throw new IllegalArgumentException("Invalid or non-existing token!");
+            }
+        }
+
+        @Override
+        public Token refresh(String tokenValue) {
+            Optional<Token> existing = tokenRepository.findByValue(tokenValue);
+            if (existing.isPresent()) {
+                Token token = existing.get();
+                token.setValue(UUID.randomUUID().toString());
+                return tokenRepository.save(token);
             } else {
                 throw new IllegalArgumentException("Invalid or non-existing token!");
             }

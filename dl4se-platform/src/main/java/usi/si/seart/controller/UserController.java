@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
 import usi.si.seart.model.user.User;
-import usi.si.seart.model.user.token.VerificationToken;
+import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.jwt.JwtTokenProvider;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.UserService;
@@ -70,7 +70,7 @@ public class UserController {
         HttpStatus status;
         try {
             User created = userService.create(conversionService.convert(userDto, User.class));
-            VerificationToken token = verificationService.generate(created);
+            Token token = verificationService.generate(created);
             String link = WebMvcLinkBuilder.linkTo(
                     WebMvcLinkBuilder.methodOn(UserController.class).verify(token.getValue())
             ).toString();
@@ -91,12 +91,29 @@ public class UserController {
 
     @GetMapping("/verify")
     public ResponseEntity<?> verify(@RequestParam String token) {
-        HttpStatus status;
         try {
             verificationService.verify(token);
-            status = HttpStatus.OK;
+            return ResponseEntity.ok().build();
         } catch (IllegalStateException ex) {
-            status = HttpStatus.GONE;
+            String link = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(UserController.class).resendVerification(token)
+            ).toString();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(link);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/verify/resend")
+    public ResponseEntity<?> resendVerification(@RequestParam String token) {
+        HttpStatus status;
+        try {
+            Token refreshed = verificationService.refresh(token);
+            String link = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(UserController.class).verify(refreshed.getValue())
+            ).toString();
+            emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
+            status = HttpStatus.OK;
         } catch (IllegalArgumentException ex) {
             status = HttpStatus.BAD_REQUEST;
         }
