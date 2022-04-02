@@ -4,7 +4,9 @@ import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import lombok.AccessLevel;
 import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -24,10 +26,11 @@ import javax.mail.internet.MimeMessage;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(value = "classpath:application-test.properties")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 class EmailServiceTest {
 
     @Autowired
-    private EmailService.EmailServiceImpl emailService;
+    EmailService emailService;
 
     @TestConfiguration
     static class EmailServiceTestContextConfiguration {
@@ -44,7 +47,7 @@ class EmailServiceTest {
     }
 
     @RegisterExtension
-    private static final GreenMailExtension greenMailProxy = new GreenMailExtension(ServerSetupTest.SMTP)
+    static final GreenMailExtension greenMailProxy = new GreenMailExtension(ServerSetupTest.SMTP)
             .withConfiguration(
                     GreenMailConfiguration.aConfig()
                             .withUser("dabico@dl4se.ch", "dabico", "password1234")
