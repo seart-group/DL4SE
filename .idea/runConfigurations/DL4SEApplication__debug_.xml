@@ -26,6 +26,11 @@
       </param>
       <param>
         <option name="enabled" value="true" />
+        <option name="name" value="logging.level.org.hibernate.SQL" />
+        <option name="value" value="DEBUG" />
+      </param>
+      <param>
+        <option name="enabled" value="true" />
         <option name="name" value="logging.level.org.hibernate.type.descriptor.sql" />
         <option name="value" value="TRACE" />
       </param>
