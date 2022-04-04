@@ -1,5 +1,6 @@
 package usi.si.seart.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,7 @@ public class Language {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotBlank
@@ -53,12 +55,13 @@ public class Language {
     @NotEmpty
     @Type(type = "list-array")
     @Column(columnDefinition = "text[]")
-    @ToString.Exclude
     @Singular
+    @ToString.Exclude
     List<@NotNull String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")
     @ToString.Exclude
+    @JsonIgnore
     Set<GitRepo> repos = new HashSet<>();
 
     @Override

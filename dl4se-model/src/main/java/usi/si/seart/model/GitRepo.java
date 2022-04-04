@@ -1,5 +1,6 @@
 package usi.si.seart.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +48,7 @@ public class GitRepo {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotBlank
@@ -94,13 +96,15 @@ public class GitRepo {
     Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     @Singular
+    @ToString.Exclude
+    @JsonIgnore
     List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     @Singular
+    @ToString.Exclude
+    @JsonIgnore
     List<Function> functions = new ArrayList<>();
 
     @ManyToMany
@@ -109,8 +113,9 @@ public class GitRepo {
             joinColumns = @JoinColumn(name = "repo_id"),
             inverseJoinColumns = @JoinColumn(name = "lang_id")
     )
-    @ToString.Exclude
     @Singular
+    @ToString.Exclude
+    @JsonIgnore
     Set<Language> languages = new HashSet<>();
 
     @Override

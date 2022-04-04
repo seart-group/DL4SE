@@ -1,5 +1,6 @@
 package usi.si.seart.model.code;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class File extends Code {
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
     @Singular
+    @JsonIgnore
     List<Function> functions = new ArrayList<>();
 
     @Override

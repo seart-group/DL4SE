@@ -1,5 +1,6 @@
 package usi.si.seart.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,7 @@ public class User {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotBlank

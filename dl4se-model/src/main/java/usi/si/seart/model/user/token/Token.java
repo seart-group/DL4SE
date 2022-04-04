@@ -1,5 +1,6 @@
 package usi.si.seart.model.user.token;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public abstract class Token {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotBlank

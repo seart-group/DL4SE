@@ -1,5 +1,6 @@
 package usi.si.seart.model.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,7 @@ public class CrawlJob {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotNull

@@ -1,5 +1,6 @@
 package usi.si.seart.model.code;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Function extends Code {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name="file_id")
+    @JsonIgnore
     File file;
 
     @Basic

@@ -1,5 +1,6 @@
 package usi.si.seart.model.code;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public abstract class Code {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     Long id;
 
     @NotNull
