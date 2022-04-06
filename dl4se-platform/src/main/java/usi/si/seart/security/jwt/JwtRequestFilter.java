@@ -41,9 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 Long id = tokenProvider.getUserIdFromJWT(token);
                 UserDetails userDetails = userRepository.findById(id)
                         .map(UserPrincipal::of)
-                        .orElseThrow(() ->
-                                new UserNotFoundException("Could not find User with id: " + id)
-                        );
+                        .orElseThrow(() -> new UserNotFoundException("id", id));
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities()
