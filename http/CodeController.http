@@ -1,0 +1,38 @@
+### POST /code/create
+POST https://localhost:8080/api/code/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "query" : {
+    "type" : "function",
+    "language_name" : "Java",
+    "has_license" : false,
+    "exclude_forks" : true,
+    "min_commits" : 100,
+    "min_contributors" : 10,
+    "min_issues" : 5,
+    "min_stars" : 20,
+    "include_ast" : true,
+    "min_tokens" : 10,
+    "max_tokens" : 5000,
+    "min_lines" : 3,
+    "max_lines" : 200,
+    "min_characters" : 100,
+    "max_characters" : 10000,
+    "exclude_duplicates" : true,
+    "exclude_identical" : true,
+    "exclude_non_ascii" : true,
+    "exclude_boilerplate" : true
+  },
+  "processing" : {
+    "mask_token" : "<MASK>",
+    "mask_percentage" : 50,
+    "mask_contiguous_only" : true,
+    "idioms" : [
+      "idiom1",
+      "idiom2",
+      "idiom3"
+    ]
+  }
+}
