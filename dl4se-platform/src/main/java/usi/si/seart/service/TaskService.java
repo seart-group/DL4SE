@@ -38,7 +38,7 @@ public interface TaskService {
 
         @Override
         public boolean canCreateTask(User user) {
-            Long activeTasks = taskRepository.countActiveTasksByUser(user);
+            Long activeTasks = taskRepository.countActiveByUser(user);
             return activeTasks < userTaskLimit;
         }
 

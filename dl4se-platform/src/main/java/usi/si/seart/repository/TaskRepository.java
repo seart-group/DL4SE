@@ -10,5 +10,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.user = :user " +
             "AND t.status IN (usi.si.seart.model.task.Status.QUEUED, usi.si.seart.model.task.Status.EXECUTING)")
-    Long countActiveTasksByUser(@Param("user") User user);
+    Long countActiveByUser(@Param("user") User user);
 }
