@@ -18,11 +18,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public interface TaskService {
 
     boolean canCreateTask(User user);
+    boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, Query query, Processing processing);
 
     @Service
@@ -41,6 +43,14 @@ public interface TaskService {
         public boolean canCreateTask(User user) {
             Long activeTasks = taskRepository.countActiveByUser(user);
             return activeTasks < userTaskLimit;
+        }
+
+        @Override
+        public boolean activeTaskExists(User user, Query query, Processing processing) {
+            int taskHash = Objects.hash(user, query, processing);
+            return taskRepository.findActiveByUser(user).stream()
+                    .mapToInt(Task::hashCode)
+                    .anyMatch(hash -> hash == taskHash);
         }
 
         @Override

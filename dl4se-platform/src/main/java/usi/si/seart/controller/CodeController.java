@@ -76,6 +76,9 @@ public class CodeController {
         CodeProcessingDto processingDto = codeTaskDto.getProcessing();
         Processing processing = conversionService.convert(processingDto, CodeProcessing.class);
 
+        if (taskService.activeTaskExists(requester, query, processing))
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
         taskService.create(requester, requestedAt, query, processing);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
