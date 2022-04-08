@@ -66,7 +66,7 @@ public class Task {
     @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     Query query;
 
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     Processing processing;
 
     @Basic(optional = false)

@@ -20,6 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CodeProcessingDto {
 
+    @NotNull
+    @JsonProperty(value = "remove_docstring")
+    Boolean removeDocstring;
+
+    @NotNull
+    @JsonProperty(value = "remove_inner_comments")
+    Boolean removeInnerComments;
+
     @NotBlank
     @JsonProperty(value = "mask_token")
     String maskToken;

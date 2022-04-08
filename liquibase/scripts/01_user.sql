@@ -79,6 +79,8 @@ CREATE TABLE "function_query" (
 CREATE TABLE "code_processing" (
     "id" bigint PRIMARY KEY NOT NULL,
     "task_id" bigint NOT NULL,
+    "remove_docstring" boolean NOT NULL,
+    "remove_inner_comments" boolean NOT NULL,
     "mask_token" text NOT NULL,
     "mask_percentage" integer NOT NULL,
     "mask_contiguous_only" boolean NOT NULL,

@@ -31,6 +31,14 @@ import java.util.List;
 @TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class CodeProcessing extends Processing {
 
+    @NotNull
+    @Column(name = "remove_docstring")
+    Boolean removeDocstring;
+
+    @NotNull
+    @Column(name = "remove_inner_comments")
+    Boolean removeInnerComments;
+
     @NotBlank
     @Column(name = "mask_token")
     String maskToken;

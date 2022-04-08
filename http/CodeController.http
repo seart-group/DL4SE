@@ -26,6 +26,8 @@ Content-Type: application/json
     "exclude_boilerplate" : true
   },
   "processing" : {
+    "remove_docstring" : true,
+    "remove_inner_comments" : false,
     "mask_token" : "<MASK>",
     "mask_percentage" : 50,
     "mask_contiguous_only" : true,

@@ -11,6 +11,8 @@ public class DtoToCodeProcessingConverter implements Converter<CodeProcessingDto
     @NonNull
     public CodeProcessing convert(@NonNull CodeProcessingDto source) {
         return CodeProcessing.builder()
+                .removeDocstring(source.getRemoveDocstring())
+                .removeInnerComments(source.getRemoveInnerComments())
                 .maskToken(source.getMaskToken())
                 .maskPercentage(source.getMaskPercentage())
                 .maskContiguousOnly(source.getMaskContiguousOnly())
