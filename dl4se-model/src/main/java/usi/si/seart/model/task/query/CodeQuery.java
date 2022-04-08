@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import usi.si.seart.model.Language;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -20,6 +23,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class CodeQuery extends Query {
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "lang_id")
+    Language language;
 
     @NotNull
     @Column(name = "include_ast")

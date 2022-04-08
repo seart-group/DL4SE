@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Task;
 
 import javax.persistence.Column;
@@ -18,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -41,11 +39,6 @@ public abstract class Query {
     @OneToOne(optional = false)
     @JoinColumn(name = "task_id")
     Task task;
-
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "lang_id")
-    Language language;
 
     @NotNull
     @Column(name = "has_license")

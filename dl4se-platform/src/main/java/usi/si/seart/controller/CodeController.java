@@ -22,9 +22,9 @@ import usi.si.seart.dto.task.query.FunctionQueryDto;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.processing.Processing;
+import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
-import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
@@ -59,7 +59,7 @@ public class CodeController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 
         CodeQueryDto queryDto = codeTaskDto.getQuery();
-        Query query;
+        CodeQuery query;
         if (queryDto instanceof FileQueryDto) {
             query = conversionService.convert(queryDto, FileQuery.class);
         } else if (queryDto instanceof FunctionQueryDto) {
