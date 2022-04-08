@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import usi.si.seart.model.task.Task;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -63,4 +65,17 @@ public abstract class Query {
     @PositiveOrZero
     @Column(name = "min_stars")
     Long minStars;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Query query = (Query) o;
+        return id != null && Objects.equals(id, query.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hasLicense, excludeForks, minCommits, minContributors, minIssues, minStars);
+    }
 }

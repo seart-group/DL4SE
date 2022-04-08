@@ -9,6 +9,7 @@ import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.validator.constraints.Range;
@@ -20,6 +21,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "code_processing")
@@ -56,4 +60,25 @@ public class CodeProcessing extends Processing {
     @Singular
     @ToString.Exclude
     List<@NotNull String> idioms = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        CodeProcessing that = (CodeProcessing) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        SortedSet<String> sortedIdioms = new TreeSet<>(idioms);
+        return Objects.hash(
+                removeDocstring,
+                removeInnerComments,
+                maskToken,
+                maskPercentage,
+                maskContiguousOnly,
+                sortedIdioms
+        );
+    }
 }
