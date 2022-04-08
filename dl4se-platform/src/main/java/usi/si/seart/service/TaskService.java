@@ -14,6 +14,7 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ public interface TaskService {
         }
 
         @Override
-        @SneakyThrows
+        @SneakyThrows({IOException.class})
         public void create(User requester, LocalDateTime requestedAt, Query query, Processing processing) {
             UUID uuid = UUID.randomUUID();
             String prefix = requester.getId() + "_" + uuid + "_";
