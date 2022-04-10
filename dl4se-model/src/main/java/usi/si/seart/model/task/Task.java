@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -40,7 +39,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "task")
-@DynamicUpdate
 @Getter
 @Setter
 @Builder
