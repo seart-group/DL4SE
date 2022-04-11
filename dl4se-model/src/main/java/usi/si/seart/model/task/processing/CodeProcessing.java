@@ -73,6 +73,7 @@ public class CodeProcessing extends Processing {
     public int hashCode() {
         SortedSet<String> sortedIdioms = new TreeSet<>(idioms);
         return Objects.hash(
+                super.hashCode(),
                 removeDocstring,
                 removeInnerComments,
                 maskToken,

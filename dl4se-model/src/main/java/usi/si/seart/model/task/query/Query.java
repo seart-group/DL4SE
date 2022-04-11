@@ -76,6 +76,14 @@ public abstract class Query {
 
     @Override
     public int hashCode() {
-        return Objects.hash(hasLicense, excludeForks, minCommits, minContributors, minIssues, minStars);
+        return Objects.hash(
+                getClass().hashCode(),
+                hasLicense,
+                excludeForks,
+                minCommits,
+                minContributors,
+                minIssues,
+                minStars
+        );
     }
 }
