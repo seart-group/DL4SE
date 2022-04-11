@@ -57,9 +57,10 @@ CREATE TABLE "query" (
     "exclude_boilerplate" boolean
 );
 
-CREATE TABLE "code_processing" (
+CREATE TABLE "processing" (
     "id" bigint PRIMARY KEY NOT NULL,
     "task_id" bigint NOT NULL,
+    "type" text NOT NULL,
     "remove_docstring" boolean NOT NULL,
     "remove_inner_comments" boolean NOT NULL,
     "mask_token" text NOT NULL,
@@ -73,7 +74,7 @@ ALTER TABLE "token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELE
 ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 ALTER TABLE "query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
-ALTER TABLE "code_processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
+ALTER TABLE "processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 
 -- INDEXES
 CREATE INDEX "task_user_id_idx" ON "task" (user_id);
