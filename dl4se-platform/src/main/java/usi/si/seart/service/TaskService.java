@@ -60,13 +60,14 @@ public interface TaskService {
         @SneakyThrows({IOException.class})
         public void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing) {
             UUID uuid = UUID.randomUUID();
-            String prefix = requester.getId() + "_" + uuid + "_";
-            Path requestFile = Files.createTempFile(fileStorageDirPath, prefix, ".jsonl");
+            Path source = Files.createTempFile(fileStorageDirPath, null, null);
+            Path target = source.resolveSibling(uuid+".jsonl");
+            Files.move(source, target);
             Task task = CodeTask.builder()
                     .uuid(uuid)
                     .user(requester)
                     .submitted(requestedAt)
-                    .exportPath(requestFile.toString())
+                    .exportPath(target.toString())
                     .query(query)
                     .processing(processing)
                     .build();
