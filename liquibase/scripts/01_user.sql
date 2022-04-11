@@ -9,8 +9,9 @@ CREATE TABLE "user" (
     "registered" timestamp NOT NULL
 );
 
-CREATE TABLE "verification_token" (
+CREATE TABLE "token" (
     "id" bigint PRIMARY KEY NOT NULL,
+    "type" text NOT NULL,
     "value" text UNIQUE NOT NULL,
     "user_id" bigint NOT NULL,
     "expires" timestamp NOT NULL
@@ -68,7 +69,7 @@ CREATE TABLE "code_processing" (
 );
 
 -- FOREIGN KEYS
-ALTER TABLE "verification_token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
+ALTER TABLE "token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 ALTER TABLE "query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
