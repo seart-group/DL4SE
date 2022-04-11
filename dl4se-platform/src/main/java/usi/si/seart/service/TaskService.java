@@ -8,8 +8,11 @@ import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.processing.Processing;
+import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
@@ -25,7 +28,7 @@ public interface TaskService {
 
     boolean canCreateTask(User user);
     boolean activeTaskExists(User user, Query query, Processing processing);
-    void create(User requester, LocalDateTime requestedAt, Query query, Processing processing);
+    void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -55,11 +58,11 @@ public interface TaskService {
 
         @Override
         @SneakyThrows({IOException.class})
-        public void create(User requester, LocalDateTime requestedAt, Query query, Processing processing) {
+        public void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing) {
             UUID uuid = UUID.randomUUID();
             String prefix = requester.getId() + "_" + uuid + "_";
             Path requestFile = Files.createTempFile(fileStorageDirPath, prefix, ".jsonl");
-            Task task = Task.builder()
+            Task task = CodeTask.builder()
                     .uuid(uuid)
                     .user(requester)
                     .submitted(requestedAt)

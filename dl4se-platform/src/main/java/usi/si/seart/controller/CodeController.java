@@ -21,7 +21,6 @@ import usi.si.seart.dto.task.query.FileQueryDto;
 import usi.si.seart.dto.task.query.FunctionQueryDto;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.processing.CodeProcessing;
-import usi.si.seart.model.task.processing.Processing;
 import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
@@ -74,7 +73,7 @@ public class CodeController {
         query.setLanguage(language);
 
         CodeProcessingDto processingDto = codeTaskDto.getProcessing();
-        Processing processing = conversionService.convert(processingDto, CodeProcessing.class);
+        CodeProcessing processing = conversionService.convert(processingDto, CodeProcessing.class);
 
         if (taskService.activeTaskExists(requester, query, processing))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

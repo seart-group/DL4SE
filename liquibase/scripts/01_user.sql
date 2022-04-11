@@ -19,6 +19,7 @@ CREATE TABLE "verification_token" (
 CREATE TABLE "task" (
     "id" bigint PRIMARY KEY NOT NULL,
     "uuid" uuid UNIQUE NOT NULL,
+    "dataset" text NOT NULL,
     "user_id" bigint NOT NULL,
     "status" text NOT NULL,
     "export_path" text NOT NULL,
