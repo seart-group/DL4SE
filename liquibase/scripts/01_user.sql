@@ -31,10 +31,11 @@ CREATE TABLE "task" (
     "finished" timestamp
 );
 
-CREATE TABLE "file_query" (
+CREATE TABLE "query" (
     "id" bigint PRIMARY KEY NOT NULL,
     "task_id" bigint NOT NULL,
     "lang_id" bigint NOT NULL,
+    "type" text NOT NULL,
     "has_license" boolean NOT NULL,
     "exclude_forks" boolean NOT NULL,
     "min_commits" bigint NOT NULL,
@@ -51,30 +52,8 @@ CREATE TABLE "file_query" (
     "exclude_duplicates" boolean NOT NULL,
     "exclude_identical" boolean NOT NULL,
     "exclude_non_ascii" boolean NOT NULL,
-    "exclude_unparsable" boolean NOT NULL
-);
-
-CREATE TABLE "function_query" (
-    "id" bigint PRIMARY KEY NOT NULL,
-    "task_id" bigint NOT NULL,
-    "lang_id" bigint NOT NULL,
-    "has_license" boolean NOT NULL,
-    "exclude_forks" boolean NOT NULL,
-    "min_commits" bigint NOT NULL,
-    "min_contributors" bigint NOT NULL,
-    "min_issues" bigint NOT NULL,
-    "min_stars" bigint NOT NULL,
-    "include_ast" boolean NOT NULL,
-    "min_tokens" bigint,
-    "max_tokens" bigint,
-    "min_lines" bigint,
-    "max_lines" bigint,
-    "min_characters" bigint,
-    "max_characters" bigint,
-    "exclude_duplicates" boolean NOT NULL,
-    "exclude_identical" boolean NOT NULL,
-    "exclude_non_ascii" boolean NOT NULL,
-    "exclude_boilerplate" boolean NOT NULL
+    "exclude_unparsable" boolean,
+    "exclude_boilerplate" boolean
 );
 
 CREATE TABLE "code_processing" (
@@ -91,10 +70,8 @@ CREATE TABLE "code_processing" (
 -- FOREIGN KEYS
 ALTER TABLE "verification_token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-ALTER TABLE "file_query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
-ALTER TABLE "file_query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
-ALTER TABLE "function_query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
-ALTER TABLE "function_query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
+ALTER TABLE "query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
+ALTER TABLE "query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "code_processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 
 -- INDEXES

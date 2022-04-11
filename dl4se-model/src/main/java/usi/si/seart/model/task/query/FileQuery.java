@@ -9,13 +9,12 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Table(name = "file_query")
+@DiscriminatorValue("CODE_FILE")
 @Getter
 @Setter
 @SuperBuilder
@@ -23,7 +22,6 @@ import java.util.Objects;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileQuery extends CodeQuery {
 
-    @NotNull
     @Column(name = "exclude_unparsable")
     Boolean excludeUnparsable;
 
@@ -37,6 +35,6 @@ public class FileQuery extends CodeQuery {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getClass().hashCode(), excludeUnparsable);
+        return Objects.hash(super.hashCode(), excludeUnparsable);
     }
 }

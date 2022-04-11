@@ -9,13 +9,12 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Table(name = "function_query")
+@DiscriminatorValue("CODE_FUNCTION")
 @Getter
 @Setter
 @SuperBuilder
@@ -23,7 +22,6 @@ import java.util.Objects;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FunctionQuery extends CodeQuery {
 
-    @NotNull
     @Column(name = "exclude_boilerplate")
     Boolean excludeBoilerplate;
 
@@ -37,6 +35,6 @@ public class FunctionQuery extends CodeQuery {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getClass().hashCode(), excludeBoilerplate);
+        return Objects.hash(super.hashCode(), excludeBoilerplate);
     }
 }
