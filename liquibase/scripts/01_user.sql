@@ -79,6 +79,9 @@ ALTER TABLE "processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON
 
 -- INDEXES
 CREATE INDEX "task_user_id_idx" ON "task" (user_id);
+CREATE INDEX "query_task_id_idx" ON "query" (task_id);
+CREATE INDEX "query_lang_id_idx" ON "query" (lang_id);
+CREATE INDEX "processing_task_id_idx" ON "processing" (task_id);
 CREATE INDEX "file_content_hash_idx" ON "file" (content_hash);
 CREATE INDEX "function_content_hash_idx" ON "function" (content_hash);
 CREATE INDEX "file_ast_hash_idx" ON "file" (ast_hash);
