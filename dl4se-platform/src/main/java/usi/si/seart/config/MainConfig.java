@@ -1,5 +1,8 @@
 package usi.si.seart.config;
 
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +26,11 @@ public class MainConfig {
     @Bean
     public Path fileStorageDirPath() {
         return Path.of(tmpDir, "dl4se_storage");
+    }
+
+    @Bean
+    public DSLContext dslContext() {
+        return DSL.using(SQLDialect.POSTGRES);
     }
 
     @Bean
