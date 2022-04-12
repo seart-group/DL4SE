@@ -10,23 +10,9 @@ public class DtoToFunctionQueryConverter implements Converter<FunctionQueryDto, 
     @Override
     @NonNull
     public FunctionQuery convert(@NonNull FunctionQueryDto source) {
-        return FunctionQuery.builder()
-                .hasLicense(source.getHasLicense())
-                .excludeForks(source.getExcludeForks())
-                .minCommits(source.getMinCommits())
-                .minContributors(source.getMinContributors())
-                .minIssues(source.getMinIssues())
-                .minStars(source.getMinStars())
-                .includeAst(source.getIncludeAst())
-                .minTokens(source.getMinTokens())
-                .maxTokens(source.getMaxTokens())
-                .minLines(source.getMinLines())
-                .maxLines(source.getMaxLines())
-                .minCharacters(source.getMinCharacters())
-                .maxCharacters(source.getMaxCharacters())
-                .excludeDuplicates(source.getExcludeDuplicates())
-                .excludeIdentical(source.getExcludeIdentical())
-                .excludeNonAscii(source.getExcludeNonAscii())
+        FunctionQuery.FunctionQueryBuilder<?, ?> builder = FunctionQuery.builder();
+        ConverterUtil.copyToBuilder(builder, source);
+        return builder
                 .excludeBoilerplate(source.getExcludeBoilerplate())
                 .build();
     }

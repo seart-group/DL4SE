@@ -10,23 +10,9 @@ public class DtoToFileQueryConverter implements Converter<FileQueryDto, FileQuer
     @Override
     @NonNull
     public FileQuery convert(@NonNull FileQueryDto source) {
-        return FileQuery.builder()
-                .hasLicense(source.getHasLicense())
-                .excludeForks(source.getExcludeForks())
-                .minCommits(source.getMinCommits())
-                .minContributors(source.getMinContributors())
-                .minIssues(source.getMinIssues())
-                .minStars(source.getMinStars())
-                .includeAst(source.getIncludeAst())
-                .minTokens(source.getMinTokens())
-                .maxTokens(source.getMaxTokens())
-                .minLines(source.getMinLines())
-                .maxLines(source.getMaxLines())
-                .minCharacters(source.getMinCharacters())
-                .maxCharacters(source.getMaxCharacters())
-                .excludeDuplicates(source.getExcludeDuplicates())
-                .excludeIdentical(source.getExcludeIdentical())
-                .excludeNonAscii(source.getExcludeNonAscii())
+        FileQuery.FileQueryBuilder<?, ?> builder = FileQuery.builder();
+        ConverterUtil.copyToBuilder(builder, source);
+        return builder
                 .excludeUnparsable(source.getExcludeUnparsable())
                 .build();
     }
