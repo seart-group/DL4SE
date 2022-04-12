@@ -62,6 +62,10 @@ public abstract class CodeQuery extends Query {
     Boolean excludeIdentical;
 
     @NotNull
+    @Column(name = "exclude_test")
+    Boolean excludeTest;
+
+    @NotNull
     @Column(name = "exclude_non_ascii")
     Boolean excludeNonAscii;
 
@@ -87,6 +91,7 @@ public abstract class CodeQuery extends Query {
                 maxCharacters,
                 excludeDuplicates,
                 excludeIdentical,
+                excludeTest,
                 excludeNonAscii
         );
     }

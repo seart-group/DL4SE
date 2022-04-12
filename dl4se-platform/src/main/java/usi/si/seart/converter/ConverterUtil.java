@@ -23,6 +23,7 @@ public class ConverterUtil {
                 .maxCharacters(source.getMaxCharacters())
                 .excludeDuplicates(source.getExcludeDuplicates())
                 .excludeIdentical(source.getExcludeIdentical())
+                .excludeTest(source.getExcludeTest())
                 .excludeNonAscii(source.getExcludeNonAscii());
     }
 }

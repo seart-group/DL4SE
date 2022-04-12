@@ -90,6 +90,10 @@ public abstract class CodeQueryDto {
     Boolean excludeIdentical;
 
     @NotNull
+    @JsonProperty(value = "exclude_test")
+    Boolean excludeTest;
+
+    @NotNull
     @JsonProperty(value = "exclude_non_ascii")
     Boolean excludeNonAscii;
 }

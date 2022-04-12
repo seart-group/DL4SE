@@ -52,6 +52,7 @@ CREATE TABLE "query" (
     "max_characters" bigint,
     "exclude_duplicates" boolean NOT NULL,
     "exclude_identical" boolean NOT NULL,
+    "exclude_test" boolean NOT NULL,
     "exclude_non_ascii" boolean NOT NULL,
     "exclude_unparsable" boolean,
     "exclude_boilerplate" boolean

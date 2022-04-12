@@ -22,6 +22,7 @@ Content-Type: application/json
     "max_characters" : 10000,
     "exclude_duplicates" : true,
     "exclude_identical" : true,
+    "exclude_test" : false,
     "exclude_non_ascii" : true,
     "exclude_boilerplate" : true
   },
