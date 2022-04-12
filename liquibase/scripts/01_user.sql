@@ -78,6 +78,7 @@ ALTER TABLE "query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 
 -- INDEXES
+CREATE INDEX "token_user_id_idx" ON "token" (user_id);
 CREATE INDEX "task_user_id_idx" ON "task" (user_id);
 CREATE INDEX "query_task_id_idx" ON "query" (task_id);
 CREATE INDEX "query_lang_id_idx" ON "query" (lang_id);
