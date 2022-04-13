@@ -145,15 +145,18 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
             tokens = totalTokens;
         }
 
-        Param<Long> minId = DSL.param("id_min", checkpointId);
+        Param<Long> minId = DSL.param("checkpoint_id", checkpointId);
+        Param<Boolean> notTest = DSL.param("is_test", false);
+        Param<Boolean> ascii = DSL.param("non_ascii", false);
+        Param<Boolean> parsed = DSL.param("is_parsed", true);
 
         List<Condition> conditions = new ArrayList<>();
         conditions.add(getRangeCondition(lines, minLines, maxLines));
         conditions.add(getRangeCondition(characters, minChars, maxChars));
         conditions.add(getRangeCondition(tokens, minTokens, maxTokens));
-        if (excludeTest) conditions.add(isTest.isFalse());
-        if (excludeNonAscii) conditions.add(containsNonAscii.isFalse());
-        if (excludeUnparsable) conditions.add(isParsed.isTrue());
+        if (excludeTest) conditions.add(isTest.equal(notTest));
+        if (excludeNonAscii) conditions.add(containsNonAscii.equal(ascii));
+        if (excludeUnparsable) conditions.add(isParsed.equal(parsed));
         if (excludeBoilerplate) conditions.add(boilerplateType.isNull());
         if (minId.getValue() != null) conditions.add(id.greaterThan(minId));
 
@@ -166,7 +169,7 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
 
     private Table<?> getDerivedLangTable(CodeQuery codeQuery) {
         Field<Long> id = DSL.field("id", Long.class);
-        Param<Long> idParam = DSL.param("id", codeQuery.getLanguage().getId());
+        Param<Long> idParam = DSL.param("lang_id", codeQuery.getLanguage().getId());
         return dslCtx.select(id)
                 .from("language")
                 .where(id.equal(idParam))
@@ -181,6 +184,7 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
         Param<Long> minContributors = DSL.param("contributors_min", query.getMinContributors());
         Param<Long> minIssues = DSL.param("issues_min", query.getMinIssues());
         Param<Long> minStars = DSL.param("stars_min", query.getMinStars());
+        Param<Boolean> notFork = DSL.param("fork", false);
 
         Field<Long> id = DSL.field("id", Long.class);
         Field<String> license = DSL.field("license", String.class);
@@ -195,7 +199,7 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
         conditions.add(contributors.greaterOrEqual(minContributors));
         conditions.add(issues.greaterOrEqual(minIssues));
         conditions.add(stars.greaterOrEqual(minStars));
-        if (excludeForks) conditions.add(isFork.isFalse());
+        if (excludeForks) conditions.add(isFork.equal(notFork));
         if (hasLicense) conditions.add(license.isNotNull());
 
         return dslCtx.select(id)
