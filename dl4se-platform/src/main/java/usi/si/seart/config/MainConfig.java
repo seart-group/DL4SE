@@ -1,5 +1,7 @@
 package usi.si.seart.config;
 
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -17,6 +19,8 @@ import usi.si.seart.converter.DtoToFunctionQueryConverter;
 import usi.si.seart.converter.DtoToUserConverter;
 
 import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Configuration
 public class MainConfig {
@@ -32,6 +36,19 @@ public class MainConfig {
     @Bean
     public DSLContext dslContext() {
         return DSL.using(SQLDialect.POSTGRES);
+    }
+
+    @Bean
+    public JsonMapper jsonMapper() {
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
+        jsonMapper.setDateFormat(dateFormat());
+        return jsonMapper;
+    }
+
+    @Bean
+    public DateFormat dateFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
     }
 
     @Bean
