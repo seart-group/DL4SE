@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public interface CodeRepository {
 
-    <T extends Code> Stream<T> streamCode(String queryString, Map<String, ?> parameters, Class<T> codeClass);
+    <T extends Code> Stream<T> stream(String queryString, Map<String, ?> parameters, Class<T> codeClass);
 
     @Repository
     class CodeRepositoryImpl implements CodeRepository {
@@ -21,7 +21,7 @@ public interface CodeRepository {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T extends Code> Stream<T> streamCode(
+        public <T extends Code> Stream<T> stream(
                 String queryString, Map<String, ?> parameters, Class<T> codeClass
         ) {
             Query query = entityManager.createNativeQuery(queryString, codeClass);
