@@ -47,6 +47,7 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
         Table<?> langTable = getDerivedLangTable(codeQuery);
         Table<?> repoTable = getDerivedRepoTable(codeQuery);
 
+        Field<Long> codeTableId = codeTable.field("id", Long.class);
         Field<Long> langTableId = langTable.field("id", Long.class);
         Field<Long> repoTableId = repoTable.field("id", Long.class);
         Field<Long> codeTableLangId = codeTable.field("lang_id", Long.class);
@@ -58,6 +59,7 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
                 .on(codeTableLangId.equal(langTableId))
                 .innerJoin(repoTable)
                 .on(codeTableRepoId.equal(repoTableId))
+                .orderBy(codeTableId)
                 .getQuery();
     }
 
