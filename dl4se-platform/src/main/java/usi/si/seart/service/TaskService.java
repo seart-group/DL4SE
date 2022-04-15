@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TaskService {
@@ -29,6 +30,7 @@ public interface TaskService {
     boolean canCreateTask(User user);
     boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
+    Optional<Task> getNext();
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -75,6 +77,13 @@ public interface TaskService {
             query.setTask(task);
             processing.setTask(task);
             taskRepository.save(task);
+        }
+
+        @Override
+        public Optional<Task> getNext() {
+            Optional<Task> next = taskRepository.findFirstExecuting();
+            if (next.isEmpty()) next = taskRepository.findFirstQueued();
+            return next;
         }
     }
 }
