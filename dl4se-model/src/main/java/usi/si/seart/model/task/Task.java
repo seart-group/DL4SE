@@ -82,10 +82,6 @@ public abstract class Task {
 
     // TODO 06.04.22: Add some kind of reference that points to task executor instance
 
-    @NotBlank
-    @Column(name = "export_path")
-    String exportPath;
-
     @Column(name = "checkpoint_id")
     Long checkpointId;
 

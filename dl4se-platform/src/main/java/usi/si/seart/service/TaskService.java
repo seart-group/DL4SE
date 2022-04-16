@@ -2,7 +2,6 @@ package usi.si.seart.service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +34,6 @@ public interface TaskService {
     @RequiredArgsConstructor(onConstructor_ = @Autowired)
     class TaskServiceImpl implements TaskService {
 
-        Path fileStorageDirPath;
         TaskRepository taskRepository;
 
         @NonFinal
@@ -60,17 +55,11 @@ public interface TaskService {
         }
 
         @Override
-        @SneakyThrows({IOException.class})
         public void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing) {
-            UUID uuid = UUID.randomUUID();
-            Path source = Files.createTempFile(fileStorageDirPath, null, null);
-            Path target = source.resolveSibling(uuid+".jsonl");
-            Files.move(source, target);
             Task task = CodeTask.builder()
                     .uuid(uuid)
                     .user(requester)
                     .submitted(requestedAt)
-                    .exportPath(target.toString())
                     .query(query)
                     .processing(processing)
                     .build();
