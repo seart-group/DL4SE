@@ -33,7 +33,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
@@ -62,7 +61,8 @@ public abstract class Task {
     @NotNull
     @Type(type = "pg-uuid")
     @Column(unique = true)
-    UUID uuid;
+    @Builder.Default
+    UUID uuid = UUID.randomUUID();
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

@@ -19,7 +19,6 @@ import usi.si.seart.repository.TaskRepository;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface TaskService {
 
@@ -57,7 +56,6 @@ public interface TaskService {
         @Override
         public void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing) {
             Task task = CodeTask.builder()
-                    .uuid(uuid)
                     .user(requester)
                     .submitted(requestedAt)
                     .query(query)
