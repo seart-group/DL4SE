@@ -25,8 +25,8 @@ CREATE TABLE "task" (
     "status" text NOT NULL,
     "export_path" text NOT NULL,
     "checkpoint_id" bigint,
-    "processed_results" bigint,
-    "total_results" bigint,
+    "processed_results" bigint NOT NULL,
+    "total_results" bigint NOT NULL,
     "submitted" timestamp NOT NULL,
     "started" timestamp,
     "finished" timestamp

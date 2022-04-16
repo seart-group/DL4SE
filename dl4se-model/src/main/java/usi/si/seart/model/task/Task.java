@@ -36,6 +36,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -88,11 +89,15 @@ public abstract class Task {
     @Column(name = "checkpoint_id")
     Long checkpointId;
 
+    @PositiveOrZero
     @Column(name = "processed_results")
-    Long processedResults;
+    @Builder.Default
+    Long processedResults = 0L;
 
+    @PositiveOrZero
     @Column(name = "total_results")
-    Long totalResults;
+    @Builder.Default
+    Long totalResults = 0L;
 
     @PastOrPresent
     LocalDateTime submitted;
