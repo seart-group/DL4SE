@@ -30,6 +30,7 @@ public interface TaskService {
     boolean canCreateTask(User user);
     boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
+    void update(Task task);
     Optional<Task> getNext();
 
     @Service
@@ -77,6 +78,11 @@ public interface TaskService {
             query.setTask(task);
             processing.setTask(task);
             taskRepository.save(task);
+        }
+
+        @Override
+        public void update(Task task) {
+            taskRepository.saveAndFlush(task);
         }
 
         @Override
