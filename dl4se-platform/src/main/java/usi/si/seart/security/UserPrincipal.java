@@ -39,6 +39,10 @@ public class UserPrincipal implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    public String getEmail() {
+        return username;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
