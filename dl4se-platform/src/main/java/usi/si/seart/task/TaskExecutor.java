@@ -71,18 +71,20 @@ public class TaskExecutor {
     public void run() {
         log.debug("Fetching next task to execute...");
         Optional<Task> optional = taskService.getNext();
-        optional.ifPresentOrElse(task -> {
-            log.info("Executing task: [{}]", task.getUuid());
-            if (task instanceof CodeTask) {
-                run((CodeTask) task);
-            } else {
-                String message = "Unsupported task type: " + task.getClass().getName();
-                UnsupportedOperationException cause = new UnsupportedOperationException(message);
-                throw new TaskFailedException(task, cause);
-            }
-            log.info("Finished task:  [{}]", task.getUuid());
-            // TODO 17.04.22: Send email notification containing dataset link
-        }, () -> log.debug("No tasks to execute!"));
+        optional.ifPresentOrElse(this::run, () -> log.debug("No tasks to execute!"));
+    }
+
+    private void run(Task task) {
+        log.info("Executing task: [{}]", task.getUuid());
+        if (task instanceof CodeTask) {
+            run((CodeTask) task);
+        } else {
+            String message = "Unsupported task type: " + task.getClass().getName();
+            UnsupportedOperationException cause = new UnsupportedOperationException(message);
+            throw new TaskFailedException(task, cause);
+        }
+        log.info("Finished task:  [{}]", task.getUuid());
+        // TODO 17.04.22: Send email notification containing dataset link
     }
 
     private void run(CodeTask task) {
