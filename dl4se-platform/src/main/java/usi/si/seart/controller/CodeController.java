@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
 import usi.si.seart.model.user.User;
+import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
@@ -47,12 +49,11 @@ public class CodeController {
 
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
-    public ResponseEntity<?> createTask(@Valid @RequestBody CodeTaskDto codeTaskDto) {
+    public ResponseEntity<?> createTask(
+            @Valid @RequestBody CodeTaskDto codeTaskDto, @AuthenticationPrincipal UserPrincipal principal
+    ) {
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails) principal).getUsername();
-        User requester = userService.getWithEmail(email);
+        User requester = userService.getWithEmail(principal.getEmail());
 
         if (!taskService.canCreateTask(requester))
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
