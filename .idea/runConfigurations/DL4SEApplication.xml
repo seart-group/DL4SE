@@ -10,6 +10,7 @@
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
+    <option name="ACTIVE_PROFILES" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
     <option name="HIDE_BANNER" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" />
