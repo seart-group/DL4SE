@@ -108,6 +108,10 @@ public class TaskExecutor {
         task.setStarted(LocalDateTime.now(ZoneOffset.UTC));
         taskService.update(task);
 
+        Long totalResults = codeService.countTotalResults(query, codeClass);
+        task.setTotalResults(totalResults);
+        taskService.update(task);
+
         try {
             Path exportPath = fileSystemService.getExportPath(task);
             @Cleanup BufferedWriter writer = new BufferedWriter(
