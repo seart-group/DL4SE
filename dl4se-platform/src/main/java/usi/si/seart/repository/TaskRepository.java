@@ -7,8 +7,10 @@ import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.user.User;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -29,4 +31,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     default Optional<Task> findFirstQueued() {
         return findFirstByStatusOrderBySubmitted(Status.QUEUED);
     }
+
+    Optional<Task> findByUuid(@NotNull UUID uuid);
 }

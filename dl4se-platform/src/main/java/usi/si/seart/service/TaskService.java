@@ -22,6 +22,7 @@ import usi.si.seart.repository.TaskRepository;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface TaskService {
 
@@ -30,6 +31,7 @@ public interface TaskService {
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
     void update(Task task);
     Optional<Task> getNext();
+    Optional<Task> getWithUUID(UUID uuid);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -81,6 +83,11 @@ public interface TaskService {
             Optional<Task> next = taskRepository.findFirstExecuting();
             if (next.isEmpty()) next = taskRepository.findFirstQueued();
             return next;
+        }
+
+        @Override
+        public Optional<Task> getWithUUID(UUID uuid) {
+            return taskRepository.findByUuid(uuid);
         }
     }
 }
