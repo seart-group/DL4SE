@@ -57,6 +57,7 @@ public class Language {
     @Column(columnDefinition = "text[]")
     @Singular
     @ToString.Exclude
+    @JsonIgnore
     List<@NotNull String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")

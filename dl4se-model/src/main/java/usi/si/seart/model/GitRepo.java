@@ -1,6 +1,7 @@
 package usi.si.seart.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,6 +61,7 @@ public class GitRepo {
 
     @NotNull
     @Column(name = "is_fork")
+    @JsonProperty(value = "is_fork")
     Boolean isFork;
 
     @PositiveOrZero
@@ -80,6 +82,7 @@ public class GitRepo {
 
     @NotNull
     @Column(name = "last_commit")
+    @JsonProperty(value = "last_commit")
     @PastOrPresent
     @Builder.Default
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
@@ -87,11 +90,13 @@ public class GitRepo {
     @NotBlank
     @Size(min = 7, max = 40)
     @Column(name = "last_commit_sha")
+    @JsonProperty(value = "last_commit_sha")
     @Builder.Default
     String lastCommitSHA = "0000000000000000000000000000000000000000";
 
     @NotNull
     @Column(name = "is_deleted")
+    @JsonProperty(value = "is_deleted")
     @Builder.Default
     Boolean isDeleted = false;
 

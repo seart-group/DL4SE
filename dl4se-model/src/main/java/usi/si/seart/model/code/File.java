@@ -1,6 +1,7 @@
 package usi.si.seart.model.code;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class File extends Code {
     @NotNull
     @Column(name = "is_parsed")
     @Builder.Default
+    @JsonProperty(value = "is_parsed")
     Boolean isParsed = false;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)

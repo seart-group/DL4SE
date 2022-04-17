@@ -1,6 +1,7 @@
 package usi.si.seart.model.code;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class Function extends Code {
     @Enumerated(EnumType.STRING)
     @Type(type = "string-enum")
     @Column(name = "boilerplate_type")
+    @JsonProperty(value = "boilerplate_type")
     Boilerplate boilerplateType;
 
     @Override
