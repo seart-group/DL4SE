@@ -17,40 +17,40 @@ import java.util.stream.Stream;
 
 public interface CodeService {
 
+    Long countTotalResults(Query query);
     <T extends Code> Stream<Code> createPipeline(Query query, UnaryOperator<Code> pipeline, Class<T> codeClass);
-    <T extends Code> Long countTotalResults(Query query, Class<T> codeClass);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor(onConstructor_ = @Autowired)
-    @SuppressWarnings("ConstantConditions")
     class CodeServiceImpl implements CodeService {
 
         DSLContext dslContext;
         CodeRepository codeRepository;
 
         @Override
+        public Long countTotalResults(Query query) {
+            String sql = dslContext.renderNamedParams(query);
+            Map<String, ?> parameters = getQueryParameters(query);
+            return codeRepository.count(sql, parameters);
+        }
+
+        @Override
         public <T extends Code> Stream<Code> createPipeline(
                 Query query, UnaryOperator<Code> processing, Class<T> codeClass
         ) {
             String sql = dslContext.renderNamedParams(query);
-            Map<String, ?> parameters = query.getParams()
-                    .entrySet()
-                    .stream()
-                    .map(entry -> Map.entry(entry.getKey(), entry.getValue().getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Map<String, ?> parameters = getQueryParameters(query);
             return codeRepository.stream(sql, parameters, codeClass).map(processing);
         }
 
-        @Override
-        public <T extends Code> Long countTotalResults(Query query, Class<T> codeClass) {
-            String sql = dslContext.renderNamedParams(query);
-            Map<String, ?> parameters = query.getParams()
+        @SuppressWarnings("ConstantConditions")
+        private Map<String, ?> getQueryParameters(Query query) {
+            return query.getParams()
                     .entrySet()
                     .stream()
                     .map(entry -> Map.entry(entry.getKey(), entry.getValue().getValue()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return codeRepository.count(sql, parameters, codeClass);
         }
     }
 }

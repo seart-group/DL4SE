@@ -5,11 +5,14 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Param;
+import org.jooq.Queries;
 import org.jooq.SelectFieldOrAsterisk;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import usi.si.seart.model.task.CodeTask;
+import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.processing.Processing;
 import usi.si.seart.model.task.query.CodeQuery;
@@ -21,12 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Query> {
+public class TaskToQueriesConverter implements Converter<Task, Queries> {
 
     private final DSLContext dslCtx;
 
     @Override
-    public org.jooq.Query convert(CodeTask source) {
+    @NonNull
+    public Queries convert(@NonNull Task source) {
+        if (source instanceof CodeTask) {
+            return convert((CodeTask) source);
+        } else {
+            throw new UnsupportedOperationException(
+                    "Converter not implemented for task type: " + source.getClass().getName()
+            );
+        }
+    }
+
+    private Queries convert(CodeTask source) {
         Query query = source.getQuery();
         Processing processing = source.getProcessing();
         Long checkpointId = source.getCheckpointId();
@@ -41,8 +55,13 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private org.jooq.Query convert(CodeQuery codeQuery, CodeProcessing codeProcessing, Long checkpointId) {
+    private Queries convert(CodeQuery codeQuery, CodeProcessing codeProcessing, Long checkpointId) {
+        org.jooq.Query resultQuery = getResultQuery(codeQuery, codeProcessing, checkpointId);
+        org.jooq.Query countQuery = getCountQuery(codeQuery, codeProcessing);
+        return DSL.queries(resultQuery, countQuery);
+    }
+
+    private org.jooq.Query getResultQuery(CodeQuery codeQuery, CodeProcessing codeProcessing, Long checkpointId) {
         Table<?> codeTable = getDerivedCodeTable(codeQuery, codeProcessing, checkpointId);
         Table<?> langTable = getDerivedLangTable(codeQuery);
         Table<?> repoTable = getDerivedRepoTable(codeQuery);
@@ -60,6 +79,26 @@ public class CodeTaskToQueryConverter implements Converter<CodeTask, org.jooq.Qu
                 .innerJoin(repoTable)
                 .on(codeTableRepoId.equal(repoTableId))
                 .orderBy(codeTableId)
+                .getQuery();
+    }
+
+    private org.jooq.Query getCountQuery(CodeQuery codeQuery, CodeProcessing codeProcessing) {
+        Table<?> codeTable = getDerivedCodeTable(codeQuery, codeProcessing, null);
+        Table<?> langTable = getDerivedLangTable(codeQuery);
+        Table<?> repoTable = getDerivedRepoTable(codeQuery);
+
+        Field<Long> codeTableId = codeTable.field("id", Long.class);
+        Field<Long> langTableId = langTable.field("id", Long.class);
+        Field<Long> repoTableId = repoTable.field("id", Long.class);
+        Field<Long> codeTableLangId = codeTable.field("lang_id", Long.class);
+        Field<Long> codeTableRepoId = codeTable.field("repo_id", Long.class);
+
+        return DSL.select(DSL.count(codeTableId))
+                .from(codeTable)
+                .innerJoin(langTable)
+                .on(codeTableLangId.equal(langTableId))
+                .innerJoin(repoTable)
+                .on(codeTableRepoId.equal(repoTableId))
                 .getQuery();
     }
 

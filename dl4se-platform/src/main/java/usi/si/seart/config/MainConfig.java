@@ -12,11 +12,11 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import usi.si.seart.converter.CodeTaskToQueryConverter;
 import usi.si.seart.converter.DtoToCodeProcessingConverter;
 import usi.si.seart.converter.DtoToFileQueryConverter;
 import usi.si.seart.converter.DtoToFunctionQueryConverter;
 import usi.si.seart.converter.DtoToUserConverter;
+import usi.si.seart.converter.TaskToQueriesConverter;
 
 import java.nio.file.Path;
 import java.text.DateFormat;
@@ -67,7 +67,7 @@ public class MainConfig {
                 registry.addConverter(new DtoToFileQueryConverter());
                 registry.addConverter(new DtoToFunctionQueryConverter());
                 registry.addConverter(new DtoToCodeProcessingConverter());
-                registry.addConverter(new CodeTaskToQueryConverter(dslContext()));
+                registry.addConverter(new TaskToQueriesConverter(dslContext()));
             }
         };
     }

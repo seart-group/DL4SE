@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -86,11 +87,13 @@ public class TaskExecutor {
             throw new TaskFailedException(task, cause);
         }
         log.info("Finished task:  [{}]", task.getUuid());
-        // TODO 17.04.22: Send email notification containing dataset link
     }
 
     private void run(CodeTask task) {
-        org.jooq.Query query = conversionService.convert(task, org.jooq.Query.class);
+        @SuppressWarnings("ConstantConditions")
+        org.jooq.Query[] queries = conversionService.convert(task, Queries.class).queries();
+        org.jooq.Query resultQuery = queries[0];
+        org.jooq.Query countQuery = queries[1];
         // TODO 14.04.22: Convert CodeProcessing to a UnaryOperator
         UnaryOperator<Code> pipeline = UnaryOperator.identity();
 
@@ -110,7 +113,7 @@ public class TaskExecutor {
         task.setStarted(LocalDateTime.now(ZoneOffset.UTC));
         taskService.update(task);
 
-        Long totalResults = codeService.countTotalResults(query, codeClass);
+        Long totalResults = codeService.countTotalResults(countQuery);
         task.setTotalResults(totalResults);
         taskService.update(task);
 
@@ -123,7 +126,7 @@ public class TaskExecutor {
                     )
             );
             Consumer<Code> codeConsumer = generateCodeConsumer(task, writer);
-            @Cleanup Stream<? extends Code> stream = codeService.createPipeline(query, pipeline, codeClass);
+            @Cleanup Stream<? extends Code> stream = codeService.createPipeline(resultQuery, pipeline, codeClass);
             stream.forEach(codeConsumer);
         } catch (IOException ex) {
             throw new TaskFailedException(task, ex);
