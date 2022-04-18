@@ -115,7 +115,7 @@ public class TaskExecutor {
         taskService.update(task);
 
         try {
-            Path exportPath = fileSystemService.getExportPath(task);
+            Path exportPath = fileSystemService.createExportFile(task);
             @Cleanup BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(
                             new FileOutputStream(exportPath.toFile(), true),

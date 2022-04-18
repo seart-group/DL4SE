@@ -13,7 +13,8 @@ import java.nio.file.Path;
 
 public interface FileSystemService {
 
-    Path getExportPath(Task task) throws IOException;
+    Path getExportFile(Task task);
+    Path createExportFile(Task task) throws IOException;
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,10 +24,19 @@ public interface FileSystemService {
         Path fileStorageDirPath;
 
         @Override
-        public Path getExportPath(Task task) throws IOException {
-            Path filePath = Path.of(fileStorageDirPath.toString(), task.getUuid()+".jsonl");
+        public Path getExportFile(Task task) {
+            return getExportFilePath(task.getUuid().toString());
+        }
+
+        @Override
+        public Path createExportFile(Task task) throws IOException {
+            Path filePath = getExportFilePath(task.getUuid().toString());
             if (Files.notExists(filePath)) Files.createFile(filePath);
             return filePath;
+        }
+
+        private Path getExportFilePath(String name) {
+            return Path.of(fileStorageDirPath.toString(), name+".jsonl");
         }
     }
 }
