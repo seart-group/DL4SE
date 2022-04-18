@@ -23,15 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.task.CodeTaskDto;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
 import usi.si.seart.dto.task.query.CodeQueryDto;
-import usi.si.seart.dto.task.query.FileQueryDto;
-import usi.si.seart.dto.task.query.FunctionQueryDto;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
-import usi.si.seart.model.task.query.FileQuery;
-import usi.si.seart.model.task.query.FunctionQuery;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.FileSystemService;
@@ -73,16 +69,7 @@ public class CodeController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 
         CodeQueryDto queryDto = codeTaskDto.getQuery();
-        CodeQuery query;
-        if (queryDto instanceof FileQueryDto) {
-            query = conversionService.convert(queryDto, FileQuery.class);
-        } else if (queryDto instanceof FunctionQueryDto) {
-            query = conversionService.convert(queryDto, FunctionQuery.class);
-        } else {
-            throw new IllegalStateException(
-                    "Converter not defined for DTO type: ["+queryDto.getClass().getName()+"]"
-            );
-        }
+        CodeQuery query = conversionService.convert(queryDto, CodeQuery.class);
 
         Language language = languageService.getWithName(queryDto.getLanguageName());
         query.setLanguage(language);
