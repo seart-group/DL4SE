@@ -17,7 +17,6 @@ import usi.si.seart.converter.DtoToCodeProcessingConverter;
 import usi.si.seart.converter.DtoToFileQueryConverter;
 import usi.si.seart.converter.DtoToFunctionQueryConverter;
 import usi.si.seart.converter.DtoToUserConverter;
-import usi.si.seart.converter.StringToUUIDConverter;
 
 import java.nio.file.Path;
 import java.text.DateFormat;
@@ -69,7 +68,6 @@ public class MainConfig {
                 registry.addConverter(new DtoToFunctionQueryConverter());
                 registry.addConverter(new DtoToCodeProcessingConverter());
                 registry.addConverter(new CodeTaskToQueryConverter(dslContext()));
-                registry.addConverter(new StringToUUIDConverter());
             }
         };
     }
