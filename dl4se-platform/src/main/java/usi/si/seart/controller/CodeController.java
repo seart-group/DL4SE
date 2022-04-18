@@ -2,11 +2,16 @@ package usi.si.seart.controller;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,19 +26,27 @@ import usi.si.seart.dto.task.query.CodeQueryDto;
 import usi.si.seart.dto.task.query.FileQueryDto;
 import usi.si.seart.dto.task.query.FunctionQueryDto;
 import usi.si.seart.model.Language;
+import usi.si.seart.model.task.Status;
+import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.UserPrincipal;
+import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -45,6 +58,7 @@ public class CodeController {
     TaskService taskService;
     UserService userService;
     LanguageService languageService;
+    FileSystemService fileSystemService;
     ConversionService conversionService;
 
     @SuppressWarnings("ConstantConditions")
@@ -81,5 +95,36 @@ public class CodeController {
 
         taskService.create(requester, requestedAt, query, processing);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @SneakyThrows
+    @GetMapping(value = "/download/{uuid}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<?> downloadTaskResults(
+            @PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        User requester = userService.getWithEmail(principal.getEmail());
+        Optional<Task> optional = taskService.getWithUUID(uuid);
+        if (optional.isEmpty()) return ResponseEntity.notFound().build();
+
+        Task task = optional.get();
+        User owner = task.getUser();
+        Status status = task.getStatus();
+        if (!requester.equals(owner) || status != Status.FINISHED)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        Path exportFilePath = fileSystemService.getExportFile(task);
+        String exportFileName = exportFilePath.getFileName().toString();
+        if (Files.notExists(exportFilePath)) return ResponseEntity.status(HttpStatus.GONE).build();
+
+        long exportFileSize = exportFilePath.toFile().length();
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(exportFilePath.toFile()));
+        ContentDisposition disposition = ContentDisposition.attachment().filename(exportFileName).build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentLength(exportFileSize);
+        headers.setContentDisposition(disposition);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }

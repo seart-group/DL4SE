@@ -39,3 +39,8 @@ Content-Type: application/json
     ]
   }
 }
+
+### GET /code/download
+GET https://localhost:8080/api/code/download/{{uuid}}
+Authorization: Bearer {{token}}
+Content-Type: text/plain
