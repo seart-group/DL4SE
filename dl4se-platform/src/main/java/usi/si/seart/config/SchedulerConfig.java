@@ -25,7 +25,7 @@ public class SchedulerConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(1);
+        threadPoolTaskScheduler.setPoolSize(2);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         return threadPoolTaskScheduler;

@@ -8,6 +8,10 @@ import usi.si.seart.model.task.Task;
 import usi.si.seart.model.user.User;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -33,4 +37,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     }
 
     Optional<Task> findByUuid(@NotNull UUID uuid);
+
+    List<Task> findByFinishedBetween(LocalDateTime lower, LocalDateTime upper);
+
+    default List<Task> findExpiredInactiveTasks() {
+        LocalDateTime currentHour = LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime oneWeekAgoUpper = currentHour.minusWeeks(1);
+        LocalDateTime oneWeekAgoLower = oneWeekAgoUpper.minusHours(1);
+        return findByFinishedBetween(oneWeekAgoLower, oneWeekAgoUpper);
+    }
 }

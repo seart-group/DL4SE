@@ -20,6 +20,7 @@ import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public interface TaskService {
     void update(Task task);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
+    List<Task> getTasksForCleanup();
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -88,6 +90,11 @@ public interface TaskService {
         @Override
         public Optional<Task> getWithUUID(UUID uuid) {
             return taskRepository.findByUuid(uuid);
+        }
+
+        @Override
+        public List<Task> getTasksForCleanup() {
+            return taskRepository.findExpiredInactiveTasks();
         }
     }
 }

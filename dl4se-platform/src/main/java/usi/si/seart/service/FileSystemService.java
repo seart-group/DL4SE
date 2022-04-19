@@ -3,6 +3,7 @@ package usi.si.seart.service;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import usi.si.seart.model.task.Task;
@@ -15,7 +16,9 @@ public interface FileSystemService {
 
     Path getExportFile(Task task);
     Path createExportFile(Task task) throws IOException;
+    void deleteExportFile(Task task);
 
+    @Slf4j
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor(onConstructor_ = @Autowired)
@@ -33,6 +36,16 @@ public interface FileSystemService {
             Path filePath = getExportFilePath(task.getUuid().toString());
             if (Files.notExists(filePath)) Files.createFile(filePath);
             return filePath;
+        }
+
+        @Override
+        public void deleteExportFile(Task task) {
+            Path filePath = getExportFilePath(task.getUuid().toString());
+            try {
+                Files.delete(filePath);
+            } catch (IOException ex) {
+                log.warn("Could not delete file: " + filePath, ex);
+            }
         }
 
         private Path getExportFilePath(String name) {
