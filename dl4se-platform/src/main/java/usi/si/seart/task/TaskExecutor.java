@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,7 +49,6 @@ import java.util.stream.Stream;
 @Slf4j
 @Component
 @EnableScheduling
-@ConditionalOnProperty(prefix = "app", value = "executor.enabled", havingValue = "true")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class TaskExecutor {
