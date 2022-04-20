@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import usi.si.seart.exception.EntityNotFoundException;
 import usi.si.seart.exception.TokenExpiredException;
 
 @Slf4j
@@ -37,6 +38,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public void handleDataAccessException(DataAccessException ex) {
         log.error("Unexpected JDBC exception: {}", ex.getMessage());
         log.trace("", ex);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public void handleEntityNotFoundException(EntityNotFoundException ex) {
+        log.debug(ex.getMessage());
     }
 
     @ExceptionHandler(TokenExpiredException.class)
