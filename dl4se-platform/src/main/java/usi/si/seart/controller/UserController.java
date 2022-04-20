@@ -6,8 +6,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
-import usi.si.seart.exception.TokenExpiredException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.jwt.JwtTokenProvider;
@@ -77,15 +74,8 @@ public class UserController {
 
     @GetMapping("/verify")
     public ResponseEntity<?> verify(@RequestParam String token) {
-        try {
-            verificationService.verify(token);
-            return ResponseEntity.ok().build();
-        } catch (TokenExpiredException ex) {
-            String link = WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(UserController.class).resendVerification(token)
-            ).toString();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(link);
-        }
+        verificationService.verify(token);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/verify/resend")
