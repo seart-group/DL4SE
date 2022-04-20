@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
+import usi.si.seart.exception.TokenExpiredException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.jwt.JwtTokenProvider;
@@ -94,30 +95,21 @@ public class UserController {
         try {
             verificationService.verify(token);
             return ResponseEntity.ok().build();
-        } catch (IllegalStateException ex) {
+        } catch (TokenExpiredException ex) {
             String link = WebMvcLinkBuilder.linkTo(
                     WebMvcLinkBuilder.methodOn(UserController.class).resendVerification(token)
             ).toString();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(link);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping("/verify/resend")
     public ResponseEntity<?> resendVerification(@RequestParam String token) {
-        HttpStatus status;
-        try {
-            Token refreshed = verificationService.refresh(token);
-            String link = WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(UserController.class).verify(refreshed.getValue())
-            ).toString();
-            emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
-            status = HttpStatus.OK;
-        } catch (IllegalArgumentException ex) {
-            status = HttpStatus.BAD_REQUEST;
-        }
-
-        return new ResponseEntity<>(status);
+        Token refreshed = verificationService.refresh(token);
+        String link = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(UserController.class).verify(refreshed.getValue())
+        ).toString();
+        emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
+        return ResponseEntity.ok().build();
     }
 }

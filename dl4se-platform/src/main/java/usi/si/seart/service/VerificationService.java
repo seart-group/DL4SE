@@ -5,13 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import usi.si.seart.exception.TokenExpiredException;
+import usi.si.seart.exception.TokenNotFoundException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.model.user.token.VerificationToken;
 import usi.si.seart.repository.TokenRepository;
 import usi.si.seart.repository.UserRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface VerificationService {
@@ -39,33 +40,24 @@ public interface VerificationService {
 
         @Override
         public void verify(String value) {
-            Optional<Token> existing = tokenRepository.findByValue(value);
-            if (existing.isPresent()) {
-                Token token = existing.get();
+            tokenRepository.findByValue(value).map(token -> {
                 User user = token.getUser();
 
-                if (!token.isValid()) {
-                    throw new IllegalStateException("Cannot verify user, token has expired!");
-                }
+                if (!token.isValid())
+                    throw new TokenExpiredException(token);
 
                 user.setVerified(true);
                 tokenRepository.delete(token);
-                userRepository.save(user);
-            } else {
-                throw new IllegalArgumentException("Invalid or non-existing token!");
-            }
+                return userRepository.save(user);
+            }).orElseThrow(() -> new TokenNotFoundException("value", value));
         }
 
         @Override
         public Token refresh(String value) {
-            Optional<Token> existing = tokenRepository.findByValue(value);
-            if (existing.isPresent()) {
-                Token token = existing.get();
+            return tokenRepository.findByValue(value).map(token -> {
                 token.setValue(UUID.randomUUID().toString());
                 return tokenRepository.save(token);
-            } else {
-                throw new IllegalArgumentException("Invalid or non-existing token!");
-            }
+            }).orElseThrow(() -> new TokenNotFoundException("value", value));
         }
     }
 }
