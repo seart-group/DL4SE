@@ -17,8 +17,8 @@ import java.util.UUID;
 public interface VerificationService {
 
     Token generate(User user);
-    Token refresh(String tokenValue);
-    void verify(String tokenValue);
+    Token refresh(String value);
+    void verify(String value);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -38,8 +38,8 @@ public interface VerificationService {
         }
 
         @Override
-        public void verify(String tokenValue) {
-            Optional<Token> existing = tokenRepository.findByValue(tokenValue);
+        public void verify(String value) {
+            Optional<Token> existing = tokenRepository.findByValue(value);
             if (existing.isPresent()) {
                 Token token = existing.get();
                 User user = token.getUser();
@@ -57,8 +57,8 @@ public interface VerificationService {
         }
 
         @Override
-        public Token refresh(String tokenValue) {
-            Optional<Token> existing = tokenRepository.findByValue(tokenValue);
+        public Token refresh(String value) {
+            Optional<Token> existing = tokenRepository.findByValue(value);
             if (existing.isPresent()) {
                 Token token = existing.get();
                 token.setValue(UUID.randomUUID().toString());
