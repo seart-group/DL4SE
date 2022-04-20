@@ -44,7 +44,7 @@ public interface FileSystemService {
             try {
                 Files.delete(filePath);
             } catch (IOException ex) {
-                log.warn("Could not delete file: " + filePath, ex);
+                log.trace("Could not delete file: " + filePath, ex);
             }
         }
 
