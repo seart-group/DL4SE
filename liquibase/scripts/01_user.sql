@@ -4,6 +4,7 @@ CREATE TABLE "user" (
     "email" text UNIQUE NOT NULL,
     "password" text NOT NULL,
     "verified" boolean NOT NULL,
+    "enabled" boolean NOT NULL,
     "organisation" text NOT NULL,
     "role" text NOT NULL,
     "registered" timestamp NOT NULL

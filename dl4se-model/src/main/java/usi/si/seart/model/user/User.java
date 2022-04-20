@@ -66,6 +66,10 @@ public class User {
     @Builder.Default
     Boolean verified = false;
 
+    @NotNull
+    @Builder.Default
+    Boolean enabled = true;
+
     @NotBlank
     String organisation;
 

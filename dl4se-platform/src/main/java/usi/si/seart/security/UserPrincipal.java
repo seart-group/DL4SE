@@ -2,6 +2,7 @@ package usi.si.seart.security;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import usi.si.seart.model.user.User;
 import java.util.Collection;
 import java.util.List;
 
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserPrincipal implements UserDetails {
@@ -28,10 +30,19 @@ public class UserPrincipal implements UserDetails {
 
     Boolean verified;
 
+    Boolean enabled;
+
     Role role;
 
     public static UserPrincipal of(User user) {
-        return new UserPrincipal(user.getId(), user.getEmail(), user.getPassword(), user.getVerified(), user.getRole());
+        return UserPrincipal.builder()
+                .id(user.getId())
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .verified(user.getVerified())
+                .enabled(user.getEnabled())
+                .role(user.getRole())
+                .build();
     }
 
     @Override
@@ -60,6 +71,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return verified;
+        return verified && enabled;
     }
 }
