@@ -59,6 +59,7 @@ public class User {
 
     @NotBlank
     @ToString.Exclude
+    @JsonIgnore
     String password;
 
     @NotNull
