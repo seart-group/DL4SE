@@ -61,6 +61,7 @@ public class TaskToQueriesConverter implements Converter<Task, Queries> {
         return DSL.queries(resultQuery, countQuery);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private org.jooq.Query getResultQuery(CodeQuery codeQuery, CodeProcessing codeProcessing, Long checkpointId) {
         Table<?> codeTable = getDerivedCodeTable(codeQuery, codeProcessing, checkpointId);
         Table<?> langTable = getDerivedLangTable(codeQuery);
@@ -82,6 +83,7 @@ public class TaskToQueriesConverter implements Converter<Task, Queries> {
                 .getQuery();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private org.jooq.Query getCountQuery(CodeQuery codeQuery, CodeProcessing codeProcessing) {
         Table<?> codeTable = getDerivedCodeTable(codeQuery, codeProcessing, null);
         Table<?> langTable = getDerivedLangTable(codeQuery);
