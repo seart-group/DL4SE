@@ -52,7 +52,6 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> logIn(@Valid @RequestBody LoginDto loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -61,33 +60,19 @@ public class UserController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token = tokenProvider.generateToken(authentication);
         return ResponseEntity.ok("Bearer " + token);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto) {
-        HttpStatus status;
-        try {
-            User created = userService.create(conversionService.convert(userDto, User.class));
-            Token token = verificationService.generate(created);
-            String link = WebMvcLinkBuilder.linkTo(
-                    WebMvcLinkBuilder.methodOn(UserController.class).verify(token.getValue())
-            ).toString();
-            emailService.sendVerificationEmail(userDto.getEmail(), link);
-            status = HttpStatus.CREATED;
-        } catch (DataIntegrityViolationException ignored) {
-            status = HttpStatus.FORBIDDEN;
-        } catch (DataAccessException ex) {
-            log.error("Unexpected JDBC exception", ex);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        } catch (MailException ex) {
-            log.error("Mail service exception", ex);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-        return new ResponseEntity<>(status);
+        User created = userService.create(conversionService.convert(userDto, User.class));
+        Token token = verificationService.generate(created);
+        String link = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(UserController.class).verify(token.getValue())
+        ).toString();
+        emailService.sendVerificationEmail(userDto.getEmail(), link);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/verify")
