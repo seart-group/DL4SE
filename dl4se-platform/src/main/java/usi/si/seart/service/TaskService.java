@@ -20,6 +20,8 @@ import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -97,7 +99,10 @@ public interface TaskService {
 
         @Override
         public List<Task> getTasksForCleanup() {
-            return taskRepository.findExpiredInactiveTasks();
+            LocalDateTime currentHour = LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.HOURS);
+            LocalDateTime oneWeekAgoUpper = currentHour.minusWeeks(1);
+            LocalDateTime oneWeekAgoLower = oneWeekAgoUpper.minusHours(1);
+            return taskRepository.findByFinishedBetween(oneWeekAgoLower, oneWeekAgoUpper);
         }
     }
 }
