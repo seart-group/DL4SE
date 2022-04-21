@@ -81,10 +81,13 @@ public interface TaskService {
         }
 
         @Override
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
         public Optional<Task> getNext() {
-            Optional<Task> next = taskRepository.findFirstExecuting();
-            if (next.isEmpty()) next = taskRepository.findFirstQueued();
-            return next;
+            return taskRepository.findFirstExecuting()
+                    .or(() -> {
+                        taskRepository.markForExecution();
+                        return taskRepository.findFirstExecuting();
+                    });
         }
 
         @Override

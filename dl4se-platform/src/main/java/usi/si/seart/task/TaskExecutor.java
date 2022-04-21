@@ -107,10 +107,6 @@ public class TaskExecutor {
             throw new TaskFailedException(task, cause);
         }
 
-        task.setStatus(Status.EXECUTING);
-        task.setStarted(LocalDateTime.now(ZoneOffset.UTC));
-        taskService.update(task);
-
         Long totalResults = codeService.countTotalResults(countQuery);
         task.setTotalResults(totalResults);
         taskService.update(task);

@@ -1,9 +1,9 @@
 package usi.si.seart.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.user.User;
 
@@ -26,15 +26,19 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "AND t.status IN (usi.si.seart.model.task.Status.QUEUED, usi.si.seart.model.task.Status.EXECUTING)")
     Long countActiveByUser(@Param("user") User user);
 
-    Optional<Task> findFirstByStatusOrderBySubmitted(Status status);
+    @Query(
+            value = "SELECT t.* FROM task as t WHERE t.status = 'EXECUTING' ORDER BY submitted LIMIT 1",
+            nativeQuery = true
+    )
+    Optional<Task> findFirstExecuting();
 
-    default Optional<Task> findFirstExecuting() {
-        return findFirstByStatusOrderBySubmitted(Status.EXECUTING);
-    }
-
-    default Optional<Task> findFirstQueued() {
-        return findFirstByStatusOrderBySubmitted(Status.QUEUED);
-    }
+    @Modifying
+    @Query(
+            value = "UPDATE task SET status = 'EXECUTING', started = now() " +
+                    "WHERE id = (SELECT id FROM task WHERE status = 'QUEUED' ORDER BY submitted LIMIT 1)",
+            nativeQuery = true
+    )
+    void markForExecution();
 
     Optional<Task> findByUuid(@NotNull UUID uuid);
 
