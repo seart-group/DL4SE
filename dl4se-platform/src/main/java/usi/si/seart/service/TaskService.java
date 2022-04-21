@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.model.task.CodeTask;
+import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.processing.Processing;
@@ -50,14 +51,15 @@ public interface TaskService {
 
         @Override
         public boolean canCreateTask(User user) {
-            Long activeTasks = taskRepository.countActiveByUser(user);
+            Long activeTasks = taskRepository.countAllByUserAndStatusIn(user, Status.Category.ACTIVE);
             return activeTasks < userTaskLimit;
         }
 
         @Override
         public boolean activeTaskExists(User user, Query query, Processing processing) {
             int taskHash = Objects.hash(user, query, processing);
-            return taskRepository.findActiveByUser(user).stream()
+            return taskRepository.findAllByUserAndStatusIn(user, Status.Category.ACTIVE)
+                    .stream()
                     .mapToInt(Task::hashCode)
                     .anyMatch(hash -> hash == taskHash);
         }
