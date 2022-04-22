@@ -7,7 +7,6 @@ import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.model.task.CodeTask;
@@ -78,10 +77,14 @@ public interface TaskService {
             taskRepository.save(task);
         }
 
+        Object lock = new Object();
+
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public <T extends Task> T update(T task) {
-            return taskRepository.saveAndFlush(task);
+            synchronized (lock) {
+                return taskRepository.saveAndFlush(task);
+            }
         }
 
         @Override
