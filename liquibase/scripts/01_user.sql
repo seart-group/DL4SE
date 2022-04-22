@@ -24,6 +24,7 @@ CREATE TABLE "task" (
     "dataset" text NOT NULL,
     "user_id" bigint NOT NULL,
     "status" text NOT NULL,
+    "version" bigint NOT NULL,
     "checkpoint_id" bigint,
     "processed_results" bigint NOT NULL,
     "total_results" bigint NOT NULL,

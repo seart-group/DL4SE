@@ -33,6 +33,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
@@ -81,6 +82,9 @@ public abstract class Task {
     Status status = Status.QUEUED;
 
     // TODO 06.04.22: Add some kind of reference that points to task executor instance
+
+    @Version
+    Long version;
 
     @Column(name = "checkpoint_id")
     Long checkpointId;
