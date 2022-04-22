@@ -79,7 +79,7 @@ public interface TaskService {
         }
 
         @Override
-        @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
         public <T extends Task> T update(T task) {
             return taskRepository.saveAndFlush(task);
         }
