@@ -33,7 +33,7 @@ public interface TaskService {
     boolean canCreateTask(User user);
     boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
-    void update(Task task);
+    <T extends Task> T update(T task);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
     List<Task> getTasksForCleanup();
@@ -80,8 +80,8 @@ public interface TaskService {
 
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
-        public void update(Task task) {
-            taskRepository.saveAndFlush(task);
+        public <T extends Task> T update(T task) {
+            return taskRepository.saveAndFlush(task);
         }
 
         @Override
