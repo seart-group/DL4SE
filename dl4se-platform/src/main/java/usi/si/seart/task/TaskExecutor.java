@@ -41,8 +41,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -109,7 +107,7 @@ public class TaskExecutor {
 
         Long totalResults = codeService.countTotalResults(countQuery);
         task.setTotalResults(totalResults);
-        taskService.update(task);
+        task = taskService.update(task);
 
         try {
             Path exportPath = fileSystemService.createExportFile(task);
@@ -119,9 +117,27 @@ public class TaskExecutor {
                             StandardCharsets.UTF_8
                     )
             );
-            Consumer<Code> codeConsumer = generateCodeConsumer(task, writer);
-            @Cleanup Stream<? extends Code> stream = codeService.createPipeline(resultQuery, pipeline, codeClass);
-            stream.forEach(codeConsumer);
+            @Cleanup Stream<Code> stream = codeService.createPipeline(resultQuery, pipeline, codeClass);
+            Iterable<Code> iterable = stream::iterator;
+            long count = task.getProcessedResults();
+            for (Code code : iterable) {
+                entityManager.detach(code);
+                count += 1;
+
+                long id = code.getId();
+                task.setCheckpointId(id);
+                task.setProcessedResults(count);
+
+                String serialized = jsonMapper.writeValueAsString(code);
+                writer.write(serialized);
+                writer.newLine();
+
+                if (count % fetchSize == 0) {
+                    task = taskService.update(task);
+                    writer.flush();
+                    entityManager.clear();
+                }
+            }
         } catch (IOException ex) {
             throw new TaskFailedException(task, ex);
         }
@@ -129,31 +145,5 @@ public class TaskExecutor {
         task.setStatus(Status.FINISHED);
         task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
         taskService.update(task);
-    }
-
-    private Consumer<Code> generateCodeConsumer(CodeTask task, BufferedWriter writer) {
-        AtomicLong counter = new AtomicLong(task.getProcessedResults());
-        return code -> {
-            entityManager.detach(code);
-
-            long id = code.getId();
-            long count = counter.incrementAndGet();
-            task.setCheckpointId(id);
-            task.setProcessedResults(count);
-
-            try {
-                String serialized = jsonMapper.writeValueAsString(code);
-                writer.write(serialized);
-                writer.newLine();
-
-                if (count % fetchSize == 0) {
-                    taskService.update(task);
-                    writer.flush();
-                    entityManager.clear();
-                }
-            } catch (IOException ex) {
-                throw new TaskFailedException(task, ex);
-            }
-        };
     }
 }
