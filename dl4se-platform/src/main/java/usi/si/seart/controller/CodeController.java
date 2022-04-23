@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +29,14 @@ import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
+import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
+import usi.si.seart.task.TaskExecutor;
 
 import javax.validation.Valid;
 import java.io.FileInputStream;
@@ -56,6 +59,10 @@ public class CodeController {
     LanguageService languageService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
+
+    ScheduledAnnotationBeanPostProcessor postProcessor;
+
+    TaskExecutor taskExecutor;
 
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
@@ -82,6 +89,37 @@ public class CodeController {
 
         taskService.create(requester, requestedAt, query, processing);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @PostMapping(value = "/cancel/{uuid}")
+    public ResponseEntity<?> cancelTask(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
+        User requester = userService.getWithEmail(principal.getEmail());
+        Optional<Task> optional = taskService.getWithUUID(uuid);
+        if (optional.isEmpty()) return ResponseEntity.notFound().build();
+
+        Task task = optional.get();
+        Status status = task.getStatus();
+        if (Status.Category.INACTIVE.contains(status))
+            return ResponseEntity.badRequest().build();
+
+        User owner = task.getUser();
+        boolean canCancel = requester.equals(owner) || requester.getRole().equals(Role.ADMIN);
+        if (!canCancel)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        log.info("Cancelling task: [{}]", task.getUuid());
+
+        if (status.equals(Status.QUEUED)) {
+            taskService.update(task, task::setStatus, Status.CANCELLED);
+        } else {
+            String executorName = TaskExecutor.class.getSimpleName();
+            postProcessor.postProcessBeforeDestruction(taskExecutor, executorName);
+            taskService.update(task, task::setStatus, Status.CANCELLED);
+            fileSystemService.deleteExportFile(task);
+            postProcessor.postProcessAfterInitialization(taskExecutor, executorName);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @SneakyThrows

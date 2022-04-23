@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
@@ -37,16 +38,24 @@ public class SchedulerConfig {
         public void handleError(Throwable t) {
             if (t instanceof TaskFailedException) {
                 handleError((TaskFailedException) t);
+            } else if (t instanceof OptimisticLockingFailureException) {
+                handleError((OptimisticLockingFailureException) t);
             } else {
                 log.error("An unexpected exception occurred while performing a scheduled job.", t);
             }
         }
 
         private void handleError(TaskFailedException ex) {
-            Task failedTask = ex.getTask();
-            failedTask.setStatus(Status.ERROR);
-            taskService.update(failedTask);
+            Task task = ex.getTask();
+            taskService.update(task, task::setStatus, Status.ERROR);
             log.error(ex.getMessage(), ex.getCause());
+        }
+
+        private void handleError(OptimisticLockingFailureException ex) {
+            // Allowing this exception to reach the handler also means that the task run is definitively cancelled
+            // Usually thrown as a result of a general update method being called after a status change (cancellation)
+            // TODO 22.04.22: Should we do something else here?
+            log.debug("", ex);
         }
     }
 }
