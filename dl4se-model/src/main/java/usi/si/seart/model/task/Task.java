@@ -106,6 +106,10 @@ public abstract class Task {
 
     LocalDateTime finished;
 
+    @NotNull
+    @Builder.Default
+    Boolean expired = false;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

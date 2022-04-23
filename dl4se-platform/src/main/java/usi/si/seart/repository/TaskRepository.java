@@ -38,7 +38,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Modifying
     @Query(
-            "UPDATE Task SET status = usi.si.seart.model.task.Status.CANCELLED, version = version + 1 WHERE id = :id"
+            value = "UPDATE Task SET " +
+                    "status = usi.si.seart.model.task.Status.CANCELLED, " +
+                    "version = version + 1, " +
+                    "expired = true " +
+                    "WHERE id = :id"
     )
     void markForCancellation(@Param("id") Long id);
 

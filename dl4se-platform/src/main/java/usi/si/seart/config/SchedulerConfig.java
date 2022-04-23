@@ -93,6 +93,7 @@ public class SchedulerConfig {
         private void handleError(TaskFailedException ex) {
             Task task = ex.getTask();
             task.setStatus(Status.ERROR);
+            task.setExpired(true);
             taskService.update(task);
             log.error(ex.getMessage(), ex.getCause());
         }
