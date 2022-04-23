@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +35,6 @@ import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
-import usi.si.seart.task.TaskExecutor;
 
 import javax.validation.Valid;
 import java.io.FileInputStream;
@@ -59,10 +57,6 @@ public class CodeController {
     LanguageService languageService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
-
-    ScheduledAnnotationBeanPostProcessor postProcessor;
-
-    TaskExecutor taskExecutor;
 
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
@@ -107,18 +101,7 @@ public class CodeController {
         if (!canCancel)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
-        log.info("Cancelling task: [{}]", task.getUuid());
-
-        if (status.equals(Status.QUEUED)) {
-            taskService.update(task, task::setStatus, Status.CANCELLED);
-        } else {
-            String executorName = TaskExecutor.class.getSimpleName();
-            postProcessor.postProcessBeforeDestruction(taskExecutor, executorName);
-            taskService.update(task, task::setStatus, Status.CANCELLED);
-            fileSystemService.deleteExportFile(task);
-            postProcessor.postProcessAfterInitialization(taskExecutor, executorName);
-        }
-
+        taskService.cancel(task);
         return ResponseEntity.ok().build();
     }
 

@@ -36,6 +36,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     )
     void markForExecution();
 
+    @Modifying
+    @Query(
+            "UPDATE Task SET status = usi.si.seart.model.task.Status.CANCELLED, version = version + 1 WHERE id = :id"
+    )
+    void markForCancellation(@Param("id") Long id);
+
     Optional<Task> findByUuid(@NotNull UUID uuid);
 
     List<Task> findByFinishedBetween(LocalDateTime lower, LocalDateTime upper);

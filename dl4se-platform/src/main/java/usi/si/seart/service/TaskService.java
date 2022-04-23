@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public interface TaskService {
 
@@ -34,7 +33,7 @@ public interface TaskService {
     boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
     <T extends Task> T update(T task);
-    <T extends Task, V> T update(T task, Consumer<V> setter, V value);
+    <T extends Task> void cancel(T task);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
     List<Task> getTasksForCleanup();
@@ -90,10 +89,10 @@ public interface TaskService {
         }
 
         @Override
-        public <T extends Task, V> T update(T task, Consumer<V> setter, V value) {
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public <T extends Task> void cancel(T task) {
             synchronized (lock) {
-                setter.accept(value);
-                return taskRepository.saveAndFlush(task);
+                taskRepository.markForCancellation(task.getId());
             }
         }
 
