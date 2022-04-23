@@ -44,3 +44,7 @@ Content-Type: application/json
 GET https://localhost:8080/api/code/download/{{uuid}}
 Authorization: Bearer {{token}}
 Content-Type: text/plain
+
+### POST /code/cancel
+POST https://localhost:8080/api/code/cancel/{{uuid}}
+Authorization: Bearer {{token}}

@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="POST /code/cancel" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" path="$PROJECT_DIR$/http/CodeController.http" index="3" requestIdentifier="POST /code/cancel" runType="Run single request">
+    <method v="2" />
+  </configuration>
+</component>
