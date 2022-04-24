@@ -118,8 +118,8 @@ public class CodeController {
 
         User owner = task.getUser();
         Status status = task.getStatus();
-        if (!requester.equals(owner) || status != Status.FINISHED)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        boolean canDownload = requester.equals(owner) && status == Status.FINISHED;
+        if (!canDownload) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         Path exportFilePath = fileSystemService.getExportFile(task);
         String exportFileName = exportFilePath.getFileName().toString();
