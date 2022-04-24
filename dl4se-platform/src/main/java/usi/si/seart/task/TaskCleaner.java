@@ -8,7 +8,7 @@ import usi.si.seart.model.task.Task;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 @AllArgsConstructor
@@ -20,14 +20,13 @@ public class TaskCleaner implements Runnable {
 
     @Override
     public void run() {
-        log.info("Cleaning up expired task files...");
-        List<Task> tasks = taskService.getTasksForCleanup();
-        tasks.forEach(this::logAndDeleteFile);
-        log.info("Cleaning complete!");
-    }
-
-    private void logAndDeleteFile(Task task) {
-        log.debug("Deleting files: [{}]", task.getUuid());
-        fileSystemService.deleteExportFile(task);
+        log.debug("Cleaning up expired task files...");
+        Consumer<Task> deleteAndMark = task -> {
+            log.trace("Deleting export file for task: [{}]", task.getUuid());
+            task.setExpired(true);
+            fileSystemService.deleteExportFile(task);
+        };
+        taskService.forEachNonExpired(deleteAndMark);
+        log.debug("Cleaning complete!");
     }
 }

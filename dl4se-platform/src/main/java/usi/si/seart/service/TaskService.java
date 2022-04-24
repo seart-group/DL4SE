@@ -1,6 +1,7 @@
 package usi.si.seart.service;
 
 import lombok.AccessLevel;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -21,11 +22,11 @@ import usi.si.seart.repository.TaskRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface TaskService {
 
@@ -34,9 +35,9 @@ public interface TaskService {
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
     <T extends Task> T update(T task);
     <T extends Task> void cancel(T task);
+    void forEachNonExpired(Consumer<Task> consumer);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
-    List<Task> getTasksForCleanup();
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -98,6 +99,14 @@ public interface TaskService {
 
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public void forEachNonExpired(Consumer<Task> consumer) {
+            LocalDateTime oneWeekAgo = LocalDateTime.now(ZoneOffset.UTC).minusWeeks(1);
+            @Cleanup Stream<Task> taskStream = taskRepository.findAllByFinishedLessThanAndExpired(oneWeekAgo, false);
+            taskStream.forEach(consumer);
+        }
+
+        @Override
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
         public Optional<Task> getNext() {
             return taskRepository.findFirstExecuting()
                     .or(() -> {
@@ -109,14 +118,6 @@ public interface TaskService {
         @Override
         public Optional<Task> getWithUUID(UUID uuid) {
             return taskRepository.findByUuid(uuid);
-        }
-
-        @Override
-        public List<Task> getTasksForCleanup() {
-            LocalDateTime currentHour = LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.HOURS);
-            LocalDateTime oneWeekAgoUpper = currentHour.minusWeeks(1);
-            LocalDateTime oneWeekAgoLower = oneWeekAgoUpper.minusHours(1);
-            return taskRepository.findByFinishedBetween(oneWeekAgoLower, oneWeekAgoUpper);
         }
     }
 }

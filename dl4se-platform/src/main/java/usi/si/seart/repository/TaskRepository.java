@@ -11,10 +11,10 @@ import usi.si.seart.model.user.User;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -46,7 +46,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     )
     void markForCancellation(@Param("id") Long id);
 
-    Optional<Task> findByUuid(@NotNull UUID uuid);
+    Stream<Task> findAllByFinishedLessThanAndExpired(LocalDateTime finished, @NotNull Boolean expired);
 
-    List<Task> findByFinishedBetween(LocalDateTime lower, LocalDateTime upper);
+    Optional<Task> findByUuid(@NotNull UUID uuid);
 }

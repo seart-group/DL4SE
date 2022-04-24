@@ -26,7 +26,6 @@ import usi.si.seart.task.TaskRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.ZoneOffset;
 
 @Slf4j
 @Configuration
@@ -57,7 +56,7 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.initialize();
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger("@hourly", ZoneOffset.UTC));
+        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger("* */15 * * * *"));
         threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 1000);
         return threadPoolTaskScheduler;
     }
