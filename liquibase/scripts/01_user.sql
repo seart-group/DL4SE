@@ -31,7 +31,8 @@ CREATE TABLE "task" (
     "submitted" timestamp NOT NULL,
     "started" timestamp,
     "finished" timestamp,
-    "expired" boolean NOT NULL
+    "expired" boolean NOT NULL,
+    "error_stack_trace" text
 );
 
 CREATE TABLE "query" (

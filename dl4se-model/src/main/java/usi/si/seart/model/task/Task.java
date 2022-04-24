@@ -110,6 +110,9 @@ public abstract class Task {
     @Builder.Default
     Boolean expired = false;
 
+    @Column(name = "error_stack_trace")
+    String errorStackTrace;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
