@@ -5,7 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,6 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
-import usi.si.seart.model.task.Status;
-import usi.si.seart.model.task.Task;
 import usi.si.seart.service.CodeService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
@@ -27,7 +26,6 @@ import usi.si.seart.task.TaskRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Slf4j
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -80,6 +78,8 @@ public class SchedulerConfig {
 
     private class SchedulerErrorHandler implements ErrorHandler {
 
+        private final Logger log = LoggerFactory.getLogger(this.getClass());
+
         @Override
         public void handleError(Throwable t) {
             if (t instanceof TaskFailedException) {
@@ -90,11 +90,10 @@ public class SchedulerConfig {
         }
 
         private void handleError(TaskFailedException ex) {
-            Task task = ex.getTask();
-            task.setStatus(Status.ERROR);
-            task.setExpired(true);
-            taskService.update(task);
-            log.error(ex.getMessage(), ex.getCause());
+            log.warn(ex.getMessage());
+            taskService.registerException(ex);
+            fileSystemService.deleteExportFile(ex.getTask());
+            // TODO 24.04.22: Send notification to user via email
         }
     }
 }

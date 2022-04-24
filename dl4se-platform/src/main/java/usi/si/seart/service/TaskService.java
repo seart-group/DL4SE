@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
@@ -20,6 +21,8 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -35,6 +38,7 @@ public interface TaskService {
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
     <T extends Task> T update(T task);
     <T extends Task> void cancel(T task);
+    void registerException(TaskFailedException ex);
     void forEachNonExpired(Consumer<Task> consumer);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
@@ -95,6 +99,24 @@ public interface TaskService {
             synchronized (lock) {
                 taskRepository.markForCancellation(task.getId());
             }
+        }
+
+        @Override
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public void registerException(TaskFailedException ex) {
+            Task task = ex.getTask();
+            Throwable cause = ex.getCause();
+
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            cause.printStackTrace(printWriter);
+            String stackTrace = stringWriter.toString();
+
+            task.setStatus(Status.ERROR);
+            task.setExpired(true);
+            task.setErrorStackTrace(stackTrace);
+
+            taskRepository.saveAndFlush(task);
         }
 
         @Override

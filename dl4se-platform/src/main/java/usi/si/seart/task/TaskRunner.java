@@ -31,7 +31,6 @@ import usi.si.seart.service.TaskService;
 import javax.persistence.EntityManager;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -167,9 +166,8 @@ public class TaskRunner implements Runnable {
                 fileSystemService.deleteExportFile(task);
                 log.info("Cancelled task: [{}]", task.getUuid());
                 log.debug("", ex);
-            } catch (IOException ex) {
-                fileSystemService.deleteExportFile(task);
-                throw new TaskFailedException(task, ex);
+            } catch (Throwable thr) {
+                throw new TaskFailedException(task, thr);
             }
         }
     }
