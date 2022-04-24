@@ -25,6 +25,7 @@ import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
 import usi.si.seart.model.task.query.Query;
 import usi.si.seart.service.CodeService;
+import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
 
@@ -49,6 +50,7 @@ public class TaskRunner implements Runnable {
 
     CodeService codeService;
     TaskService taskService;
+    EmailService emailService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
 
@@ -154,8 +156,9 @@ public class TaskRunner implements Runnable {
 
                 task.setStatus(Status.FINISHED);
                 task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
-                taskService.update(task);
+                task = taskService.update(task);
                 log.info("Finished task:  [{}]", task.getUuid());
+                emailService.sendTaskNotificationEmail(task);
             } catch (OptimisticLockingFailureException ex) {
                 // Only two threads can modify a single task:
                 // 1) The task executor

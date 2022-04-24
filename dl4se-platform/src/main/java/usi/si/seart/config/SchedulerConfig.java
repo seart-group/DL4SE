@@ -17,7 +17,9 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
+import usi.si.seart.model.task.Task;
 import usi.si.seart.service.CodeService;
+import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.task.TaskCleaner;
@@ -35,6 +37,7 @@ public class SchedulerConfig {
 
     CodeService codeService;
     TaskService taskService;
+    EmailService emailService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
 
@@ -68,6 +71,7 @@ public class SchedulerConfig {
                 jsonMapper,
                 codeService,
                 taskService,
+                emailService,
                 fileSystemService,
                 conversionService,
                 transactionManager,
@@ -92,8 +96,9 @@ public class SchedulerConfig {
         private void handleError(TaskFailedException ex) {
             log.warn(ex.getMessage());
             taskService.registerException(ex);
-            fileSystemService.deleteExportFile(ex.getTask());
-            // TODO 24.04.22: Send notification to user via email
+            Task task = ex.getTask();
+            fileSystemService.deleteExportFile(task);
+            emailService.sendTaskNotificationEmail(task);
         }
     }
 }

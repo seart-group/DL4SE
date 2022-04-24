@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import usi.si.seart.model.task.Task;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -21,9 +21,9 @@ import java.util.Map;
 
 public interface EmailService {
 
-    void sendVerificationEmail(String recipient, String value);
+    void sendTaskNotificationEmail(Task task);
+    void sendVerificationEmail(String recipient, String link);
 
-    @Slf4j
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -36,6 +36,26 @@ public interface EmailService {
         JavaMailSender mailSender;
         SpringTemplateEngine templateEngine;
 
+        @Override
+        public void sendTaskNotificationEmail(Task task) {
+            String recipient = task.getUser().getEmail();
+            String uuidString = task.getUuid().toString();
+            String statusName = task.getStatus().name();
+            String subject = String.format("Task [%s]: %s", uuidString, statusName);
+            Map<String, Object> variables = Map.of(
+                    "uuid", uuidString,
+                    "status", statusName,
+                    "submitted", task.getSubmitted(),
+                    "started", task.getStarted(),
+                    "finished", task.getFinished(),
+                    "results", task.getProcessedResults()
+            );
+
+            MimeMessage message = createMessage("task_notification", recipient, subject, variables);
+            mailSender.send(message);
+        }
+
+        @Override
         public void sendVerificationEmail(String recipient, String link) {
             MimeMessage message = createMessage(
                     "verification", recipient, "Complete your DL4SE registration", Map.of("link", link)
