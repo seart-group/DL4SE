@@ -38,7 +38,6 @@ import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
 import java.io.FileInputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -115,6 +114,8 @@ public class CodeController {
         if (optional.isEmpty()) return ResponseEntity.notFound().build();
 
         Task task = optional.get();
+        if (task.getExpired()) return ResponseEntity.status(HttpStatus.GONE).build();
+
         User owner = task.getUser();
         Status status = task.getStatus();
         if (!requester.equals(owner) || status != Status.FINISHED)
@@ -122,8 +123,6 @@ public class CodeController {
 
         Path exportFilePath = fileSystemService.getExportFile(task);
         String exportFileName = exportFilePath.getFileName().toString();
-        if (Files.notExists(exportFilePath)) return ResponseEntity.status(HttpStatus.GONE).build();
-
         long exportFileSize = exportFilePath.toFile().length();
         InputStreamResource resource = new InputStreamResource(new FileInputStream(exportFilePath.toFile()));
         ContentDisposition disposition = ContentDisposition.attachment().filename(exportFileName).build();
