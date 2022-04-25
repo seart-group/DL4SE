@@ -1,0 +1,17 @@
+### POST /admin/{id}/enable
+POST https://localhost:8080/api/admin/{{target_user_id}}/enable
+Authorization: Bearer {{token}}
+
+### POST /admin/{id}/disable
+POST https://localhost:8080/api/admin/{{target_user_id}}/disable
+Authorization: Bearer {{token}}
+
+### POST /admin/configuration
+POST https://localhost:8080/api/admin/configuration
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "key" : "request_limit",
+  "value" : "5"
+}

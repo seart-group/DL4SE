@@ -109,22 +109,4 @@ public class UserController {
         User user = userService.getWithId(id);
         return ResponseEntity.ok(user);
     }
-
-    @PostMapping("/{id}/enable")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> enableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
-        user.setEnabled(true);
-        userService.update(user);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/disable")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> disableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
-        user.setEnabled(false);
-        userService.update(user);
-        return ResponseEntity.ok().build();
-    }
 }
