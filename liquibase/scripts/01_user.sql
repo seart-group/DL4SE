@@ -1,4 +1,10 @@
 -- TABLES
+CREATE TABLE "configuration" (
+    "key" text PRIMARY KEY NOT NULL,
+    "value" text NOT NULL,
+    "last_update" timestamp NOT NULL
+);
+
 CREATE TABLE "user" (
     "id" bigint PRIMARY KEY NOT NULL,
     "email" text UNIQUE NOT NULL,
@@ -92,3 +98,9 @@ CREATE INDEX "function_content_hash_idx" ON "function" (content_hash);
 CREATE INDEX "file_ast_hash_idx" ON "file" (ast_hash);
 CREATE INDEX "function_ast_hash_idx" ON "function" (ast_hash);
 CREATE INDEX "git_repo_stats_idx" ON "git_repo" (commits, contributors, issues, stars) INCLUDE (is_fork, license);
+
+-- ADD CONFIGURATION PROPERTIES
+INSERT INTO configuration(key, value, last_update)
+VALUES
+    ('request_limit', '3', now()),
+    ('page_size', '20', now());
