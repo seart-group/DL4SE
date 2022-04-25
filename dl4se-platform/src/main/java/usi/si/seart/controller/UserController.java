@@ -26,6 +26,7 @@ import usi.si.seart.dto.UserDto;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.jwt.JwtTokenProvider;
+import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
@@ -48,6 +49,7 @@ public class UserController {
     VerificationService verificationService;
     EmailService emailService;
     ConversionService conversionService;
+    ConfigurationService configurationService;
 
     @PostMapping("/login")
     public ResponseEntity<?> logIn(@Valid @RequestBody LoginDto loginRequest) {
@@ -96,7 +98,8 @@ public class UserController {
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "registered") String column
     ) {
-        List<User> users = userService.getAll(page, column);
+        Integer pageSize = configurationService.get("page_size", Integer.class);
+        List<User> users = userService.getAll(page, pageSize, column);
         return ResponseEntity.ok(users);
     }
 

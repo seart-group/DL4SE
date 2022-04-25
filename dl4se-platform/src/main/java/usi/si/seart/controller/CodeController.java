@@ -31,6 +31,7 @@ import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.UserPrincipal;
+import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
@@ -56,6 +57,7 @@ public class CodeController {
     LanguageService languageService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
+    ConfigurationService configurationService;
 
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
@@ -65,7 +67,8 @@ public class CodeController {
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
         User requester = userService.getWithEmail(principal.getEmail());
 
-        if (!taskService.canCreateTask(requester))
+        Integer taskLimit = configurationService.get("request_limit", Integer.class);
+        if (!taskService.canCreateTask(requester, taskLimit))
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 
         CodeQueryDto queryDto = codeTaskDto.getQuery();

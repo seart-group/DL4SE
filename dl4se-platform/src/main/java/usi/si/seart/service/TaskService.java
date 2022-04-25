@@ -1,12 +1,10 @@
 package usi.si.seart.service;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +31,7 @@ import java.util.stream.Stream;
 
 public interface TaskService {
 
-    boolean canCreateTask(User user);
+    boolean canCreateTask(User user, Integer limit);
     boolean activeTaskExists(User user, Query query, Processing processing);
     void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
     <T extends Task> T update(T task);
@@ -45,19 +43,15 @@ public interface TaskService {
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
+    @AllArgsConstructor(onConstructor_ = @Autowired)
     class TaskServiceImpl implements TaskService {
 
         TaskRepository taskRepository;
 
-        @NonFinal
-        @Value("${app.request.limit}")
-        Long userTaskLimit;
-
         @Override
-        public boolean canCreateTask(User user) {
+        public boolean canCreateTask(User user, Integer limit) {
             Long activeTasks = taskRepository.countAllByUserAndStatusIn(user, Status.Category.ACTIVE);
-            return activeTasks < userTaskLimit;
+            return activeTasks < limit;
         }
 
         @Override

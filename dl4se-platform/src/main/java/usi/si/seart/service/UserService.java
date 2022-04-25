@@ -1,11 +1,9 @@
 package usi.si.seart.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,21 +20,17 @@ public interface UserService {
 
     User create(User user);
     void update(User user);
-    List<User> getAll(Integer page, String column);
+    List<User> getAll(Integer page, Integer size, String column);
     User getWithId(Long id);
     User getWithEmail(String email);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
+    @AllArgsConstructor(onConstructor_ = @Autowired)
     class UserServiceImpl implements UserService {
 
         PasswordEncoder passwordEncoder;
         UserRepository userRepository;
-
-        @Value("${app.page.size}")
-        @NonFinal
-        Integer pageSize;
 
         @Override
         public User create(User user) {
@@ -51,7 +45,7 @@ public interface UserService {
         }
 
         @Override
-        public List<User> getAll(Integer page, String column) {
+        public List<User> getAll(Integer page, Integer pageSize, String column) {
             Sort sort = Sort.by(column).ascending();
             Pageable pageable = PageRequest.of(page, pageSize, sort);
             return userRepository.findAll(pageable).getContent();
