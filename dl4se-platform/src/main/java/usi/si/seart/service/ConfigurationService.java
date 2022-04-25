@@ -14,6 +14,9 @@ import usi.si.seart.model.Configuration;
 import usi.si.seart.repository.ConfigurationRepository;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public interface ConfigurationService {
@@ -35,6 +38,10 @@ public interface ConfigurationService {
         @Value("${environment.name}")
         String environmentName;
 
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+        Lock readLock = readWriteLock.readLock();
+        Lock writeLock = readWriteLock.writeLock();
+
         @Override
         public PropertySource<?> getPropertySource() {
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
@@ -45,20 +52,28 @@ public interface ConfigurationService {
 
         @Override
         public <T> T get(String key, Class<T> type) {
-            // TODO 25.04.22: Add read lock
-            return configurableEnvironment.getRequiredProperty(key, type);
+            try {
+                readLock.lock();
+                return configurableEnvironment.getRequiredProperty(key, type);
+            } finally {
+                readLock.unlock();
+            }
         }
 
         @Override
         public Configuration modify(Configuration configuration) {
-            // TODO 25.04.22: Add write lock
-            configuration = configurationRepository.save(configuration);
-            Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .map(conf -> Map.entry(conf.getKey(), conf.getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            PropertySource<?> propertySource = new MapPropertySource(environmentName, configurationMap);
-            configurableEnvironment.getPropertySources().replace(environmentName, propertySource);
-            return configuration;
+            try {
+                writeLock.lock();
+                configuration = configurationRepository.save(configuration);
+                Map<String, Object> configurationMap = configurationRepository.findAll().stream()
+                        .map(conf -> Map.entry(conf.getKey(), conf.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                PropertySource<?> propertySource = new MapPropertySource(environmentName, configurationMap);
+                configurableEnvironment.getPropertySources().replace(environmentName, propertySource);
+                return configuration;
+            } finally {
+                writeLock.unlock();
+            }
         }
 
         @Override
