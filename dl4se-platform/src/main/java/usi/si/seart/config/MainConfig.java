@@ -13,6 +13,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import usi.si.seart.converter.DtoToCodeProcessingConverter;
+import usi.si.seart.converter.DtoToConfigurationConverter;
 import usi.si.seart.converter.DtoToUserConverter;
 import usi.si.seart.converter.GenericCodeQueryConverter;
 import usi.si.seart.converter.TaskToQueriesConverter;
@@ -63,6 +64,7 @@ public class MainConfig {
             @Override
             public void addFormatters(@NonNull final FormatterRegistry registry) {
                 registry.addConverter(new DtoToUserConverter());
+                registry.addConverter(new DtoToConfigurationConverter());
                 registry.addConverter(new GenericCodeQueryConverter());
                 registry.addConverter(new DtoToCodeProcessingConverter());
                 registry.addConverter(new TaskToQueriesConverter(dslContext()));
