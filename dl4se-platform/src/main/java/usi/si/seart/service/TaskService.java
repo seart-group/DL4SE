@@ -136,12 +136,13 @@ public interface TaskService {
         }
 
         @Override
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public Optional<Task> getNext() {
-            return taskRepository.findFirstExecuting()
-                    .or(() -> {
-                        taskRepository.markForExecution();
-                        return taskRepository.findFirstExecuting();
+        @Transactional
+        public synchronized Optional<Task> getNext() {
+            return taskRepository.findFirstByStatusOrderBySubmitted(Status.QUEUED)
+                    .flatMap(task -> {
+                        Long id = task.getId();
+                        taskRepository.markForExecution(id);
+                        return taskRepository.findById(id);
                     });
         }
 

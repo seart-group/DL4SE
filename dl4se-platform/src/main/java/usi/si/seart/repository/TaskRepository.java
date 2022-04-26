@@ -26,19 +26,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Long countAllByUserAndStatusIn(User user, Collection<Status> status);
 
-    @Query(
-            value = "SELECT t.* FROM task as t WHERE t.status = 'EXECUTING' ORDER BY submitted LIMIT 1",
-            nativeQuery = true
-    )
-    Optional<Task> findFirstExecuting();
-
-    @Modifying
-    @Query(
-            value = "UPDATE task SET status = 'EXECUTING', started = now() " +
-                    "WHERE id = (SELECT id FROM task WHERE status = 'QUEUED' ORDER BY submitted LIMIT 1)",
-            nativeQuery = true
-    )
-    void markForExecution();
+    Optional<Task> findFirstByStatusOrderBySubmitted(Status status);
 
     @Modifying
     @Query(
@@ -49,6 +37,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                     "WHERE id = :id"
     )
     void markForCancellation(@Param("id") Long id);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(
+            value = "UPDATE Task SET " +
+                    "status = usi.si.seart.model.task.Status.EXECUTING, " +
+                    "started = current_timestamp, " +
+                    "version = version + 1 " +
+                    "WHERE id = :id"
+    )
+    void markForExecution(@Param("id") Long id);
 
     Stream<Task> findAllByFinishedLessThanAndExpired(LocalDateTime finished, @NotNull Boolean expired);
 
