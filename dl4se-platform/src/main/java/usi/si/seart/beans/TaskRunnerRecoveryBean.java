@@ -9,9 +9,9 @@ import usi.si.seart.model.task.Status;
 import usi.si.seart.service.TaskService;
 
 @Slf4j
-@Component("TaskExecutorRecoveryBean")
+@Component("TaskRunnerRecoveryBean")
 @AllArgsConstructor(onConstructor_ = @Autowired)
-public class TaskExecutorRecoveryBean implements InitializingBean {
+public class TaskRunnerRecoveryBean implements InitializingBean {
 
     private final TaskService taskService;
 
