@@ -8,9 +8,11 @@ import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.user.User;
 
+import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -49,4 +51,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Stream<Task> findAllByFinishedLessThanAndExpired(LocalDateTime finished, @NotNull Boolean expired);
 
     Optional<Task> findByUuid(@NotNull UUID uuid);
+
+    @Query("SELECT status, COUNT(status) AS COUNT FROM Task GROUP BY status")
+    List<Tuple> countAllGroupByStatus();
+
+    @Query("SELECT status, COUNT(status) AS COUNT FROM Task WHERE user = :user GROUP BY status")
+    List<Tuple> countAllByUserGroupByStatus(@Param("user") User user);
 }

@@ -19,14 +19,19 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
+import javax.persistence.Tuple;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface TaskService {
@@ -40,6 +45,8 @@ public interface TaskService {
     void forEachNonExpired(Consumer<Task> consumer);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
+    Map<Status, Long> getSummary();
+    Map<Status, Long> getSummary(User user);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -134,6 +141,26 @@ public interface TaskService {
         @Override
         public Optional<Task> getWithUUID(UUID uuid) {
             return taskRepository.findByUuid(uuid);
+        }
+
+        @Override
+        public Map<Status, Long> getSummary() {
+            Supplier<List<Tuple>> countQuery = taskRepository::countAllGroupByStatus;
+            return supplyToMap(countQuery, Status.class, Long.class);
+        }
+
+        @Override
+        public Map<Status, Long> getSummary(User user) {
+            Supplier<List<Tuple>> userCountQuery = () -> taskRepository.countAllByUserGroupByStatus(user);
+            return supplyToMap(userCountQuery, Status.class, Long.class);
+        }
+
+        private <K, V> Map<K, V> supplyToMap(
+                Supplier<List<Tuple>> tupleResultQuery, Class<K> keyType, Class<V> valueType
+        ) {
+            return tupleResultQuery.get().stream()
+                    .map(tuple -> Map.entry(tuple.get(0, keyType), tuple.get(1, valueType)))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
     }
 }
