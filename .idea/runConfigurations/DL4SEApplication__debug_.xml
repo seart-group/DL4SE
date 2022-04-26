@@ -19,10 +19,6 @@
         <option name="name" value="logging.level.org.springframework.transaction.interceptor" />
         <option name="value" value="TRACE" />
       </param>
-      <param>
-        <option name="name" value="logging.file.name" />
-        <option name="value" value="logs/server.log" />
-      </param>
     </additionalParameters>
     <option name="HIDE_BANNER" value="true" />
     <module name="dl4se-platform" />
