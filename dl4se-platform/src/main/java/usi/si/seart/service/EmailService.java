@@ -17,6 +17,7 @@ import usi.si.seart.model.task.Task;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 public interface EmailService {
@@ -42,14 +43,13 @@ public interface EmailService {
             String uuidString = task.getUuid().toString();
             String statusName = task.getStatus().name();
             String subject = String.format("Task [%s]: %s", uuidString, statusName);
-            Map<String, Object> variables = Map.of(
-                    "uuid", uuidString,
-                    "status", statusName,
-                    "submitted", task.getSubmitted(),
-                    "started", task.getStarted(),
-                    "finished", task.getFinished(),
-                    "results", task.getProcessedResults()
-            );
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("uuid", uuidString);
+            variables.put("status", statusName);
+            variables.put("submitted", task.getSubmitted());
+            variables.put("started", task.getStarted());
+            variables.put("finished", task.getFinished());
+            variables.put("results", task.getProcessedResults());
 
             MimeMessage message = createMessage("task_notification", recipient, subject, variables);
             mailSender.send(message);
