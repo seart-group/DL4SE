@@ -43,6 +43,7 @@ public interface TaskService {
     <T extends Task> void cancel(T task);
     void registerException(TaskFailedException ex);
     void forEachNonExpired(Consumer<Task> consumer);
+    void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
     Optional<Task> getWithUUID(UUID uuid);
     Map<Status, Long> getSummary();
@@ -126,6 +127,12 @@ public interface TaskService {
             LocalDateTime oneWeekAgo = LocalDateTime.now(ZoneOffset.UTC).minusWeeks(1);
             @Cleanup Stream<Task> taskStream = taskRepository.findAllByFinishedLessThanAndExpired(oneWeekAgo, false);
             taskStream.forEach(consumer);
+        }
+
+        @Override
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public void forEachExecuting(Consumer<Task> consumer) {
+            taskRepository.findAllByStatus(Status.EXECUTING).forEach(consumer);
         }
 
         @Override

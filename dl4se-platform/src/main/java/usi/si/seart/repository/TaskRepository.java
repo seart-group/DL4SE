@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
+    List<Task> findAllByStatus(Status status);
+
     Set<Task> findAllByUserAndStatusIn(User user, Collection<Status> status);
 
     Long countAllByUserAndStatusIn(User user, Collection<Status> status);
