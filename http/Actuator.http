@@ -1,0 +1,18 @@
+### GET /actuator
+GET https://localhost:8080/api/actuator
+Accept: application/vnd.spring-boot.actuator.v3+json
+Authorization: Bearer {{token}}
+
+### GET /actuator/health
+GET https://localhost:8080/api/actuator/health
+Accept: application/vnd.spring-boot.actuator.v3+json
+Authorization: Bearer {{token}}
+
+### GET /actuator/logfile
+GET https://localhost:8080/api/actuator/logfile
+Authorization: Bearer {{token}}
+
+### GET /actuator/metrics
+GET https://localhost:8080/api/actuator/metrics
+Accept: application/vnd.spring-boot.actuator.v3+json
+Authorization: Bearer {{token}}
