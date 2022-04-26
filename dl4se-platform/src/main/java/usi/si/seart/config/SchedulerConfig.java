@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Configuration
-@DependsOn("TaskExecutorRecoveryBean")
+@DependsOn({"TaskExecutorRecoveryBean", "DirectoryInitializationBean"})
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SchedulerConfig {
