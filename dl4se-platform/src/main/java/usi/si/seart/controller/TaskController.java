@@ -41,7 +41,6 @@ import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -88,10 +87,7 @@ public class TaskController {
     @PostMapping(value = "/cancel/{uuid}")
     public ResponseEntity<?> cancelTask(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
-        Optional<Task> optional = taskService.getWithUUID(uuid);
-        if (optional.isEmpty()) return ResponseEntity.notFound().build();
-
-        Task task = optional.get();
+        Task task = taskService.getWithUUID(uuid);
         Status status = task.getStatus();
         if (Status.Category.INACTIVE.contains(status))
             return ResponseEntity.badRequest().build();
@@ -111,10 +107,7 @@ public class TaskController {
             @PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithEmail(principal.getEmail());
-        Optional<Task> optional = taskService.getWithUUID(uuid);
-        if (optional.isEmpty()) return ResponseEntity.notFound().build();
-
-        Task task = optional.get();
+        Task task = taskService.getWithUUID(uuid);
         if (task.getExpired()) return ResponseEntity.status(HttpStatus.GONE).build();
 
         User owner = task.getUser();

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.exception.TaskFailedException;
+import usi.si.seart.exception.TaskNotFoundException;
 import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
@@ -45,7 +46,7 @@ public interface TaskService {
     void forEachNonExpired(Consumer<Task> consumer);
     void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
-    Optional<Task> getWithUUID(UUID uuid);
+    Task getWithUUID(UUID uuid);
     Map<Status, Long> getSummary();
     Map<Status, Long> getSummary(User user);
 
@@ -147,8 +148,9 @@ public interface TaskService {
         }
 
         @Override
-        public Optional<Task> getWithUUID(UUID uuid) {
-            return taskRepository.findByUuid(uuid);
+        public Task getWithUUID(UUID uuid) {
+            return taskRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new TaskNotFoundException("uuid", uuid));
         }
 
         @Override
