@@ -32,13 +32,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "\"user\"")
@@ -98,7 +98,7 @@ public class User {
     @PrePersist
     @SneakyThrows
     private void prePersist() {
-        long random = SecureRandom.getInstanceStrong().nextLong();
+        long random = UUID.randomUUID().getLeastSignificantBits();
         byte[] idBytes = BigInteger.valueOf(random).toByteArray();
         uid = Base64.getUrlEncoder().withoutPadding().encodeToString(idBytes);
         registered = LocalDateTime.now(ZoneOffset.UTC);
