@@ -1,6 +1,7 @@
 package usi.si.seart.model.task.query;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,30 +46,37 @@ public abstract class Query {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "task_id")
+    @JsonIgnore
     Task task;
 
     @NotNull
     @Column(name = "has_license")
+    @JsonProperty(value = "has_license")
     Boolean hasLicense;
 
     @NotNull
     @Column(name = "exclude_forks")
+    @JsonProperty(value = "exclude_forks")
     Boolean excludeForks;
 
     @PositiveOrZero
     @Column(name = "min_commits")
+    @JsonProperty(value = "min_commits")
     Long minCommits;
 
     @PositiveOrZero
     @Column(name = "min_contributors")
+    @JsonProperty(value = "min_contributors")
     Long minContributors;
 
     @PositiveOrZero
     @Column(name = "min_issues")
+    @JsonProperty(value = "min_issues")
     Long minIssues;
 
     @PositiveOrZero
     @Column(name = "min_stars")
+    @JsonProperty(value = "min_stars")
     Long minStars;
 
     @Override

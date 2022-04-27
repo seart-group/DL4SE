@@ -1,5 +1,6 @@
 package usi.si.seart.model.task.processing;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,22 +38,27 @@ public class CodeProcessing extends Processing {
 
     @NotNull
     @Column(name = "remove_docstring")
+    @JsonProperty(value = "remove_docstring")
     Boolean removeDocstring;
 
     @NotNull
     @Column(name = "remove_inner_comments")
+    @JsonProperty(value = "remove_inner_comments")
     Boolean removeInnerComments;
 
     @NotBlank
     @Column(name = "mask_token")
+    @JsonProperty(value = "mask_token")
     String maskToken;
 
     @Range(min = 0, max = 100)
     @Column(name = "mask_percentage")
+    @JsonProperty(value = "mask_percentage")
     Integer maskPercentage;
 
     @NotNull
     @Column(name = "mask_contiguous_only")
+    @JsonProperty(value = "mask_contiguous_only")
     Boolean maskContiguousOnly;
 
     @NotNull

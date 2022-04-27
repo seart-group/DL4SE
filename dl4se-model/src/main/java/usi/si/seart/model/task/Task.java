@@ -1,6 +1,7 @@
 package usi.si.seart.model.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -87,15 +88,18 @@ public abstract class Task {
     Long version;
 
     @Column(name = "checkpoint_id")
+    @JsonProperty(value = "checkpoint_id")
     Long checkpointId;
 
     @PositiveOrZero
     @Column(name = "processed_results")
+    @JsonProperty(value = "processed_results")
     @Builder.Default
     Long processedResults = 0L;
 
     @PositiveOrZero
     @Column(name = "total_results")
+    @JsonProperty(value = "total_results")
     @Builder.Default
     Long totalResults = 0L;
 
@@ -111,6 +115,7 @@ public abstract class Task {
     Boolean expired = false;
 
     @Column(name = "error_stack_trace")
+    @JsonProperty(value = "error_stack_trace")
     String errorStackTrace;
 
     @Override

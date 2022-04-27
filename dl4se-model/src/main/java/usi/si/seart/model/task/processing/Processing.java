@@ -42,6 +42,7 @@ public abstract class Processing {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "task_id")
+    @JsonIgnore
     Task task;
 
     @Override
