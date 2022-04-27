@@ -98,7 +98,7 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         taskService.cancel(task);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @SneakyThrows
