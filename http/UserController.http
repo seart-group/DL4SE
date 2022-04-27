@@ -17,10 +17,6 @@ Content-Type: application/json
   "password": "Lugano2022"
 }
 
-### GET /user
-GET https://localhost:8080/api/user
-Authorization: Bearer {{token}}
-
 ### GET /user/{id}
 GET https://localhost:8080/api/user/{{target_user_id}}
 Authorization: Bearer {{token}}

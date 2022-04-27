@@ -1,3 +1,7 @@
+### GET /admin/users
+GET https://localhost:8080/api/admin/users
+Authorization: Bearer {{token}}
+
 ### POST /admin/{id}/enable
 POST https://localhost:8080/api/admin/{{target_user_id}}/enable
 Authorization: Bearer {{token}}

@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import usi.si.seart.dto.ConfigurationDto;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.model.user.User;
@@ -19,6 +21,7 @@ import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AdminRestController
 @RequestMapping("/admin")
@@ -29,6 +32,16 @@ public class AdminController {
     UserService userService;
     ConversionService conversionService;
     ConfigurationService configurationService;
+
+    @GetMapping("/users")
+    public ResponseEntity<?> listUsers(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "registered") String column
+    ) {
+        Integer pageSize = configurationService.get("page_size", Integer.class);
+        List<User> users = userService.getAll(page, pageSize, column);
+        return ResponseEntity.ok(users);
+    }
 
     @PostMapping("/{id}/enable")
     public ResponseEntity<?> enableUser(@PathVariable Long id) {

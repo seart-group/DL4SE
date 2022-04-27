@@ -32,7 +32,6 @@ import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -90,17 +89,6 @@ public class UserController {
         ).toString();
         emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> listUsers(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "registered") String column
-    ) {
-        Integer pageSize = configurationService.get("page_size", Integer.class);
-        List<User> users = userService.getAll(page, pageSize, column);
-        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
