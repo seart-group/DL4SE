@@ -20,6 +20,7 @@ import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.service.CodeService;
+import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
@@ -28,6 +29,7 @@ import usi.si.seart.task.TaskRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.Clock;
 
 @Configuration
 @DependsOn({"TaskRunnerRecoveryBean", "DirectoryInitializationBean"})
@@ -42,6 +44,7 @@ public class SchedulerConfig {
     EmailService emailService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
+    ConfigurationService configurationService;
 
     PlatformTransactionManager transactionManager;
 
@@ -54,13 +57,20 @@ public class SchedulerConfig {
 
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
+        Integer runners = configurationService.get("task_runner_count", Integer.class);
+        String cron = configurationService.get("task_cleaner_cron", String.class);
+
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(2);
+        threadPoolTaskScheduler.setClock(Clock.systemUTC());
+        threadPoolTaskScheduler.setPoolSize(1 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.initialize();
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger("* */15 * * * *"));
-        threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 1000);
+
+        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(cron));
+        for (int i = 0; i < runners; i++)
+            threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
+
         return threadPoolTaskScheduler;
     }
 

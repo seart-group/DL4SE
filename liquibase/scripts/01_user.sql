@@ -104,4 +104,6 @@ CREATE INDEX "git_repo_stats_idx" ON "git_repo" (commits, contributors, issues, 
 INSERT INTO configuration(key, value, last_update)
 VALUES
     ('request_limit', '3', now()),
-    ('page_size', '20', now());
+    ('page_size', '20', now()),
+    ('task_runner_count', '2', now()),
+    ('task_cleaner_cron', '0 */15 * * * *', now());
