@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +26,8 @@ import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
+import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.security.jwt.JwtTokenProvider;
-import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
@@ -48,7 +49,12 @@ public class UserController {
     VerificationService verificationService;
     EmailService emailService;
     ConversionService conversionService;
-    ConfigurationService configurationService;
+
+    @GetMapping
+    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
+        User requester = userService.getWithId(principal.getId());
+        return ResponseEntity.ok(requester);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> logIn(@Valid @RequestBody LoginDto loginRequest) {

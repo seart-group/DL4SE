@@ -1,3 +1,11 @@
+### GET /user
+GET https://localhost:8080/api/user
+Authorization: Bearer {{token}}
+
+### GET /user/{id}
+GET https://localhost:8080/api/user/{{target_user_id}}
+Authorization: Bearer {{token}}
+
 ### POST /user/register
 POST https://localhost:8080/api/user/register
 Content-Type: application/json
@@ -16,7 +24,3 @@ Content-Type: application/json
   "email": "dozren@yahoo.com",
   "password": "Lugano2022"
 }
-
-### GET /user/{id}
-GET https://localhost:8080/api/user/{{target_user_id}}
-Authorization: Bearer {{token}}
