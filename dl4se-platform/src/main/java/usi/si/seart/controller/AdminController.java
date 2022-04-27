@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import usi.si.seart.dto.ConfigurationDto;
 import usi.si.seart.model.Configuration;
+import usi.si.seart.model.task.Task;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.annotation.AdminRestController;
 import usi.si.seart.service.ConfigurationService;
+import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
@@ -30,6 +32,7 @@ import java.util.List;
 public class AdminController {
 
     UserService userService;
+    TaskService taskService;
     ConversionService conversionService;
     ConfigurationService configurationService;
 
@@ -41,6 +44,16 @@ public class AdminController {
         Integer pageSize = configurationService.get("page_size", Integer.class);
         List<User> users = userService.getAll(page, pageSize, column);
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/tasks")
+    public ResponseEntity<?> listTasks(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "submitted") String column
+    ) {
+        Integer pageSize = configurationService.get("page_size", Integer.class);
+        List<Task> tasks = taskService.getAll(page, pageSize, column);
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping("/{id}/enable")

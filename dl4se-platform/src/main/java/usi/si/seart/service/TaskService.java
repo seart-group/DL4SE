@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +49,7 @@ public interface TaskService {
     void forEachNonExpired(Consumer<Task> consumer);
     void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
+    List<Task> getAll(Integer page, Integer pageSize, String column);
     Task getWithUUID(UUID uuid);
     Map<Status, Long> getSummary();
     Map<Status, Long> getSummary(User user);
@@ -145,6 +149,13 @@ public interface TaskService {
                         taskRepository.markForExecution(id);
                         return taskRepository.findById(id);
                     });
+        }
+
+        @Override
+        public List<Task> getAll(Integer page, Integer pageSize, String column) {
+            Sort sort = Sort.by(column).ascending();
+            Pageable pageable = PageRequest.of(page, pageSize, sort);
+            return taskRepository.findAll(pageable).getContent();
         }
 
         @Override

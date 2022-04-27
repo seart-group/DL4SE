@@ -20,7 +20,7 @@ public interface UserService {
 
     User create(User user);
     void update(User user);
-    List<User> getAll(Integer page, Integer size, String column);
+    List<User> getAll(Integer page, Integer pageSize, String column);
     User getWithId(Long id);
     User getWithEmail(String email);
 
