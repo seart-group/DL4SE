@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.InputStreamResource;
@@ -45,12 +44,11 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/task")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @Autowired)
-public class CodeController {
+public class TaskController {
 
     TaskService taskService;
     UserService userService;
