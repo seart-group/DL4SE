@@ -58,7 +58,7 @@ public class TaskController {
 
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
-    public ResponseEntity<?> createTask(
+    public ResponseEntity<?> create(
             @Valid @RequestBody CodeTaskDto codeTaskDto, @AuthenticationPrincipal UserPrincipal principal
     ) {
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
@@ -85,7 +85,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/cancel/{uuid}")
-    public ResponseEntity<?> cancelTask(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
+    public ResponseEntity<?> cancel(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
         Status status = task.getStatus();
@@ -103,7 +103,7 @@ public class TaskController {
 
     @SneakyThrows
     @GetMapping(value = "/download/{uuid}", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<?> downloadTaskResults(
+    public ResponseEntity<?> downloadResults(
             @PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithEmail(principal.getEmail());
