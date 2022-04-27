@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
@@ -30,9 +31,12 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,6 +56,10 @@ public class User {
     @GeneratedValue
     @JsonIgnore
     Long id;
+
+    @NotBlank
+    @Column(unique = true)
+    String uid;
 
     @NotBlank
     @Column(unique = true)
@@ -88,7 +96,11 @@ public class User {
     LocalDateTime registered;
 
     @PrePersist
+    @SneakyThrows
     private void prePersist() {
+        long random = SecureRandom.getInstanceStrong().nextLong();
+        byte[] idBytes = BigInteger.valueOf(random).toByteArray();
+        uid = Base64.getUrlEncoder().withoutPadding().encodeToString(idBytes);
         registered = LocalDateTime.now(ZoneOffset.UTC);
     }
 

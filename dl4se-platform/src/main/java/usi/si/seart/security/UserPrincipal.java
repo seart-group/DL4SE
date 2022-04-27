@@ -22,6 +22,9 @@ public class UserPrincipal implements UserDetails {
     @Getter
     Long id;
 
+    @Getter
+    String uid;
+
     @Getter(onMethod_ = @Override)
     String username;
 
@@ -37,6 +40,7 @@ public class UserPrincipal implements UserDetails {
     public static UserPrincipal of(User user) {
         return UserPrincipal.builder()
                 .id(user.getId())
+                .uid(user.getUid())
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .verified(user.getVerified())

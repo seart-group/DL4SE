@@ -7,6 +7,7 @@ CREATE TABLE "configuration" (
 
 CREATE TABLE "user" (
     "id" bigint PRIMARY KEY NOT NULL,
+    "uid" text UNIQUE NOT NULL,
     "email" text UNIQUE NOT NULL,
     "password" text NOT NULL,
     "verified" boolean NOT NULL,
