@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ConcurrentReferenceHashMap;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.exception.TaskNotFoundException;
 import usi.si.seart.model.task.CodeTask;
@@ -33,6 +34,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -60,6 +63,17 @@ public interface TaskService {
     class TaskServiceImpl implements TaskService {
 
         TaskRepository taskRepository;
+
+        TaskLockMap taskLockMap = new TaskLockMap();
+
+        private static class TaskLockMap {
+
+            private final ConcurrentReferenceHashMap<Long, Lock> taskLocks = new ConcurrentReferenceHashMap<>();
+
+            private Lock getLock(Task task) {
+                return this.taskLocks.compute(task.getId(), (k, v) -> v == null ? new ReentrantLock() : v);
+            }
+        }
 
         @Override
         public boolean canCreateTask(User user, Integer limit) {
@@ -90,21 +104,27 @@ public interface TaskService {
             taskRepository.save(task);
         }
 
-        Object lock = new Object();
-
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public <T extends Task> T update(T task) {
-            synchronized (lock) {
+            Lock taskLock = taskLockMap.getLock(task);
+            try {
+                taskLock.lock();
                 return taskRepository.saveAndFlush(task);
+            } finally {
+                taskLock.unlock();
             }
         }
 
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public <T extends Task> void cancel(T task) {
-            synchronized (lock) {
+            Lock taskLock = taskLockMap.getLock(task);
+            try {
+                taskLock.lock();
                 taskRepository.markForCancellation(task.getId());
+            } finally {
+                taskLock.unlock();
             }
         }
 
