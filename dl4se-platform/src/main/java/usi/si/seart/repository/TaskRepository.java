@@ -38,16 +38,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     )
     void markForCancellation(@Param("id") Long id);
 
-    @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query(
-            value = "UPDATE Task SET " +
-                    "status = usi.si.seart.model.task.Status.EXECUTING, " +
-                    "started = current_timestamp, " +
-                    "version = version + 1 " +
-                    "WHERE id = :id"
-    )
-    void markForExecution(@Param("id") Long id);
-
     Stream<Task> findAllByFinishedLessThanAndExpired(LocalDateTime finished, @NotNull Boolean expired);
 
     Optional<Task> findByUuid(@NotNull UUID uuid);

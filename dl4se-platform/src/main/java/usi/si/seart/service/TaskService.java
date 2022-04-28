@@ -144,10 +144,11 @@ public interface TaskService {
         @Transactional
         public synchronized Optional<Task> getNext() {
             return taskRepository.findFirstByStatusOrderBySubmitted(Status.QUEUED)
-                    .flatMap(task -> {
-                        Long id = task.getId();
-                        taskRepository.markForExecution(id);
-                        return taskRepository.findById(id);
+                    .map(task -> {
+                        task.setStatus(Status.EXECUTING);
+                        if (task.getStarted() == null)
+                            task.setStarted(LocalDateTime.now(ZoneOffset.UTC));
+                        return task;
                     });
         }
 
