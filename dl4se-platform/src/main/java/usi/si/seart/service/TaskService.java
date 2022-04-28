@@ -142,7 +142,7 @@ public interface TaskService {
 
         @Override
         @Transactional
-        public synchronized Optional<Task> getNext() {
+        public Optional<Task> getNext() {
             return taskRepository.findFirstByStatusOrderBySubmitted(Status.QUEUED)
                     .map(task -> {
                         task.setStatus(Status.EXECUTING);

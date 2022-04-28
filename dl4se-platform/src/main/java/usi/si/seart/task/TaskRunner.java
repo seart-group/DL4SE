@@ -63,8 +63,11 @@ public class TaskRunner implements Runnable {
     @Override
     public void run() {
         log.debug("Fetching next task to execute...");
-        Optional<Task> optional = taskService.getNext();
-        optional.ifPresentOrElse(this::run, () -> log.debug("No tasks to execute!"));
+        Optional<Task> next;
+        synchronized (TaskRunner.class) {
+            next = taskService.getNext();
+        }
+        next.ifPresentOrElse(this::run, () -> log.debug("No tasks to execute!"));
     }
 
     private void run(Task task) {
