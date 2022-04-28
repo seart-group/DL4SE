@@ -82,9 +82,8 @@ public abstract class Task {
     @Builder.Default
     Status status = Status.QUEUED;
 
-    // TODO 06.04.22: Add some kind of reference that points to task executor instance
-
     @Version
+    @JsonIgnore
     Long version;
 
     @Column(name = "checkpoint_id")
