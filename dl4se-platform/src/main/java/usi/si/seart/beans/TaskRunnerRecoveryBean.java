@@ -18,7 +18,7 @@ public class TaskRunnerRecoveryBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         Long executingCount = taskService.getSummary().get(Status.EXECUTING);
-        if (executingCount != null) {
+        if (executingCount > 0) {
             log.info("Returning {} interrupted tasks back to queue...", executingCount);
             taskService.forEachExecuting(task -> task.setStatus(Status.QUEUED));
         }

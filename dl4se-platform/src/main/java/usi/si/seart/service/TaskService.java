@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -187,22 +188,22 @@ public interface TaskService {
 
         @Override
         public Map<Status, Long> getSummary() {
-            Supplier<List<Tuple>> countQuery = taskRepository::countAllGroupByStatus;
-            return supplyToMap(countQuery, Status.class, Long.class);
+            return supplyToMap(taskRepository::countAllGroupByStatus);
         }
 
         @Override
         public Map<Status, Long> getSummary(User user) {
-            Supplier<List<Tuple>> userCountQuery = () -> taskRepository.countAllByUserGroupByStatus(user);
-            return supplyToMap(userCountQuery, Status.class, Long.class);
+            return supplyToMap(() -> taskRepository.countAllByUserGroupByStatus(user));
         }
 
-        private <K, V> Map<K, V> supplyToMap(
-                Supplier<List<Tuple>> tupleResultQuery, Class<K> keyType, Class<V> valueType
-        ) {
-            return tupleResultQuery.get().stream()
-                    .map(tuple -> Map.entry(tuple.get(0, keyType), tuple.get(1, valueType)))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        private Map<Status, Long> supplyToMap(Supplier<List<Tuple>> tupleResultQuery) {
+            Stream<Map.Entry<Status, Long>> noResultStream = Stream.of(Status.values())
+                    .map(status -> Map.entry(status, 0L));
+            Stream<Map.Entry<Status, Long>> queryResultStream = tupleResultQuery.get().stream()
+                    .map(tuple -> Map.entry(tuple.get(0, Status.class), tuple.get(1, Long.class)));
+            return Stream.concat(noResultStream, queryResultStream).collect(
+                    Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, TreeMap::new)
+            );
         }
     }
 }
