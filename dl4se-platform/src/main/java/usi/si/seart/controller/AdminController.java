@@ -52,17 +52,17 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/user/enable/{id}")
-    public ResponseEntity<?> enableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
+    @PostMapping("/user/{uid}/enable")
+    public ResponseEntity<?> enableUser(@PathVariable String uid) {
+        User user = userService.getWithUid(uid);
         user.setEnabled(true);
         userService.update(user);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/user/disable/{id}")
-    public ResponseEntity<?> disableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
+    @PostMapping("/user/{uid}/disable")
+    public ResponseEntity<?> disableUser(@PathVariable String uid) {
+        User user = userService.getWithUid(uid);
         user.setEnabled(false);
         userService.update(user);
         return ResponseEntity.ok().build();

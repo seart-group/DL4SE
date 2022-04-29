@@ -6,12 +6,12 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/admin/user/{{target_uid}}
 Authorization: Bearer {{token}}
 
-### POST /admin/user/enable/{id}
-POST https://localhost:8080/api/admin/user/enable/{{target_user_id}}
+### POST /admin/user/{uid}/enable
+POST https://localhost:8080/api/admin/user/{{target_uid}}/enable
 Authorization: Bearer {{token}}
 
-### POST /admin/user/disable/{id}
-POST https://localhost:8080/api/admin/user/disable/{{target_user_id}}
+### POST /admin/user/{uid}/disable
+POST https://localhost:8080/api/admin/user/{{target_uid}}/disable
 Authorization: Bearer {{token}}
 
 ### GET /admin/tasks
