@@ -1,5 +1,13 @@
-### GET /admin/users
-GET https://localhost:8080/api/admin/users
+### GET /admin/user
+GET https://localhost:8080/api/admin/user
+Authorization: Bearer {{token}}
+
+### POST /admin/user/enable/{id}
+POST https://localhost:8080/api/admin/user/enable/{{target_user_id}}
+Authorization: Bearer {{token}}
+
+### POST /admin/user/disable/{id}
+POST https://localhost:8080/api/admin/user/disable/{{target_user_id}}
 Authorization: Bearer {{token}}
 
 ### GET /admin/tasks
@@ -8,14 +16,6 @@ Authorization: Bearer {{token}}
 
 ### GET /admin/stats/tasks
 GET https://localhost:8080/api/admin/stats/tasks
-Authorization: Bearer {{token}}
-
-### POST /admin/{id}/enable
-POST https://localhost:8080/api/admin/{{target_user_id}}/enable
-Authorization: Bearer {{token}}
-
-### POST /admin/{id}/disable
-POST https://localhost:8080/api/admin/{{target_user_id}}/disable
 Authorization: Bearer {{token}}
 
 ### POST /admin/configuration

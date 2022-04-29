@@ -36,7 +36,7 @@ public class AdminController {
     ConversionService conversionService;
     ConfigurationService configurationService;
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public ResponseEntity<?> listUsers(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "registered") String column
@@ -44,6 +44,22 @@ public class AdminController {
         Integer pageSize = configurationService.get("page_size", Integer.class);
         List<User> users = userService.getAll(page, pageSize, column);
         return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/user/enable/{id}")
+    public ResponseEntity<?> enableUser(@PathVariable Long id) {
+        User user = userService.getWithId(id);
+        user.setEnabled(true);
+        userService.update(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/disable/{id}")
+    public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        User user = userService.getWithId(id);
+        user.setEnabled(false);
+        userService.update(user);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/tasks")
@@ -59,22 +75,6 @@ public class AdminController {
     @GetMapping("/stats/tasks")
     public ResponseEntity<?> statsTasks() {
         return ResponseEntity.ok(taskService.getSummary());
-    }
-
-    @PostMapping("/{id}/enable")
-    public ResponseEntity<?> enableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
-        user.setEnabled(true);
-        userService.update(user);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/disable")
-    public ResponseEntity<?> disableUser(@PathVariable Long id) {
-        User user = userService.getWithId(id);
-        user.setEnabled(false);
-        userService.update(user);
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/configuration")

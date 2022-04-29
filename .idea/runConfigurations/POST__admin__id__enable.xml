@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="POST /admin/{id}/enable" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/admin" path="$PROJECT_DIR$/http/AdminController.http" index="2" requestIdentifier="POST /admin/{id}/enable" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>
