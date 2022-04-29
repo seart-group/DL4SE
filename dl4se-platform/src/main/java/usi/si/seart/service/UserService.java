@@ -22,6 +22,7 @@ public interface UserService {
     void update(User user);
     List<User> getAll(Integer page, Integer pageSize, String column);
     User getWithId(Long id);
+    User getWithUid(String uid);
     User getWithEmail(String email);
 
     @Service
@@ -55,6 +56,12 @@ public interface UserService {
         public User getWithId(Long id) {
             return userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException("id", id));
+        }
+
+        @Override
+        public User getWithUid(String uid) {
+            return userRepository.findByUid(uid)
+                    .orElseThrow(() -> new UserNotFoundException("uid", uid));
         }
 
         @Override
