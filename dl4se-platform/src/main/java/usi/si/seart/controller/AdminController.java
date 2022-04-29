@@ -46,6 +46,12 @@ public class AdminController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/user/{uid}")
+    public ResponseEntity<?> getUser(@PathVariable String uid) {
+        User user = userService.getWithUid(uid);
+        return ResponseEntity.ok(user);
+    }
+
     @PostMapping("/user/enable/{id}")
     public ResponseEntity<?> enableUser(@PathVariable Long id) {
         User user = userService.getWithId(id);

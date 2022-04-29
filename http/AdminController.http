@@ -2,6 +2,10 @@
 GET https://localhost:8080/api/admin/user
 Authorization: Bearer {{token}}
 
+### GET /admin/user/{uid}
+GET https://localhost:8080/api/admin/user/{{target_uid}}
+Authorization: Bearer {{token}}
+
 ### POST /admin/user/enable/{id}
 POST https://localhost:8080/api/admin/user/enable/{{target_user_id}}
 Authorization: Bearer {{token}}
