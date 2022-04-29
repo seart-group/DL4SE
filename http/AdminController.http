@@ -14,6 +14,14 @@ Authorization: Bearer {{token}}
 POST https://localhost:8080/api/admin/user/{{target_uid}}/disable
 Authorization: Bearer {{token}}
 
+### POST /admin/user/{uid}/promote
+POST https://localhost:8080/api/admin/user/{{target_uid}}/promote
+Authorization: Bearer {{token}}
+
+### POST /admin/user/{uid}/demote
+POST https://localhost:8080/api/admin/user/{{target_uid}}/demote
+Authorization: Bearer {{token}}
+
 ### GET /admin/tasks
 GET https://localhost:8080/api/admin/tasks
 Authorization: Bearer {{token}}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import usi.si.seart.dto.ConfigurationDto;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
 import usi.si.seart.security.annotation.AdminRestController;
 import usi.si.seart.service.ConfigurationService;
@@ -64,6 +65,22 @@ public class AdminController {
     public ResponseEntity<?> disableUser(@PathVariable String uid) {
         User user = userService.getWithUid(uid);
         user.setEnabled(false);
+        userService.update(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/{uid}/promote")
+    public ResponseEntity<?> promoteUser(@PathVariable String uid) {
+        User user = userService.getWithUid(uid);
+        user.setRole(Role.ADMIN);
+        userService.update(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/{uid}/demote")
+    public ResponseEntity<?> demoteUser(@PathVariable String uid) {
+        User user = userService.getWithUid(uid);
+        user.setRole(Role.USER);
         userService.update(user);
         return ResponseEntity.ok().build();
     }
