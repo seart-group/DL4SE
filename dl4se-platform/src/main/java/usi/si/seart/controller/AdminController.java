@@ -56,6 +56,11 @@ public class AdminController {
         return ResponseEntity.ok(tasks);
     }
 
+    @GetMapping("/stats/tasks")
+    public ResponseEntity<?> statsTasks() {
+        return ResponseEntity.ok(taskService.getSummary());
+    }
+
     @PostMapping("/{id}/enable")
     public ResponseEntity<?> enableUser(@PathVariable Long id) {
         User user = userService.getWithId(id);

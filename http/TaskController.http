@@ -40,11 +40,15 @@ Content-Type: application/json
   }
 }
 
+### POST /task/cancel
+POST https://localhost:8080/api/task/cancel/{{uuid}}
+Authorization: Bearer {{token}}
+
+### GET /task/stats
+GET https://localhost:8080/api/task/stats
+Authorization: Bearer {{token}}
+
 ### GET /task/download
 GET https://localhost:8080/api/task/download/{{uuid}}
 Authorization: Bearer {{token}}
 Content-Type: text/plain
-
-### POST /task/cancel
-POST https://localhost:8080/api/task/cancel/{{uuid}}
-Authorization: Bearer {{token}}

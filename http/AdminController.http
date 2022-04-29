@@ -6,6 +6,10 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/admin/tasks
 Authorization: Bearer {{token}}
 
+### GET /admin/stats/tasks
+GET https://localhost:8080/api/admin/stats/tasks
+Authorization: Bearer {{token}}
+
 ### POST /admin/{id}/enable
 POST https://localhost:8080/api/admin/{{target_user_id}}/enable
 Authorization: Bearer {{token}}
