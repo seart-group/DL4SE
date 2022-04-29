@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.task.CodeTaskDto;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
@@ -55,6 +56,17 @@ public class TaskController {
     FileSystemService fileSystemService;
     ConversionService conversionService;
     ConfigurationService configurationService;
+
+    @GetMapping
+    public ResponseEntity<?> tasks(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "submitted") String column,
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        User requester = userService.getWithId(principal.getId());
+        Integer pageSize = configurationService.get("page_size", Integer.class);
+        return ResponseEntity.ok(taskService.getAll(requester, page, pageSize, column));
+    }
 
     @GetMapping("/stats")
     public ResponseEntity<?> statsTasks(@AuthenticationPrincipal UserPrincipal principal) {

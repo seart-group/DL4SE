@@ -1,5 +1,7 @@
 package usi.si.seart.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +23,8 @@ import java.util.stream.Stream;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findAllByStatus(Status status);
+
+    Page<Task> findAllByUser(User user, Pageable pageable);
 
     Set<Task> findAllByUserAndStatusIn(User user, Collection<Status> status);
 

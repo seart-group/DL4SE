@@ -54,6 +54,7 @@ public interface TaskService {
     void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
     List<Task> getAll(Integer page, Integer pageSize, String column);
+    List<Task> getAll(User user, Integer page, Integer pageSize, String column);
     Task getWithUUID(UUID uuid);
     Map<Status, Long> getSummary();
     Map<Status, Long> getSummary(User user);
@@ -178,6 +179,13 @@ public interface TaskService {
             Sort sort = Sort.by(column).ascending();
             Pageable pageable = PageRequest.of(page, pageSize, sort);
             return taskRepository.findAll(pageable).getContent();
+        }
+
+        @Override
+        public List<Task> getAll(User user, Integer page, Integer pageSize, String column) {
+            Sort sort = Sort.by(column).ascending();
+            Pageable pageable = PageRequest.of(page, pageSize, sort);
+            return taskRepository.findAllByUser(user, pageable).getContent();
         }
 
         @Override
