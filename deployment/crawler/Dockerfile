@@ -13,11 +13,13 @@ COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
 RUN apk update && apk add git
 
-ENTRYPOINT java \
-    -DDATABASE_HOST=$DATABASE_HOST \
-    -DDATABASE_NAME=$DATABASE_NAME \
-    -DDATABASE_PASS=$DATABASE_PASS \
-    -DDATABASE_PORT=$DATABASE_PORT \
-    -DDATABASE_USER=$DATABASE_USER \
-    -Dfile.encoding=UTF-8 \
-    -jar crawler.jar
+ENTRYPOINT while : ; do \
+java -DDATABASE_HOST=$DATABASE_HOST \
+     -DDATABASE_NAME=$DATABASE_NAME \
+     -DDATABASE_PASS=$DATABASE_PASS \
+     -DDATABASE_PORT=$DATABASE_PORT \
+     -DDATABASE_USER=$DATABASE_USER \
+     -Dfile.encoding=UTF-8 \
+     -jar crawler.jar ;\
+[[ $? == 0 ]] || exit $? ;\
+done
