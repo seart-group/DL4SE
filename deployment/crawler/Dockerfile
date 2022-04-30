@@ -21,5 +21,9 @@ java -DDATABASE_HOST=$DATABASE_HOST \
      -DDATABASE_USER=$DATABASE_USER \
      -Dfile.encoding=UTF-8 \
      -jar crawler.jar ;\
-[[ $? == 0 ]] || exit $? ;\
+EXIT_CODE=$? ;\
+if [[ $EXIT_CODE == 0 ]] ;\
+then sleep 6h ;\
+else exit $EXIT_CODE ;\
+fi ;\
 done
