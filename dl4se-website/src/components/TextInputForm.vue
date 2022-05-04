@@ -2,8 +2,10 @@
   <form @submit.prevent.stop>
     <div v-for="input in inputs" :key="input.key">
       <label>{{ input.label }}</label>
+      <sup v-if="input.required">*</sup>
       <input
           :type="input.type"
+          :required="input.required"
           :placeholder="input.placeholder"
           v-model="input.value"
       />
@@ -34,6 +36,7 @@ export default {
         }
       }
 
+      // TODO 04.05.22: Register error/success handlers as props?
       axios.post(this.apiTarget, data, config)
           .then((response) => {
             const token = response.data
@@ -44,6 +47,8 @@ export default {
           })
           .catch((err) => {
             console.log(err)
+            // TODO 04.05.22: handle 400 for improper form inputs
+            // TODO 04.05.22: handle 401 for incorrect username/pass
           })
     }
   }
@@ -65,12 +70,15 @@ label {
   display: block;
 }
 
-label,
 input {
   margin: 10px;
 }
 
 label, input {
   display: inline-block;
+}
+
+sup {
+  color: #721c24;
 }
 </style>

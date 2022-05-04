@@ -24,6 +24,7 @@ export default {
           type: "email",
           key: "email",
           value: "",
+          required: true,
           placeholder: "example@email.com"
         },
         {
@@ -31,6 +32,7 @@ export default {
           type: "password",
           key: "password",
           value: "",
+          required: true,
           placeholder: ""
         }
       ]
