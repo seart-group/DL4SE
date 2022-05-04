@@ -3,6 +3,10 @@ import LogInView from '@/views/LogInView.vue'
 
 const routes = [
   {
+    path: '',
+    redirect: 'login'
+  },
+  {
     path: '/login',
     name: 'login',
     component: LogInView
