@@ -4,6 +4,8 @@
     <text-input-form
         :inputs="inputs"
         :api-target="apiTarget"
+        :success-handler="successHandler"
+        :failure-handler="failureHandler"
     />
   </div>
 </template>
@@ -18,6 +20,26 @@ export default {
   data () {
     return {
       apiTarget: "https://localhost:8080/api/user/login",
+      successHandler: (response) => {
+        const token = response.data
+        this.$store.commit("setToken", token)
+        this.inputs.forEach((input) => { input.value = "" })
+        // TODO 04.05.22: Re-route to user profile
+      },
+      failureHandler: (err) => {
+        const status = err.response.status
+        // TODO 04.05.22: Display popups for errors
+        switch (status) {
+          case 400:
+            console.log("Form data invalid!")
+            break
+          case 401:
+            console.log("Invalid credentials!")
+            break
+          default:
+            console.log("An error has occurred! Status code: " + status)
+        }
+      },
       inputs : [
         {
           label: "Email",

@@ -21,7 +21,9 @@ export default {
   name: "text-input-form",
   props: {
     apiTarget: String,
-    inputs: Array[Object]
+    inputs: Array[Object],
+    successHandler: Function,
+    failureHandler: Function
   },
   methods: {
     postData() {
@@ -36,20 +38,9 @@ export default {
         }
       }
 
-      // TODO 04.05.22: Register error/success handlers as props?
       axios.post(this.apiTarget, data, config)
-          .then((response) => {
-            const token = response.data
-            console.log(token)
-            // TODO 04.05.22: Set the token value in the store
-            // TODO 04.05.22: Re-route to user profile
-            // TODO 04.05.22: Clear Input Values
-          })
-          .catch((err) => {
-            console.log(err)
-            // TODO 04.05.22: handle 400 for improper form inputs
-            // TODO 04.05.22: handle 401 for incorrect username/pass
-          })
+          .then(this.successHandler)
+          .catch(this.failureHandler)
     }
   }
 }
