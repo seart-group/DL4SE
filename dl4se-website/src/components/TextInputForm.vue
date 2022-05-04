@@ -58,7 +58,8 @@ form {
 }
 
 label {
-  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 10%;
   text-align: right;
   display: block;
@@ -66,6 +67,10 @@ label {
 
 label,
 input {
+  margin: 10px;
+}
+
+label, input {
   display: inline-block;
 }
 </style>
