@@ -24,7 +24,7 @@ export default {
         const token = response.data
         this.$store.commit("setToken", token)
         this.inputs.forEach((input) => { input.value = "" })
-        // TODO 04.05.22: Re-route to user profile
+        this.$router.push('/profile')
       },
       failureHandler: (err) => {
         const status = err.response.status
