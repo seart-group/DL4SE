@@ -1,19 +1,28 @@
 <template>
-  <b-form @submit.prevent.stop class="m-4">
-    <b-form-row v-for="(input, idx) in inputs" :key="input.key">
+  <b-form @submit.prevent.stop novalidate class="m-4">
+    <b-form-row
+        v-for="(input, idx) in inputs"
+        :key="input.key"
+    >
       <b-form-group
           :id="input.key"
           :label="input.label"
           :label-for="'input-' + idx"
-          class="mx-auto text-left"
+          class="mx-auto text-left w-25"
       >
         <b-form-input
             :id="'input-' + idx"
             :type="input.type"
-            :required="input.required"
             :placeholder="input.placeholder"
+            :state="input.validator(input.value)"
             v-model="input.value"
         />
+        <b-form-invalid-feedback
+            :state="input.validator(input.value)"
+            v-if="input.validatorMessage"
+        >
+          {{ input.validatorMessage }}
+        </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
     <b-button @click="postData" type="submit">Submit</b-button>

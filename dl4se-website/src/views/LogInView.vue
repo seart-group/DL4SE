@@ -51,17 +51,25 @@ export default {
           label: "Email",
           type: "email",
           key: "email",
-          value: "",
-          required: true,
-          placeholder: "example@email.com"
+          value: null,
+          placeholder: "example@email.com",
+          validator: (value) => {
+            const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
+            return (value === null) ? null : regex.test(value)
+          },
+          validatorMessage: null
         },
         {
           label: "Password",
           type: "password",
           key: "password",
-          value: "",
-          required: true,
-          placeholder: ""
+          value: null,
+          placeholder: "",
+          validator: (value) => {
+            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
+            return (value === null) ? null : regex.test(value)
+          },
+          validatorMessage: null
         }
       ]
     }
