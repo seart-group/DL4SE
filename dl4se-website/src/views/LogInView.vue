@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h1>Log In</h1>
+    <h1 class="m-4">Log In</h1>
     <text-input-form
         :inputs="inputs"
         :api-target="apiTarget"
@@ -17,6 +17,17 @@ export default {
   components: {
     TextInputForm
   },
+  methods: {
+    appendToast(title, message, variant) {
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        toaster: "b-toaster-top-right",
+        autoHideDelay: 4500,
+        appendToast: true
+      })
+    }
+  },
   data () {
     return {
       apiTarget: "https://localhost:8080/api/user/login",
@@ -28,16 +39,16 @@ export default {
       },
       failureHandler: (err) => {
         const status = err.response.status
-        // TODO 04.05.22: Display popups for errors
         switch (status) {
           case 400:
-            console.log("Form data invalid!")
+            this.appendToast("Error", "Invalid form inputs. ", "danger")
             break
           case 401:
-            console.log("Invalid credentials!")
+            this.appendToast("Error", "Invalid login credentials.", "danger")
             break
           default:
-            console.log("An error has occurred! Status code: " + status)
+            this.appendToast("Error", "An unexpected server error has occurred. Please try again later.", "danger")
+            break
         }
       },
       inputs : [
