@@ -1,6 +1,9 @@
-import {createRouter, createWebHistory} from 'vue-router'
-import LogInView from '@/views/LogInView.vue'
-import ProfileView from '@/views/ProfileView.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import LogInView from '@/views/LogInView'
+import ProfileView from '@/views/ProfileView'
+
+Vue.use(VueRouter)
 
 const routes = [
   {
@@ -19,8 +22,9 @@ const routes = [
   }
 ]
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes
 })
 
