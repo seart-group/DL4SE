@@ -12,22 +12,13 @@
 
 <script>
 import TextInputForm from '@/components/TextInputForm';
+import bootstrapMixin from '@/mixins/bootstrapMixin'
 
 export default {
   components: {
     TextInputForm
   },
-  methods: {
-    appendToast(title, message, variant) {
-      this.$bvToast.toast(message, {
-        title: title,
-        variant: variant,
-        toaster: "b-toaster-top-right",
-        autoHideDelay: 4500,
-        appendToast: true
-      })
-    }
-  },
+  mixins: [ bootstrapMixin ],
   data () {
     return {
       apiTarget: "https://localhost:8080/api/user/login",
@@ -39,17 +30,21 @@ export default {
       },
       failureHandler: (err) => {
         const status = err.response.status
+        const title = "Error"
+        const variant = "danger"
+        let message
         switch (status) {
           case 400:
-            this.appendToast("Error", "Invalid form inputs. ", "danger")
+            message = "Invalid form inputs."
             break
           case 401:
-            this.appendToast("Error", "Invalid login credentials.", "danger")
+            message = "Invalid login credentials."
             break
           default:
-            this.appendToast("Error", "An unexpected server error has occurred. Please try again later.", "danger")
+            message = "An unexpected server error has occurred. Please try again later."
             break
         }
+        this.appendToast(title, message, variant)
       },
       inputs : [
         {
