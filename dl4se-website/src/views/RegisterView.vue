@@ -76,9 +76,10 @@ export default {
           value: null,
           placeholder: "",
           validator: (value) => {
-            return (value === null) ? null : value !== ''
+            const regex = /^[^\s-_][\w\s-]*$/
+            return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: "This is a required field."
+          validatorMessage: "This is a required field. Don't leave it blank!"
         }
       ]
     }
