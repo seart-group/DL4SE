@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
 import ProfileView from '@/views/ProfileView'
 import RegisterView from "@/views/RegisterView";
@@ -8,8 +9,9 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '',
-    redirect: 'login'
+    path: '/',
+    name: 'home',
+    component: HomeView
   },
   {
     path: '/login',
