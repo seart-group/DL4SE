@@ -26,7 +26,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
-    <b-button :disabled="submitted" type="submit">Submit</b-button>
+    <b-button :disabled="!canSubmit || submitted" type="submit">Submit</b-button>
   </b-form>
 </template>
 
@@ -40,6 +40,11 @@ export default {
     inputs: Array[Object],
     successHandler: Function,
     failureHandler: Function
+  },
+  computed: {
+    canSubmit: function () {
+      return this.inputs.map(input => !!input.validator(input.value)).reduce((acc, curr) => acc && curr, true)
+    }
   },
   methods: {
     async postData() {
