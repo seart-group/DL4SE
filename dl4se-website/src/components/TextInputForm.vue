@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent.stop novalidate class="m-4">
+  <b-form @submit.prevent.stop="postData" novalidate class="m-4">
     <b-form-row
         v-for="(input, idx) in inputs"
         :key="input.key"
@@ -14,6 +14,7 @@
             :id="'input-' + idx"
             :type="input.type"
             :placeholder="input.placeholder"
+            :disabled="submitted"
             :state="input.validator(input.value)"
             v-model="input.value"
         />
@@ -25,7 +26,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
-    <b-button @click="postData" type="submit">Submit</b-button>
+    <b-button :disabled="submitted" type="submit">Submit</b-button>
   </b-form>
 </template>
 
@@ -41,7 +42,9 @@ export default {
     failureHandler: Function
   },
   methods: {
-    postData() {
+    async postData() {
+      this.submitted = true
+
       const data = {}
       this.inputs.forEach((input) => {
         data[input.key] = input.value
@@ -53,9 +56,16 @@ export default {
         }
       }
 
-      axios.post(this.apiTarget, data, config)
+      await axios.post(this.apiTarget, data, config)
           .then(this.successHandler)
           .catch(this.failureHandler)
+
+      this.submitted = false
+    }
+  },
+  data() {
+    return {
+      submitted: false
     }
   }
 }
