@@ -29,4 +29,9 @@ body {
   text-align: center;
   color: black;
 }
+
+:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
 </style>
