@@ -1,6 +1,6 @@
 <template>
-  <div class="login">
-    <h1 class="m-4">Log In</h1>
+  <div class="register">
+    <h1 class="m-4">Register</h1>
     <text-input-form
         :inputs="inputs"
         :api-target="apiTarget"
@@ -21,12 +21,10 @@ export default {
   mixins: [ bootstrapMixin ],
   data () {
     return {
-      apiTarget: "https://localhost:8080/api/user/login",
-      successHandler: (response) => {
-        const token = response.data
-        this.$store.commit("setToken", token)
+      apiTarget: "https://localhost:8080/api/user/register",
+      successHandler: () => {
         this.inputs.forEach((input) => { input.value = "" })
-        this.$router.push('/profile')
+        this.$router.push('/login')
       },
       failureHandler: (err) => {
         const status = err.response.status
@@ -57,7 +55,7 @@ export default {
             const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: null
+          validatorMessage: "Please provide a valid email address."
         },
         {
           label: "Password",
@@ -69,7 +67,18 @@ export default {
             const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: null
+          validatorMessage: "Password must be 6 to 20 characters long, and contain one uppercase letter and number."
+        },
+        {
+          label: "Organisation",
+          type: "text",
+          key: "organisation",
+          value: null,
+          placeholder: "",
+          validator: (value) => {
+            return (value === null) ? null : value !== ''
+          },
+          validatorMessage: "This is a required field."
         }
       ]
     }

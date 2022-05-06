@@ -1,17 +1,32 @@
 <template>
-  <form @submit.prevent.stop>
-    <div v-for="input in inputs" :key="input.key">
-      <label>{{ input.label }}</label>
-      <sup v-if="input.required">*</sup>
-      <input
-          :type="input.type"
-          :required="input.required"
-          :placeholder="input.placeholder"
-          v-model="input.value"
-      />
-    </div>
-    <button @click="postData" type="submit">Submit</button>
-  </form>
+  <b-form @submit.prevent.stop novalidate class="m-4">
+    <b-form-row
+        v-for="(input, idx) in inputs"
+        :key="input.key"
+    >
+      <b-form-group
+          :id="input.key"
+          :label="input.label"
+          :label-for="'input-' + idx"
+          class="mx-auto text-left w-25"
+      >
+        <b-form-input
+            :id="'input-' + idx"
+            :type="input.type"
+            :placeholder="input.placeholder"
+            :state="input.validator(input.value)"
+            v-model="input.value"
+        />
+        <b-form-invalid-feedback
+            :state="input.validator(input.value)"
+            v-if="input.validatorMessage"
+        >
+          {{ input.validatorMessage }}
+        </b-form-invalid-feedback>
+      </b-form-group>
+    </b-form-row>
+    <b-button @click="postData" type="submit">Submit</b-button>
+  </b-form>
 </template>
 
 <script>
@@ -45,31 +60,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-form {
-  width: 80%;
-  margin: 0 auto;
-}
-
-label {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 10%;
-  text-align: right;
-  display: block;
-}
-
-input {
-  margin: 10px;
-}
-
-label, input {
-  display: inline-block;
-}
-
-sup {
-  color: #721c24;
-}
-</style>
