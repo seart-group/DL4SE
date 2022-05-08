@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="m-4">Welcome to DL4SE!</h1>
+    <h1 class="page-title">Welcome to DL4SE!</h1>
     <b-card-group deck>
       <b-card no-body v-for="(section, idx) in sections" :key="idx">
         <b-card-body>

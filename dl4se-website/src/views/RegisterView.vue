@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <h1 class="m-4">Register</h1>
+    <h1 class="page-title">Register</h1>
     <text-input-form
         :inputs="inputs"
         :api-target="apiTarget"

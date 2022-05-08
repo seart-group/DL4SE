@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h1 class="m-4">Log In</h1>
+    <h1 class="page-title">Log In</h1>
     <text-input-form
         :inputs="inputs"
         :api-target="apiTarget"

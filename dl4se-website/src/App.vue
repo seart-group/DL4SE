@@ -22,6 +22,11 @@ body {
   min-height: 100vh;
 }
 
+.page-title {
+  text-align: center;
+  margin: 1.5rem;
+}
+
 #app {
   font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
