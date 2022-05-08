@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent.stop="postData" novalidate class="m-4">
+  <b-form @submit.prevent.stop="postData" novalidate class="m-4 text-center">
     <b-form-row
         v-for="(input, idx) in inputs"
         :key="input.key"
