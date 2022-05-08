@@ -24,7 +24,7 @@ body {
 
 .page-title {
   text-align: center;
-  margin: 1.5rem;
+  margin: 3rem;
 }
 
 #app {

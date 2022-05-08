@@ -4,7 +4,7 @@
     <div class="card-stack">
       <b-card
           v-for="(section, idx) in sections" :key="idx"
-          no-body bg-variant="light" :class="{ 'mb-4': idx < sections.length - 1 }"
+          no-body bg-variant="light" :class="{ 'mb-5': idx < sections.length - 1 }"
       >
         <b-card-body>
           <b-link :to="section.linksTo" class="text-secondary">
@@ -45,7 +45,7 @@ export default {
 
 <style scoped>
 .card-stack {
-  margin: 1.5rem;
+  margin: 3rem;
   display: flex;
   flex-flow: column wrap;
   align-content: center;
