@@ -7,7 +7,7 @@
           no-body bg-variant="light" :class="{ 'mb-4': idx < sections.length - 1 }"
       >
         <b-card-body>
-          <b-link :to="section.linksTo">
+          <b-link :to="section.linksTo" class="text-secondary">
             <h4 class="card-title">{{ section.title }}</h4>
           </b-link>
           <p class="card-text">{{ section.description }}</p>
