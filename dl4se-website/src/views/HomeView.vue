@@ -1,8 +1,11 @@
 <template>
   <div class="home">
     <h1 class="page-title">Welcome to DL4SE!</h1>
-    <b-card-group deck>
-      <b-card no-body v-for="(section, idx) in sections" :key="idx">
+    <div class="card-stack">
+      <b-card
+          v-for="(section, idx) in sections" :key="idx"
+          no-body bg-variant="light" :class="{ 'mb-4': idx < sections.length - 1 }"
+      >
         <b-card-body>
           <b-link :to="section.linksTo">
             <h4 class="card-title">{{ section.title }}</h4>
@@ -10,7 +13,7 @@
           <p class="card-text">{{ section.description }}</p>
         </b-card-body>
       </b-card>
-    </b-card-group>
+    </div>
   </div>
 </template>
 
@@ -39,3 +42,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.card-stack {
+  margin: 1.5rem;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: center;
+}
+</style>
