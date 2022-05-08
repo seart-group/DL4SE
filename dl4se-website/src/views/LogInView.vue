@@ -19,6 +19,10 @@ export default {
     TextInputForm
   },
   mixins: [ bootstrapMixin ],
+  created() {
+    const token = this.$store.getters.getToken
+    if (token) this.$router.push('/profile')
+  },
   data () {
     return {
       apiTarget: "https://localhost:8080/api/user/login",
