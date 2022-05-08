@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div id="login">
     <h1 class="page-title">Log In</h1>
     <text-input-form
         :inputs="inputs"

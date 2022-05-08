@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div id="home">
     <h1 class="page-title">Welcome to DL4SE!</h1>
     <div class="card-stack">
       <b-card
