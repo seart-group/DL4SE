@@ -10,7 +10,7 @@ const vuexLocal = new VuexPersistence({
 
 export default new Vuex.Store({
   state: {
-    token: ""
+    token: null
   },
   getters: {
     getToken(state) {
@@ -21,8 +21,8 @@ export default new Vuex.Store({
     setToken(state, value) {
       state.token = value
     },
-    clearToken(state) {
-      state.token = ""
+    clearToken() {
+      window.localStorage.clear()
     }
   },
   actions: {
