@@ -1,6 +1,7 @@
 package usi.si.seart.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -27,10 +28,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public void handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error("Integrity constraint violation: {}", ex.getMessage());
         log.trace("", ex);
+        Throwable cause = ex.getCause();
+        if (cause instanceof ConstraintViolationException) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @ExceptionHandler(DataAccessException.class)
