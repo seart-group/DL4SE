@@ -34,18 +34,24 @@ export default {
       },
       failureHandler: (err) => {
         const status = err.response.status
-        const title = "Error"
-        const variant = "danger"
+        let title
         let message
+        let variant
         switch (status) {
           case 400:
+            title = "Form Error"
             message = "Invalid form inputs."
+            variant = "warning"
             break
           case 401:
+            title = "Form Error"
             message = "Invalid login credentials."
+            variant = "warning"
             break
           default:
+            title = "Server Error"
             message = "An unexpected server error has occurred. Please try again later."
+            variant = "danger"
             break
         }
         this.appendToast(title, message, variant)
