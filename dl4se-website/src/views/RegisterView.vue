@@ -24,7 +24,13 @@ export default {
       apiTarget: "https://localhost:8080/api/user/register",
       successHandler: () => {
         this.inputs.forEach((input) => { input.value = "" })
-        this.$router.push('/login')
+        this.$router.push('/').then(() => {
+          this.appendToast(
+              "Account Created",
+              "Your account has been created. We have sent you a verification link. Please check your email.",
+              "secondary"
+          )
+        })
       },
       failureHandler: (err) => {
         const status = err.response.status
