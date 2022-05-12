@@ -38,4 +38,8 @@ body {
   cursor: not-allowed;
   pointer-events: all !important;
 }
+
+[v-cloak] {
+  display: none;
+}
 </style>
