@@ -1,12 +1,14 @@
 package usi.si.seart.controller;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.UserDto;
 import usi.si.seart.model.user.User;
@@ -33,12 +36,13 @@ import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
 
 import javax.validation.Valid;
+import java.net.MalformedURLException;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@AllArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserController {
 
     AuthenticationManager authenticationManager;
@@ -49,6 +53,10 @@ public class UserController {
     VerificationService verificationService;
     EmailService emailService;
     ConversionService conversionService;
+
+    @NonFinal
+    @Value("${frontend.url}")
+    String frontendUrl;
 
     @GetMapping
     public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
@@ -81,9 +89,7 @@ public class UserController {
     public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto) {
         User created = userService.create(conversionService.convert(userDto, User.class));
         Token token = verificationService.generate(created);
-        String link = WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(UserController.class).verify(token.getValue())
-        ).toString();
+        String link = getVerificationURL(token);
         emailService.sendVerificationEmail(userDto.getEmail(), link);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -97,10 +103,18 @@ public class UserController {
     @GetMapping("/verify/resend")
     public ResponseEntity<?> resendVerification(@RequestParam String token) {
         Token refreshed = verificationService.refresh(token);
-        String link = WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(UserController.class).verify(refreshed.getValue())
-        ).toString();
+        String link = getVerificationURL(refreshed);
         emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
         return ResponseEntity.ok().build();
+    }
+
+    @SneakyThrows({MalformedURLException.class})
+    private String getVerificationURL(Token token) {
+        return UriComponentsBuilder.fromHttpUrl(frontendUrl)
+                .path("/verify/" + token.getValue())
+                .build()
+                .toUri()
+                .toURL()
+                .toString();
     }
 }
