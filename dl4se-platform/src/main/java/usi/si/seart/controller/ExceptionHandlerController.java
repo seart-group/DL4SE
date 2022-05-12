@@ -4,14 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import usi.si.seart.exception.EntityNotFoundException;
 import usi.si.seart.exception.TokenExpiredException;
@@ -49,16 +47,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public void handleEntityNotFoundException(EntityNotFoundException ex) {
-        log.debug(ex.getMessage());
+        log.debug("Entity not found: {}", ex.getMessage());
+        log.trace("", ex);
     }
 
     @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<?> handleTokenExpiredException(TokenExpiredException ex, WebRequest request) {
-        log.debug(ex.getMessage());
-        String tokenValue = request.getParameter("token");
-        String link = WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(UserController.class).resendVerification(tokenValue)
-        ).toString();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(link);
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    public void handleTokenExpiredException(TokenExpiredException ex) {
+        log.debug("Verification exception: {}", ex.getMessage());
+        log.trace("", ex);
     }
 }
