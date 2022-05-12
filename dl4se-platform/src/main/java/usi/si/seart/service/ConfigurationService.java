@@ -3,9 +3,7 @@ package usi.si.seart.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
@@ -34,9 +32,7 @@ public interface ConfigurationService {
         ConfigurationRepository configurationRepository;
         ConfigurableEnvironment configurableEnvironment;
 
-        @NonFinal
-        @Value("${environment.name}")
-        String environmentName;
+        String environmentName = "dl4seEnvironment";
 
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         Lock readLock = readWriteLock.readLock();
