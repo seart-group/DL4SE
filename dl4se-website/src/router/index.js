@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
 import ProfileView from '@/views/ProfileView'
 import RegisterView from "@/views/RegisterView";
+import VerifyView from "@/views/VerifyView";
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,12 @@ const routes = [
     path: '/register',
     name: 'register',
     component: RegisterView
+  },
+  {
+    path: '/verify/:token',
+    name: 'verify',
+    component: VerifyView,
+    props: true
   },
   {
     path: '/profile',
