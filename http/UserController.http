@@ -2,6 +2,10 @@
 GET https://localhost:8080/api/user
 Authorization: Bearer {{token}}
 
+### GET /user/{uid}
+GET https://localhost:8080/api/user/{{target_uid}}
+Authorization: Bearer {{token}}
+
 ### POST /user/register
 POST https://localhost:8080/api/user/register
 Content-Type: application/json
