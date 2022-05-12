@@ -3,9 +3,9 @@
     <h1 class="page-title">Log In</h1>
     <text-input-form
         :inputs="inputs"
-        :api-target="apiTarget"
-        :success-handler="successHandler"
-        :failure-handler="failureHandler"
+        :api-target="loginTarget"
+        :success-handler="loginSuccess"
+        :failure-handler="loginFailure"
     />
   </div>
 </template>
@@ -25,14 +25,14 @@ export default {
   },
   data () {
     return {
-      apiTarget: "https://localhost:8080/api/user/login",
-      successHandler: (response) => {
+      loginTarget: "https://localhost:8080/api/user/login",
+      loginSuccess: (response) => {
         const token = response.data
         this.$store.commit("setToken", token)
         this.inputs.forEach((input) => { input.value = "" })
         this.$router.push('/profile')
       },
-      failureHandler: (err) => {
+      loginFailure: (err) => {
         const status = err.response.status
         let title
         let message
