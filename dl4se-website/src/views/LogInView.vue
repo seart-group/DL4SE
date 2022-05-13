@@ -1,5 +1,5 @@
 <template>
-  <div id="login">
+  <div id="login" v-cloak v-if="showHtml">
     <h1 class="page-title">Log In</h1>
     <text-input-form
         :inputs="inputs"
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import axios from "axios"
 import TextInputForm from '@/components/TextInputForm';
 import bootstrapMixin from '@/mixins/bootstrapMixin'
 
@@ -20,17 +21,42 @@ export default {
   },
   mixins: [ bootstrapMixin ],
   created() {
-    const token = this.$store.getters.getToken
-    if (token) this.$router.push('/profile')
+    this.getUserDetails()
+  },
+  methods: {
+    async getUserDetails() {
+      const token = this.$store.getters.getToken
+
+      if (!token) {
+        this.showHtml = true
+        return
+      }
+
+      const config = {
+        headers : {
+          'authorization': token
+        }
+      }
+      await axios.get(this.checkTarget, config).then(this.checkSuccess).catch(this.checkFailure)
+    }
   },
   data () {
     return {
+      showHtml: false,
+      checkTarget: "https://localhost:8080/api/user",
+      checkSuccess: (response) => {
+        const uid = response.data.uid
+        this.$router.push('/profile/' + uid)
+      },
+      checkFailure: () => {
+        this.$store.commit("clearToken")
+        this.showHtml = true
+      },
       loginTarget: "https://localhost:8080/api/user/login",
       loginSuccess: (response) => {
         const token = response.data
         this.$store.commit("setToken", token)
-        this.inputs.forEach((input) => { input.value = "" })
-        this.$router.push('/profile')
+        this.getUserDetails()
       },
       loginFailure: (err) => {
         const status = err.response.status

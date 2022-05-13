@@ -31,9 +31,10 @@ const routes = [
     props: true
   },
   {
-    path: '/profile',
+    path: '/profile/:uid',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
+    props: true
   }
 ]
 
