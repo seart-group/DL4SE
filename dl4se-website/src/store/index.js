@@ -21,8 +21,8 @@ export default new Vuex.Store({
     setToken(state, value) {
       state.token = value
     },
-    clearToken() {
-      window.localStorage.clear()
+    clearToken(state) {
+      state.token = null
     }
   },
   actions: {
