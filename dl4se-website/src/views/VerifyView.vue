@@ -28,7 +28,9 @@ import axios from "axios"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
 
 export default {
-  props: ['token'],
+  props: {
+    token: String
+  },
   mixins: [ bootstrapMixin ],
   async created() {
     await this.apiCall(this.verifyLink, this.verifySuccess, this.verifyError)
@@ -67,30 +69,33 @@ export default {
       },
       verifyError: (err) => {
         const status = err.response.status
+        let title
+        let message
+        let variant
+        let action
         switch (status) {
           case 403:
-            this.showHtml = true
+            action = () => { this.showHtml = true }
             break
           case 404:
-            this.returnHomeAndToast(
-                "Invalid Token",
-                "The specified token does not exist. Check the link for errors and try again.",
-                "warning"
-            )
+            title = "Invalid Token"
+            message = "The specified token does not exist. Check the link for errors and try again."
+            variant = "warning"
+            action = () => { this.returnHomeAndToast(title, message, variant) }
             break
           default:
-            this.returnHomeAndToast(
-                "Server Error",
-                "An unexpected server error has occurred. Please try again later.",
-                "danger"
-            )
+            title = "Server Error"
+            message = "An unexpected server error has occurred. Please try again later."
+            variant = "danger"
+            action = () => { this.returnHomeAndToast(title, message, variant) }
             break
         }
+        action()
       },
       resendSuccess: () => {
         this.returnHomeAndToast(
             "Token Resent",
-            "We have sent you a new verification token. Please check your email.",
+            "We have sent you a new verification link. Please check your email.",
             "secondary"
         )
       },
