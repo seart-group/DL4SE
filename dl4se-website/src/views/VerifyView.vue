@@ -34,11 +34,6 @@ export default {
     await this.apiCall(this.verifyLink, this.verifySuccess, this.verifyError)
   },
   methods: {
-    returnHomeAndToast(title, message, variant) {
-      this.$router.push("/").then(() => {
-        this.appendToast(title, message, variant)
-      })
-    },
     async apiCall(link, successHandler, errorHandler) {
       const config = {
         params: {

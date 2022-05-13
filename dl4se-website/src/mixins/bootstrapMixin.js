@@ -8,6 +8,11 @@ export default {
                 autoHideDelay: 4500,
                 appendToast: true
             })
+        },
+        returnHomeAndToast(title, message, variant) {
+            this.$router.push("/").then(() => {
+                this.appendToast(title, message, variant)
+            })
         }
     }
 }
