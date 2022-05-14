@@ -5,6 +5,7 @@ import LogInView from '@/views/LogInView'
 import ProfileView from '@/views/ProfileView'
 import RegisterView from "@/views/RegisterView";
 import VerifyView from "@/views/VerifyView";
+import NotFoundView from "@/views/NotFoundView";
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,10 @@ const routes = [
     name: 'profile',
     component: ProfileView,
     props: true
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: NotFoundView
   }
 ]
 
