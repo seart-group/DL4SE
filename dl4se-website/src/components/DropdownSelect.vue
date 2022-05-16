@@ -1,5 +1,9 @@
 <template>
-  <b-dropdown :style="{ minWidth: dMinWidth + 'em', maxWidth: '100%' }" no-caret>
+  <b-dropdown :style="{ minWidth: dMinWidth + 'em', maxWidth: '100%' }"
+              toggle-class="border-left-0 border-top-0 border-right-0 rounded-0"
+              menu-class="rounded-0"
+              no-caret
+  >
     <template #button-content>
       {{ selected }} <b-icon-chevron-down />
     </template>
@@ -30,3 +34,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  .b-dropdown > button, .b-dropdown > button:active {
+    color: #6c757d!important;
+    background-color: #e6e6e6!important;
+  }
+
+  .b-dropdown > button:hover, .b-dropdown > ul > li > a:active {
+    color: white!important;
+    background-color: #6c757d!important;
+  }
+</style>
