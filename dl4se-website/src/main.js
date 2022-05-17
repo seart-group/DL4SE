@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@/assets/styles/borders.css'
 
 Vue.config.productionTip = false
 
