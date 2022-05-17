@@ -26,7 +26,12 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
-    <b-button :disabled="!canSubmit || submitted" type="submit">Submit</b-button>
+    <b-button type="submit"
+              :disabled="!canSubmit || submitted"
+              class="btn btn-secondary border-dark border-2 text-center"
+    >
+      Submit
+    </b-button>
   </b-form>
 </template>
 
