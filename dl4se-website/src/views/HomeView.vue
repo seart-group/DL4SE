@@ -3,14 +3,14 @@
     <h1 class="page-title">Welcome to DL4SE!</h1>
     <div class="card-stack">
       <b-card
-          v-for="(section, idx) in sections" :key="idx"
-          no-body bg-variant="light" :class="{ 'mb-5': idx < sections.length - 1 }"
+          v-for="(card, idx) in cards" :key="idx"
+          no-body :class="cardClasses(idx)"
       >
         <b-card-body>
-          <b-link :to="section.linksTo" class="text-secondary">
-            <h4 class="card-title">{{ section.title }}</h4>
+          <b-link :to="card.linksTo" class="text-secondary">
+            <h4 class="card-title">{{ card.title }}</h4>
           </b-link>
-          <p class="card-text">{{ section.description }}</p>
+          <p class="card-text">{{ card.description }}</p>
         </b-card-body>
       </b-card>
     </div>
@@ -19,9 +19,20 @@
 
 <script>
 export default {
+  methods: {
+    cardClasses(idx) {
+      return {
+        'mt-4': idx > 0,
+        'mb-4': idx < this.cards.length - 1,
+        'border': true,
+        'rounded-0': true,
+        'card-background': true
+      }
+    }
+  },
   data() {
     return {
-      sections: [
+      cards: [
         {
           title: "Log In",
           description: "Start generating datasets for your models in just a few clicks!",
@@ -43,11 +54,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .card-stack {
   margin: 3rem;
   display: flex;
   flex-flow: column wrap;
   align-content: center;
+}
+
+.card-background {
+  background-color: #f2f2f2ee!important;
 }
 </style>
