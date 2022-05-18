@@ -8,18 +8,16 @@
            class="form-control input-number bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
     />
     <span class="input-group-btn input-group-btn-vertical">
-      <button type="button"
-              @click="increment"
+      <b-button type="button" @click="increment"
               class="btn bg-light-gray btn-outline-secondary rounded-0 border-0"
       >
         <b-icon-chevron-up :scale="scale" />
-      </button>
-      <button type="button"
-              @click="decrement"
+      </b-button>
+      <b-button type="button" @click="decrement"
               class="btn bg-light-gray btn-outline-secondary rounded-0 border-secondary border-left-0 border-top-0 border-right-0 position-absolute"
       >
         <b-icon-chevron-down :scale="scale" />
-      </button>
+      </b-button>
     </span>
   </div>
 </template>
