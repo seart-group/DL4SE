@@ -74,7 +74,7 @@ export default {
 
 input {
   min-height: 42px;
-  max-width: 140px;
+  max-width: 100px;
 }
 
 input:focus {
