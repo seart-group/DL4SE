@@ -1,11 +1,8 @@
 <template>
   <div class="input-group">
-    <input type="number"
-           :id="id" :name="name"
-           :placeholder="placeholder"
-           v-model.number="count"
-           :min="min" :max="max"
-           class="form-control input-number bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
+    <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
+             v-model.number="count" :min="min" :max="max" @input="setCount"
+             class="form-control input-number bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
     />
     <span class="input-group-btn input-group-btn-vertical">
       <b-button type="button" @click="increment"
@@ -45,6 +42,13 @@ export default {
     placeholder: String
   },
   methods: {
+    toNumberOrNull(value) {
+      let parsed = parseFloat(value)
+      return (isNaN(parsed)) ? null : parsed
+    },
+    setCount(value) {
+      this.count = this.toNumberOrNull(value)
+    },
     increment() {
       if (this.count !== null && this.count < this.max) this.count += 1
       else this.count = 0
@@ -56,7 +60,7 @@ export default {
   },
   watch: {
     count() {
-      this.$emit('input', this.count)
+      this.$emit('input', this.toNumberOrNull(this.count))
     }
   },
   data() {
