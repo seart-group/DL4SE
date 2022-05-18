@@ -5,7 +5,6 @@
            :placeholder="placeholder"
            v-model.number="count"
            :min="min" :max="max"
-           @input="handleInput"
            class="form-control input-number bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
     />
     <span class="input-group-btn input-group-btn-vertical">
@@ -51,14 +50,14 @@ export default {
     increment() {
       if (this.count !== null && this.count < this.max) this.count += 1
       else this.count = 0
-      this.$emit('input', this.count)
     },
     decrement() {
       if (this.count !== null && this.count > this.min) this.count -= 1
       else this.count = 0
-      this.$emit('input', this.count)
-    },
-    handleInput() {
+    }
+  },
+  watch: {
+    count() {
       this.$emit('input', this.count)
     }
   },
