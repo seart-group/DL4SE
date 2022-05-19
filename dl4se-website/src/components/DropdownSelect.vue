@@ -1,12 +1,11 @@
 <template>
   <b-dropdown no-caret toggle-class="dropdown-toggle-btn" menu-class="rounded-0">
     <template #button-content>
-      {{ selected }} <b-icon-chevron-down />
+      {{ selected }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
     <b-dropdown-item v-for="option in options"
-                     :key="option"
-                     :value="option"
+                     :key="option" :value="option"
                      @click="setValue(option)"
     >
       {{ option }}
