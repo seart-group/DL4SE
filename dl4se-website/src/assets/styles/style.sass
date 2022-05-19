@@ -40,6 +40,24 @@ input:focus, .form-control:focus
 .card-background
   background-color: #f2f2f2ee
 
+.counter-btn
+  @extend .btn
+  @extend .bg-light-gray
+  @extend .btn-outline-secondary
+  @extend .rounded-0
+
+.counter-btn-top
+  @extend .counter-btn
+  @extend .border-0
+
+.counter-btn-bottom
+  @extend .counter-btn
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .position-absolute
+
 .dropdown-toggle, .dropdown-toggle:focus
   color: $normal-gray
   background-color: $light-gray
