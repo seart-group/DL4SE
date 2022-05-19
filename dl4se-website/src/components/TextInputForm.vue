@@ -17,6 +17,7 @@
             :disabled="submitted"
             :state="input.validator(input.value)"
             v-model="input.value"
+            class="form-control bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
         />
         <b-form-invalid-feedback
             :state="input.validator(input.value)"
@@ -80,3 +81,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.bg-light-gray {
+  background-color: #e6e6e6;
+}
+
+input:focus {
+  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
+}
+</style>
