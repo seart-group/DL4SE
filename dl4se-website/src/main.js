@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/styles/borders.css'
 import '@/assets/styles/bootstrap-override.css'
+import '@/assets/styles/override/validation.css'
 
 Vue.config.productionTip = false
 

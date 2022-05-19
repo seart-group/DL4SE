@@ -1,0 +1,29 @@
+.valid-feedback,
+.invalid-feedback
+{
+    color: #343a40;
+}
+
+.was-validated .form-control:valid:focus,
+.was-validated .form-control:invalid:focus,
+.form-control.is-valid:focus,
+.form-control.is-invalid:focus
+{
+    box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-control:valid,
+.form-control.is-invalid,
+.form-control.is-valid
+{
+    background-position: right calc(0.375em + 0.1875rem) center;
+}
+
+.was-validated .form-control:valid, .form-control.is-valid {
+    background-image: url('@/assets/img/icomoon/checkmark.svg');
+}
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+    background-image: url('@/assets/img/icomoon/cross.svg');
+}
