@@ -1,12 +1,14 @@
 <template>
-  <b-dropdown no-caret toggle-class="dropdown-toggle-btn" menu-class="rounded-0">
+  <b-dropdown :id="id" :name="name"
+              no-caret toggle-class="dropdown-toggle-btn" menu-class="rounded-0"
+  >
     <template #button-content>
-      {{ selected }}
+      {{ (selected) ? selected : notSelected }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
     <b-dropdown-item v-for="option in options"
                      :key="option" :value="option"
-                     @click="setValue(option)"
+                     @click="selected = option"
     >
       {{ option }}
     </b-dropdown-item>
@@ -17,10 +19,25 @@
 export default {
   name: "b-dropdown-select",
   props: {
-    header: String,
-    selected: String,
-    options: Array[String],
-    setValue: Function
+    id: String,
+    name: String,
+    value: String,
+    notSelected: String,
+    header: {
+      type: String,
+      default: "Choose an option"
+    },
+    options: Array[String]
+  },
+  watch: {
+    selected() {
+      this.$emit('input', this.selected)
+    }
+  },
+  data() {
+    return {
+      selected: this.value
+    }
   }
 }
 </script>
