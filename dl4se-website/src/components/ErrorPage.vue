@@ -4,7 +4,7 @@
     <h3 class="m-5 px-5" v-if="description">
       {{ description }}
     </h3>
-    <b-button to="/"><b-icon-house-door /> Home</b-button>
+    <b-button to="/" class="btn btn-secondary border-dark border-2 text-center"><b-icon-house-door /> Home</b-button>
   </div>
 </template>
 
