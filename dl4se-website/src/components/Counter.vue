@@ -84,27 +84,9 @@ input {
   max-width: 100px;
 }
 
-input:focus {
-  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
 .btn-outline-secondary:focus, .btn-outline-secondary.focus {
   box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
   z-index: 1;
-}
-
-.bg-light-gray {
-  background-color: #e6e6e6;
 }
 
 .input-group-btn-vertical {

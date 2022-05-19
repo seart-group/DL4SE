@@ -8,7 +8,7 @@
           :id="input.key"
           :label="input.label"
           :label-for="'input-' + idx"
-          class="mx-auto text-left w-25"
+          class="text-input-group"
       >
         <b-form-input
             :id="'input-' + idx"
@@ -17,7 +17,7 @@
             :disabled="submitted"
             :state="input.validator(input.value)"
             v-model="input.value"
-            class="form-control bg-light-gray rounded-0 border-secondary border-left-0 border-top-0 border-right-0"
+            class="text-input-field"
         />
         <b-form-invalid-feedback
             :state="input.validator(input.value)"
@@ -27,10 +27,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
-    <b-button type="submit"
-              :disabled="!canSubmit || submitted"
-              class="btn btn-secondary border-dark border-2 text-center"
-    >
+    <b-button type="submit" :disabled="!canSubmit || submitted" class="action-btn">
       Submit
     </b-button>
   </b-form>
@@ -81,13 +78,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.bg-light-gray {
-  background-color: #e6e6e6;
-}
-
-input:focus {
-  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
-}
-</style>

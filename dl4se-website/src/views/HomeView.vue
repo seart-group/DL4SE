@@ -61,8 +61,4 @@ export default {
   flex-flow: column wrap;
   align-content: center;
 }
-
-.card-background {
-  background-color: #f2f2f2ee!important;
-}
 </style>

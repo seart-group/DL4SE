@@ -1,0 +1,67 @@
+@import 'node_modules/bootstrap/scss/bootstrap'
+
+$light-gray: #e6e6e6
+$normal-gray: #6c757d
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button
+  -webkit-appearance: none
+  margin: 0
+
+input[type=number]
+  -moz-appearance: textfield
+
+input:focus, .form-control:focus
+  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%)
+
+@each $size in 2, 3, 4, 5
+  .border-#{$size}
+    border-width: $size+px
+
+.bg-light-gray
+  background-color: $light-gray
+
+.dropdown-toggle-btn
+  min-width: 120px
+  max-width: 100%
+  @extend .text-left
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
+
+.action-btn
+  @extend .btn
+  @extend .btn-secondary
+  @extend .border-2
+  @extend .border-dark
+  @extend .text-center
+
+.card-background
+  background-color: #f2f2f2ee
+
+.dropdown-toggle, .dropdown-toggle:focus
+  color: $normal-gray
+  background-color: $light-gray
+
+.dropdown-toggle:hover
+  color: white
+  background-color: $normal-gray
+
+.dropdown-item:active, .dropdown-item.active
+  color: white
+  background-color: $normal-gray
+
+.text-input-group
+  @extend .w-25
+  @extend .mx-auto
+  @extend .text-left
+
+.text-input-field
+  @extend .form-control
+  @extend .bg-light-gray
+  @extend .rounded-0
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
