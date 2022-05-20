@@ -41,6 +41,9 @@ input:focus, .form-control:focus
 .counter-btn:focus, .counter-btn.focus
   z-index: 1
 
+.counter-btn:focus:not(:hover), .counter-btn.focus:not(:hover)
+  @extend .bg-light-gray
+
 .counter-btn-top
   @extend .counter-btn
   @extend .border-0
