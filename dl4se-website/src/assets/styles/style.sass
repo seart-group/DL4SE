@@ -82,6 +82,20 @@ input:focus, .form-control:focus
   color: white
   background-color: $normal-gray
 
+.input-group-btn-vertical
+  @extend .position-relative
+  @extend .d-table-cell
+  @extend .text-nowrap
+  @extend .align-middle
+
+.input-group-btn-vertical > .btn
+  padding: 10px 10px
+  @extend .w-100
+  @extend .h-50
+  @extend .position-relative
+  @extend .d-block
+  @extend .float-none
+
 .text-input-group
   @extend .w-25
   @extend .mx-auto

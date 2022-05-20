@@ -74,23 +74,6 @@ export default {
 </script>
 
 <style scoped>
-.input-group-btn-vertical {
-  position: relative;
-  white-space: nowrap;
-  vertical-align: middle;
-  display: table-cell;
-}
-
-.input-group-btn-vertical > .btn {
-  display: block;
-  float: none;
-  width: 100%;
-  max-width: 100%;
-  height: 50%;
-  padding: 10px 10px;
-  position: relative;
-}
-
 .input-group-btn-vertical > button > svg {
   position: absolute;
   top: 0;
