@@ -45,11 +45,17 @@ input:focus, .form-control:focus
   @extend .bg-light-gray
 
 .counter-btn-top
+  @include fixed-width(20)
+  @include fixed-height(20)
   @extend .counter-btn
+  @extend .p-0
   @extend .border-0
 
 .counter-btn-bottom
+  @include fixed-width(20)
+  @include fixed-height(19)
   @extend .counter-btn
+  @extend .p-0
   @extend .border-secondary
   @extend .border-left-0
   @extend .border-top-0
@@ -85,7 +91,7 @@ input:focus, .form-control:focus
 
 .dropdown-toggle-btn
   @include fixed-width(120)
-  @include fixed-height(42)
+  @include fixed-height(40)
   padding-right: calc(1.5em + 0.75rem)
   background-position: right calc(0.375em + 0.1875rem) center
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)
@@ -111,7 +117,6 @@ input:focus, .form-control:focus
   @extend .align-middle
 
 .input-group-btn-vertical > .btn
-  padding: 10px 10px
   @extend .w-100
   @extend .h-50
   @extend .position-relative
@@ -134,5 +139,5 @@ input:focus, .form-control:focus
 
 .text-input-field-sm
   @include fixed-width(100)
-  @include fixed-height(42)
+  @include fixed-height(39)
   @extend .text-input-field

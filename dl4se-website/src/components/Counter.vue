@@ -5,12 +5,8 @@
              class="text-input-field-sm"
     />
     <span class="input-group-btn-vertical">
-      <b-button type="button" @click="increment" class="counter-btn-top">
-        <b-icon-chevron-up :scale="scale" />
-      </b-button>
-      <b-button type="button" @click="decrement" class="counter-btn-bottom">
-        <b-icon-chevron-down :scale="scale" />
-      </b-button>
+      <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
+      <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" />
     </span>
   </div>
 </template>
@@ -66,17 +62,8 @@ export default {
   },
   data() {
     return {
-      count: this.value,
-      scale: 0.6
+      count: this.value
     }
   }
 }
 </script>
-
-<style scoped>
-.input-group-btn-vertical > button > svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-</style>
