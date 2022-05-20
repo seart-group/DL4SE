@@ -56,6 +56,25 @@ input:focus, .form-control:focus
   @extend .border-right-0
   @extend .position-absolute
 
+.counter-btn-chevron
+  background-repeat: no-repeat
+  background-position: center
+  background-size: 65%
+
+.counter-btn-chevron-up
+  @extend .counter-btn-chevron
+  @include bg-chevron-up($normal-gray)
+
+.counter-btn-chevron-up:hover
+  @include bg-chevron-up($white)
+
+.counter-btn-chevron-down
+  @extend .counter-btn-chevron
+  @include bg-chevron-down($normal-gray)
+
+.counter-btn-chevron-down:hover
+  @include bg-chevron-down($white)
+
 .dropdown-toggle, .dropdown-toggle:focus
   color: $normal-gray
   background-color: $light-gray
