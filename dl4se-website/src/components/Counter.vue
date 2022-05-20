@@ -2,7 +2,7 @@
   <div class="input-group">
     <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
              v-model.number="count" :min="min" :max="max" @input="setCount" :state="state"
-             class="text-input-field"
+             class="text-input-field-sm"
     />
     <span class="input-group-btn input-group-btn-vertical">
       <b-button type="button" @click="increment" class="counter-btn-top">
@@ -74,12 +74,6 @@ export default {
 </script>
 
 <style scoped>
-
-input {
-  min-height: 42px;
-  max-width: 100px;
-}
-
 .btn-outline-secondary:focus, .btn-outline-secondary.focus {
   box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%);
   z-index: 1;
