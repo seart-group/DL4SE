@@ -4,10 +4,10 @@
              v-model.number="count" :min="min" :max="max" @input="setCount" :state="state"
              class="text-input-field-sm"
     />
-    <span class="input-group-btn-vertical">
+    <div class="input-group-btn-vertical">
       <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
       <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" />
-    </span>
+    </div>
   </div>
 </template>
 
