@@ -8,8 +8,6 @@ import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/styles/style.sass'
-import '@/assets/styles/override/validation.css'
-import '@/assets/styles/override/custom-control-input.css'
 
 Vue.config.productionTip = false
 

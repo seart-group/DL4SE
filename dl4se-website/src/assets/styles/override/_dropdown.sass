@@ -1,0 +1,28 @@
+.dropdown-toggle, .dropdown-toggle:focus
+  color: $normal-gray
+  background-color: $light-gray
+
+.dropdown-toggle:hover
+  color: $white
+  background-color: $normal-gray
+
+.dropdown-toggle-btn
+  @include fixed-width(120)
+  @include fixed-height(40)
+  padding-right: calc(1.5em + 0.75rem)
+  background-position: right calc(0.375em + 0.1875rem) center
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)
+  background-repeat: no-repeat
+  @include bg-chevron-down($normal-gray)
+  @extend .text-left
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
+
+.dropdown-toggle-btn:hover, .show > .dropdown-toggle
+  @include bg-chevron-down($white)
+
+.dropdown-item:active, .dropdown-item.active
+  color: $white
+  background-color: $normal-gray

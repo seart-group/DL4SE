@@ -1,0 +1,68 @@
+.counter-btn
+  @include fixed-width(20)
+  @include fixed-height(20)
+  @extend .btn
+  @extend .p-0
+  @extend .bg-light-gray
+  @extend .btn-outline-secondary
+  @extend .rounded-0
+
+.counter-btn:focus, .counter-btn.focus
+  z-index: 1
+
+.counter-btn:focus:not(:hover), .counter-btn.focus:not(:hover)
+  @extend .bg-light-gray
+
+.counter-btn-top
+  @extend .counter-btn
+  @extend .border-0
+
+.counter-btn-bottom
+  @extend .counter-btn
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+
+.counter-btn-chevron
+  background-repeat: no-repeat
+  background-position: center
+  background-size: 65%
+
+.counter-btn-chevron-up
+  @extend .counter-btn-chevron
+  @include bg-chevron-up($normal-gray)
+
+.counter-btn-chevron-up:hover
+  @include bg-chevron-up($white)
+
+.counter-btn-chevron-down
+  @extend .counter-btn-chevron
+  @include bg-chevron-down($normal-gray)
+
+.counter-btn-chevron-down:hover
+  @include bg-chevron-down($white)
+
+.counter-input-field
+  @include fixed-width(100)
+  @include fixed-height(40)
+  @extend .form-control
+  @extend .bg-light-gray
+  @extend .rounded-0
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+
+.input-group-btn-vertical
+  @extend .position-relative
+  @extend .d-table-cell
+  @extend .text-nowrap
+  @extend .align-middle
+
+.input-group-btn-vertical > .btn
+  @extend .w-100
+  @extend .h-50
+  @extend .position-relative
+  @extend .d-block
+  @extend .float-none

@@ -1,0 +1,35 @@
+.custom-control-input:hover~.custom-control-label::before
+  border-color: $dark-gray
+
+.custom-control-input:hover~.custom-control-label::after
+  border-color: $normal-gray
+
+.custom-control-input:not(:disabled):active ~ .custom-control-label::before
+  border-color: $normal-gray
+  background-color: $normal-gray
+
+.custom-control-input:focus~.custom-control-label::before
+  border-color: $normal-gray
+  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%) !important
+
+.custom-control-input:checked~.custom-control-label::before
+  border-color: $normal-gray
+  background-color: $normal-gray
+
+.custom-control-input:checked:hover~.custom-control-label::before
+  border-color: $dark-gray
+  background-color: $dark-gray
+
+.custom-control-input:active~.custom-control-label::before
+  border-color: $normal-gray
+  background-color: $normal-gray
+
+.custom-control-input:focus:not(:checked)~.custom-control-label::before
+  border-color: $normal-gray
+
+.custom-control-input:focus:not(:checked):hover ~ .custom-control-label::before
+  border-color: $dark-gray
+
+.custom-control-input-green:not(:disabled):active~.custom-control-label::before
+  border-color: $normal-gray
+  background-color: $normal-gray

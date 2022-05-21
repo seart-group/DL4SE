@@ -1,19 +1,29 @@
 @import 'node_modules/bootstrap/scss/bootstrap'
-@import "@/assets/styles/mixins.sass"
+@import "variables"
+@import "mixins"
+@import "svg"
+@import "override"
+@import "component"
 
-$light-gray: #e6e6e6
-$normal-gray: #6c757d
+@font-face
+  font-family: 'Trebuchet MS'
+  font-style: normal
+  font-weight: normal
+  src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button
-  -webkit-appearance: none
+*
   margin: 0
+  padding: 0
+  box-sizing: border-box
 
-input[type=number]
-  -moz-appearance: textfield
+body
+  color: black
+  font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+  min-height: 100vh
 
-input:focus, .form-control:focus
-  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%)
+\:disabled
+  cursor: not-allowed
+  pointer-events: all!important
 
 @each $size in 2, 3, 4, 5
   .border-#{$size}
@@ -29,111 +39,6 @@ input:focus, .form-control:focus
   @extend .border-dark
   @extend .text-center
 
-.card-background
-  background-color: #f2f2f2ee
-
-.counter-btn
-  @include fixed-width(20)
-  @include fixed-height(20)
-  @extend .btn
-  @extend .p-0
-  @extend .bg-light-gray
-  @extend .btn-outline-secondary
-  @extend .rounded-0
-
-.counter-btn:focus, .counter-btn.focus
-  z-index: 1
-
-.counter-btn:focus:not(:hover), .counter-btn.focus:not(:hover)
-  @extend .bg-light-gray
-
-.counter-btn-top
-  @extend .counter-btn
-  @extend .border-0
-
-.counter-btn-bottom
-  @extend .counter-btn
-  @extend .border-secondary
-  @extend .border-left-0
-  @extend .border-top-0
-  @extend .border-right-0
-
-.counter-btn-chevron
-  background-repeat: no-repeat
-  background-position: center
-  background-size: 65%
-
-.counter-btn-chevron-up
-  @extend .counter-btn-chevron
-  @include bg-chevron-up($normal-gray)
-
-.counter-btn-chevron-up:hover
-  @include bg-chevron-up($white)
-
-.counter-btn-chevron-down
-  @extend .counter-btn-chevron
-  @include bg-chevron-down($normal-gray)
-
-.counter-btn-chevron-down:hover
-  @include bg-chevron-down($white)
-
-.dropdown-toggle, .dropdown-toggle:focus
-  color: $normal-gray
-  background-color: $light-gray
-
-.dropdown-toggle:hover
-  color: $white
-  background-color: $normal-gray
-
-.dropdown-toggle-btn
-  @include fixed-width(120)
-  @include fixed-height(40)
-  padding-right: calc(1.5em + 0.75rem)
-  background-position: right calc(0.375em + 0.1875rem) center
-  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)
-  background-repeat: no-repeat
-  @include bg-chevron-down($normal-gray)
-  @extend .text-left
-  @extend .border-left-0
-  @extend .border-top-0
-  @extend .border-right-0
-  @extend .rounded-0
-
-.dropdown-toggle-btn:hover, .show > .dropdown-toggle
-  @include bg-chevron-down($white)
-
-.dropdown-item:active, .dropdown-item.active
-  color: $white
-  background-color: $normal-gray
-
-.input-group-btn-vertical
-  @extend .position-relative
-  @extend .d-table-cell
-  @extend .text-nowrap
-  @extend .align-middle
-
-.input-group-btn-vertical > .btn
-  @extend .w-100
-  @extend .h-50
-  @extend .position-relative
-  @extend .d-block
-  @extend .float-none
-
-.text-input-group
-  @extend .w-25
-  @extend .mx-auto
-  @extend .text-left
-
-.text-input-field
-  @extend .form-control
-  @extend .bg-light-gray
-  @extend .rounded-0
-  @extend .border-secondary
-  @extend .border-left-0
-  @extend .border-top-0
-  @extend .border-right-0
-
-.text-input-field-sm
-  @include fixed-width(100)
-  @include fixed-height(40)
-  @extend .text-input-field
+.page-title
+  @extend .text-center
+  @extend .m-5

@@ -2,7 +2,7 @@
   <div class="input-group">
     <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
              v-model.number="count" :min="min" :max="max" @input="setCount" :state="state"
-             class="text-input-field-sm"
+             class="counter-input-field"
     />
     <div class="input-group-btn-vertical">
       <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
