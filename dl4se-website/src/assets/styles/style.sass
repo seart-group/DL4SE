@@ -33,7 +33,10 @@ input:focus, .form-control:focus
   background-color: #f2f2f2ee
 
 .counter-btn
+  @include fixed-width(20)
+  @include fixed-height(20)
   @extend .btn
+  @extend .p-0
   @extend .bg-light-gray
   @extend .btn-outline-secondary
   @extend .rounded-0
@@ -45,22 +48,15 @@ input:focus, .form-control:focus
   @extend .bg-light-gray
 
 .counter-btn-top
-  @include fixed-width(20)
-  @include fixed-height(20)
   @extend .counter-btn
-  @extend .p-0
   @extend .border-0
 
 .counter-btn-bottom
-  @include fixed-width(20)
-  @include fixed-height(19)
   @extend .counter-btn
-  @extend .p-0
   @extend .border-secondary
   @extend .border-left-0
   @extend .border-top-0
   @extend .border-right-0
-  @extend .position-absolute
 
 .counter-btn-chevron
   background-repeat: no-repeat
@@ -139,5 +135,5 @@ input:focus, .form-control:focus
 
 .text-input-field-sm
   @include fixed-width(100)
-  @include fixed-height(39)
+  @include fixed-height(40)
   @extend .text-input-field
