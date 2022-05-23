@@ -1,14 +1,14 @@
 <template>
-  <div class="input-group">
+  <div class="counter">
     <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
              v-model.number="count" :min="min" :max="max" @input="setCount" :state="state"
-             class="counter-input-field"
+             class="counter-input"
     />
-    <div class="input-group-btn-vertical">
+    <div class="counter-btn-group">
       <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
       <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" />
     </div>
-    <label v-if="label" :for="id" class="m-0 px-2 d-flex align-items-center">
+    <label v-if="label" :for="id" class="counter-label">
       {{ label }}
     </label>
   </div>
