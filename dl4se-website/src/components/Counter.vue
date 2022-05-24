@@ -8,9 +8,6 @@
       <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
       <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" />
     </div>
-    <label v-if="label" :for="id" class="counter-label">
-      {{ label }}
-    </label>
   </div>
 </template>
 
@@ -20,7 +17,6 @@ export default {
   props: {
     id: String,
     name: String,
-    label: String,
     value: {
       type: Number,
       default: null
