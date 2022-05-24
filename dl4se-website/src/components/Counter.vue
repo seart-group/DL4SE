@@ -1,7 +1,7 @@
 <template>
   <div class="counter">
     <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
-             v-model.number="count" :min="min" :max="max" @input="setCount" :state="state"
+             v-model.number="count" :min="min" :max="max" @input="setCount" :state="validator()"
              class="counter-input"
     />
     <div class="counter-btn-group">
@@ -31,7 +31,13 @@ export default {
       default: Number.POSITIVE_INFINITY,
       required: false
     },
-    placeholder: String
+    placeholder: String,
+    validator: {
+      type: Function,
+      default() {
+        return (this.value === null) ? null : (this.min <= this.value && this.value <= this.max)
+      }
+    }
   },
   methods: {
     toNumberOrNull(value) {
@@ -53,11 +59,6 @@ export default {
   watch: {
     count() {
       this.$emit('input', this.toNumberOrNull(this.count))
-    }
-  },
-  computed: {
-    state() {
-      return (this.count === null) ? null : (this.min <= this.count && this.count <= this.max)
     }
   },
   data() {
