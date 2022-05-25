@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <h1 class="page-title">Welcome to DL4SE!</h1>
+    <b-img :src="image" alt="DL4SE" center fluid class="my-5" />
     <div class="card-stack">
       <b-card
           v-for="(card, idx) in cards" :key="idx"
@@ -32,6 +32,7 @@ export default {
   },
   data() {
     return {
+      image: require('@/assets/img/logo.png'),
       cards: [
         {
           title: "Log In",
