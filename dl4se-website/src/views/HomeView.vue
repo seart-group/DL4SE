@@ -53,12 +53,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.card-stack {
-  margin: 3rem;
-  display: flex;
-  flex-flow: column wrap;
-  align-content: center;
-}
-</style>
