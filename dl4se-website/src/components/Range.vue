@@ -2,7 +2,7 @@
   <div class="range">
     <template v-if="lowerBound">
       <label :for="idLower" class="range-text">
-        Has at least
+        At least
       </label>
       <b-counter :id="idLower" :name="nameLower"
                  :min="min" :max="max" placeholder="min"
@@ -12,7 +12,7 @@
     </template>
     <template v-if="upperBound">
       <label :for="idUpper" class="range-text">
-        {{ (lowerBound) ? "and at most" : "Has at most" }}
+        {{ (lowerBound) ? "and at most" : "At most" }}
       </label>
       <b-counter :id="idUpper" :name="nameUpper"
                  :min="min" :max="max" placeholder="max"
