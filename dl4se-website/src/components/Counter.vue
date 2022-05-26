@@ -48,12 +48,18 @@ export default {
       this.count = this.toNumberOrNull(value)
     },
     increment() {
-      if (this.count !== null && this.count < this.max) this.count += 1
-      else this.count = 0
+      if (this.count !== null) {
+        if (this.count < this.max) this.count += 1
+      } else {
+        this.count = 0
+      }
     },
     decrement() {
-      if (this.count !== null && this.count > this.min) this.count -= 1
-      else this.count = 0
+      if (this.count !== null) {
+        if (this.count > this.min) this.count -= 1
+      } else {
+        this.count = 0
+      }
     }
   },
   watch: {
