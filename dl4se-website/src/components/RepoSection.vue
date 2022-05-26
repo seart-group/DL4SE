@@ -6,7 +6,7 @@
       </b-col>
     </b-row>
     <b-row class="justify-content-between">
-      <b-col xl="3" lg="3" md="3" sm="12">
+      <b-col xl="3" lg="3" md="4" sm="12">
         <div class="p-2 text-center">
           <b-dropdown-select id="language-select" name="language"
                              header="Select a language" not-selected="Language"
@@ -23,8 +23,8 @@
           </b-checkbox>
         </div>
       </b-col>
-      <b-col xl="9" lg="9" md="9" sm="12">
-        <b-row no-gutters class="justify-content-between">
+      <b-col xl="7" lg="9" md="8" sm="12">
+        <b-row no-gutters>
           <b-col xl="6" lg="6" md="9" sm="12" cols="12">
             <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
                      v-model:lower.number="count.commits"
