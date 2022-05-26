@@ -6,7 +6,7 @@
       </b-col>
     </b-row>
     <b-row class="justify-content-between">
-      <b-col xl="3" lg="3" md="3" sm="6">
+      <b-col xl="3" lg="3" md="3" sm="12">
         <div class="p-2 text-center">
           <b-dropdown-select id="language-select" name="language"
                              header="Select a language" not-selected="Language"
@@ -23,29 +23,33 @@
           </b-checkbox>
         </div>
       </b-col>
-      <b-col xl="4" lg="5" md="6" sm="6">
-        <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
-                 v-model:lower.number="count.commits"
-                 @update:lower="count.commits = $event"
-                 class="p-2"
-        />
-        <b-range id="contributors-range" ref="range-2" field="contributors" lower-bound :min="0"
-                 v-model:lower.number="count.contributors"
-                 @update:lower="count.contributors = $event"
-                 class="p-2"
-        />
-      </b-col>
-      <b-col xl="4" lg="4" md="6" sm="6">
-        <b-range id="issues-range" ref="range-3" field="issues" lower-bound :min="0"
-                 v-model:lower.number="count.issues"
-                 @update:lower="count.issues = $event"
-                 class="p-2"
-        />
-        <b-range id="stars-range" ref="range-4" field="stars" lower-bound :min="0"
-                 v-model:lower.number="count.stars"
-                 @update:lower="count.stars = $event"
-                 class="p-2"
-        />
+      <b-col xl="9" lg="9" md="9" sm="12">
+        <b-row no-gutters class="justify-content-between">
+          <b-col xl="6" lg="6" md="9" sm="12" cols="12">
+            <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
+                     v-model:lower.number="count.commits"
+                     @update:lower="count.commits = $event"
+                     class="p-2"
+            />
+            <b-range id="contributors-range" ref="range-2" field="contributors" lower-bound :min="0"
+                     v-model:lower.number="count.contributors"
+                     @update:lower="count.contributors = $event"
+                     class="p-2"
+            />
+          </b-col>
+          <b-col xl="6" lg="6" md="9" sm="12" cols="12">
+            <b-range id="issues-range" ref="range-3" field="issues" lower-bound :min="0"
+                     v-model:lower.number="count.issues"
+                     @update:lower="count.issues = $event"
+                     class="p-2"
+            />
+            <b-range id="stars-range" ref="range-4" field="stars" lower-bound :min="0"
+                     v-model:lower.number="count.stars"
+                     @update:lower="count.stars = $event"
+                     class="p-2"
+            />
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
