@@ -5,27 +5,33 @@
         <h5 class="task-form-section-title">Repository Sample Characteristics</h5>
       </b-col>
     </b-row>
-    <b-row class="justify-content-between">
-      <b-col xl="3" lg="3" md="4" sm="12">
-        <div class="p-2 text-center">
-          <b-dropdown-select id="language-select" name="language"
-                             header="Select a language" not-selected="Language"
-                             v-model="dropdown.language"
-                             :options="dropdown.options"
-          />
-        </div>
-        <div class="p-2">
-          <b-checkbox id="license-checkbox" v-model="checked.has_license">
-            Has Open-source License
-          </b-checkbox>
-          <b-checkbox id="forks-checkbox" v-model="checked.exclude_forks">
-            Exclude Forks
-          </b-checkbox>
-        </div>
+    <b-row align-h="between">
+      <b-col xl="5" lg="3" md="4" sm="12">
+        <b-row no-gutters align-h="between">
+          <b-col xl="4" lg="12" md="12" sm="12" cols="12">
+            <div class="p-2 text-center">
+              <b-dropdown-select id="language-select" name="language"
+                                 header="Select a language" not-selected="Language"
+                                 v-model="dropdown.language"
+                                 :options="dropdown.options"
+              />
+            </div>
+          </b-col>
+          <b-col xl="6" lg="12" md="12" sm="12" cols="12">
+            <div class="p-2">
+              <b-checkbox id="license-checkbox" v-model="checked.has_license">
+                Has Open-source License
+              </b-checkbox>
+              <b-checkbox id="forks-checkbox" v-model="checked.exclude_forks">
+                Exclude Forks
+              </b-checkbox>
+            </div>
+          </b-col>
+        </b-row>
       </b-col>
-      <b-col xl="7" lg="9" md="8" sm="12">
+      <b-col xl lg="9" md="6" sm="12">
         <b-row no-gutters>
-          <b-col xl="6" lg="6" md="9" sm="12" cols="12">
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
             <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
                      v-model:lower.number="count.commits"
                      @update:lower="count.commits = $event"
@@ -37,7 +43,7 @@
                      class="p-2"
             />
           </b-col>
-          <b-col xl="6" lg="6" md="9" sm="12" cols="12">
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
             <b-range id="issues-range" ref="range-3" field="issues" lower-bound :min="0"
                      v-model:lower.number="count.issues"
                      @update:lower="count.issues = $event"
