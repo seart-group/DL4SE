@@ -9,13 +9,12 @@
       <b-col xl="5" lg="4" md="5" sm="12">
         <b-row no-gutters align-h="between" align-v="center">
           <b-col xl="4" lg="12" md="12" sm="12" cols="12">
-            <div class="p-2 text-center text-xl-left">
-              <b-dropdown-select id="language-select" name="language"
-                                 header="Select a language" not-selected="Language"
-                                 v-model="dropdown.language"
-                                 :options="dropdown.options"
-              />
-            </div>
+            <b-dropdown-select id="language-select" name="language"
+                               header="Select a language" not-selected="Language"
+                               v-model="dropdown.language"
+                               :options="dropdown.options"
+                               class="p-2"
+            />
           </b-col>
           <b-col xl="7" lg="12" md="12" sm="12" cols="12">
             <div class="p-2">
