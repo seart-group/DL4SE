@@ -34,24 +34,24 @@
             <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
                      v-model:lower.number="count.commits"
                      @update:lower="count.commits = $event"
-                     class="p-2"
+                     :class="classes.range"
             />
             <b-range id="contributors-range" ref="range-2" field="contributors" lower-bound :min="0"
                      v-model:lower.number="count.contributors"
                      @update:lower="count.contributors = $event"
-                     class="p-2"
+                     :class="classes.range"
             />
           </b-col>
           <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
             <b-range id="issues-range" ref="range-3" field="issues" lower-bound :min="0"
                      v-model:lower.number="count.issues"
                      @update:lower="count.issues = $event"
-                     class="p-2"
+                     :class="classes.range"
             />
             <b-range id="stars-range" ref="range-4" field="stars" lower-bound :min="0"
                      v-model:lower.number="count.stars"
                      @update:lower="count.stars = $event"
-                     class="p-2"
+                     :class="classes.range"
             />
           </b-col>
         </b-row>
@@ -123,6 +123,13 @@ export default {
         contributors: this.contributors,
         issues: this.issues,
         stars: this.stars
+      },
+      classes: {
+        range: {
+          "px-0": true,
+          "px-sm-2": true,
+          "py-2": true
+        }
       }
     }
   }
