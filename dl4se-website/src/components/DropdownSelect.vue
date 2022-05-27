@@ -1,6 +1,6 @@
 <template>
   <b-dropdown :id="id" :name="name"
-              no-caret toggle-class="dropdown-toggle-btn" menu-class="rounded-0"
+              no-caret toggle-class="dropdown-toggle-btn"
               :disabled="!Array.isArray(options) || !options.length"
   >
     <template #button-content>
