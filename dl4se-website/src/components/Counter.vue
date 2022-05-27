@@ -23,12 +23,12 @@ export default {
     },
     min: {
       type: Number,
-      default: Number.NEGATIVE_INFINITY,
+      default: Number.MIN_SAFE_INTEGER,
       required: false
     },
     max: {
       type: Number,
-      default: Number.POSITIVE_INFINITY,
+      default: Number.MAX_SAFE_INTEGER,
       required: false
     },
     placeholder: String,
