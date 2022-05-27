@@ -23,7 +23,10 @@ export default {
     id: String,
     name: String,
     value: String,
-    notSelected: String,
+    notSelected: {
+      type: String,
+      default: "Value"
+    },
     header: {
       type: String,
       default: "Choose an option"
