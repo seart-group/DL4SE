@@ -2,7 +2,7 @@
   <b-container>
     <b-row>
       <b-col>
-        <h5 class="task-form-section-title">Characteristics of repositories used to build the dataset</h5>
+        <h5 class="task-form-section-title">Repository Sample Characteristics</h5>
       </b-col>
     </b-row>
     <b-row class="justify-content-between">
