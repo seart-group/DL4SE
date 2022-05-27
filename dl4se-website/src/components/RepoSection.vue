@@ -5,9 +5,9 @@
         <h5 class="task-form-section-title">Repository Sample Characteristics</h5>
       </b-col>
     </b-row>
-    <b-row class="justify-content-md-between">
+    <b-row class="justify-content-md-between" align-v="center">
       <b-col xl="5" lg="4" md="5" sm="12">
-        <b-row no-gutters align-h="between">
+        <b-row no-gutters align-h="between" align-v="center">
           <b-col xl="4" lg="12" md="12" sm="12" cols="12">
             <div class="p-2 text-center text-xl-left">
               <b-dropdown-select id="language-select" name="language"
