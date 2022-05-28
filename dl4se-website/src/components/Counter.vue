@@ -1,8 +1,8 @@
 <template>
   <div class="counter">
-    <b-input type="number" :id="id" :name="name" :placeholder="placeholder"
-             v-model.number="count" :min="min" :max="max" @input="setCount" :state="validator()"
-             class="counter-input"
+    <b-input type="number" :id="id" :name="name" :placeholder="placeholder" class="counter-input"
+             v-model.number="count" :min="min" :max="max" :state="validator()"
+             @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
     />
     <div class="counter-btn-group">
       <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
@@ -69,6 +69,7 @@ export default {
   },
   data() {
     return {
+      holding: false,
       count: this.value
     }
   }
