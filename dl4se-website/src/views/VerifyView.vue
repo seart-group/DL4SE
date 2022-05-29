@@ -1,19 +1,19 @@
 <template>
   <div id="verify" v-cloak v-if="showHtml">
     <h1 class="page-title">Link Expired</h1>
-    <div class="m-5">
-      <div class="row my-3">
+    <div class="m-lg-5 m-md-4 m-sm-3 m-3">
+      <div class="row my-0 my-md-3">
         <h3 class="col text-center">
           The verification link has expired.
         </h3>
       </div>
-      <div class="row my-3">
-        <div class="col-6 text-right">
+      <div class="row my-0 my-md-3">
+        <div class="col-12 col-md-6 text-center text-md-right py-3 py-md-0">
           <b-button :disabled="blockInput" @click="resendToken" class="action-btn">
             <b-icon-arrow-clockwise /> Resend
           </b-button>
         </div>
-        <div class="col-6 text-left">
+        <div class="col-12 col-md-6 text-center text-md-left py-3 py-md-0">
           <b-button :disabled="blockInput" to="/" class="action-btn">
             <b-icon-house-door /> Home
           </b-button>
