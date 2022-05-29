@@ -3,6 +3,7 @@
 @import "mixins"
 @import "svg"
 @import "override"
+@import "extension"
 @import "component"
 
 @font-face
@@ -24,10 +25,6 @@ body
 \:disabled
   cursor: not-allowed
   pointer-events: all!important
-
-@each $size in 2, 3, 4, 5
-  .border-#{$size}
-    border-width: $size+px!important
 
 .bg-light-gray
   background-color: $light-gray
