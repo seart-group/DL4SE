@@ -9,12 +9,12 @@
       </div>
       <div class="row my-3">
         <div class="col-6 text-right">
-          <b-button :disabled="blockInput" @click="resendToken">
+          <b-button :disabled="blockInput" @click="resendToken" class="action-btn">
             <b-icon-arrow-clockwise /> Resend
           </b-button>
         </div>
         <div class="col-6 text-left">
-          <b-button :disabled="blockInput" to="/">
+          <b-button :disabled="blockInput" to="/" class="action-btn">
             <b-icon-house-door /> Home
           </b-button>
         </div>
