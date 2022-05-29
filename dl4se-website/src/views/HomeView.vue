@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <b-img :src="image" alt="DL4SE" center fluid class="my-5" />
+    <b-img :src="image" alt="DL4SE" center fluid class="logo-image" />
     <div class="card-stack">
       <b-card
           v-for="(card, idx) in cards" :key="idx"
