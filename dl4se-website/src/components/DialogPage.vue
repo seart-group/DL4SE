@@ -1,0 +1,55 @@
+<template>
+  <div class="dialog">
+    <h1 class="page-title">{{ title }}</h1>
+    <h3 class="page-description" v-if="description">
+      {{ description }}
+    </h3>
+    <b-container class="dialog-container">
+      <b-row align-h="center">
+        <b-col xl="2" lg="2" md="3" sm="12" cols="12" class="dialog-column"
+               v-for="({text, icon, action}, idx) in actions" :key="idx"
+        >
+          <b-button class="action-btn" :disabled="disabled" @click="disabled = true; action();">
+            <b-icon :icon="icon" />
+            {{ text }}
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
+</template>
+
+<script>
+import Router from '../router';
+
+export default {
+  name: "b-dialog-page",
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: false
+    },
+    actions: {
+      type: Array[Object],
+      default(){
+        return [
+          {
+            text: "Home",
+            icon: "house-door",
+            action: () => Router.push("/")
+          }
+        ]
+      }
+    }
+  },
+  data() {
+    return {
+      disabled: false
+    }
+  }
+}
+</script>
