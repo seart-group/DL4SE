@@ -3,14 +3,14 @@
     <b-img :src="image" alt="DL4SE" center fluid class="logo-image" />
     <div class="card-stack">
       <b-card
-          v-for="(card, idx) in cards" :key="idx"
+          v-for="({title, description, linksTo}, idx) in cards" :key="idx"
           no-body :class="cardClasses(idx)"
       >
         <b-card-body>
-          <b-link :to="card.linksTo" class="text-secondary">
-            <h4 class="card-title">{{ card.title }}</h4>
+          <b-link :to="linksTo" class="text-secondary">
+            <h4 class="card-title">{{ title }}</h4>
           </b-link>
-          <p class="card-text">{{ card.description }}</p>
+          <p class="card-text">{{ description }}</p>
         </b-card-body>
       </b-card>
     </div>
