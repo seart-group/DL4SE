@@ -1,22 +1,15 @@
 <template>
-  <error-page
-      :code="code"
-      :title="title"
-      :description="description"
+  <b-dialog-page
+      id="error-404"
+      title="Page Not Found"
+      description="The requested webpage can not be found, as it does not exist, or has been moved."
   />
 </template>
 
 <script>
-import ErrorPage from "@/components/ErrorPage";
+import BDialogPage from "@/components/DialogPage";
 
 export default {
-  components: { ErrorPage },
-  data() {
-    return {
-      code: 404,
-      title: "Page Not Found",
-      description: "The requested webpage can not be found, as it does not exist, or has been moved."
-    }
-  }
+  components: { BDialogPage }
 }
 </script>

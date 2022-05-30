@@ -1,36 +1,21 @@
 <template>
-  <div id="verify" v-cloak v-if="showHtml">
-    <h1 class="page-title">Link Expired</h1>
-    <div class="m-lg-5 m-md-4 m-sm-3 m-3">
-      <div class="row my-0 my-md-3">
-        <h3 class="col text-center">
-          The verification link has expired.
-        </h3>
-      </div>
-      <div class="row my-0 my-md-3">
-        <div class="col-12 col-md-6 text-center text-md-right py-3 py-md-0">
-          <b-button :disabled="blockInput" @click="resendToken" class="action-btn">
-            <b-icon-arrow-clockwise /> Resend
-          </b-button>
-        </div>
-        <div class="col-12 col-md-6 text-center text-md-left py-3 py-md-0">
-          <b-button :disabled="blockInput" to="/" class="action-btn">
-            <b-icon-house-door /> Home
-          </b-button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-dialog-page
+      id="verify" v-cloak v-if="showHtml"
+      title="The verification link has expired."
+      :actions="actions"
+  />
 </template>
 
 <script>
 import axios from "axios"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
+import BDialogPage from "@/components/DialogPage";
 
 export default {
   props: {
     token: String
   },
+  components: { BDialogPage },
   mixins: [ bootstrapMixin ],
   async created() {
     await this.apiCall(this.verifyLink, this.verifySuccess, this.verifyError)
@@ -60,6 +45,18 @@ export default {
       showHtml: false,
       blockInput: false,
       verifyLink: "https://localhost:8080/api/user/verify",
+      actions: [
+        {
+          text: "Resend",
+          icon: "arrow-clockwise",
+          action: this.resendToken
+        },
+        {
+          text: "Home",
+          icon: "house-door",
+          action: () => this.$router.push("/")
+        }
+      ],
       verifySuccess: () => {
         this.returnHomeAndToast(
             "Account Verified",
