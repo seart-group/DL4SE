@@ -71,7 +71,10 @@ export default {
   props: {
     granularity: {
       type: String,
-      required: true
+      required: true,
+      validator(value) {
+        return ["file", "function"].includes(value)
+      }
     },
     exclude: Object,
     characters: Object,
