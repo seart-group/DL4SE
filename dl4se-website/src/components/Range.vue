@@ -20,7 +20,7 @@
                  :validator="upperValid"
       />
     </template>
-    <p class="range-text">
+    <p class="range-text" v-if="field">
       {{ field }}
     </p>
   </div>
@@ -34,7 +34,10 @@ export default {
   components: { BCounter },
   props: {
     id: String,
-    field: String,
+    field: {
+      type: String,
+      required: false
+    },
     lowerBound: {
       type: Boolean,
     },
