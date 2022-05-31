@@ -11,8 +11,9 @@
       />
     </template>
     <template v-if="upperBound">
+      <p class="m-0" v-if="lowerBound">and&nbsp;</p>
       <label :for="idUpper" class="m-0">
-        {{ (lowerBound) ? "and at most" : "At most" }}
+        {{ ((lowerBound) ? 'a' : 'A') + "t most" }}
       </label>
       <b-counter :id="idUpper" :name="nameUpper" class="p-2"
                  :min="min" :max="max" placeholder="max"
