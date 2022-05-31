@@ -13,7 +13,7 @@
     <template v-if="upperBound">
       <p class="m-0" v-if="lowerBound">&nbsp;and&nbsp;</p>
       <label :for="id + '-upper'" class="m-0">
-        {{ ((lowerBound) ? 'a' : 'A') + "t most&nbsp;" }}
+        {{ (lowerBound) ? 'a' : 'A' }}t most&nbsp;
       </label>
       <b-counter :id="id + '-upper'" class="py-2"
                  :min="min" :max="max" placeholder="max"
