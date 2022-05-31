@@ -1,10 +1,10 @@
 <template>
   <div class="range">
     <template v-if="lowerBound">
-      <label :for="idLower" class="m-0">
+      <label :for="id + '-lower'" class="m-0">
         At least&nbsp;
       </label>
-      <b-counter :id="idLower" :name="nameLower" class="py-2"
+      <b-counter :id="id + '-lower'" class="py-2"
                  :min="min" :max="max" placeholder="min"
                  v-model.number="count.lower"
                  :validator="lowerValid"
@@ -12,10 +12,10 @@
     </template>
     <template v-if="upperBound">
       <p class="m-0" v-if="lowerBound">&nbsp;and&nbsp;</p>
-      <label :for="idUpper" class="m-0">
+      <label :for="id + '-upper'" class="m-0">
         {{ ((lowerBound) ? 'a' : 'A') + "t most&nbsp;" }}
       </label>
-      <b-counter :id="idUpper" :name="nameUpper" class="py-2"
+      <b-counter :id="id + '-upper'" class="py-2"
                  :min="min" :max="max" placeholder="max"
                  v-model.number="count.upper"
                  :validator="upperValid"
@@ -65,18 +65,6 @@ export default {
     }
   },
   computed: {
-    idLower() {
-      return this.id + "-lower"
-    },
-    idUpper() {
-      return this.id + "-upper"
-    },
-    nameLower() {
-      return "min_" + this.field
-    },
-    nameUpper() {
-      return "max_" + this.field
-    },
     state() {
       const inputs = [this.lowerValid(), this.upperValid()]
       return inputs.filter(x => x !== null).reduce((acc, curr) => acc && curr, true)
