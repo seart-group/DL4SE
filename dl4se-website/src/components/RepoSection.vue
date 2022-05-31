@@ -17,14 +17,14 @@
             />
           </b-col>
           <b-col xl="7" lg="12" md="12" sm="12" cols="12">
-            <div class="p-2">
+            <b-form-group class="m-0">
               <b-checkbox id="license-checkbox" v-model="checked.has_license" inline>
                 Has Open-source License
               </b-checkbox>
               <b-checkbox id="forks-checkbox" v-model="checked.exclude_forks" inline>
                 Exclude Forks
               </b-checkbox>
-            </div>
+            </b-form-group>
           </b-col>
         </b-row>
       </b-col>
