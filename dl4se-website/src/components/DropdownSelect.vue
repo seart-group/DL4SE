@@ -1,6 +1,5 @@
 <template>
-  <b-dropdown :id="id" :name="name"
-              no-caret toggle-class="dropdown-toggle-btn"
+  <b-dropdown :id="id" no-caret block toggle-class="dropdown-toggle-btn"
               :disabled="!Array.isArray(options) || !options.length"
   >
     <template #button-content>
@@ -21,7 +20,6 @@ export default {
   name: "b-dropdown-select",
   props: {
     id: String,
-    name: String,
     value: String,
     notSelected: {
       type: String,
