@@ -55,7 +55,7 @@ import BDropdownSelect from "@/components/DropdownSelect"
 import BRange from "@/components/Range"
 
 export default {
-  name: "b-repo-section",
+  name: "b-section-repo",
   components: { BDropdownSelect, BRange },
   props: {
     language: String,

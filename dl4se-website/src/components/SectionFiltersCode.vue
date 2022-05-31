@@ -63,7 +63,7 @@
 import BRange from "@/components/Range"
 
 export default {
-  name: "b-code-filters-section",
+  name: "b-section-filters-code",
   components: { BRange },
   props: {
     granularity: {
