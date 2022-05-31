@@ -69,7 +69,6 @@ export default {
   },
   data() {
     return {
-      holding: false,
       count: this.value
     }
   }
