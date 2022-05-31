@@ -2,27 +2,27 @@
   <div class="range">
     <template v-if="lowerBound">
       <label :for="idLower" class="m-0">
-        At least
+        At least&nbsp;
       </label>
-      <b-counter :id="idLower" :name="nameLower" class="p-2"
+      <b-counter :id="idLower" :name="nameLower" class="py-2"
                  :min="min" :max="max" placeholder="min"
                  v-model.number="count.lower"
                  :validator="lowerValid"
       />
     </template>
     <template v-if="upperBound">
-      <p class="m-0" v-if="lowerBound">and&nbsp;</p>
+      <p class="m-0" v-if="lowerBound">&nbsp;and&nbsp;</p>
       <label :for="idUpper" class="m-0">
-        {{ ((lowerBound) ? 'a' : 'A') + "t most" }}
+        {{ ((lowerBound) ? 'a' : 'A') + "t most&nbsp;" }}
       </label>
-      <b-counter :id="idUpper" :name="nameUpper" class="p-2"
+      <b-counter :id="idUpper" :name="nameUpper" class="py-2"
                  :min="min" :max="max" placeholder="max"
                  v-model.number="count.upper"
                  :validator="upperValid"
       />
     </template>
     <p class="m-0" v-if="field">
-      {{ field }}
+      &nbsp;{{ field }}
     </p>
   </div>
 </template>
