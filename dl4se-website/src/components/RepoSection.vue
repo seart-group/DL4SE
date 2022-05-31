@@ -16,7 +16,7 @@
             />
           </b-col>
           <b-col xl="7" lg="12" md="12" sm="12" cols="12">
-            <b-form-group class="m-0">
+            <b-form-group class="m-0 py-2">
               <b-checkbox id="license-checkbox" v-model="checked.has_license" inline>
                 Has Open-source License
               </b-checkbox>
