@@ -35,33 +35,17 @@ export default {
   components: { BCounter },
   props: {
     id: String,
-    field: {
-      type: String,
-      required: false
-    },
-    lowerBound: {
-      type: Boolean,
-    },
-    upperBound: {
-      type: Boolean,
-    },
-    lower: {
-      type: Number,
-      default: null
-    },
-    upper: {
-      type: Number,
-      default: null
-    },
+    field: String,
+    lowerBound: Boolean,
+    upperBound: Boolean,
+    value: Object,
     min: {
       type: Number,
-      default: Number.MIN_SAFE_INTEGER,
-      required: false
+      default: Number.MIN_SAFE_INTEGER
     },
     max: {
       type: Number,
-      default: Number.MAX_SAFE_INTEGER,
-      required: false
+      default: Number.MAX_SAFE_INTEGER
     }
   },
   computed: {
@@ -95,19 +79,16 @@ export default {
     }
   },
   watch: {
-    "count.lower": function () {
-      this.$emit("update:lower", this.count.lower)
-    },
-    "count.upper": function() {
-      this.$emit("update:upper", this.count.upper)
+    count: {
+      deep: true,
+      handler() {
+        this.$emit("input", this.count)
+      }
     }
   },
   data() {
     return {
-      count: {
-        lower: this.lower,
-        upper: this.upper
-      }
+      count: this.value
     }
   }
 }

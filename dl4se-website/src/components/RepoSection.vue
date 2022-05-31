@@ -11,16 +11,15 @@
           <b-col xl="4" lg="12" md="12" sm="12" cols="12">
             <b-dropdown-select id="language-select" class="py-2"
                                header="Select a language" not-selected="Language"
-                               v-model="dropdown.language"
-                               :options="dropdown.options"
+                               v-model="local.language" :options="options"
             />
           </b-col>
           <b-col xl="7" lg="12" md="12" sm="12" cols="12">
             <b-form-group class="m-0 py-2">
-              <b-checkbox id="license-checkbox" v-model="checked.has_license" inline>
+              <b-checkbox id="license-checkbox" v-model="local.hasLicense" inline>
                 Has Open-source License
               </b-checkbox>
-              <b-checkbox id="forks-checkbox" v-model="checked.exclude_forks" inline>
+              <b-checkbox id="forks-checkbox" v-model="local.exclude.forks" inline>
                 Exclude Forks
               </b-checkbox>
             </b-form-group>
@@ -30,23 +29,19 @@
       <b-col xl="7" lg="8" md="6" sm="12">
         <b-row no-gutters class="justify-content-lg-around">
           <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
-            <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
-                     v-model:lower.number="count.commits"
-                     @update:lower="count.commits = $event"
+            <b-range id="commits-range" ref="range-1" field="commits"
+                     lower-bound :min="0" v-model="local.commits"
             />
-            <b-range id="contributors-range" ref="range-2" field="contributors" lower-bound :min="0"
-                     v-model:lower.number="count.contributors"
-                     @update:lower="count.contributors = $event"
+            <b-range id="contributors-range" ref="range-2" field="contributors"
+                     lower-bound :min="0" v-model="local.contributors"
             />
           </b-col>
           <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
-            <b-range id="issues-range" ref="range-3" field="issues" lower-bound :min="0"
-                     v-model:lower.number="count.issues"
-                     @update:lower="count.issues = $event"
+            <b-range id="issues-range" ref="range-3" field="issues"
+                     lower-bound :min="0" v-model="local.issues"
             />
-            <b-range id="stars-range" ref="range-4" field="stars" lower-bound :min="0"
-                     v-model:lower.number="count.stars"
-                     @update:lower="count.stars = $event"
+            <b-range id="stars-range" ref="range-4" field="stars"
+                     lower-bound :min="0" v-model="local.stars"
             />
           </b-col>
         </b-row>
@@ -65,39 +60,54 @@ export default {
   props: {
     language: String,
     options: Array[String],
-    has_license: Boolean,
-    exclude_forks: Boolean,
-    commits: Number,
-    contributors: Number,
-    issues: Number,
-    stars: Number
+    hasLicense: Boolean,
+    exclude: Object,
+    commits: Object,
+    contributors: Object,
+    issues: Object,
+    stars: Object
   },
   watch: {
-    "dropdown.language": function () {
-      this.$emit("update:language", this.dropdown.language)
+    "local.language": function () {
+      this.$emit("update:language", this.local.language)
     },
-    "checked.has_license": function () {
-      this.$emit("update:has-license", this.checked.has_license)
+    "local.hasLicense": function () {
+      this.$emit("update:has-license", this.local.hasLicense)
     },
-    "checked.exclude_forks": function () {
-      this.$emit("update:exclude-forks", this.checked.exclude_forks)
+    "local.exclude": {
+      deep: true,
+      handler() {
+        this.$emit("update:exclude", this.local.exclude)
+      }
     },
-    "count.commits" : function () {
-      this.$emit("update:commits", this.count.commits)
+    "local.commits": {
+      deep: true,
+      handler() {
+        this.$emit("update:commits", this.local.commits)
+      }
     },
-    "count.contributors" : function () {
-      this.$emit("update:contributors", this.count.contributors)
+    "local.contributors": {
+      deep: true,
+      handler() {
+        this.$emit("update:contributors", this.local.contributors)
+      }
     },
-    "count.issues" : function () {
-      this.$emit("update:issues", this.count.issues)
+    "local.issues": {
+      deep: true,
+      handler() {
+        this.$emit("update:issues", this.local.issues)
+      }
     },
-    "count.stars" : function () {
-      this.$emit("update:stars", this.count.stars)
+    "local.stars": {
+      deep: true,
+      handler() {
+        this.$emit("update:stars", this.local.stars)
+      }
     }
   },
   computed: {
     state() {
-      return !!this.dropdown.language &&
+      return !!this.local.language &&
           Object.values(this.$refs).map(ref => ref.state)
               .filter(x => x !== null)
               .reduce((acc, curr) => acc && curr, true)
@@ -105,15 +115,11 @@ export default {
   },
   data() {
     return {
-      dropdown: {
+      local: {
         language: this.language,
-        options: this.options
-      },
-      checked: {
-        has_license: this.has_license,
-        exclude_forks: this.exclude_forks
-      },
-      count: {
+        options: this.options,
+        hasLicense: this.hasLicense,
+        exclude: this.exclude,
         commits: this.commits,
         contributors: this.contributors,
         issues: this.issues,
