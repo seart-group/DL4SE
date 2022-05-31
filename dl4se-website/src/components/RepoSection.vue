@@ -28,7 +28,7 @@
         </b-row>
       </b-col>
       <b-col xl="7" lg="8" md="6" sm="12">
-        <b-row no-gutters class="justify-content-lg-between">
+        <b-row no-gutters class="justify-content-lg-around">
           <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
             <b-range id="commits-range" ref="range-1" field="commits" lower-bound :min="0"
                      v-model:lower.number="count.commits"
