@@ -5,8 +5,8 @@
              @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
     />
     <div class="counter-btn-group">
-      <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" />
-      <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" />
+      <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" tabindex="-1" />
+      <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" tabindex="-1" />
     </div>
   </div>
 </template>
