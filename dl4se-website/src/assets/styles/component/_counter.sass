@@ -6,6 +6,7 @@
 .counter-input
   @include fixed-width(100)
   @include fixed-height(40)
+  @extend .z-index-2
   @extend .form-control
   @extend .bg-light-gray
   @extend .rounded-0
@@ -31,9 +32,6 @@
   @extend .rounded-0
   @extend .d-block
   @extend .float-none
-
-%counter-btn:focus, %counter-btn.focus
-  z-index: 1
 
 %counter-btn:focus:not(:hover), %counter-btn.focus:not(:hover)
   @extend .bg-light-gray
