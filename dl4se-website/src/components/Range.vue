@@ -1,26 +1,26 @@
 <template>
   <div class="range">
     <template v-if="lowerBound">
-      <label :for="idLower" class="range-text">
+      <label :for="idLower" class="m-0">
         At least
       </label>
-      <b-counter :id="idLower" :name="nameLower"
+      <b-counter :id="idLower" :name="nameLower" class="p-2"
                  :min="min" :max="max" placeholder="min"
                  v-model.number="count.lower"
                  :validator="lowerValid"
       />
     </template>
     <template v-if="upperBound">
-      <label :for="idUpper" class="range-text">
+      <label :for="idUpper" class="m-0">
         {{ (lowerBound) ? "and at most" : "At most" }}
       </label>
-      <b-counter :id="idUpper" :name="nameUpper"
+      <b-counter :id="idUpper" :name="nameUpper" class="p-2"
                  :min="min" :max="max" placeholder="max"
                  v-model.number="count.upper"
                  :validator="upperValid"
       />
     </template>
-    <p class="range-text" v-if="field">
+    <p class="m-0" v-if="field">
       {{ field }}
     </p>
   </div>
