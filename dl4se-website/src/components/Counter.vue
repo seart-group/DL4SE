@@ -51,14 +51,14 @@ export default {
       if (this.count !== null) {
         if (this.count < this.max) this.count += 1
       } else {
-        this.count = 0
+        this.count = this.min
       }
     },
     decrement() {
       if (this.count !== null) {
         if (this.count > this.min) this.count -= 1
       } else {
-        this.count = 0
+        this.count = this.min
       }
     }
   },
