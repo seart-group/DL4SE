@@ -45,13 +45,13 @@
         </b-form-group>
       </b-col>
       <b-col lg="7" md="9" sm="12">
-        <b-range id="characters-range" field="characters"
+        <b-range id="characters-range" ref="range-1" field="characters"
                  lower-bound upper-bound :min="0" v-model="local.characters"
         />
-        <b-range id="tokens-range" field="tokens"
+        <b-range id="tokens-range" ref="range-2" field="tokens"
                  lower-bound upper-bound :min="0" v-model="local.tokens"
         />
-        <b-range id="lines-range" field="lines"
+        <b-range id="lines-range" ref="range-3" field="lines"
                  lower-bound upper-bound :min="0" v-model="local.lines"
         />
       </b-col>
@@ -77,6 +77,13 @@ export default {
     characters: Object,
     tokens: Object,
     lines: Object
+  },
+  computed: {
+    state() {
+      return Object.values(this.$refs).map(ref => ref.state)
+          .filter(x => x !== null)
+          .reduce((acc, curr) => acc && curr, true)
+    }
   },
   watch: {
     "local.exclude": {
