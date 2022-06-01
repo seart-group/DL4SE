@@ -8,13 +8,13 @@
     <b-row class="justify-content-md-between align-items-xl-center">
       <b-col xl="5" lg="4" md="5" sm="12">
         <b-row no-gutters align-h="between" align-v="center">
-          <b-col xl="4" lg="12" md="12" sm="12" cols="12">
+          <b-col xl="4" lg="12">
             <b-dropdown-select id="language-select" class="py-2"
                                header="Select a language" not-selected="Language"
                                v-model="local.language" :options="options"
             />
           </b-col>
-          <b-col xl="7" lg="12" md="12" sm="12" cols="12">
+          <b-col xl="7" lg="12">
             <b-form-group class="m-0 py-2">
               <b-checkbox id="license-checkbox" v-model="local.hasLicense" inline>
                 Has Open-source License
@@ -28,27 +28,25 @@
       </b-col>
       <b-col xl="7" lg="8" md="6" sm="12">
         <b-row no-gutters class="justify-content-lg-around">
-          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+          <b-col lg="6" md="12">
             <b-range id="commits-range" ref="range-1" field="commits"
                      lower-bound :min="0" v-model="local.commits"
             />
           </b-col>
-          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+          <b-col lg="6" md="12">
             <b-range id="issues-range" ref="range-2" field="issues"
                      lower-bound :min="0" v-model="local.issues"
             />
           </b-col>
-          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+          <b-col lg="6" md="12">
             <b-range id="contributors-range" ref="range-3" field="contributors"
                      lower-bound :min="0" v-model="local.contributors"
             />
           </b-col>
-          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+          <b-col lg="6" md="12">
             <b-range id="stars-range" ref="range-4" field="stars"
                      lower-bound :min="0" v-model="local.stars"
             />
-          </b-col>
-          <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
           </b-col>
         </b-row>
       </b-col>
