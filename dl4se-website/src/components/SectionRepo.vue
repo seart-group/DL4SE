@@ -28,21 +28,27 @@
       </b-col>
       <b-col xl="7" lg="8" md="6" sm="12">
         <b-row no-gutters class="justify-content-lg-around">
-          <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
             <b-range id="commits-range" ref="range-1" field="commits"
                      lower-bound :min="0" v-model="local.commits"
             />
-            <b-range id="contributors-range" ref="range-2" field="contributors"
+          </b-col>
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+            <b-range id="issues-range" ref="range-2" field="issues"
+                     lower-bound :min="0" v-model="local.issues"
+            />
+          </b-col>
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
+            <b-range id="contributors-range" ref="range-3" field="contributors"
                      lower-bound :min="0" v-model="local.contributors"
             />
           </b-col>
-          <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
-            <b-range id="issues-range" ref="range-3" field="issues"
-                     lower-bound :min="0" v-model="local.issues"
-            />
+          <b-col xl="6" lg="6" md="12" sm="12" cols="12">
             <b-range id="stars-range" ref="range-4" field="stars"
                      lower-bound :min="0" v-model="local.stars"
             />
+          </b-col>
+          <b-col xl="6" lg="auto" md="12" sm="12" cols="12">
           </b-col>
         </b-row>
       </b-col>
