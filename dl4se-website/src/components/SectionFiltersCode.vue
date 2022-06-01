@@ -6,7 +6,7 @@
       </b-col>
     </b-row>
     <b-row align-h="center">
-      <b-col lg="3" md="6" sm="12" cols="12">
+      <b-col lg="3" md="6" sm="12">
         <b-form-group label="Exclude:" label-class="font-weight-bold">
           <b-checkbox id="test-code-checkbox" v-model="local.exclude.test">
             Test code
@@ -28,7 +28,7 @@
           </b-checkbox>
         </b-form-group>
       </b-col>
-      <b-col lg="2" md="6" sm="12" cols="12">
+      <b-col lg="2" md="6" sm="12">
         <b-form-group label="Ignore:" label-class="font-weight-bold">
           <b-checkbox id="duplicates-checkbox" inline
                       v-model="local.exclude.duplicates"
@@ -44,7 +44,7 @@
           </b-checkbox>
         </b-form-group>
       </b-col>
-      <b-col lg md="9" sm="12" cols="12">
+      <b-col lg="7" md="9" sm="12">
         <b-range id="characters-range" field="characters"
                  lower-bound upper-bound :min="0" v-model="local.characters"
         />
