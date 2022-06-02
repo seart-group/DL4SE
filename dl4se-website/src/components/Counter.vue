@@ -1,7 +1,7 @@
 <template>
   <div class="counter">
     <b-input type="number" :id="id" :name="name" :placeholder="placeholder" :class="counterClasses"
-             v-model.number="count" :min="min" :max="max" :state="validator()"
+             v-model.number="count" :min="min" :max="max" :state="state"
              @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
     />
     <div class="counter-btn-group">
@@ -44,6 +44,9 @@ export default {
     }
   },
   computed: {
+    state() {
+      return this.validator()
+    },
     counterClasses() {
       const internal = [ "counter-input" ]
       return [...internal, ...this.counterClass.split(" ")]
