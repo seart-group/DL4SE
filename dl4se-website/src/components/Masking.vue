@@ -4,7 +4,7 @@
       Randomly mask&nbsp;
     </label>
     <p class="masking-pad" />
-    <b-counter :id="id + '-counter'"
+    <b-counter :id="id + '-counter'" ref="counter-1"
                class="py-2" counter-class="masking-counter-input"
                :min="1" :max="100" placeholder="%"
                v-model.number="local.masking.percentage"
@@ -41,6 +41,13 @@ export default {
   props: {
     id: String,
     masking: Object
+  },
+  computed: {
+    state() {
+      return Object.values(this.$refs).map(ref => ref.state)
+          .filter(x => x !== null)
+          .reduce((acc, curr) => acc && curr, true)
+    }
   },
   watch: {
     "local.masking": function () {
