@@ -4,7 +4,7 @@
       <label :for="id + '-lower'" class="m-0">
         At least&nbsp;
       </label>
-      <b-counter :id="id + '-lower'" class="py-2" ref="counter-1"
+      <b-counter :id="id + '-lower'" class="py-2"
                  :min="min" :max="max" placeholder="min"
                  v-model.number="count.lower"
                  :validator="lowerValid"
@@ -16,7 +16,7 @@
       <label :for="id + '-upper'" class="m-0">
         {{ (lowerBound) ? 'a' : 'A' }}t most&nbsp;
       </label>
-      <b-counter :id="id + '-upper'" class="py-2" ref="counter-2"
+      <b-counter :id="id + '-upper'" class="py-2"
                  :min="min" :max="max" placeholder="max"
                  v-model.number="count.upper"
                  :validator="upperValid"
@@ -52,9 +52,7 @@ export default {
   },
   computed: {
     state() {
-      return Object.values(this.$refs).map(ref => ref.state)
-          .filter(x => x !== null)
-          .reduce((acc, curr) => acc && curr, true)
+      return this.isValid()
     }
   },
   methods: {
@@ -79,6 +77,9 @@ export default {
       } else {
         return null
       }
+    },
+    isValid() {
+      return this.lowerValid() || this.upperValid()
     }
   },
   watch: {
