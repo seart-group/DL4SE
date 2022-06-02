@@ -9,9 +9,9 @@
       <b-col xl="5" lg="4" md="5" sm="12">
         <b-row no-gutters align-h="between" align-v="center">
           <b-col xl="4" lg="12">
-            <b-dropdown-select id="language-select" class="py-2"
-                               header="Select a language" not-selected="Language"
-                               v-model="local.language" :options="options"
+            <b-dropdown-select id="language-select" class="py-2" ref="dropdown-1"
+                               header="Select a language" placeholder="Language"
+                               v-model="local.language" :options="options" required
             />
           </b-col>
           <b-col xl="7" lg="12">

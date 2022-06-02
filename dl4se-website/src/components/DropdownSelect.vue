@@ -3,7 +3,7 @@
               :disabled="!Array.isArray(options) || !options.length"
   >
     <template #button-content>
-      {{ (selected) ? selected : notSelected }}
+      {{ (selected) ? selected : placeholder }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
     <b-dropdown-item v-for="option in options"
@@ -21,7 +21,8 @@ export default {
   props: {
     id: String,
     value: String,
-    notSelected: {
+    required: Boolean,
+    placeholder: {
       type: String,
       default: "Value"
     },
@@ -30,6 +31,11 @@ export default {
       default: "Choose an option"
     },
     options: Array[String]
+  },
+  computed: {
+    state() {
+      return (this.required) ? !!this.selected : true
+    }
   },
   watch: {
     selected() {
