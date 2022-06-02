@@ -12,6 +12,7 @@
     </template>
     <template v-if="upperBound">
       <p class="m-0" v-if="lowerBound">&nbsp;and&nbsp;</p>
+      <b-break md />
       <label :for="id + '-upper'" class="m-0">
         {{ (lowerBound) ? 'a' : 'A' }}t most&nbsp;
       </label>
@@ -28,11 +29,12 @@
 </template>
 
 <script>
+import BBreak from "@/components/Break"
 import BCounter from "@/components/Counter";
 
 export default {
   name: "b-range",
-  components: { BCounter },
+  components: { BBreak, BCounter },
   props: {
     id: String,
     field: String,
