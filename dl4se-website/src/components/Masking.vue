@@ -3,13 +3,18 @@
     <label :for="id + '-counter'" class="m-0">
       Randomly mask&nbsp;
     </label>
+    <p class="masking-pad" />
     <b-counter :id="id + '-counter'"
                class="py-2" counter-class="masking-counter-input"
                :min="1" :max="100" placeholder="%"
                v-model.number="local.masking.percentage"
     />
     <p class="m-0">
-      &nbsp;of tokens&nbsp;
+      &nbsp;of&nbsp;
+    </p>
+    <b-break md />
+    <p class="m-0">
+      tokens&nbsp;
     </p>
     <label :for="id + '-mask'" class="m-0">
       using the&nbsp;
@@ -27,11 +32,12 @@
 </template>
 
 <script>
+import BBreak from "@/components/Break"
 import BCounter from "@/components/Counter";
 
 export default {
   name: "b-masking",
-  components: { BCounter },
+  components: { BBreak, BCounter },
   props: {
     id: String,
     masking: Object
