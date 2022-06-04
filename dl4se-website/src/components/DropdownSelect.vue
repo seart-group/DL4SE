@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import {requiredIf} from '@vuelidate/validators'
+
 export default {
   name: "b-dropdown-select",
   props: {
@@ -32,19 +35,26 @@ export default {
     },
     options: Array[String]
   },
-  computed: {
-    state() {
-      return (this.required) ? !!this.selected : true
-    }
-  },
   watch: {
     selected() {
       this.$emit('input', this.selected)
     }
   },
+  setup() {
+    return {
+      v$: useVuelidate()
+    }
+  },
   data() {
     return {
       selected: this.value
+    }
+  },
+  validations() {
+    return {
+      selected: {
+        required: requiredIf(this.required),
+      }
     }
   }
 }
