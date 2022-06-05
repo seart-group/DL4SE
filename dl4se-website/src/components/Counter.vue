@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core'
-import {between} from '@vuelidate/validators'
+import useVuelidate from "@vuelidate/core"
+import {between} from "@vuelidate/validators"
 
 export default {
   name: "b-counter",
@@ -75,9 +75,10 @@ export default {
       this.$emit('input', this.toNumberOrNull(this.count))
     }
   },
-  setup() {
+  setup(props) {
+    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate()
+      v$: useVuelidate(globalConfig)
     }
   },
   data() {

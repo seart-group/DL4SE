@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core'
-import {requiredIf} from '@vuelidate/validators'
+import useVuelidate from "@vuelidate/core"
+import {requiredIf} from "@vuelidate/validators"
 
 export default {
   name: "b-dropdown-select",
@@ -40,9 +40,10 @@ export default {
       this.$emit('input', this.selected)
     }
   },
-  setup() {
+  setup(props) {
+    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate()
+      v$: useVuelidate(globalConfig)
     }
   },
   data() {
