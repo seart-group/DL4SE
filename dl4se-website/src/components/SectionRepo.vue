@@ -9,10 +9,14 @@
       <b-col xl="5" lg="4" md="5" sm="12">
         <b-row no-gutters align-h="between" align-v="center">
           <b-col xl="4" lg="12">
-            <b-dropdown-select id="language-select" class="py-2" ref="dropdown-1"
-                               header="Select a language" placeholder="Language"
-                               v-model="local.language" :options="options" required
-            />
+            <b-form-group class="m-0 py-2" :state="dropdownState">
+              <b-dropdown-select id="language-select" header="Select a language" placeholder="Language"
+                                 v-model="local.language" :options="options" required
+              />
+              <template #invalid-feedback>
+                You must select a language
+              </template>
+            </b-form-group>
           </b-col>
           <b-col xl="7" lg="12">
             <b-form-group class="m-0 py-2">
@@ -29,24 +33,16 @@
       <b-col xl="7" lg="8" md="6" sm="12">
         <b-row no-gutters class="justify-content-lg-around">
           <b-col lg="6" md="12">
-            <b-range id="commits-range" ref="range-1" field="commits"
-                     lower-bound :min="0" v-model="local.commits"
-            />
+            <b-range id="commits-range" field="commits" lower-bound :min="0" v-model="local.commits" />
           </b-col>
           <b-col lg="6" md="12">
-            <b-range id="issues-range" ref="range-2" field="issues"
-                     lower-bound :min="0" v-model="local.issues"
-            />
+            <b-range id="issues-range" field="issues" lower-bound :min="0" v-model="local.issues" />
           </b-col>
           <b-col lg="6" md="12">
-            <b-range id="contributors-range" ref="range-3" field="contributors"
-                     lower-bound :min="0" v-model="local.contributors"
-            />
+            <b-range id="contributors-range" field="contributors" lower-bound :min="0" v-model="local.contributors" />
           </b-col>
           <b-col lg="6" md="12">
-            <b-range id="stars-range" ref="range-4" field="stars"
-                     lower-bound :min="0" v-model="local.stars"
-            />
+            <b-range id="stars-range" field="stars" lower-bound :min="0" v-model="local.stars" />
           </b-col>
         </b-row>
       </b-col>
@@ -55,6 +51,7 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
 import BDropdownSelect from "@/components/DropdownSelect"
 import BRange from "@/components/Range"
 
@@ -110,11 +107,14 @@ export default {
     }
   },
   computed: {
-    state() {
-      return !!this.local.language &&
-          Object.values(this.$refs).map(ref => ref.state)
-              .filter(x => x !== null)
-              .reduce((acc, curr) => acc && curr, true)
+    dropdownState() {
+      const child$ = this.v$.$getResultsForChild("language-select")
+      return (child$) ? !child$.$invalid : null
+    }
+  },
+  setup() {
+    return {
+      v$: useVuelidate()
     }
   },
   data() {
