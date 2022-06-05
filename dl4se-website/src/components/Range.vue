@@ -4,10 +4,8 @@
       <label :for="id + '-lower'" class="m-0">
         At least&nbsp;
       </label>
-      <b-counter :id="id + '-lower'" class="py-2"
-                 :min="min" :max="max" placeholder="min"
-                 v-model.number="count.lower"
-                 :validator="lowerValid"
+      <b-counter :id="id + '-lower'" class="py-2" placeholder="min"
+                 :min="min" :max="lowerMax" v-model.number="count.lower"
       />
     </template>
     <template v-if="upperBound">
@@ -16,10 +14,8 @@
       <label :for="id + '-upper'" class="m-0">
         {{ (lowerBound) ? 'a' : 'A' }}t most&nbsp;
       </label>
-      <b-counter :id="id + '-upper'" class="py-2"
-                 :min="min" :max="max" placeholder="max"
-                 v-model.number="count.upper"
-                 :validator="upperValid"
+      <b-counter :id="id + '-upper'" class="py-2" placeholder="max"
+                 :min="upperMin" :max="max" v-model.number="count.upper"
       />
     </template>
     <p class="m-0" v-if="field">
@@ -51,35 +47,11 @@ export default {
     }
   },
   computed: {
-    state() {
-      return this.isValid()
-    }
-  },
-  methods: {
-    lowerValid() {
-      if (this.count.lower !== null) {
-        if (this.count.upper !== null) {
-          return this.min <= this.count.lower && this.count.lower <= this.count.upper
-        } else {
-          return this.min <= this.count.lower && this.count.lower <= this.max
-        }
-      } else {
-        return null
-      }
+    lowerMax() {
+      return (this.count.upper !== null && this.count.upper <= this.max) ? this.count.upper : this.max
     },
-    upperValid() {
-      if (this.count.upper !== null) {
-        if (this.count.lower !== null) {
-          return this.count.lower <= this.count.upper && this.count.upper <= this.max
-        } else {
-          return this.min <= this.count.upper && this.count.upper <= this.max
-        }
-      } else {
-        return null
-      }
-    },
-    isValid() {
-      return this.lowerValid() || this.upperValid()
+    upperMin() {
+      return (this.count.lower !== null && this.min <= this.count.lower) ? this.count.lower : this.min
     }
   },
   watch: {
