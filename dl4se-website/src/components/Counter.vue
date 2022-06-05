@@ -1,6 +1,6 @@
 <template>
   <div class="counter">
-    <b-input type="number" :id="id" :name="name" :placeholder="placeholder" :class="counterClasses"
+    <b-input type="number" :id="id" :placeholder="placeholder" :class="counterClasses"
              v-model.number="count" :min="min" :max="max" :state="state"
              @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
     />
@@ -19,7 +19,6 @@ export default {
   name: "b-counter",
   props: {
     id: String,
-    name: String,
     counterClass: {
       type: String,
       default: ""
