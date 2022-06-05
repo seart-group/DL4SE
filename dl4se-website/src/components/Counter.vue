@@ -12,6 +12,9 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import {between} from '@vuelidate/validators'
+
 export default {
   name: "b-counter",
   props: {
@@ -27,25 +30,18 @@ export default {
     },
     min: {
       type: Number,
-      default: Number.MIN_SAFE_INTEGER,
-      required: false
+      default: Number.MIN_SAFE_INTEGER
     },
     max: {
       type: Number,
-      default: Number.MAX_SAFE_INTEGER,
-      required: false
+      default: Number.MAX_SAFE_INTEGER
     },
-    placeholder: String,
-    validator: {
-      type: Function,
-      default() {
-        return (this.value === null) ? null : (this.min <= this.value && this.value <= this.max)
-      }
-    }
+    placeholder: String
   },
   computed: {
     state() {
-      return this.validator()
+      if (this.count !== null) return !this.v$.$invalid
+      else return null
     },
     counterClasses() {
       const internal = [ "counter-input" ]
@@ -80,9 +76,21 @@ export default {
       this.$emit('input', this.toNumberOrNull(this.count))
     }
   },
+  setup() {
+    return {
+      v$: useVuelidate()
+    }
+  },
   data() {
     return {
       count: this.value
+    }
+  },
+  validations() {
+    return {
+      count: {
+        between: between(this.min, this.max)
+      }
     }
   }
 }
