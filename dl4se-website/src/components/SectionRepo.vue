@@ -14,7 +14,7 @@
                                  v-model="local.language" :options="options" required
               />
               <template #invalid-feedback>
-                You must select a language
+                Language is required
               </template>
             </b-form-group>
           </b-col>
