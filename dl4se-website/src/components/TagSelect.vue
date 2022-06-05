@@ -78,7 +78,7 @@ export default {
     }
   },
   watch: {
-    idioms: {
+    tags: {
       handler() {
         this.$emit("input", this.tags)
       }
