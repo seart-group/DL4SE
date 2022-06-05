@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
 import BBreak from "@/components/Break"
 import BCounter from "@/components/Counter";
 
@@ -60,6 +61,12 @@ export default {
       handler() {
         this.$emit("input", this.count)
       }
+    }
+  },
+  setup(props) {
+    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    return {
+      v$: useVuelidate(globalConfig)
     }
   },
   data() {
