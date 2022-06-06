@@ -35,10 +35,20 @@ export default {
       type: Number,
       default: Number.MAX_SAFE_INTEGER
     },
-    placeholder: String
+    placeholder: String,
+    validators: {
+      type: Array[Object],
+      default() {
+        return []
+      }
+    }
   },
   computed: {
     state() {
+      const parent = this.validators
+          .map(validator => validator.$invalid)
+          .reduce((curr, acc) => curr || acc, false)
+      if (parent) return false
       if (this.v$.$dirty) return !this.v$.$invalid
       else return null
     },
