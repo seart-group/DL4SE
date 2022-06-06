@@ -11,7 +11,7 @@
     <p class="m-0">
       &nbsp;of&nbsp;
     </p>
-    <b-break md />
+    <b-break />
     <p class="m-0">
       tokens&nbsp;
     </p>
