@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     state() {
-      if (this.count !== null) return !this.v$.$invalid
+      if (this.v$.$dirty) return !this.v$.$invalid
       else return null
     },
     counterClasses() {
@@ -68,10 +68,14 @@ export default {
       } else {
         this.count = this.min
       }
+    },
+    resetValidation() {
+      if (this.count === null) this.v$.$reset()
     }
   },
   watch: {
     count() {
+      this.resetValidation()
       this.$emit('input', this.toNumberOrNull(this.count))
     }
   },
