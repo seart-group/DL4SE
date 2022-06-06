@@ -44,12 +44,14 @@ export default {
     }
   },
   computed: {
-    state() {
-      const parent = this.validators
+    invalidParent() {
+      return this.validators
           .map(validator => validator.$invalid)
           .reduce((curr, acc) => curr || acc, false)
-      if (parent) return false
-      if (this.v$.$dirty) return !this.v$.$invalid
+    },
+    state() {
+      if (this.invalidParent) return false
+      else if (this.v$.$dirty) return !this.v$.$invalid
       else return null
     },
     counterClasses() {
