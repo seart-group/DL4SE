@@ -1,15 +1,10 @@
 <template>
-  <b-dropdown :id="id" no-caret block toggle-class="dropdown-toggle-btn"
-              :disabled="!Array.isArray(options) || !options.length"
-  >
+  <b-dropdown :id="id" no-caret block toggle-class="dropdown-toggle-btn" :disabled="disabled">
     <template #button-content>
-      {{ (selected) ? selected : placeholder }}
+      {{ toggleContent }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-    <b-dropdown-item v-for="option in options"
-                     :key="option" :value="option"
-                     @click="selected = option"
-    >
+    <b-dropdown-item v-for="option in options" :key="option" :value="option" @click="selected = option">
       {{ option }}
     </b-dropdown-item>
   </b-dropdown>
@@ -33,7 +28,20 @@ export default {
       type: String,
       default: "Choose an option"
     },
-    options: Array[String]
+    options: {
+      type: Array[String],
+      default() {
+        return []
+      }
+    }
+  },
+  computed: {
+    disabled() {
+      return !this.options.length
+    },
+    toggleContent() {
+      return (this.selected) ? this.selected : this.placeholder
+    }
   },
   watch: {
     selected() {
