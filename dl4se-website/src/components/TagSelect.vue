@@ -54,7 +54,7 @@ export default {
     validator: {
       type: Function,
       default(tag) {
-        return /^[A-Za-z]{1,20}$/.test(tag)
+        return /^[A-Za-z]*$/.test(tag)
       }
     }
   },
