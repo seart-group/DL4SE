@@ -40,7 +40,7 @@ export default {
   components: { BBreak, BCounter },
   props: {
     id: String,
-    masking: Object
+    value: Object
   },
   computed: {
     state() {
@@ -50,14 +50,17 @@ export default {
     }
   },
   watch: {
-    "local.masking": function () {
-      this.$emit("update:masking", this.local.masking)
+    "local.masking": {
+      deep: true,
+      handler() {
+        this.$emit("input", this.local.masking)
+      }
     }
   },
   data() {
     return {
       local: {
-        masking: this.masking
+        masking: this.value
       }
     }
   }
