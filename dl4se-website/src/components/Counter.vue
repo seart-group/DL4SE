@@ -1,6 +1,6 @@
 <template>
   <div class="counter">
-    <b-input type="number" :id="id" :name="name" :placeholder="placeholder" :class="counterClasses"
+    <b-input type="number" :id="id" :placeholder="placeholder" :class="counterClasses"
              v-model.number="count" :min="min" :max="max" :state="state"
              @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
     />
@@ -12,11 +12,13 @@
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core"
+import {between} from "@vuelidate/validators"
+
 export default {
   name: "b-counter",
   props: {
     id: String,
-    name: String,
     counterClass: {
       type: String,
       default: ""
@@ -27,25 +29,30 @@ export default {
     },
     min: {
       type: Number,
-      default: Number.MIN_SAFE_INTEGER,
-      required: false
+      default: Number.MIN_SAFE_INTEGER
     },
     max: {
       type: Number,
-      default: Number.MAX_SAFE_INTEGER,
-      required: false
+      default: Number.MAX_SAFE_INTEGER
     },
     placeholder: String,
-    validator: {
-      type: Function,
+    validators: {
+      type: Array[Object],
       default() {
-        return (this.value === null) ? null : (this.min <= this.value && this.value <= this.max)
+        return []
       }
     }
   },
   computed: {
+    invalidParent() {
+      return this.validators
+          .map(validator => validator.$invalid)
+          .reduce((curr, acc) => curr || acc, false)
+    },
     state() {
-      return this.validator()
+      if (this.invalidParent) return false
+      else if (this.v$.$dirty) return !this.v$.$invalid
+      else return null
     },
     counterClasses() {
       const internal = [ "counter-input" ]
@@ -73,16 +80,34 @@ export default {
       } else {
         this.count = this.min
       }
+    },
+    resetValidation() {
+      if (this.count === null) this.v$.$reset()
     }
   },
   watch: {
     count() {
+      this.resetValidation()
       this.$emit('input', this.toNumberOrNull(this.count))
+    }
+  },
+  setup(props) {
+    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    return {
+      v$: useVuelidate(globalConfig)
     }
   },
   data() {
     return {
       count: this.value
+    }
+  },
+  validations() {
+    return {
+      count: {
+        $autoDirty: true,
+        between: between(this.min, this.max)
+      }
     }
   }
 }
