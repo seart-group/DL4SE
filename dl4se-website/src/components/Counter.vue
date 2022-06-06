@@ -89,6 +89,7 @@ export default {
   validations() {
     return {
       count: {
+        $autoDirty: true,
         between: between(this.min, this.max)
       }
     }
