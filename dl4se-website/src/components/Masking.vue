@@ -46,16 +46,6 @@ export default {
     id: String,
     value: Object
   },
-  watch: {
-    "local.masking": {
-      deep: true,
-      handler() {
-        this.resetCheckbox()
-        this.resetValidation()
-        this.$emit("input", this.local.masking)
-      }
-    }
-  },
   computed: {
     anyInputEmpty() {
       return this.local.masking.percentage === null || this.local.masking.token === null
@@ -83,6 +73,16 @@ export default {
     },
     resetValidation() {
       if (this.bothInputsEmpty) this.v$.$reset()
+    }
+  },
+  watch: {
+    "local.masking": {
+      deep: true,
+      handler() {
+        this.resetCheckbox()
+        this.resetValidation()
+        this.$emit("input", this.local.masking)
+      }
     }
   },
   setup(props) {
