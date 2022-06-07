@@ -2,7 +2,7 @@
   <div id="login" v-cloak v-if="showHtml">
     <h1 class="page-title">Log In</h1>
     <text-input-form
-        :inputs="inputs"
+        v-model="inputs"
         :api-target="loginTarget"
         :success-handler="loginSuccess"
         :failure-handler="loginFailure"

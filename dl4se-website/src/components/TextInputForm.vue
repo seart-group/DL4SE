@@ -36,7 +36,7 @@ import axios from "axios"
 export default {
   name: "text-input-form",
   props: {
-    inputs: Object,
+    value: Object,
     apiTarget: String,
     successHandler: Function,
     failureHandler: Function
@@ -66,9 +66,18 @@ export default {
           .catch(this.failureHandler)
     }
   },
+  watch: {
+    "inputs": {
+      nested: true,
+      handler() {
+        this.$emit("input", this.inputs)
+      }
+    }
+  },
   data() {
     return {
-      submitted: false
+      submitted: false,
+      inputs: this.value
     }
   }
 }
