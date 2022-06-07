@@ -21,7 +21,6 @@
           <b-col xl="6" lg="7" md="12" sm="12" cols="12" offset-lg="1" offset-xl="2">
             <b-form-group label="Mask:" label-class="font-weight-bold">
               <b-masking id="token-mask" v-model="local.masking" />
-              <b-checkbox v-model="local.masking.contiguous_only">Only mask contiguous tokens</b-checkbox>
             </b-form-group>
           </b-col>
         </b-row>

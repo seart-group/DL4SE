@@ -26,6 +26,8 @@
     <p class="m-0">
       &nbsp;token
     </p>
+    <b-break />
+    <b-checkbox v-model="local.masking.contiguous_only">Only mask contiguous tokens</b-checkbox>
   </div>
 </template>
 
