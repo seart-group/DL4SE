@@ -27,7 +27,9 @@
       &nbsp;token
     </p>
     <b-break />
-    <b-checkbox v-model="local.masking.contiguous_only">Only mask contiguous tokens</b-checkbox>
+    <b-checkbox v-model="local.masking.contiguous_only" :disabled="checkboxDisabled">
+      Only mask contiguous tokens
+    </b-checkbox>
   </div>
 </template>
 
@@ -48,14 +50,24 @@ export default {
     "local.masking": {
       deep: true,
       handler() {
+        this.resetCheckbox()
         this.resetValidation()
         this.$emit("input", this.local.masking)
       }
     }
   },
   computed: {
+    anyInputEmpty() {
+      return this.local.masking.percentage === null || this.local.masking.token === null
+    },
+    bothInputsEmpty() {
+      return this.local.masking.percentage === null && this.local.masking.token === null
+    },
     inputState() {
       return (this.v$.local.masking.$anyDirty) ? !this.v$.local.masking.token.$invalid : null
+    },
+    checkboxDisabled() {
+      return this.anyInputEmpty || this.v$.$invalid
     }
   },
   methods: {
@@ -66,8 +78,11 @@ export default {
     setToken(value) {
       this.local.masking.token = this.format(value)
     },
+    resetCheckbox() {
+      if (this.anyInputEmpty) this.local.masking.contiguous_only = false
+    },
     resetValidation() {
-      if (this.local.masking.percentage === null && this.local.masking.token === null) this.v$.$reset()
+      if (this.bothInputsEmpty) this.v$.$reset()
     }
   },
   setup(props) {
