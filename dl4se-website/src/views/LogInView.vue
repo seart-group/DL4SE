@@ -82,32 +82,30 @@ export default {
         }
         this.appendToast(title, message, variant)
       },
-      inputs : [
-        {
+      inputs : {
+        email: {
           label: "Email",
           type: "email",
-          key: "email",
           value: null,
           placeholder: "example@email.com",
           validator: (value) => {
             const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: null
+          feedback: null
         },
-        {
+        password: {
           label: "Password",
           type: "password",
-          key: "password",
           value: null,
           placeholder: "",
           validator: (value) => {
             const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: null
+          feedback: null
         }
-      ]
+      }
     }
   }
 }

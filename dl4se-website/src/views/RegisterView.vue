@@ -23,7 +23,6 @@ export default {
     return {
       apiTarget: "https://localhost:8080/api/user/register",
       successHandler: () => {
-        this.inputs.forEach((input) => { input.value = "" })
         this.$router.push('/').then(() => {
           this.appendToast(
               "Account Created",
@@ -56,44 +55,41 @@ export default {
         }
         this.appendToast(title, message, variant)
       },
-      inputs : [
-        {
+      inputs: {
+        email: {
           label: "Email",
           type: "email",
-          key: "email",
           value: null,
           placeholder: "example@email.com",
           validator: (value) => {
             const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: "Please provide a valid email address."
+          feedback: "Please provide a valid email address."
         },
-        {
+        password: {
           label: "Password",
           type: "password",
-          key: "password",
           value: null,
           placeholder: "",
           validator: (value) => {
             const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: "Password must be 6 to 20 characters long, and contain one uppercase letter and number."
+          feedback: "Password must be 6 to 20 characters long, and contain one uppercase letter and number."
         },
-        {
+        organisation: {
           label: "Organisation",
           type: "text",
-          key: "organisation",
           value: null,
           placeholder: "",
           validator: (value) => {
             const regex = /^[^\s-_][\w\s-]*$/
             return (value === null) ? null : regex.test(value)
           },
-          validatorMessage: "This is a required field. Don't leave it blank!"
+          feedback: "This is a required field. Don't leave it blank!"
         }
-      ]
+      }
     }
   }
 }

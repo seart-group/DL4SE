@@ -1,29 +1,26 @@
 <template>
   <b-form @submit.prevent.stop="postData" novalidate class="text-input-form">
-    <b-form-row
-        v-for="(input, idx) in inputs"
-        :key="input.key"
-    >
+    <b-form-row v-for="[key, data] in Object.entries(inputs)" :key="key">
       <b-form-group
-          :id="input.key"
-          :label="input.label"
-          :label-for="'input-' + idx"
+          :id="key"
+          :label="data.label"
+          :label-for="'input-' + key"
           class="text-input-group"
       >
         <b-form-input
-            :id="'input-' + idx"
-            :type="input.type"
-            :placeholder="input.placeholder"
+            :id="'input-' + key"
+            :type="data.type"
+            :placeholder="data.placeholder"
             :disabled="submitted"
-            :state="input.validator(input.value)"
-            v-model="input.value"
+            :state="data.validator(data.value)"
+            v-model="data.value"
             class="text-input-field"
         />
         <b-form-invalid-feedback
-            :state="input.validator(input.value)"
-            v-if="input.validatorMessage"
+            :state="data.validator(data.value)"
+            v-if="data.feedback"
         >
-          {{ input.validatorMessage }}
+          {{ data.feedback }}
         </b-form-invalid-feedback>
       </b-form-group>
     </b-form-row>
@@ -39,24 +36,24 @@ import axios from "axios"
 export default {
   name: "text-input-form",
   props: {
+    inputs: Object,
     apiTarget: String,
-    inputs: Array[Object],
     successHandler: Function,
     failureHandler: Function
   },
   computed: {
-    canSubmit: function () {
-      return this.inputs.map(input => !!input.validator(input.value)).reduce((acc, curr) => acc && curr, true)
+    canSubmit() {
+      return Object.values(this.inputs)
+          .map(data => !!data.validator(data.value))
+          .reduce((acc, curr) => acc && curr, true)
     }
   },
   methods: {
     async postData() {
       this.submitted = true
 
-      const data = {}
-      this.inputs.forEach((input) => {
-        data[input.key] = input.value
-      })
+      const payload = {}
+      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
 
       const config = {
         headers : {
@@ -64,11 +61,9 @@ export default {
         }
       }
 
-      await axios.post(this.apiTarget, data, config)
+      await axios.post(this.apiTarget, payload, config)
           .then(this.successHandler)
           .catch(this.failureHandler)
-
-      this.submitted = false
     }
   },
   data() {
