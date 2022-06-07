@@ -6,6 +6,7 @@ import ProfileView from '@/views/ProfileView'
 import RegisterView from "@/views/RegisterView";
 import VerifyView from "@/views/VerifyView";
 import NotFoundView from "@/views/NotFoundView";
+import TaskCreateView from "@/views/TaskCreateView";
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const routes = [
     name: 'profile',
     component: ProfileView,
     props: true
+  },
+  {
+    path: '/task',
+    name: 'task',
+    component: TaskCreateView
   },
   {
     path: '/:pathMatch(.*)*',
