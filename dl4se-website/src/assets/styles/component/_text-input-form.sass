@@ -6,13 +6,17 @@
   @extend .m-3
 
 .text-input-group
-  @extend .col-xl-2
-  @extend .col-lg-3
-  @extend .col-md-4
+  @extend .col-xl-3
+  @extend .col-lg-4
+  @extend .col-md-5
   @extend .col-sm-6
   @extend .col-12
   @extend .mx-auto
   @extend .text-left
+
+@include media-breakpoint-up(xl)
+  .text-input-group
+    max-width: 350px!important
 
 .text-input-icon
   color: $dark-red
