@@ -2,7 +2,7 @@
   <div id="login" v-cloak v-if="showHtml">
     <h1 class="page-title">Log In</h1>
     <text-input-form
-        :inputs="inputs"
+        v-model="inputs"
         :api-target="loginTarget"
         :success-handler="loginSuccess"
         :failure-handler="loginFailure"
@@ -12,17 +12,15 @@
 
 <script>
 import axios from "axios"
-import TextInputForm from '@/components/TextInputForm';
+import {email, helpers, required} from "@vuelidate/validators";
 import bootstrapMixin from '@/mixins/bootstrapMixin'
+import TextInputForm from '@/components/TextInputForm';
 
 export default {
   components: {
     TextInputForm
   },
   mixins: [ bootstrapMixin ],
-  created() {
-    this.getUserDetails()
-  },
   methods: {
     async getUserDetails() {
       const token = this.$store.getters.getToken
@@ -39,6 +37,9 @@ export default {
       }
       await axios.get(this.checkTarget, config).then(this.checkSuccess).catch(this.checkFailure)
     }
+  },
+  created() {
+    this.getUserDetails()
   },
   data () {
     return {
@@ -82,32 +83,32 @@ export default {
         }
         this.appendToast(title, message, variant)
       },
-      inputs : [
-        {
+      inputs : {
+        email: {
           label: "Email",
           type: "email",
-          key: "email",
           value: null,
           placeholder: "example@email.com",
-          validator: (value) => {
-            const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          validatorMessage: null
+          feedback: false,
+          rules: {
+            $autoDirty: true,
+            required: required,
+            format: email
+          }
         },
-        {
+        password: {
           label: "Password",
           type: "password",
-          key: "password",
           value: null,
           placeholder: "",
-          validator: (value) => {
-            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          validatorMessage: null
+          feedback: false,
+          rules: {
+            $autoDirty: true,
+            required: required,
+            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+          }
         }
-      ]
+      }
     }
   }
 }
