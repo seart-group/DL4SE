@@ -12,8 +12,10 @@
                       :state="entryState(key)" :disabled="submitted"
                       :placeholder="data.placeholder" v-model.trim="data.value"
         />
-        <template #invalid-feedback v-if="data.feedback">
-          {{ entryErrors(key) }}
+        <template #invalid-feedback v-if="entryFeedback(key)">
+          <ul class="text-input-feedback">
+            <li v-for="(error, idx) in entryErrors(key)" :key="idx">{{ error }}</li>
+          </ul>
         </template>
       </b-form-group>
     </b-form-row>
@@ -69,7 +71,10 @@ export default {
       return this.entryDirty(key) ? this.entryValid(key) : null
     },
     entryErrors(key) {
-      return this.v$.inputs[key].$errors.map(error => error.$message).join("<br/>")
+      return this.v$.inputs[key].$errors.map(error => error.$message).filter(message => message)
+    },
+    entryFeedback(key) {
+      return this.inputs[key].feedback && !!this.entryErrors(key).length
     },
     async postData() {
       this.submitted = true
