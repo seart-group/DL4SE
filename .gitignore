@@ -289,14 +289,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-### Vue template
-# gitignore template for Vue.js projects
-#
-# Recommended template: Node.gitignore
-
-docs/_book
-
-test/
-
-
