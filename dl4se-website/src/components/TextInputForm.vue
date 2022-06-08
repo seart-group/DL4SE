@@ -2,15 +2,26 @@
   <b-form @submit.prevent.stop="postData" novalidate class="text-input-form">
     <b-form-row v-for="[key, data] in Object.entries(inputs)" :key="key">
       <b-form-group :id="'label-'+key" class="text-input-group"
-                    :label="data.label" :label-for="'input-' + key"
-                    :state="entryState(key)"
+                    :label-for="'input-' + key" :state="entryState(key)"
       >
+        <template #label>
+          {{ data.label }}
+          <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
+        </template>
         <b-form-input :id="'input-' + key" :type="data.type" class="text-input-field"
                       :state="entryState(key)" :disabled="submitted"
                       :placeholder="data.placeholder" v-model.trim="data.value"
         />
         <template #invalid-feedback v-if="data.feedback">
           {{ entryErrors(key) }}
+        </template>
+      </b-form-group>
+    </b-form-row>
+    <b-form-row v-if="anyRequired">
+      <b-form-group class="text-input-group">
+        <template #description>
+          <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-input-icon" />
+          Required fields
         </template>
       </b-form-group>
     </b-form-row>
@@ -23,6 +34,7 @@
 <script>
 import axios from "axios"
 import useVuelidate from "@vuelidate/core";
+import {required} from "@vuelidate/validators";
 
 export default {
   name: "text-input-form",
@@ -33,6 +45,12 @@ export default {
     failureHandler: Function
   },
   computed: {
+    anyRequired() {
+      return Object.values(this.inputs).map(input => {
+        const inputRules = Object.values(input.rules)
+        return inputRules.includes(required)
+      }).reduce((curr, acc) => curr || acc, false)
+    },
     submitDisabled() {
       return this.v$.$invalid || this.submitted
     }
@@ -43,6 +61,9 @@ export default {
     },
     entryValid(key) {
       return !this.v$.inputs[key].$invalid
+    },
+    entryRequired(key) {
+      return Object.values(this.inputs[key].rules).includes(required)
     },
     entryState(key) {
       return this.entryDirty(key) ? this.entryValid(key) : null
