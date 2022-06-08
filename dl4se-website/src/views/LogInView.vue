@@ -12,17 +12,15 @@
 
 <script>
 import axios from "axios"
-import TextInputForm from '@/components/TextInputForm';
+import {email, helpers, required} from "@vuelidate/validators";
 import bootstrapMixin from '@/mixins/bootstrapMixin'
+import TextInputForm from '@/components/TextInputForm';
 
 export default {
   components: {
     TextInputForm
   },
   mixins: [ bootstrapMixin ],
-  created() {
-    this.getUserDetails()
-  },
   methods: {
     async getUserDetails() {
       const token = this.$store.getters.getToken
@@ -39,6 +37,9 @@ export default {
       }
       await axios.get(this.checkTarget, config).then(this.checkSuccess).catch(this.checkFailure)
     }
+  },
+  created() {
+    this.getUserDetails()
   },
   data () {
     return {
@@ -88,22 +89,24 @@ export default {
           type: "email",
           value: null,
           placeholder: "example@email.com",
-          validator: (value) => {
-            const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          feedback: null
+          feedback: false,
+          rules: {
+            $autoDirty: true,
+            ruleRequired: required,
+            ruleEmail: email
+          }
         },
         password: {
           label: "Password",
           type: "password",
           value: null,
           placeholder: "",
-          validator: (value) => {
-            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          feedback: null
+          feedback: false,
+          rules: {
+            $autoDirty: true,
+            ruleRequired: required,
+            rulePassword: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+          }
         }
       }
     }

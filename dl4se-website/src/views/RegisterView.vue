@@ -11,8 +11,9 @@
 </template>
 
 <script>
-import TextInputForm from '@/components/TextInputForm';
+import {email, helpers, required} from "@vuelidate/validators";
 import bootstrapMixin from '@/mixins/bootstrapMixin'
+import TextInputForm from '@/components/TextInputForm';
 
 export default {
   components: {
@@ -61,33 +62,35 @@ export default {
           type: "email",
           value: null,
           placeholder: "example@email.com",
-          validator: (value) => {
-            const regex = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,6}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          feedback: "Please provide a valid email address."
+          feedback: true,
+          rules: {
+            $autoDirty: true,
+            ruleRequired: required,
+            ruleEmail: email
+          }
         },
         password: {
           label: "Password",
           type: "password",
           value: null,
           placeholder: "",
-          validator: (value) => {
-            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/
-            return (value === null) ? null : regex.test(value)
-          },
-          feedback: "Password must be 6 to 20 characters long, and contain one uppercase letter and number."
+          feedback: true,
+          rules: {
+            $autoDirty: true,
+            ruleRequired: required,
+            rulePassword: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+          }
         },
         organisation: {
           label: "Organisation",
           type: "text",
           value: null,
           placeholder: "",
-          validator: (value) => {
-            const regex = /^[^\s-_][\w\s-]*$/
-            return (value === null) ? null : regex.test(value)
-          },
-          feedback: "This is a required field. Don't leave it blank!"
+          feedback: true,
+          rules: {
+            $autoDirty: true,
+            ruleRequired: required
+          }
         }
       }
     }

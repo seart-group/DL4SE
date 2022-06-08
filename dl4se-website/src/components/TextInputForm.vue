@@ -1,30 +1,20 @@
 <template>
   <b-form @submit.prevent.stop="postData" novalidate class="text-input-form">
     <b-form-row v-for="[key, data] in Object.entries(inputs)" :key="key">
-      <b-form-group
-          :id="key"
-          :label="data.label"
-          :label-for="'input-' + key"
-          class="text-input-group"
+      <b-form-group :id="'label-'+key" class="text-input-group"
+                    :label="data.label" :label-for="'input-' + key"
+                    :state="entryState(key)"
       >
-        <b-form-input
-            :id="'input-' + key"
-            :type="data.type"
-            :placeholder="data.placeholder"
-            :disabled="submitted"
-            :state="data.validator(data.value)"
-            v-model="data.value"
-            class="text-input-field"
+        <b-form-input :id="'input-' + key" :type="data.type" class="text-input-field"
+                      :state="entryState(key)" :disabled="submitted"
+                      :placeholder="data.placeholder" v-model="data.value"
         />
-        <b-form-invalid-feedback
-            :state="data.validator(data.value)"
-            v-if="data.feedback"
-        >
-          {{ data.feedback }}
-        </b-form-invalid-feedback>
+        <template #invalid-feedback v-if="data.feedback">
+          {{ entryErrors(key) }}
+        </template>
       </b-form-group>
     </b-form-row>
-    <b-button type="submit" :disabled="!canSubmit || submitted" class="action-btn">
+    <b-button type="submit" :disabled="submitDisabled" class="action-btn">
       Submit
     </b-button>
   </b-form>
@@ -32,6 +22,7 @@
 
 <script>
 import axios from "axios"
+import useVuelidate from "@vuelidate/core";
 
 export default {
   name: "text-input-form",
@@ -42,13 +33,23 @@ export default {
     failureHandler: Function
   },
   computed: {
-    canSubmit() {
-      return Object.values(this.inputs)
-          .map(data => !!data.validator(data.value))
-          .reduce((acc, curr) => acc && curr, true)
+    submitDisabled() {
+      return this.v$.$invalid || this.submitted
     }
   },
   methods: {
+    entryDirty(key) {
+      return this.v$.inputs[key].$dirty
+    },
+    entryValid(key) {
+      return !this.v$.inputs[key].$invalid
+    },
+    entryState(key) {
+      return this.entryDirty(key) ? this.entryValid(key) : null
+    },
+    entryErrors(key) {
+      return this.v$.inputs[key].$errors.map(error => error.$message).join("<br/>")
+    },
     async postData() {
       this.submitted = true
 
@@ -74,11 +75,24 @@ export default {
       }
     }
   },
+  setup() {
+    return {
+      v$: useVuelidate()
+    }
+  },
   data() {
     return {
       submitted: false,
       inputs: this.value
     }
+  },
+  validations() {
+    const validations = { inputs: {} }
+    Object.entries(this.inputs).forEach(([key, data]) => {
+      validations.inputs[key] = { value: data.rules }
+    })
+
+    return validations
   }
 }
 </script>
