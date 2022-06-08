@@ -92,8 +92,8 @@ export default {
           feedback: false,
           rules: {
             $autoDirty: true,
-            ruleRequired: required,
-            ruleEmail: email
+            required: required,
+            format: email
           }
         },
         password: {
@@ -104,8 +104,8 @@ export default {
           feedback: false,
           rules: {
             $autoDirty: true,
-            ruleRequired: required,
-            rulePassword: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+            required: required,
+            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
           }
         }
       }
