@@ -36,7 +36,6 @@
 <script>
 import axios from "axios"
 import useVuelidate from "@vuelidate/core";
-import {required} from "@vuelidate/validators";
 
 export default {
   name: "text-input-form",
@@ -49,8 +48,8 @@ export default {
   computed: {
     anyRequired() {
       return Object.values(this.inputs).map(input => {
-        const inputRules = Object.values(input.rules)
-        return inputRules.includes(required)
+        const inputRules = Object.keys(input.rules)
+        return inputRules.includes("required")
       }).reduce((curr, acc) => curr || acc, false)
     },
     submitDisabled() {
@@ -65,7 +64,7 @@ export default {
       return !this.v$.inputs[key].$invalid
     },
     entryRequired(key) {
-      return Object.values(this.inputs[key].rules).includes(required)
+      return Object.keys(this.inputs[key].rules).includes("required")
     },
     entryState(key) {
       return this.entryDirty(key) ? this.entryValid(key) : null
