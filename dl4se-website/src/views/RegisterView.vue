@@ -65,8 +65,8 @@ export default {
           feedback: true,
           rules: {
             $autoDirty: true,
-            required: required,
-            format: email
+            required: helpers.withMessage("", required),
+            format: helpers.withMessage("Invalid email address", email)
           }
         },
         password: {
@@ -77,8 +77,11 @@ export default {
           feedback: true,
           rules: {
             $autoDirty: true,
-            required: required,
-            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+            required: helpers.withMessage("", required),
+            format: helpers.withMessage(
+                "Password must be between 6 and 20 characters, and contain one uppercase letter and number.",
+                helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+            )
           }
         },
         organisation: {
@@ -89,7 +92,7 @@ export default {
           feedback: true,
           rules: {
             $autoDirty: true,
-            required: required
+            required: helpers.withMessage("", required)
           }
         }
       }
