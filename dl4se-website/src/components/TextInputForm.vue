@@ -7,7 +7,7 @@
       >
         <b-form-input :id="'input-' + key" :type="data.type" class="text-input-field"
                       :state="entryState(key)" :disabled="submitted"
-                      :placeholder="data.placeholder" v-model="data.value"
+                      :placeholder="data.placeholder" v-model.trim="data.value"
         />
         <template #invalid-feedback v-if="data.feedback">
           {{ entryErrors(key) }}
