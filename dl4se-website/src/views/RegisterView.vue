@@ -3,9 +3,9 @@
     <h1 class="page-title">Register</h1>
     <text-input-form
         v-model="inputs"
-        :api-target="apiTarget"
-        :success-handler="successHandler"
-        :failure-handler="failureHandler"
+        :api-target="registerTarget"
+        :success-handler="registerSuccess"
+        :failure-handler="registerFailure"
     />
   </div>
 </template>
@@ -21,8 +21,8 @@ export default {
   mixins: [ bootstrapMixin ],
   data () {
     return {
-      apiTarget: "https://localhost:8080/api/user/register",
-      successHandler: () => {
+      registerTarget: "https://localhost:8080/api/user/register",
+      registerSuccess: () => {
         this.$router.push('/').then(() => {
           this.appendToast(
               "Account Created",
@@ -31,7 +31,7 @@ export default {
           )
         })
       },
-      failureHandler: (err) => {
+      registerFailure: (err) => {
         const status = err.response.status
         let title
         let message
