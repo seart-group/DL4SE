@@ -75,7 +75,7 @@ export default {
       this.local.masking.token = this.format(value)
     },
     resetCheckbox() {
-      if (this.anyInputEmpty) this.local.masking.contiguous_only = false
+      if (this.v$.$invalid) this.local.masking.contiguous_only = false
       if (this.bothInputsEmpty) this.local.masking.contiguous_only = null
     },
     resetValidation() {
