@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import usi.si.seart.validation.constraints.AllNullOrNotNull;
 import usi.si.seart.validation.constraints.NullOrNotBlank;
 import usi.si.seart.validation.constraints.NullOrRange;
 
@@ -34,6 +35,7 @@ import java.util.TreeSet;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllNullOrNotNull(fields = { "maskToken", "maskPercentage", "maskContiguousOnly" })
 @TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class CodeProcessing extends Processing {
 

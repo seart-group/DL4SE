@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import usi.si.seart.validation.constraints.AllNullOrNotNull;
 import usi.si.seart.validation.constraints.NullOrNotBlank;
 import usi.si.seart.validation.constraints.NullOrRange;
 
@@ -22,6 +23,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@AllNullOrNotNull(fields = { "maskToken", "maskPercentage", "maskContiguousOnly" })
 public class CodeProcessingDto {
 
     @NotNull
