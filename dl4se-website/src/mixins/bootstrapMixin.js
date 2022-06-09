@@ -2,16 +2,12 @@ export default {
     methods: {
         appendToast(title, message, variant) {
             this.$bvToast.toast(message, {
+                toaster: "b-toaster-top-right",
                 title: title,
                 variant: variant,
-                toaster: "b-toaster-top-right",
+                solid: true,
                 autoHideDelay: 4500,
                 appendToast: true
-            })
-        },
-        returnHomeAndToast(title, message, variant) {
-            this.$router.push("/").then(() => {
-                this.appendToast(title, message, variant)
             })
         }
     }

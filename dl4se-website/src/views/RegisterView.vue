@@ -12,6 +12,7 @@
 
 <script>
 import {email, helpers, required} from "@vuelidate/validators";
+import axiosMixin from "@/mixins/axiosMixin";
 import bootstrapMixin from '@/mixins/bootstrapMixin'
 import TextInputForm from '@/components/TextInputForm';
 
@@ -19,18 +20,16 @@ export default {
   components: {
     TextInputForm
   },
-  mixins: [ bootstrapMixin ],
+  mixins: [ axiosMixin, bootstrapMixin ],
   data () {
     return {
       registerTarget: "https://localhost:8080/api/user/register",
       registerSuccess: () => {
-        this.$router.push('/').then(() => {
-          this.appendToast(
-              "Account Created",
-              "Your account has been created. We have sent you a verification link. Please check your email.",
-              "secondary"
-          )
-        })
+        this.returnHomeAndToast(
+            "Account Created",
+            "Your account has been created. We have sent you a verification link. Please check your email.",
+            "secondary"
+        )
       },
       registerFailure: (err) => {
         const status = err.response.status
