@@ -90,6 +90,8 @@ export default {
       await axios.post(this.apiTarget, payload, config)
           .then(this.successHandler)
           .catch(this.failureHandler)
+
+      this.submitted = false
     }
   },
   watch: {
