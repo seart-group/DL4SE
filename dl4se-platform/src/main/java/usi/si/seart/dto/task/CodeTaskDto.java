@@ -1,5 +1,7 @@
 package usi.si.seart.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
 import usi.si.seart.dto.task.query.CodeQueryDto;
+import usi.si.seart.dto.task.query.FileQueryDto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -18,9 +22,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CodeTaskDto {
 
+    @Valid
     @NotNull
-    CodeQueryDto query;
+    @JsonSetter(nulls = Nulls.SKIP)
+    CodeQueryDto query = new FileQueryDto();
 
+    @Valid
     @NotNull
-    CodeProcessingDto processing;
+    @JsonSetter(nulls = Nulls.SKIP)
+    CodeProcessingDto processing = new CodeProcessingDto();
 }

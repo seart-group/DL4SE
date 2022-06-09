@@ -13,7 +13,9 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.hibernate.validator.constraints.Range;
+import usi.si.seart.validation.constraints.AllNullOrNotNull;
+import usi.si.seart.validation.constraints.NullOrNotBlank;
+import usi.si.seart.validation.constraints.NullOrRange;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -33,6 +35,7 @@ import java.util.TreeSet;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllNullOrNotNull(fields = { "maskToken", "maskPercentage", "maskContiguousOnly" })
 @TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class CodeProcessing extends Processing {
 
@@ -46,17 +49,16 @@ public class CodeProcessing extends Processing {
     @JsonProperty(value = "remove_inner_comments")
     Boolean removeInnerComments;
 
-    @NotBlank
+    @NullOrNotBlank
     @Column(name = "mask_token")
     @JsonProperty(value = "mask_token")
     String maskToken;
 
-    @Range(min = 0, max = 100)
+    @NullOrRange(min = 1, max = 100)
     @Column(name = "mask_percentage")
     @JsonProperty(value = "mask_percentage")
     Integer maskPercentage;
 
-    @NotNull
     @Column(name = "mask_contiguous_only")
     @JsonProperty(value = "mask_contiguous_only")
     Boolean maskContiguousOnly;
@@ -65,7 +67,7 @@ public class CodeProcessing extends Processing {
     @Type(type = "list-array")
     @Singular
     @ToString.Exclude
-    List<@NotNull String> idioms = new ArrayList<>();
+    List<@NotBlank String> idioms = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
