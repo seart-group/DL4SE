@@ -175,7 +175,7 @@ export default {
       masking: {
         token: null,
         percentage: null,
-        contiguous_only : false
+        contiguous_only : null
       },
       remove: {
         docstring: false,

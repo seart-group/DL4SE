@@ -70,14 +70,21 @@ export default {
     },
     resetCheckbox() {
       if (this.anyInputEmpty) this.local.masking.contiguous_only = false
+      if (this.bothInputsEmpty) this.local.masking.contiguous_only = null
     },
     resetValidation() {
       if (this.bothInputsEmpty) this.v$.$reset()
     }
   },
   watch: {
-    "local.masking": {
-      deep: true,
+    "local.masking.percentage": {
+      handler() {
+        this.resetCheckbox()
+        this.resetValidation()
+        this.$emit("input", this.local.masking)
+      }
+    },
+    "local.masking.token": {
       handler() {
         this.resetCheckbox()
         this.resetValidation()
