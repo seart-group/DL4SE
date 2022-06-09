@@ -25,7 +25,7 @@ export default {
     return {
       registerTarget: "https://localhost:8080/api/user/register",
       registerSuccess: () => {
-        this.returnHomeAndToast(
+        this.redirectHomeAndToast(
             "Account Created",
             "Your account has been created. We have sent you a verification link. Please check your email.",
             "secondary"

@@ -58,7 +58,7 @@ export default {
         }
       ],
       verifySuccess: () => {
-        this.returnHomeAndToast(
+        this.redirectHomeAndToast(
             "Account Verified",
             "Your account has been verified. You can now log in.",
             "secondary"
@@ -78,26 +78,26 @@ export default {
             title = "Invalid Token"
             message = "The specified token does not exist. Check the link for errors and try again."
             variant = "warning"
-            action = () => { this.returnHomeAndToast(title, message, variant) }
+            action = () => { this.redirectHomeAndToast(title, message, variant) }
             break
           default:
             title = "Server Error"
             message = "An unexpected server error has occurred. Please try again later."
             variant = "danger"
-            action = () => { this.returnHomeAndToast(title, message, variant) }
+            action = () => { this.redirectHomeAndToast(title, message, variant) }
             break
         }
         action()
       },
       resendSuccess: () => {
-        this.returnHomeAndToast(
+        this.redirectHomeAndToast(
             "Token Resent",
             "We have sent you a new verification link. Please check your email.",
             "secondary"
         )
       },
       resendError: () => {
-        this.returnHomeAndToast(
+        this.redirectHomeAndToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
             "danger"
