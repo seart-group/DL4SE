@@ -74,9 +74,9 @@ CREATE TABLE "processing" (
     "type" text NOT NULL,
     "remove_docstring" boolean NOT NULL,
     "remove_inner_comments" boolean NOT NULL,
-    "mask_token" text NOT NULL,
-    "mask_percentage" integer NOT NULL,
-    "mask_contiguous_only" boolean NOT NULL,
+    "mask_token" text,
+    "mask_percentage" integer,
+    "mask_contiguous_only" boolean,
     "idioms" text[] NOT NULL
 );
 

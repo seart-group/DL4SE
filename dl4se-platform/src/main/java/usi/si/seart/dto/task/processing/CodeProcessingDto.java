@@ -7,7 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.validator.constraints.Range;
+import usi.si.seart.validation.constraints.NullOrNotBlank;
+import usi.si.seart.validation.constraints.NullOrRange;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,18 +29,17 @@ public class CodeProcessingDto {
     @JsonProperty(value = "remove_inner_comments")
     Boolean removeInnerComments;
 
-    @NotBlank
+    @NullOrNotBlank
     @JsonProperty(value = "mask_token")
     String maskToken;
 
-    @Range(min = 0, max = 100)
+    @NullOrRange(min = 1, max = 100)
     @JsonProperty(value = "mask_percentage")
     Integer maskPercentage;
 
-    @NotNull
     @JsonProperty(value = "mask_contiguous_only")
     Boolean maskContiguousOnly;
 
     @NotNull
-    List<@NotNull String> idioms;
+    List<@NotBlank String> idioms;
 }
