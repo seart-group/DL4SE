@@ -17,6 +17,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.type.StringEnumType;
+import usi.si.seart.validation.constraints.OWASPEmail;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -61,7 +62,7 @@ public class User {
     @Column(unique = true)
     String uid;
 
-    @NotBlank
+    @OWASPEmail
     @Column(unique = true)
     String email;
 
