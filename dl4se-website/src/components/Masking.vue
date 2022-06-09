@@ -47,6 +47,12 @@ export default {
     value: Object
   },
   computed: {
+    percentageSpecified() {
+      return this.local.masking.percentage != null
+    },
+    tokenSpecified() {
+      return this.local.masking.token != null
+    },
     anyInputEmpty() {
       return this.local.masking.percentage === null || this.local.masking.token === null
     },
@@ -111,11 +117,11 @@ export default {
         masking: {
           percentage: {
             $autoDirty: true,
-            required: requiredIf(this.local.masking.token)
+            required: requiredIf(this.tokenSpecified)
           },
           token: {
             $autoDirty: true,
-            required: requiredIf(this.local.masking.percentage)
+            required: requiredIf(this.percentageSpecified)
           }
         }
       }
