@@ -54,7 +54,7 @@ export default {
         {
           text: "Home",
           icon: "house-door",
-          action: () => this.$router.push("/")
+          action: () => this.$router.push({ name: "home" })
         }
       ],
       verifySuccess: () => {

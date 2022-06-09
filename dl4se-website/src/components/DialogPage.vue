@@ -40,7 +40,7 @@ export default {
           {
             text: "Home",
             icon: "house-door",
-            action: () => Router.push("/")
+            action: () => Router.push({ name: "home" })
           }
         ]
       }

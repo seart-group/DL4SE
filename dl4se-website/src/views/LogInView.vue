@@ -45,9 +45,8 @@ export default {
     return {
       showHtml: false,
       checkTarget: "https://localhost:8080/api/user",
-      checkSuccess: (response) => {
-        const uid = response.data.uid
-        this.$router.push('/profile/' + uid)
+      checkSuccess: () => {
+        this.$router.push({ name: "dashboard" })
       },
       checkFailure: () => {
         this.$store.commit("clearToken")
