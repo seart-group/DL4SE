@@ -1,10 +1,13 @@
 package usi.si.seart.dto.task.query;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.Nulls;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,63 +40,91 @@ public abstract class CodeQueryDto {
 
     @NotNull
     @JsonProperty(value = "has_license")
-    Boolean hasLicense;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean hasLicense = false;
 
     @NotNull
     @JsonProperty(value = "exclude_forks")
-    Boolean excludeForks;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeForks = false;
 
     @PositiveOrZero
     @JsonProperty(value = "min_commits")
-    Long minCommits;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minCommits = 0L;
 
     @PositiveOrZero
     @JsonProperty(value = "min_contributors")
-    Long minContributors;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minContributors = 0L;
 
     @PositiveOrZero
     @JsonProperty(value = "min_issues")
-    Long minIssues;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minIssues = 0L;
 
     @PositiveOrZero
     @JsonProperty(value = "min_stars")
-    Long minStars;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minStars = 10L;
 
     @NotNull
     @JsonProperty(value = "include_ast")
-    Boolean includeAst;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean includeAst = true;
 
     @JsonProperty(value = "min_tokens")
-    Long minTokens;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minTokens = 0L;
 
     @JsonProperty(value = "max_tokens")
     Long maxTokens;
 
     @JsonProperty(value = "min_lines")
-    Long minLines;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minLines = 0L;
 
     @JsonProperty(value = "max_lines")
     Long maxLines;
 
     @JsonProperty(value = "min_characters")
-    Long minCharacters;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Long minCharacters = 0L;
 
     @JsonProperty(value = "max_characters")
     Long maxCharacters;
 
     @NotNull
     @JsonProperty(value = "exclude_duplicates")
-    Boolean excludeDuplicates;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeDuplicates = false;
 
     @NotNull
     @JsonProperty(value = "exclude_identical")
-    Boolean excludeIdentical;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeIdentical = false;
 
     @NotNull
     @JsonProperty(value = "exclude_test")
-    Boolean excludeTest;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeTest = false;
 
     @NotNull
     @JsonProperty(value = "exclude_non_ascii")
-    Boolean excludeNonAscii;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeNonAscii = false;
 }

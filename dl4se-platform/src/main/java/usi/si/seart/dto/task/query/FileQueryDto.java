@@ -1,8 +1,11 @@
 package usi.si.seart.dto.task.query;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,5 +24,7 @@ public class FileQueryDto extends CodeQueryDto {
 
     @NotNull
     @JsonProperty(value = "exclude_unparsable")
-    Boolean excludeUnparsable;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean excludeUnparsable = false;
 }
