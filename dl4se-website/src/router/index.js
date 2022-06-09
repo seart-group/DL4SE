@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
-import ProfileView from '@/views/ProfileView'
+import DashboardView from '@/views/DashboardView'
 import RegisterView from "@/views/RegisterView";
 import VerifyView from "@/views/VerifyView";
 import NotFoundView from "@/views/NotFoundView";
@@ -33,10 +33,9 @@ const routes = [
     props: true
   },
   {
-    path: '/profile/:uid',
-    name: 'profile',
-    component: ProfileView,
-    props: true
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView,
   },
   {
     path: '/task',
