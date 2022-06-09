@@ -1,6 +1,8 @@
 package usi.si.seart.dto.task.processing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +14,7 @@ import usi.si.seart.validation.constraints.NullOrRange;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,11 +26,15 @@ public class CodeProcessingDto {
 
     @NotNull
     @JsonProperty(value = "remove_docstring")
-    Boolean removeDocstring;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean removeDocstring = false;
 
     @NotNull
     @JsonProperty(value = "remove_inner_comments")
-    Boolean removeInnerComments;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    Boolean removeInnerComments = false;
 
     @NullOrNotBlank
     @JsonProperty(value = "mask_token")
@@ -41,5 +48,7 @@ public class CodeProcessingDto {
     Boolean maskContiguousOnly;
 
     @NotNull
-    List<@NotBlank String> idioms;
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    List<@NotBlank String> idioms = new ArrayList<>();
 }
