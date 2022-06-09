@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import usi.si.seart.dto.LoginDto;
-import usi.si.seart.dto.UserDto;
+import usi.si.seart.dto.RegisterDto;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.UserPrincipal;
@@ -86,11 +86,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto) {
-        User created = userService.create(conversionService.convert(userDto, User.class));
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDto dto) {
+        User created = userService.create(conversionService.convert(dto, User.class));
         Token token = verificationService.generate(created);
         String link = getVerificationURL(token);
-        emailService.sendVerificationEmail(userDto.getEmail(), link);
+        emailService.sendVerificationEmail(dto.getEmail(), link);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
