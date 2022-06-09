@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -39,14 +40,15 @@ class NullOrRangeTest {
 
     static Stream<Arguments> invalidIntegerProvider() {
         return Stream.of(
-                Arguments.of(                0, 1),
-                Arguments.of(              101, 2),
-                Arguments.of(Integer.MIN_VALUE, 3),
-                Arguments.of(Integer.MAX_VALUE, 4)
+                Arguments.of(0),
+                Arguments.of(101),
+                Arguments.of(Integer.MIN_VALUE),
+                Arguments.of(Integer.MAX_VALUE)
         );
     }
 
     @ParameterizedTest
+    @NullSource
     @MethodSource("validIntegerProvider")
     void validTest(Integer value) {
         Set<ConstraintViolation<Contract>> violations = validator.validate(new Contract(value));
@@ -55,12 +57,11 @@ class NullOrRangeTest {
 
     static Stream<Arguments> validIntegerProvider() {
         return Stream.of(
-                Arguments.of(null, 1),
-                Arguments.of(   1, 2),
-                Arguments.of(  25, 3),
-                Arguments.of(  50, 4),
-                Arguments.of(  75, 5),
-                Arguments.of( 100, 6)
+                Arguments.of(1),
+                Arguments.of(25),
+                Arguments.of(50),
+                Arguments.of(75),
+                Arguments.of(100)
         );
     }
 }
