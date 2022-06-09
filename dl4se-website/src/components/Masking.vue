@@ -20,7 +20,7 @@
     </label>
     <div class="py-2">
       <b-input :id="id + '-token'" class="masking-token-input" placeholder="<MASK>"
-               v-model="local.masking.token" @input="setToken" :state="inputState"
+               v-model.trim="local.masking.token" @input="setToken" :state="inputState"
       />
     </div>
     <p class="m-0">
