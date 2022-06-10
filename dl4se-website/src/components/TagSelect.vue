@@ -70,11 +70,11 @@ export default {
       reader.readAsText(file)
     },
     upload() {
-      this.$refs['tags-file'].click()
+      this.$refs["tags-file"].click()
     },
     reset() {
       this.tags = []
-      this.$refs['tags-file'].value = null
+      this.$refs["tags-file"].value = null
     }
   },
   watch: {
@@ -86,7 +86,7 @@ export default {
   },
   updated() {
     const tags = this.$refs["tags-values"]
-    tags.map(tag => tag.$el.children[1])
+    tags?.map(tag => tag.$el.children[1])
         .filter(button => !button.hasAttribute("tabindex"))
         .forEach(button => button.setAttribute("tabindex", "-1"))
   },
