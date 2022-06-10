@@ -34,7 +34,7 @@ export default {
       required: false
     },
     actions: {
-      type: Array[Object],
+      type: Array,
       default(){
         return [
           {

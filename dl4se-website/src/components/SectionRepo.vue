@@ -60,7 +60,7 @@ export default {
   components: { BDropdownSelect, BRange },
   props: {
     language: String,
-    options: Array[String],
+    options: Array,
     hasLicense: Boolean,
     exclude: Object,
     commits: Object,

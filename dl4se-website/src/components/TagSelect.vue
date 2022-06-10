@@ -40,7 +40,7 @@ export default {
   props: {
     id: String,
     value: {
-      type: Array[String],
+      type: Array,
       required: true
     },
     separator: {

@@ -46,7 +46,7 @@ export default {
   props: {
     remove: Object,
     masking: Object,
-    idioms: Array[String]
+    idioms: Array
   },
   watch: {
     "local.remove": {

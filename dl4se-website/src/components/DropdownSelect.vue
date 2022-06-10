@@ -29,7 +29,7 @@ export default {
       default: "Choose an option"
     },
     options: {
-      type: Array[String],
+      type: Array,
       default() {
         return []
       }

@@ -37,7 +37,7 @@ export default {
     },
     placeholder: String,
     validators: {
-      type: Array[Object],
+      type: Array,
       default() {
         return []
       }
