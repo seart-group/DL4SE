@@ -25,7 +25,7 @@
           {{ duplicateTagText }}
         </b-form-text>
         <div :class="{ 'tag-select-tags-container': Boolean(tags.length), 'd-none': !Boolean(tags.length) }">
-          <b-form-tag v-for="tag in tags" :key="tag" :title="tag" @remove="removeTag(tag)" class="mr-1">
+          <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="mr-1" @remove="removeTag(tag)">
             {{ tag }}
           </b-form-tag>
         </div>
@@ -83,6 +83,12 @@ export default {
         this.$emit("input", this.tags)
       }
     }
+  },
+  updated() {
+    const tags = this.$refs["tags-values"]
+    tags.map(tag => tag.$el.children[1])
+        .filter(button => !button.hasAttribute("tabindex"))
+        .forEach(button => button.setAttribute("tabindex", "-1"))
   },
   data() {
     return {
