@@ -23,6 +23,23 @@ export default {
   mixins: [ axiosMixin, bootstrapMixin ],
   data () {
     return {
+      errorHandlers: {
+        400: () => this.appendToast(
+            "Form Error",
+            "Invalid form inputs.",
+            "warning"
+        ),
+        409: () => this.appendToast(
+            "Form Error",
+            "Email already in use.",
+            "warning"
+        )
+      },
+      fallbackErrorHandler: () => this.appendToast(
+          "Server Error",
+          "An unexpected server error has occurred. Please try again later.",
+          "danger"
+      ),
       registerTarget: "https://localhost:8080/api/user/register",
       registerSuccess: () => {
         this.redirectHomeAndToast(
@@ -33,27 +50,9 @@ export default {
       },
       registerFailure: (err) => {
         const status = err.response.status
-        let title
-        let message
-        let variant
-        switch (status) {
-          case 400:
-            title = "Form Error"
-            message = "Invalid form inputs."
-            variant = "warning"
-            break
-          case 409:
-            title = "Form Error"
-            message = "Email already in use."
-            variant = "warning"
-            break
-          default:
-            title = "Server Error"
-            message = "An unexpected server error has occurred. Please try again later."
-            variant = "danger"
-            break
-        }
-        this.appendToast(title, message, variant)
+        const handler = this.errorHandlers[status]
+        if (handler) handler()
+        else this.fallbackErrorHandler()
       },
       inputs: {
         email: {

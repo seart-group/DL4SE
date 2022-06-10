@@ -44,6 +44,23 @@ export default {
   data () {
     return {
       showHtml: false,
+      errorHandlers: {
+        400: () => this.appendToast(
+            "Form Error",
+            "Invalid form inputs.",
+            "warning"
+        ),
+        401: () => this.appendToast(
+            "Form Error",
+            "Invalid login credentials.",
+            "warning"
+        )
+      },
+      fallbackErrorHandler: () => this.appendToast(
+          "Server Error",
+          "An unexpected server error has occurred. Please try again later.",
+          "danger"
+      ),
       checkTarget: "https://localhost:8080/api/user",
       checkSuccess: () => {
         this.$router.push({ name: "dashboard" })
@@ -60,27 +77,9 @@ export default {
       },
       loginFailure: (err) => {
         const status = err.response.status
-        let title
-        let message
-        let variant
-        switch (status) {
-          case 400:
-            title = "Form Error"
-            message = "Invalid form inputs."
-            variant = "warning"
-            break
-          case 401:
-            title = "Form Error"
-            message = "Invalid login credentials."
-            variant = "warning"
-            break
-          default:
-            title = "Server Error"
-            message = "An unexpected server error has occurred. Please try again later."
-            variant = "danger"
-            break
-        }
-        this.appendToast(title, message, variant)
+        const handler = this.errorHandlers[status]
+        if (handler) handler()
+        else this.fallbackErrorHandler()
       },
       inputs : {
         email: {
