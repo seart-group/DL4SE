@@ -1,5 +1,6 @@
 package usi.si.seart.dto.task.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -32,6 +33,7 @@ import javax.validation.constraints.PositiveOrZero;
         @JsonSubTypes.Type(value = FileQueryDto.class, name = "file"),
         @JsonSubTypes.Type(value = FunctionQueryDto.class, name = "function")
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CodeQueryDto {
 
     @NotBlank
