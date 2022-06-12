@@ -1,7 +1,7 @@
 <template>
   <div id="task">
     <h1 class="page-title">Specify your dataset</h1>
-    <b-section-repo class="task-form-section-top" :options="languages"
+    <b-section-repo class="task-form-section-top" :options="options.languages"
                     :language="language" @update:language="language = $event"
                     :has-license="has_license" @update:has-license="has_license = $event"
                     :exclude="exclude" @update:exclude="exclude = $event"
@@ -19,7 +19,7 @@
       <b-row>
         <b-col>
           <b-form-group label="Each instance is a:" label-class="font-weight-bold" class="m-0">
-            <b-form-radio-group id="type-radio" required v-model="type" :options="types" />
+            <b-form-radio-group id="type-radio" required v-model="type" :options="options.types" />
           </b-form-group>
         </b-col>
       </b-row>
@@ -118,19 +118,21 @@ export default {
   },
   data() {
     return {
+      options: {
+        types: [
+          {
+            text: "File",
+            value: "file"
+          },
+          {
+            text: "Function",
+            value: "function"
+          }
+        ],
+        languages: ['Java', 'Python', 'C++'],
+      },
       type : "file",
-      types: [
-        {
-          text: "File",
-          value: "file"
-        },
-        {
-          text: "Function",
-          value: "function"
-        }
-      ],
       language: null,
-      languages: ['Java', 'Python', 'C++'],
       has_license : false,
       commits: {
         lower: null,
