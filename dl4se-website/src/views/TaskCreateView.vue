@@ -82,11 +82,13 @@
 </template>
 
 <script>
+import axios from "axios";
+import axiosMixin from "@/mixins/axiosMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
 import BSectionRepo from "@/components/SectionRepo"
 import BSectionFiltersCode from "@/components/SectionFiltersCode"
 import BSectionProcessingCode from "@/components/SectionProcessingCode"
-import axios from "axios";
 
 export default {
   components: {
@@ -94,16 +96,31 @@ export default {
     BSectionFiltersCode,
     BSectionProcessingCode
   },
+  mixins: [ axiosMixin, bootstrapMixin ],
   computed: {
     submitDisabled() {
       return this.v$.$invalid
     }
   },
   methods: {
+    submitSuccess() {
+      this.redirectDashboardAndToast(
+          "Task Created",
+          "Your task has been accepted. Please note that it may take some time until it begins executing.",
+          "secondary"
+      )
+    },
+    submitFailure(err) {
+      const status = err.response.status
+      const handler = this.errorHandlers[status]
+      if (handler) handler()
+      else this.fallbackErrorHandler()
+    },
     async submit() {
       const payload = this.task
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
-      await axios.post("https://localhost:8080/api/task/create", payload, config)
+      const url = "https://localhost:8080/api/task/create"
+      await axios.post(url, payload, config).then(this.submitSuccess).catch(this.submitFailure)
     }
   },
   setup() {
@@ -113,6 +130,34 @@ export default {
   },
   data() {
     return {
+      errorHandlers: {
+        400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
+        401: () => {
+          this.$store.commit("clearToken")
+          this.redirectHomeAndToast(
+              "Logged Out",
+              "Your session has expired. Please log in again.",
+              "secondary"
+          )
+        },
+        409: () => this.redirectDashboardAndToast(
+            "Task Exists",
+            "A similar task is already queued or executing." +
+            " Please wait for it to finish before submitting again.",
+            "warning"
+        ),
+        429: () => this.redirectDashboardAndToast(
+            "Too Many Active Tasks",
+            "You have already reached your limit on the number of active tasks." +
+            " Try again later once one of them finishes.",
+            "warning"
+        )
+      },
+      fallbackErrorHandler: () => this.appendToast(
+          "Server Error",
+          "An unexpected server error has occurred. Please try again later.",
+          "danger"
+      ),
       task: {
         query: {
           type : "file",
