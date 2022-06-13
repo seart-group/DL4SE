@@ -1,14 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from "@/store"
+import axios from "axios"
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
 import DashboardView from '@/views/DashboardView'
-import RegisterView from "@/views/RegisterView";
-import VerifyView from "@/views/VerifyView";
-import NotFoundView from "@/views/NotFoundView";
-import TaskCreateView from "@/views/TaskCreateView";
+import RegisterView from "@/views/RegisterView"
+import VerifyView from "@/views/VerifyView"
+import NotFoundView from "@/views/NotFoundView"
+import TaskCreateView from "@/views/TaskCreateView"
 
 Vue.use(VueRouter)
+
+const authCheck = async (_to, _from, next) => {
+  const token = store.getters.getToken
+  const config = { headers : { 'authorization': token } }
+  await axios.get("https://localhost:8080/api/user", config)
+      .then(() => { next() })
+      .catch(() => {
+        const params = { showLoggedOut: !!token?.length }
+        store.commit("clearToken")
+        next({ name: "login", params: params })
+      })
+}
 
 const routes = [
   {
@@ -19,7 +33,8 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LogInView
+    component: LogInView,
+    props: true
   },
   {
     path: '/register',
@@ -36,6 +51,7 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
+    beforeEnter: authCheck
   },
   {
     path: '/task',
