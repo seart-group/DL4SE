@@ -39,7 +39,7 @@
     <b-container class="py-4 task-form-section-bottom">
       <b-row align-h="center">
         <b-col cols="auto">
-          <b-button :disabled="submitDisabled" @click="submit" class="action-btn">Generate Dataset</b-button>
+          <b-button :disabled="v$.$invalid" @click="submit" class="action-btn">Generate Dataset</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -116,9 +116,6 @@ export default {
         percentage: this.task.processing.mask_percentage,
         contiguousOnly: this.task.processing.mask_contiguous_only
       }
-    },
-    submitDisabled() {
-      return this.v$.$invalid
     }
   },
   methods: {
