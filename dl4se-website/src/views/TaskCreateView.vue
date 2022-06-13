@@ -3,20 +3,13 @@
     <h1 class="page-title">Specify your dataset</h1>
     <b-section-repo class="task-form-section-top"
                     :options="options.languages"
-                    :language="task.query.language_name"
-                    @update:language="task.query.language_name = $event"
-                    :has-license="task.query.has_license"
-                    @update:has-license="task.query.has_license = $event"
-                    :commits="{ lower: task.query.min_commits }"
-                    @update:commits="task.query.min_commits = $event.lower"
-                    :contributors="{ lower: task.query.min_contributors }"
-                    @update:contributors="task.query.min_contributors = $event.lower"
-                    :issues="{ lower: task.query.min_issues }"
-                    @update:issues="task.query.min_issues = $event.lower"
-                    :stars="{ lower: task.query.min_stars }"
-                    @update:stars="task.query.min_stars = $event.lower"
-                    :exclude="{ forks: task.query.exclude_forks }"
-                    @update:exclude="task.query.exclude_forks = $event.forks"
+                    :language="task.query.language_name" @update:language="task.query.language_name = $event"
+                    :has-license="task.query.has_license" @update:has-license="task.query.has_license = $event"
+                    :commits="commits" @update:commits="updateCommits"
+                    :contributors="contributors" @update:contributors="updateContributors"
+                    :issues="issues" @update:issues="updateIssues"
+                    :stars="stars" @update:stars="updateStars"
+                    :exclude="exclude" @update:exclude="updateExclude"
     />
     <b-container class="py-4 task-form-section-middle">
       <b-row>
@@ -33,43 +26,15 @@
       </b-row>
     </b-container>
     <b-section-filters-code class="pb-4 task-form-section-middle" :granularity="task.query.type"
-                            :characters="{ lower: task.query.min_characters, upper: task.query.max_characters }"
-                            @update:characters="task.query.min_characters = $event.lower
-                                                task.query.max_characters = $event.upper"
-                            :tokens="{ lower: task.query.min_tokens, upper: task.query.max_tokens }"
-                            @update:tokens="task.query.min_tokens = $event.lower
-                                            task.query.max_tokens = $event.upper"
-                            :lines="{ lower: task.query.min_lines, upper: task.query.max_lines }"
-                            @update:lines="task.query.min_lines = $event.lower
-                                           task.query.max_lines = $event.upper"
-                            :exclude="{
-                              test: task.query.exclude_test,
-                              boilerplate: task.query.exclude_boilerplate,
-                              unparsable: task.query.exclude_unparsable,
-                              nonAscii: task.query.exclude_non_ascii,
-                              duplicates: task.query.exclude_duplicates,
-                              identical: task.query.exclude_identical
-                            }" @update:exclude="task.query.exclude_test = $event.test
-                                                task.query.exclude_boilerplate = $event.boilerplate
-                                                task.query.exclude_unparsable = $event.unparsable
-                                                task.query.exclude_non_ascii = $event.nonAscii
-                                                task.query.exclude_duplicates = $event.duplicates
-                                                task.query.exclude_identical = $event.identical"
+                            :characters="characters" @update:characters="updateCharacters"
+                            :tokens="tokens" @update:tokens="updateTokens"
+                            :lines="lines" @update:lines="updateLines"
+                            :exclude="exclude" @update:exclude="updateExclude"
     />
     <b-section-processing-code class="task-form-section-middle"
-                               :remove="{
-                                 docstring: task.processing.remove_docstring,
-                                 innerComments: task.processing.remove_inner_comments
-                               }" @update:remove="task.processing.remove_docstring = $event.docstring
-                                                  task.processing.remove_inner_comments = $event.innerComments"
-                               :masking="{
-                                 token: task.processing.mask_token,
-                                 percentage: task.processing.mask_percentage,
-                                 contiguousOnly: task.processing.mask_contiguous_only
-                               }" @update:masking="task.processing.mask_token = $event.token
-                                                   task.processing.mask_percentage = $event.percentage
-                                                   task.processing.mask_contiguous_only = $event.contiguousOnly"
-                               :idioms="task.processing.idioms" @update:idioms="task.processing.idioms = $event"
+                               :remove="remove" @update:remove="updateRemove"
+                               :masking="masking" @update:masking="updateMasking"
+                               :idioms="task.processing.idioms" @update:idioms="updateIdioms"
     />
     <b-container class="py-4 task-form-section-bottom">
       <b-row align-h="center">
@@ -98,11 +63,110 @@ export default {
   },
   mixins: [ axiosMixin, bootstrapMixin ],
   computed: {
+    commits() {
+      return { lower: this.task.query.min_commits }
+    },
+    contributors() {
+      return { lower: this.task.query.min_contributors }
+    },
+    issues() {
+      return { lower: this.task.query.min_issues }
+    },
+    stars() {
+      return { lower: this.task.query.min_stars }
+    },
+    characters() {
+      return {
+        lower: this.task.query.min_characters,
+        upper: this.task.query.max_characters
+      }
+    },
+    tokens() {
+      return {
+        lower: this.task.query.min_tokens,
+        upper: this.task.query.max_tokens
+      }
+    },
+    lines() {
+      return {
+        lower: this.task.query.min_lines,
+        upper: this.task.query.max_lines
+      }
+    },
+    exclude() {
+      return {
+        forks: this.task.query.exclude_forks,
+        test: this.task.query.exclude_test,
+        boilerplate: this.task.query.exclude_boilerplate,
+        unparsable: this.task.query.exclude_unparsable,
+        nonAscii: this.task.query.exclude_non_ascii,
+        duplicates: this.task.query.exclude_duplicates,
+        identical: this.task.query.exclude_identical
+      }
+    },
+    remove() {
+      return {
+        docstring: this.task.processing.remove_docstring,
+        innerComments: this.task.processing.remove_inner_comments
+      }
+    },
+    masking() {
+      return {
+        token: this.task.processing.mask_token,
+        percentage: this.task.processing.mask_percentage,
+        contiguousOnly: this.task.processing.mask_contiguous_only
+      }
+    },
     submitDisabled() {
       return this.v$.$invalid
     }
   },
   methods: {
+    updateCommits(event) {
+      this.task.query.min_commits = event.lower
+    },
+    updateContributors(event) {
+      this.task.query.min_contributors = event.lower
+    },
+    updateIssues(event) {
+      this.task.query.min_issues = event.lower
+    },
+    updateStars(event) {
+      this.task.query.min_stars = event.lower
+    },
+    updateCharacters(event) {
+      this.task.query.min_characters = event.lower
+      this.task.query.max_characters = event.upper
+    },
+    updateTokens(event) {
+      this.task.query.min_tokens = event.lower
+      this.task.query.max_tokens = event.upper
+    },
+    updateLines(event) {
+      this.task.query.min_lines = event.lower
+      this.task.query.max_lines = event.upper
+    },
+    updateExclude(event) {
+      this.task.query.exclude_forks = event.forks
+      this.task.query.exclude_test = event.test
+      this.task.query.exclude_boilerplate = event.boilerplate
+      this.task.query.exclude_unparsable = event.unparsable
+      this.task.query.exclude_non_ascii = event.nonAscii
+      this.task.query.exclude_duplicates = event.duplicates
+      this.task.query.exclude_identical = event.identical
+    },
+    updateRemove(event) {
+      this.task.processing.remove_docstring = event.docstring
+      this.task.processing.remove_inner_comments = event.innerComments
+    },
+    updateMasking(event) {
+      this.task.processing.mask_token = event.token
+      this.task.processing.mask_percentage = event.percentage
+      this.task.processing.mask_contiguous_only = event.contiguousOnly
+    },
+    updateIdioms(event) {
+      this.task.processing.idioms = event
+    },
     submitSuccess() {
       this.redirectDashboardAndToast(
           "Task Created",
