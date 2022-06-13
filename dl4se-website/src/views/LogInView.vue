@@ -77,9 +77,8 @@ export default {
       },
       loginFailure: (err) => {
         const status = err.response.status
-        const handler = this.errorHandlers[status]
-        if (handler) handler()
-        else this.fallbackErrorHandler()
+        const handler = this.errorHandlers[status] || this.fallbackErrorHandler
+        handler()
       },
       inputs : {
         email: {
