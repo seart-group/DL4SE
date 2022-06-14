@@ -1,5 +1,5 @@
 <template>
-  <div id="task">
+  <div id="task" v-if="show">
     <h1 class="page-title">Specify your dataset</h1>
     <b-section-repo class="task-form-section-top"
                     :options="options.languages"
@@ -194,8 +194,45 @@ export default {
       v$: useVuelidate()
     }
   },
+  async mounted() {
+    if (this.uuid) {
+      this.show = false
+      const config = { headers : { 'authorization': this.$store.getters.getToken } }
+      const url = "https://localhost:8080/api/task/" + this.uuid
+
+      const errorHandlers = {
+        0: () => this.$router.push({ name: 'home', params: { showServerError: true } }),
+        400: () => this.redirectDashboardAndToast(
+            "Invalid UUID",
+            "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
+            "warning"
+        ),
+        401: () => {
+          this.$store.commit("clearToken")
+          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+        },
+        404: () => this.redirectDashboardAndToast(
+            "Task Not Found",
+            "The specified task could not be found.",
+            "warning"
+        )
+      }
+      await axios(url, config)
+          .then((res) => {
+            const task = res.data
+            Object.assign(this.task.query, task.query)
+            Object.assign(this.task.processing, task.processing)
+            this.show = true
+          }).catch((err) => {
+            const status = err.response.status
+            const handler = errorHandlers[status]
+            handler()
+          })
+    }
+  },
   data() {
     return {
+      show: true,
       errorHandlers: {
         0: () => this.appendToast(
             "Server Error",
