@@ -23,7 +23,7 @@ java -DDATABASE_HOST=$DATABASE_HOST \
      -jar crawler.jar ;\
 EXIT_CODE=$? ;\
 if [[ $EXIT_CODE == 0 ]] ;\
-then sleep 6h ;\
+then sleep 21600 ;\
 else exit $EXIT_CODE ;\
 fi ;\
 done
