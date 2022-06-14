@@ -17,10 +17,16 @@ const authCheck = async (_to, _from, next) => {
   const config = { headers : { 'authorization': token } }
   await axios.get("https://localhost:8080/api/user", config)
       .then(() => { next() })
-      .catch(() => {
-        const params = { showLoggedOut: !!token?.length }
-        store.commit("clearToken")
-        next({ name: "login", params: params })
+      .catch((err) => {
+        const code = err.response.status
+        if (code) {
+          const params = { showLoggedOut: !!token?.length }
+          store.commit("clearToken")
+          next({ name: "login", params: params })
+        } else {
+          const params = { showServerError: true }
+          next({ name: 'home', params: params })
+        }
       })
 }
 
@@ -28,7 +34,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    props: true
   },
   {
     path: '/login',
