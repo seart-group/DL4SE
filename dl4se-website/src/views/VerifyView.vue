@@ -8,7 +8,7 @@
 
 <script>
 import axios from "axios"
-import axiosMixin from "@/mixins/axiosMixin";
+import routerMixin from "@/mixins/routerMixin";
 import BDialogPage from "@/components/DialogPage";
 
 export default {
@@ -16,7 +16,7 @@ export default {
     token: String
   },
   components: { BDialogPage },
-  mixins: [ axiosMixin ],
+  mixins: [ routerMixin ],
   async created() {
     await this.apiCall(this.verifyLink, this.verifySuccess, this.verifyError)
   },

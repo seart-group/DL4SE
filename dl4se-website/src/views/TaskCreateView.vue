@@ -51,7 +51,7 @@
 
 <script>
 import axios from "axios";
-import axiosMixin from "@/mixins/axiosMixin";
+import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
 import BSectionRepo from "@/components/SectionRepo"
@@ -64,7 +64,7 @@ export default {
     BSectionFiltersCode,
     BSectionProcessingCode
   },
-  mixins: [ axiosMixin, bootstrapMixin ],
+  mixins: [ routerMixin, bootstrapMixin ],
   props: {
     uuid: String
   },

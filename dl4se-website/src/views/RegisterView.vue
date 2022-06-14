@@ -12,7 +12,7 @@
 
 <script>
 import {email, helpers, required} from "@vuelidate/validators";
-import axiosMixin from "@/mixins/axiosMixin";
+import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from '@/mixins/bootstrapMixin'
 import TextInputForm from '@/components/TextInputForm';
 
@@ -20,7 +20,7 @@ export default {
   components: {
     TextInputForm
   },
-  mixins: [ axiosMixin, bootstrapMixin ],
+  mixins: [ routerMixin, bootstrapMixin ],
   data () {
     return {
       errorHandlers: {
