@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "query" : {
-    "type" : "function",
+    "granularity" : "function",
     "language_name" : "Java",
     "has_license" : false,
     "exclude_forks" : true,
