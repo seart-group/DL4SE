@@ -13,7 +13,7 @@
               <b-checkbox id="docstring-checkbox" v-model="local.remove.docstring" inline>
                 Docstrings
               </b-checkbox>
-              <b-checkbox id="comments-checkbox" v-model="local.remove.inner_comments" inline>
+              <b-checkbox id="comments-checkbox" v-model="local.remove.innerComments" inline>
                 Inner comments
               </b-checkbox>
             </b-form-group>

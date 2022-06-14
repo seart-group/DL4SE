@@ -27,7 +27,7 @@
       &nbsp;token
     </p>
     <b-break />
-    <b-checkbox v-model="local.masking.contiguous_only" :disabled="checkboxDisabled">
+    <b-checkbox v-model="local.masking.contiguousOnly" :disabled="checkboxDisabled">
       Only mask contiguous tokens
     </b-checkbox>
   </div>
@@ -75,8 +75,8 @@ export default {
       this.local.masking.token = this.format(value)
     },
     resetCheckbox() {
-      if (this.v$.$invalid) this.local.masking.contiguous_only = false
-      if (this.bothInputsEmpty) this.local.masking.contiguous_only = null
+      if (this.v$.$invalid) this.local.masking.contiguousOnly = false
+      if (this.bothInputsEmpty) this.local.masking.contiguousOnly = null
     },
     resetValidation() {
       if (this.bothInputsEmpty) this.v$.$reset()

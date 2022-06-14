@@ -48,6 +48,10 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/task
 Authorization: Bearer {{token}}
 
+### GET /task{uuid}
+GET https://localhost:8080/api/task/{{uuid}}
+Authorization: Bearer {{token}}
+
 ### GET /task/stats
 GET https://localhost:8080/api/task/stats
 Authorization: Bearer {{token}}

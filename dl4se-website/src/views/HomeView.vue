@@ -18,7 +18,16 @@
 </template>
 
 <script>
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+
 export default {
+  mixins: [ bootstrapMixin ],
+  props: {
+    showServerError: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     cardClasses(idx) {
       return {
@@ -28,6 +37,15 @@ export default {
         'rounded-0': true,
         'card-background': true
       }
+    }
+  },
+  created() {
+    if (this.showServerError) {
+      this.appendToast(
+          "Server Error",
+          "An unexpected server error has occurred. Please try again later.",
+          "danger"
+      )
     }
   },
   data() {

@@ -23,7 +23,7 @@
           >
             Unparsable code
           </b-checkbox>
-          <b-checkbox id="non-ascii-checkbox" v-model="local.exclude.non_ascii">
+          <b-checkbox id="non-ascii-checkbox" v-model="local.exclude.nonAscii">
             Instances with non-ASCII characters
           </b-checkbox>
         </b-form-group>

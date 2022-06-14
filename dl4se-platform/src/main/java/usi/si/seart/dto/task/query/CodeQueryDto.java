@@ -1,5 +1,6 @@
 package usi.si.seart.dto.task.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -26,12 +27,13 @@ import javax.validation.constraints.PositiveOrZero;
 @AllArgsConstructor
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        property = "type"
+        property = "granularity"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FileQueryDto.class, name = "file"),
         @JsonSubTypes.Type(value = FunctionQueryDto.class, name = "function")
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CodeQueryDto {
 
     @NotBlank
@@ -72,7 +74,7 @@ public abstract class CodeQueryDto {
     @JsonProperty(value = "min_stars")
     @JsonSetter(nulls = Nulls.SKIP)
     @Builder.Default
-    Long minStars = 10L;
+    Long minStars = 0L;
 
     @NotNull
     @JsonProperty(value = "include_ast")
@@ -81,25 +83,19 @@ public abstract class CodeQueryDto {
     Boolean includeAst = true;
 
     @JsonProperty(value = "min_tokens")
-    @JsonSetter(nulls = Nulls.SKIP)
-    @Builder.Default
-    Long minTokens = 0L;
+    Long minTokens;
 
     @JsonProperty(value = "max_tokens")
     Long maxTokens;
 
     @JsonProperty(value = "min_lines")
-    @JsonSetter(nulls = Nulls.SKIP)
-    @Builder.Default
-    Long minLines = 0L;
+    Long minLines;
 
     @JsonProperty(value = "max_lines")
     Long maxLines;
 
     @JsonProperty(value = "min_characters")
-    @JsonSetter(nulls = Nulls.SKIP)
-    @Builder.Default
-    Long minCharacters = 0L;
+    Long minCharacters;
 
     @JsonProperty(value = "max_characters")
     Long maxCharacters;

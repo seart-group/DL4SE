@@ -57,6 +57,12 @@ public class TaskController {
     ConversionService conversionService;
     ConfigurationService configurationService;
 
+    @GetMapping(value = "/{uuid}")
+    public ResponseEntity<?> task(@PathVariable UUID uuid) {
+        Task task = taskService.getWithUUID(uuid);
+        return ResponseEntity.ok(task);
+    }
+
     @GetMapping
     public ResponseEntity<?> tasks(
             @RequestParam(required = false, defaultValue = "0") Integer page,
