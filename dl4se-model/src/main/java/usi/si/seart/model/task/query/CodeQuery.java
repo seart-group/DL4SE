@@ -83,6 +83,9 @@ public abstract class CodeQuery extends Query {
     @JsonProperty(value = "exclude_non_ascii")
     Boolean excludeNonAscii;
 
+    @JsonProperty("granularity")
+    public abstract String getGranularity();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -20,12 +20,15 @@
       <b-row>
         <b-col>
           <b-form-group label="Each instance is a:" label-class="font-weight-bold" class="m-0">
-            <b-form-radio-group id="type-radio" required v-model="task.query.type" :options="options.types" />
+            <b-form-radio-group id="type-radio" required
+                                v-model="task.query.granularity"
+                                :options="options.granularities"
+            />
           </b-form-group>
         </b-col>
       </b-row>
     </b-container>
-    <b-section-filters-code class="pb-4 task-form-section-middle" :granularity="task.query.type"
+    <b-section-filters-code class="pb-4 task-form-section-middle" :granularity="task.query.granularity"
                             :characters="characters" @update:characters="updateCharacters"
                             :tokens="tokens" @update:tokens="updateTokens"
                             :lines="lines" @update:lines="updateLines"
@@ -223,7 +226,7 @@ export default {
       ),
       task: {
         query: {
-          type: "file",
+          granularity: "file",
           language_name: null,
           has_license : false,
           min_commits: null,
@@ -255,7 +258,7 @@ export default {
         }
       },
       options: {
-        types: [
+        granularities: [
           {
             text: "File",
             value: "file"

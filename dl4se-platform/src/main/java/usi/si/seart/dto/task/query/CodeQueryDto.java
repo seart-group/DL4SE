@@ -27,7 +27,7 @@ import javax.validation.constraints.PositiveOrZero;
 @AllArgsConstructor
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        property = "type"
+        property = "granularity"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FileQueryDto.class, name = "file"),
