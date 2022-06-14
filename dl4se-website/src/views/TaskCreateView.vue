@@ -179,7 +179,7 @@ export default {
     },
     submitFailure(err) {
       const status = err.response.status
-      const handler = this.errorHandlers[status] || this.fallbackErrorHandler
+      const handler = this.errorHandlers[status]
       handler()
     },
     async submit() {
@@ -197,6 +197,11 @@ export default {
   data() {
     return {
       errorHandlers: {
+        0: () => this.redirectHomeAndToast(
+            "Server Error",
+            "An unexpected server error has occurred. Please try again later.",
+            "danger"
+        ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         401: () => {
           this.$store.commit("clearToken")
@@ -219,11 +224,6 @@ export default {
             "warning"
         )
       },
-      fallbackErrorHandler: () => this.appendToast(
-          "Server Error",
-          "An unexpected server error has occurred. Please try again later.",
-          "danger"
-      ),
       task: {
         query: {
           granularity: "file",

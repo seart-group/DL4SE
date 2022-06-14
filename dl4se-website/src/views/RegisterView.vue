@@ -24,6 +24,11 @@ export default {
   data () {
     return {
       errorHandlers: {
+        0: () => this.appendToast(
+            "Server Error",
+            "An unexpected server error has occurred. Please try again later.",
+            "danger"
+        ),
         400: () => this.appendToast(
             "Form Error",
             "Invalid form inputs.",
@@ -35,11 +40,6 @@ export default {
             "warning"
         )
       },
-      fallbackErrorHandler: () => this.appendToast(
-          "Server Error",
-          "An unexpected server error has occurred. Please try again later.",
-          "danger"
-      ),
       registerTarget: "https://localhost:8080/api/user/register",
       registerSuccess: () => {
         this.redirectHomeAndToast(
@@ -50,7 +50,7 @@ export default {
       },
       registerFailure: (err) => {
         const status = err.response.status
-        const handler = this.errorHandlers[status] || this.fallbackErrorHandler
+        const handler = this.errorHandlers[status]
         handler()
       },
       inputs: {
