@@ -12,6 +12,12 @@ import TaskCreateView from "@/views/TaskCreateView"
 
 Vue.use(VueRouter)
 
+const sessionRestore = (_to, _from, next) => {
+  const token = store.getters.getToken
+  if (token) next({ name: 'dashboard' })
+  else next()
+}
+
 const authCheck = async (_to, _from, next) => {
   const token = store.getters.getToken
   const config = { headers : { 'authorization': token } }
@@ -41,6 +47,7 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogInView,
+    beforeEnter: sessionRestore,
     props: true
   },
   {
