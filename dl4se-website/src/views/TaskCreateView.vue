@@ -197,7 +197,7 @@ export default {
   data() {
     return {
       errorHandlers: {
-        0: () => this.redirectHomeAndToast(
+        0: () => this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
             "danger"
@@ -205,11 +205,7 @@ export default {
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         401: () => {
           this.$store.commit("clearToken")
-          this.redirectHomeAndToast(
-              "Logged Out",
-              "Your session has expired. Please log in again.",
-              "secondary"
-          )
+          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
         },
         409: () => this.redirectDashboardAndToast(
             "Task Exists",
