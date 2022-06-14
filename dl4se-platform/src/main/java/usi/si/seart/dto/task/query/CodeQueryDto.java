@@ -74,7 +74,7 @@ public abstract class CodeQueryDto {
     @JsonProperty(value = "min_stars")
     @JsonSetter(nulls = Nulls.SKIP)
     @Builder.Default
-    Long minStars = 10L;
+    Long minStars = 0L;
 
     @NotNull
     @JsonProperty(value = "include_ast")
