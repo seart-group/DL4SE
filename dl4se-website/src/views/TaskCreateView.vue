@@ -62,6 +62,9 @@ export default {
     BSectionProcessingCode
   },
   mixins: [ axiosMixin, bootstrapMixin ],
+  props: {
+    uuid: String
+  },
   computed: {
     commits() {
       return { lower: this.task.query.min_commits }
@@ -220,7 +223,7 @@ export default {
       ),
       task: {
         query: {
-          type : "file",
+          type: "file",
           language_name: null,
           has_license : false,
           min_commits: null,

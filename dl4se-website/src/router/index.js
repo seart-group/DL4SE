@@ -54,9 +54,11 @@ const routes = [
     beforeEnter: authCheck
   },
   {
-    path: '/task',
+    path: '/task/:uuid?',
     name: 'task',
-    component: TaskCreateView
+    component: TaskCreateView,
+    beforeEnter: authCheck,
+    props: true
   },
   {
     path: '/:pathMatch(.*)*',
