@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators";
-import routerMixin from "@/mixins/routerMixin";
+import {email, helpers, required} from "@vuelidate/validators"
+import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
-import TextInputForm from '@/components/TextInputForm';
+import TextInputForm from '@/components/TextInputForm'
 
 export default {
   components: {

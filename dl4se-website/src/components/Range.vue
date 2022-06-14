@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
+import useVuelidate from "@vuelidate/core"
 import BBreak from "@/components/Break"
-import BCounter from "@/components/Counter";
+import BCounter from "@/components/Counter"
 
 export default {
   name: "b-range",

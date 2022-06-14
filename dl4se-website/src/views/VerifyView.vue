@@ -8,8 +8,8 @@
 
 <script>
 import axios from "axios"
-import routerMixin from "@/mixins/routerMixin";
-import BDialogPage from "@/components/DialogPage";
+import routerMixin from "@/mixins/routerMixin"
+import BDialogPage from "@/components/DialogPage"
 
 export default {
   props: {

@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators";
+import {email, helpers, required} from "@vuelidate/validators"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
-import TextInputForm from '@/components/TextInputForm';
+import TextInputForm from '@/components/TextInputForm'
 
 export default {
   components: {

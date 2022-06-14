@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import bootstrapMixin from "@/mixins/bootstrapMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin"
 
 export default {
   mixins: [ bootstrapMixin ],

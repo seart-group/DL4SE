@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import axios from "axios";
-import routerMixin from "@/mixins/routerMixin";
-import bootstrapMixin from "@/mixins/bootstrapMixin";
-import useVuelidate from "@vuelidate/core";
+import axios from "axios"
+import routerMixin from "@/mixins/routerMixin"
+import bootstrapMixin from "@/mixins/bootstrapMixin"
+import useVuelidate from "@vuelidate/core"
 import BSectionRepo from "@/components/SectionRepo"
 import BSectionFiltersCode from "@/components/SectionFiltersCode"
 import BSectionProcessingCode from "@/components/SectionProcessingCode"

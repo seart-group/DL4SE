@@ -35,7 +35,7 @@
 
 <script>
 import axios from "axios"
-import useVuelidate from "@vuelidate/core";
+import useVuelidate from "@vuelidate/core"
 
 export default {
   name: "text-input-form",

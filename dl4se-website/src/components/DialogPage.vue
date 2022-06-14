@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Router from '../router';
+import Router from '../router'
 
 export default {
   name: "b-dialog-page",

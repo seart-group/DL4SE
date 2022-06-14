@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BDialogPage from "@/components/DialogPage";
+import BDialogPage from "@/components/DialogPage"
 
 export default {
   components: { BDialogPage }
