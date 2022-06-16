@@ -59,4 +59,4 @@ Authorization: Bearer {{token}}
 ### GET /task/download
 GET https://localhost:8080/api/task/download/{{uuid}}
 Authorization: Bearer {{token}}
-Content-Type: text/plain
+Content-Type: application/gzip
