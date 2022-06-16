@@ -1,5 +1,10 @@
 <template>
-  <div id="download" />
+  <div id="download">
+    <h5 class="page-title">
+      Dataset download will commence shortly. <br />
+      Do not close this window, or navigate to other pages until the download finishes.
+    </h5>
+  </div>
 </template>
 
 <script>
