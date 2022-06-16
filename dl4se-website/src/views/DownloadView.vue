@@ -1,5 +1,5 @@
 <template>
-  <div id="download">
+  <div id="download" v-if="show">
     <h5 class="page-title">
       Dataset download will commence shortly. <br />
       Do not close this window, or navigate to other pages until the download finishes.
@@ -29,6 +29,7 @@ export default {
         'Authorization': this.$store.getters.getToken
       }
     }).then(response => {
+      this.show = true
       const disposition = response.headers.get('Content-Disposition')
       const length = response.headers.get('Content-Length')
       const fileName = disposition.substring(
@@ -57,7 +58,11 @@ export default {
 
       pump();
     }).catch(() => {})
-    // TODO 16.06.22: What kind of handling should we do here?
+  },
+  data() {
+    return {
+      show: false
+    }
   }
 }
 </script>
