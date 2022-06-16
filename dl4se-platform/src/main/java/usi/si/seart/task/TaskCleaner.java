@@ -24,7 +24,7 @@ public class TaskCleaner implements Runnable {
         Consumer<Task> deleteAndMark = task -> {
             log.trace("Deleting export file for task: [{}]", task.getUuid());
             task.setExpired(true);
-            fileSystemService.deleteExportFile(task);
+            fileSystemService.cleanTaskFiles(task);
         };
         taskService.forEachNonExpired(deleteAndMark);
         log.debug("Cleaning complete!");
