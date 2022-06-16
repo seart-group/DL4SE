@@ -9,6 +9,7 @@ import RegisterView from "@/views/RegisterView"
 import VerifyView from "@/views/VerifyView"
 import NotFoundView from "@/views/NotFoundView"
 import TaskCreateView from "@/views/TaskCreateView"
+import DownloadView from "@/views/DownloadView"
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,13 @@ const routes = [
     path: '/task/:uuid?',
     name: 'task',
     component: TaskCreateView,
+    beforeEnter: authCheck,
+    props: true
+  },
+  {
+    path: '/download/:uuid',
+    name: 'download',
+    component: DownloadView,
     beforeEnter: authCheck,
     props: true
   },
