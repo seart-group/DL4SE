@@ -58,7 +58,8 @@ public class MainConfig {
             public void addCorsMappings(@NonNull final CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .exposedHeaders("Content-Type", "Content-Disposition", "Content-Length", "Date");
             }
 
             @Override
