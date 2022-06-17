@@ -1,9 +1,11 @@
 <template>
   <div id="download" v-if="show">
-    <h5 class="page-title">
-      Dataset download will commence shortly. <br />
-      Do not close this window, or navigate to other pages until the download finishes.
-    </h5>
+    <h1 class="page-title">
+      Download will commence shortly
+    </h1>
+    <h3 class="page-description text-center">
+      Do not close this window, or navigate to other pages until the download is finished.
+    </h3>
   </div>
 </template>
 
