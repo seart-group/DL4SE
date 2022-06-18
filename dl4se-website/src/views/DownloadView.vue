@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import streamSaver from 'streamsaver'
-import {WritableStream} from 'web-streams-polyfill/ponyfill';
+import streamSaver from "streamsaver"
+import {WritableStream} from "web-streams-polyfill/ponyfill"
+import routerMixin from "@/mixins/routerMixin"
 // Override the MITM file hosted on GitHub that streamSaver
 // uses with the locally stored one
 // https://github.com/jimmywarting/StreamSaver.js/issues/242
@@ -21,6 +22,7 @@ export default {
   props: {
     uuid: String
   },
+  mixins: [ routerMixin ],
   // Axios can not consume streams on the client-side
   // https://stackoverflow.com/a/58696592/17173324
   async created() {
@@ -31,6 +33,8 @@ export default {
         'Authorization': this.$store.getters.getToken
       }
     }).then(response => {
+      if (!response.ok) throw new Error(response.status)
+
       this.show = true
       const disposition = response.headers.get('Content-Disposition')
       const length = response.headers.get('Content-Length')
@@ -59,7 +63,39 @@ export default {
       })
 
       pump();
-    }).catch(() => {})
+    }).catch((err) => {
+      if (!err) return
+      const status = err.message
+      const responseHandlers = {
+        400: () => this.redirectDashboardAndToast(
+            "Invalid UUID",
+            "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
+            "warning"
+        ),
+        401: () => {
+          this.$store.commit("clearToken")
+          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+        },
+        403: () => this.redirectDashboardAndToast(
+            "Task Download Refused",
+            "This task can not be downloaded.",
+            "warning"
+        ),
+        404: () => this.redirectDashboardAndToast(
+            "Task Not Found",
+            "The specified task could not be found.",
+            "warning"
+        ),
+        410: () => this.redirectDashboardAndToast(
+            "Task Download Expired",
+            "The download link for this task is no longer valid.",
+            "secondary"
+        )
+      }
+      const fallbackHandler = () => this.$router.push({ name: 'home', params: { showServerError: true } })
+      const handler = responseHandlers[status] || fallbackHandler
+      handler()
+    })
   },
   data() {
     return {
