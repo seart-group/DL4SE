@@ -21,7 +21,7 @@ const sessionRestore = (_to, _from, next) => {
 
 const authCheck = async (_to, _from, next) => {
   const token = store.getters.getToken
-  const config = { headers : { 'authorization': token } }
+  const config = { headers : { "authorization": token } }
   await axios.get("https://localhost:8080/api/user", config)
       .then(() => { next() })
       .catch((err) => {
@@ -32,7 +32,7 @@ const authCheck = async (_to, _from, next) => {
           next({ name: "login", params: params })
         } else {
           const params = { showServerError: true }
-          next({ name: 'home', params: params })
+          next({ name: "home", params: params })
         }
       })
 }

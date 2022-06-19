@@ -37,7 +37,6 @@ export default {
   },
   data () {
     return {
-      showHtml: false,
       errorHandlers: {
         0: () => this.appendToast(
             "Server Error",
