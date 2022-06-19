@@ -187,6 +187,11 @@ export default {
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
       const url = "https://localhost:8080/api/task/create"
       await axios.post(url, payload, config).then(this.submitSuccess).catch(this.submitFailure)
+    },
+    async getLanguages() {
+      const config = { headers : { 'authorization': this.$store.getters.getToken } }
+      const url = "https://localhost:8080/api/language"
+      await axios.get(url, config).then((res) => { this.options.languages = res.data })
     }
   },
   setup() {
@@ -195,8 +200,9 @@ export default {
     }
   },
   async mounted() {
+    this.show = false
+    await this.getLanguages()
     if (this.uuid) {
-      this.show = false
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
       const url = "https://localhost:8080/api/task/" + this.uuid
 
@@ -222,13 +228,13 @@ export default {
             const task = res.data
             Object.assign(this.task.query, task.query)
             Object.assign(this.task.processing, task.processing)
-            this.show = true
           }).catch((err) => {
             const status = err.response.status
             const handler = errorHandlers[status]
             handler()
           })
     }
+    this.show = true
   },
   data() {
     return {
@@ -301,7 +307,7 @@ export default {
             value: "function"
           }
         ],
-        languages: ['Java', 'Python', 'C++'],
+        languages: [],
       }
     }
   }

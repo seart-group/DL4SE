@@ -9,9 +9,12 @@ import usi.si.seart.exception.LanguageNotFoundException;
 import usi.si.seart.model.Language;
 import usi.si.seart.repository.LanguageRepository;
 
+import java.util.List;
+
 public interface LanguageService {
 
     Language getWithName(String name);
+    List<Language> getAll();
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -24,6 +27,11 @@ public interface LanguageService {
         public Language getWithName(String name) {
             return languageRepository.findByName(name)
                     .orElseThrow(() -> new LanguageNotFoundException("name", name));
+        }
+
+        @Override
+        public List<Language> getAll() {
+            return languageRepository.findAll();
         }
     }
 }
