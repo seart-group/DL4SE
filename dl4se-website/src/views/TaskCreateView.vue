@@ -192,6 +192,41 @@ export default {
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
       const url = "https://localhost:8080/api/language"
       await axios.get(url, config).then((res) => { this.options.languages = res.data })
+    },
+    async getParameters() {
+      if (this.uuid) {
+        const config = { headers : { 'authorization': this.$store.getters.getToken } }
+        const url = "https://localhost:8080/api/task/" + this.uuid
+
+        const errorHandlers = {
+          0: () => this.$router.push({ name: 'home', params: { showServerError: true } }),
+          400: () => this.redirectDashboardAndToast(
+              "Invalid UUID",
+              "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
+              "warning"
+          ),
+          401: () => {
+            this.$store.commit("clearToken")
+            this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+          },
+          404: () => this.redirectDashboardAndToast(
+              "Task Not Found",
+              "The specified task could not be found.",
+              "warning"
+          )
+        }
+
+        await axios(url, config)
+            .then((res) => {
+              const task = res.data
+              Object.assign(this.task.query, task.query)
+              Object.assign(this.task.processing, task.processing)
+            }).catch((err) => {
+              const status = err.response.status
+              const handler = errorHandlers[status]
+              handler()
+            })
+      }
     }
   },
   setup() {
@@ -200,45 +235,13 @@ export default {
     }
   },
   async mounted() {
-    this.show = false
     await this.getLanguages()
-    if (this.uuid) {
-      const config = { headers : { 'authorization': this.$store.getters.getToken } }
-      const url = "https://localhost:8080/api/task/" + this.uuid
-
-      const errorHandlers = {
-        0: () => this.$router.push({ name: 'home', params: { showServerError: true } }),
-        400: () => this.redirectDashboardAndToast(
-            "Invalid UUID",
-            "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
-            "warning"
-        ),
-        401: () => {
-          this.$store.commit("clearToken")
-          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
-        },
-        404: () => this.redirectDashboardAndToast(
-            "Task Not Found",
-            "The specified task could not be found.",
-            "warning"
-        )
-      }
-      await axios(url, config)
-          .then((res) => {
-            const task = res.data
-            Object.assign(this.task.query, task.query)
-            Object.assign(this.task.processing, task.processing)
-          }).catch((err) => {
-            const status = err.response.status
-            const handler = errorHandlers[status]
-            handler()
-          })
-    }
+    await this.getParameters()
     this.show = true
   },
   data() {
     return {
-      show: true,
+      show: false,
       errorHandlers: {
         0: () => this.appendToast(
             "Server Error",
