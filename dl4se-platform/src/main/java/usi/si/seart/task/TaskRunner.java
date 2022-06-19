@@ -157,6 +157,8 @@ public class TaskRunner implements Runnable {
                     }
                 }
 
+                task = taskService.update(task);
+
                 fileSystemService.compressTaskFile(task);
 
                 task.setStatus(Status.FINISHED);
