@@ -126,7 +126,7 @@ public class TaskController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/download/{uuid}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/download/{uuid}")
     public ResponseEntity<?> downloadResults(
             @PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal
     ) {
@@ -139,14 +139,14 @@ public class TaskController {
         boolean canDownload = requester.equals(owner) && status == Status.FINISHED;
         if (!canDownload) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
-        Path exportFilePath = fileSystemService.getExportFile(task);
+        Path exportFilePath = fileSystemService.getTaskArchive(task);
         String exportFileName = exportFilePath.getFileName().toString();
         long exportFileSize = exportFilePath.toFile().length();
         InputStreamResource resource = new InputStreamResource(new FileInputStream(exportFilePath.toFile()));
         ContentDisposition disposition = ContentDisposition.attachment().filename(exportFileName).build();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(new MediaType("application", "gzip"));
         headers.setContentLength(exportFileSize);
         headers.setContentDisposition(disposition);
 

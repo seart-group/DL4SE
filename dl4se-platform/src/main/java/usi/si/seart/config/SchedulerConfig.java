@@ -109,7 +109,7 @@ public class SchedulerConfig {
             log.warn(ex.getMessage());
             taskService.registerException(ex);
             Task task = ex.getTask();
-            fileSystemService.deleteExportFile(task);
+            fileSystemService.cleanTaskFiles(task);
             emailService.sendTaskNotificationEmail(task);
         }
     }

@@ -123,7 +123,7 @@ public class TaskRunner implements Runnable {
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
-                Path exportPath = fileSystemService.createExportFile(task);
+                Path exportPath = fileSystemService.createTaskFile(task);
                 @Cleanup BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(
                                 new FileOutputStream(exportPath.toFile(), true),
@@ -157,6 +157,8 @@ public class TaskRunner implements Runnable {
                     }
                 }
 
+                fileSystemService.compressTaskFile(task);
+
                 task.setStatus(Status.FINISHED);
                 task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
                 task = taskService.update(task);
@@ -169,7 +171,7 @@ public class TaskRunner implements Runnable {
                 // That means if the locking failure occurs here, the task has been marked as cancelled, and we should
                 // move on to executing the next task. Still, this exception should be logged at the debug level, just
                 // in case we run into other locking issues when we introduce new features...
-                fileSystemService.deleteExportFile(task);
+                fileSystemService.cleanTaskFiles(task);
                 log.info("Cancelled task: [{}]", task.getUuid());
                 log.debug("", ex);
             } catch (Throwable thr) {
