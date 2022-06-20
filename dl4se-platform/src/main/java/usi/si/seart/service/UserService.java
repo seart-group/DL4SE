@@ -4,9 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import usi.si.seart.exception.UserNotFoundException;
@@ -14,13 +13,11 @@ import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.UserRepository;
 
-import java.util.List;
-
 public interface UserService {
 
     User create(User user);
     void update(User user);
-    List<User> getAll(Integer page, Integer pageSize, String column);
+    Page<User> getAll(Pageable pageable);
     User getWithId(Long id);
     User getWithUid(String uid);
     User getWithEmail(String email);
@@ -46,10 +43,8 @@ public interface UserService {
         }
 
         @Override
-        public List<User> getAll(Integer page, Integer pageSize, String column) {
-            Sort sort = Sort.by(column).ascending();
-            Pageable pageable = PageRequest.of(page, pageSize, sort);
-            return userRepository.findAll(pageable).getContent();
+        public Page<User> getAll(Pageable pageable) {
+            return userRepository.findAll(pageable);
         }
 
         @Override

@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,8 +52,8 @@ public interface TaskService {
     void forEachNonExpired(Consumer<Task> consumer);
     void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
-    List<Task> getAll(Integer page, Integer pageSize, String column);
-    List<Task> getAll(User user, Integer page, Integer pageSize, String column);
+    Page<Task> getAll(Pageable pageable);
+    Page<Task> getAll(User user, Pageable pageable);
     Task getWithUUID(UUID uuid);
     Map<Status, Long> getSummary();
     Map<Status, Long> getSummary(User user);
@@ -175,17 +174,13 @@ public interface TaskService {
         }
 
         @Override
-        public List<Task> getAll(Integer page, Integer pageSize, String column) {
-            Sort sort = Sort.by(column).ascending();
-            Pageable pageable = PageRequest.of(page, pageSize, sort);
-            return taskRepository.findAll(pageable).getContent();
+        public Page<Task> getAll(Pageable pageable) {
+            return taskRepository.findAll(pageable);
         }
 
         @Override
-        public List<Task> getAll(User user, Integer page, Integer pageSize, String column) {
-            Sort sort = Sort.by(column).ascending();
-            Pageable pageable = PageRequest.of(page, pageSize, sort);
-            return taskRepository.findAllByUser(user, pageable).getContent();
+        public Page<Task> getAll(User user, Pageable pageable) {
+            return taskRepository.findAllByUser(user, pageable);
         }
 
         @Override
