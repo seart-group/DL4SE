@@ -1,5 +1,6 @@
 package usi.si.seart.config;
 
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -9,6 +10,7 @@ import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
@@ -19,6 +21,7 @@ import usi.si.seart.converter.DtoToConfigurationConverter;
 import usi.si.seart.converter.DtoToUserConverter;
 import usi.si.seart.converter.GenericCodeQueryConverter;
 import usi.si.seart.converter.TaskToQueriesConverter;
+import usi.si.seart.jackson.PageSerializer;
 import usi.si.seart.jackson.SortSerializer;
 
 import java.nio.file.Path;
@@ -47,7 +50,9 @@ public class MainConfig {
         jsonMapper.setDateFormat(dateFormat());
         jsonMapper.registerModules(
                 new JavaTimeModule(),
-                new SimpleModule().addSerializer(Sort.class, SortSerializer.INSTANCE)
+                new SimpleModule("dl4se-spring-data-custom", Version.unknownVersion())
+                        .addSerializer(Sort.class, SortSerializer.INSTANCE)
+                        .addSerializer(PageImpl.class, PageSerializer.INSTANCE)
         );
         return jsonMapper;
     }
