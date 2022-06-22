@@ -18,6 +18,9 @@ public class PaginationConfig {
     @Bean
     PageableHandlerMethodArgumentResolverCustomizer pageableResolverCustomizer() {
         Integer maxPageSize = configurationService.get("max_page_size", Integer.class);
-        return pageableResolver -> pageableResolver.setMaxPageSize(maxPageSize);
+        return pageableResolver -> {
+            pageableResolver.setMaxPageSize(maxPageSize);
+            pageableResolver.setOneIndexedParameters(true);
+        };
     }
 }

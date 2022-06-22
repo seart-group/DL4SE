@@ -15,7 +15,7 @@ public class PageSerializer extends JsonSerializer<PageImpl> {
     public void serialize(PageImpl value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
 
-        gen.writeNumberField("page", value.getNumber());
+        gen.writeNumberField("page", value.getNumber() + 1);
         gen.writeNumberField("size", value.getSize());
 
         gen.writeNumberField("total_pages", value.getTotalPages());
