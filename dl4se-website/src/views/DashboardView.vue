@@ -1,5 +1,6 @@
 <template>
   <div id="dashboard">
+    <h1 class="page-title">Dashboard</h1>
     <b-container>
       <b-row>
         <b-col>
