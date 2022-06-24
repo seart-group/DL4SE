@@ -42,49 +42,73 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    props: true
+    props: true,
+    meta: {
+      public: true
+    }
   },
   {
     path: '/login',
     name: 'login',
     component: LogInView,
     beforeEnter: sessionRestore,
-    props: true
+    props: true,
+    meta: {
+      public: true
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: RegisterView
+    component: RegisterView,
+    meta: {
+      public: true
+    }
   },
   {
     path: '/verify/:token',
     name: 'verify',
     component: VerifyView,
-    props: true
+    props: true,
+    meta: {
+      public: true
+    }
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
-    beforeEnter: authCheck
+    beforeEnter: authCheck,
+    meta: {
+      public: false
+    }
   },
   {
     path: '/task/:uuid?',
     name: 'task',
     component: TaskCreateView,
     beforeEnter: authCheck,
-    props: true
+    props: true,
+    meta: {
+      public: false
+    }
   },
   {
     path: '/download/:uuid',
     name: 'download',
     component: DownloadView,
     beforeEnter: authCheck,
-    props: true
+    props: true,
+    meta: {
+      public: false
+    }
   },
   {
     path: '/:pathMatch(.*)*',
-    component: NotFoundView
+    component: NotFoundView,
+    meta: {
+      public: true
+    }
   }
 ]
 
