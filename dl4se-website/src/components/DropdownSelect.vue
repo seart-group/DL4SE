@@ -1,6 +1,7 @@
 <template>
   <b-dropdown :id="id" no-caret block
               toggle-class="dropdown-select-toggle"
+              menu-class="dropdown-select-menu"
               :disabled="disabled"
   >
     <template #button-content>
