@@ -9,8 +9,10 @@
       </b-row>
       <b-row align-h="center">
         <b-col>
-          <b-paginated-table id="user-table" api-url="https://localhost:8080/api/admin/user"
-                             :fields="userTable.fields" :primary-key="userTable.fields[0].key"
+          <b-paginated-table :id="userTable.id"
+                             :api-url="userTable.apiUrl"
+                             :fields="userTable.fields"
+                             :primary-key="userTable.fields[0].key"
           >
             <template #cell(registered)="row">
               <span :title="row.unformatted">{{ row.value }}</span>
@@ -83,6 +85,8 @@ export default {
   data() {
     return {
       userTable: {
+        id: "user-table",
+        apiUrl: "https://localhost:8080/api/admin/user",
         fields: [
           {
             key: "uid",
