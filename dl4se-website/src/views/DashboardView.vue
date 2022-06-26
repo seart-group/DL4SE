@@ -15,7 +15,7 @@
                              :primary-key="userTable.fields[0].key"
           >
             <template #cell(registered)="row">
-              <span :title="row.unformatted">{{ row.value }}</span>
+              <span v-b-tooltip="row.value.toISOString()">{{ row.value.toISOString().split('T')[0] }}</span>
             </template>
             <template #cell(details)="row">
               <b-icon-patch-check-fill v-if="row.item.verified" v-b-tooltip="'Email Verified'" class="mr-1" />
@@ -104,7 +104,7 @@ export default {
           {
             key: "registered",
             sortable: true,
-            formatter: (value) => value.split('T')[0]
+            formatter: (value) => new Date(Date.parse(value + 'Z'))
           }
         ]
       }
