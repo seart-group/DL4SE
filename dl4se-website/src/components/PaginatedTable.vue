@@ -57,6 +57,12 @@ export default {
     apiUrl: {
       type: String,
       required: true
+    },
+    itemTransformer: {
+      type: Function,
+      default(value) {
+        return value
+      }
     }
   },
   computed: {
@@ -79,6 +85,7 @@ export default {
       }
       return axios.get(ctx.apiUrl, config).then(res => {
         this.totalRows = res.data["total_items"]
+        res.data.items.forEach(this.itemTransformer)
         return res.data.items
       })
     }
