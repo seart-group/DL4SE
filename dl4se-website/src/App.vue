@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <main id="app">
     <b-smart-navbar />
     <router-view />
-  </div>
+  </main>
 </template>
 
 <script>
