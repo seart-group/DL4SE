@@ -20,11 +20,20 @@ $enable-responsive-font-sizes: true
   box-sizing: border-box
 
 html
+  position: relative
   min-height: 100vh
 
 body
   color: black
   font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+
+@include media-breakpoint-up(xs)
+  main
+    padding-bottom: 160px
+
+@include media-breakpoint-up(md)
+  main
+    padding-bottom: 40px
 
 \:disabled
   cursor: not-allowed
