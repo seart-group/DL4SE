@@ -1,8 +1,12 @@
 <template>
-  <main id="app">
-    <b-smart-navbar />
-    <router-view />
-  </main>
+  <fragment>
+    <header>
+      <b-smart-navbar />
+    </header>
+    <main id="app">
+      <router-view />
+    </main>
+  </fragment>
 </template>
 
 <script>
