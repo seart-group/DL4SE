@@ -1,51 +1,53 @@
 <template>
   <div id="task" v-if="show">
     <h1 class="page-title">Specify your dataset</h1>
-    <b-section-repo class="task-form-section-top"
-                    :options="options.languages"
-                    :language="task.query.language_name" @update:language="task.query.language_name = $event"
-                    :has-license="task.query.has_license" @update:has-license="task.query.has_license = $event"
-                    :commits="commits" @update:commits="updateCommits"
-                    :contributors="contributors" @update:contributors="updateContributors"
-                    :issues="issues" @update:issues="updateIssues"
-                    :stars="stars" @update:stars="updateStars"
-                    :exclude="exclude" @update:exclude="updateExclude"
-    />
-    <b-container class="py-4 task-form-section-middle">
-      <b-row>
-        <b-col>
-          <h5 class="task-form-section-title">Dataset Characteristics</h5>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-form-group label="Each instance is a:" label-class="font-weight-bold" class="m-0">
-            <b-form-radio-group id="type-radio" required
-                                v-model="task.query.granularity"
-                                :options="options.granularities"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-section-filters-code class="pb-4 task-form-section-middle" :granularity="task.query.granularity"
-                            :characters="characters" @update:characters="updateCharacters"
-                            :tokens="tokens" @update:tokens="updateTokens"
-                            :lines="lines" @update:lines="updateLines"
-                            :exclude="exclude" @update:exclude="updateExclude"
-    />
-    <b-section-processing-code class="task-form-section-middle"
-                               :remove="remove" @update:remove="updateRemove"
-                               :masking="masking" @update:masking="updateMasking"
-                               :idioms="task.processing.idioms" @update:idioms="updateIdioms"
-    />
-    <b-container class="py-4 task-form-section-bottom">
-      <b-row align-h="center">
-        <b-col cols="auto">
-          <b-button :disabled="v$.$invalid" @click="submit" class="action-btn">Generate Dataset</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
+    <div class="task-form">
+      <b-section-repo class="task-form-section-top"
+                      :options="options.languages"
+                      :language="task.query.language_name" @update:language="task.query.language_name = $event"
+                      :has-license="task.query.has_license" @update:has-license="task.query.has_license = $event"
+                      :commits="commits" @update:commits="updateCommits"
+                      :contributors="contributors" @update:contributors="updateContributors"
+                      :issues="issues" @update:issues="updateIssues"
+                      :stars="stars" @update:stars="updateStars"
+                      :exclude="exclude" @update:exclude="updateExclude"
+      />
+      <b-container class="py-4 task-form-section-middle">
+        <b-row>
+          <b-col>
+            <h5 class="task-form-section-title">Dataset Characteristics</h5>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-form-group label="Each instance is a:" label-class="font-weight-bold" class="m-0">
+              <b-form-radio-group id="type-radio" required
+                                  v-model="task.query.granularity"
+                                  :options="options.granularities"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-section-filters-code class="pb-4 task-form-section-middle" :granularity="task.query.granularity"
+                              :characters="characters" @update:characters="updateCharacters"
+                              :tokens="tokens" @update:tokens="updateTokens"
+                              :lines="lines" @update:lines="updateLines"
+                              :exclude="exclude" @update:exclude="updateExclude"
+      />
+      <b-section-processing-code class="task-form-section-middle"
+                                 :remove="remove" @update:remove="updateRemove"
+                                 :masking="masking" @update:masking="updateMasking"
+                                 :idioms="task.processing.idioms" @update:idioms="updateIdioms"
+      />
+      <b-container class="py-4 task-form-section-bottom">
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <b-button :disabled="v$.$invalid" @click="submit" class="action-btn">Generate Dataset</b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
   </div>
 </template>
 
