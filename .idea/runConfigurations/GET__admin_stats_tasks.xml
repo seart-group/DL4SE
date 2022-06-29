@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GET /admin/stats/tasks" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/admin" path="$PROJECT_DIR$/http/AdminController.http" index="8" requestIdentifier="GET /admin/stats/tasks" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>

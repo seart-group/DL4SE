@@ -85,7 +85,7 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/task")
     public ResponseEntity<?> listTasks(
             @SortDefault(sort = "submitted", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -93,7 +93,7 @@ public class AdminController {
         return ResponseEntity.ok(tasks);
     }
 
-    @GetMapping("/stats/tasks")
+    @GetMapping("/task/stats")
     public ResponseEntity<?> statsTasks() {
         return ResponseEntity.ok(taskService.getSummary());
     }
