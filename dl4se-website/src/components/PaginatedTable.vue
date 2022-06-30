@@ -16,25 +16,33 @@
         <slot :name="slotName" />
       </template>
     </b-table>
-    <div class="paginated-table-controls">
-      <b-pagination v-model="currentPage"
-                    :per-page="perPage"
-                    :total-rows="totalRows"
-                    last-number first-number
-                    align="center"
-      >
-        <template #prev-text><b-icon-chevron-left /></template>
-        <template #next-text><b-icon-chevron-right /></template>
-        <template #ellipsis-text><b-icon-three-dots /></template>
-      </b-pagination>
-      <b-dropdown-select header="Choose Page Size" placeholder="Page Size"
-                         v-model="perPage" :options="perPageOptions"
-                         class="mb-3"
-      />
-      <b-button class="paginated-table-refresh" @click="refresh">
-        <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
-      </b-button>
-    </div>
+    <b-container class="paginated-table-controls">
+      <b-row no-gutters align-h="center">
+        <b-col md="auto" cols="12">
+          <b-pagination v-model="currentPage"
+                        :per-page="perPage"
+                        :total-rows="totalRows"
+                        last-number first-number
+                        align="center"
+          >
+            <template #prev-text><b-icon-chevron-left /></template>
+            <template #next-text><b-icon-chevron-right /></template>
+            <template #ellipsis-text><b-icon-three-dots /></template>
+          </b-pagination>
+        </b-col>
+        <b-col md="auto" col>
+          <b-dropdown-select header="Choose Page Size" placeholder="Page Size"
+                             v-model="perPage" :options="perPageOptions"
+                             class="mb-3"
+          />
+        </b-col>
+        <b-col cols="auto">
+          <b-button class="paginated-table-refresh" @click="refresh">
+            <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
