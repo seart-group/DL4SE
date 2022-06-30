@@ -15,7 +15,7 @@
                              :primary-key="userTable.fields[0].key"
           >
             <template #cell(registered)="row">
-              <span v-b-tooltip="row.value">{{ row.value.split('T')[0] }}</span>
+              <b-abbreviation :value="row.value.toISOString()" :transformer="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
               <b-icon :icon="(row.item.verified) ? 'patch-check-fill' : 'patch-question-fill'"
@@ -64,10 +64,11 @@
 
 <script>
 import axios from "axios"
+import BAbbreviation from "@/components/Abbreviation";
 import BPaginatedTable from "@/components/PaginatedTable"
 
 export default {
-  components: { BPaginatedTable },
+  components: { BAbbreviation, BPaginatedTable },
   methods: {
     toTitleCase(str) {
       return str.replace(
@@ -108,7 +109,7 @@ export default {
           {
             key: "registered",
             sortable: true,
-            formatter: (value) => new Date(Date.parse(value + 'Z')).toISOString()
+            formatter: (value) => new Date(Date.parse(value + 'Z'))
           }
         ]
       }
