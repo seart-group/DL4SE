@@ -93,13 +93,14 @@ export default {
         res.data.items.forEach(this.itemTransformer)
         return res.data.items
       })
+    },
+    refresh() {
+      this.$root.$emit('bv::refresh::table', this.id)
     }
   },
   mounted() {
     if (this.autoRefresh) {
-      setInterval(() => {
-        this.$root.$emit('bv::refresh::table', this.id)
-      }, this.refreshRate)
+      setInterval(this.refresh, this.refreshRate)
     }
   },
   data() {
