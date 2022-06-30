@@ -63,6 +63,11 @@ export default {
       default(value) {
         return value
       }
+    },
+    autoRefresh: Boolean,
+    refreshRate: {
+      type: Number,
+      default: 5000
     }
   },
   computed: {
@@ -88,6 +93,13 @@ export default {
         res.data.items.forEach(this.itemTransformer)
         return res.data.items
       })
+    }
+  },
+  mounted() {
+    if (this.autoRefresh) {
+      setInterval(() => {
+        this.$root.$emit('bv::refresh::table', this.id)
+      }, this.refreshRate)
     }
   },
   data() {
