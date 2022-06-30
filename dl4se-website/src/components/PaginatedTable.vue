@@ -31,6 +31,9 @@
                          v-model="perPage" :options="perPageOptions"
                          class="mb-3"
       />
+      <b-button class="paginated-table-refresh" @click="refresh">
+        <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+      </b-button>
     </div>
   </div>
 </template>
