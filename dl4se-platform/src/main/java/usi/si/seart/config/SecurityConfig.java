@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/actuator/**")
-                .hasAnyRole("ADMIN")
+                .hasRole("ADMIN")
                 .antMatchers(
                         "/",
                         "/user/login",
