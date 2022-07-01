@@ -1,3 +1,7 @@
+### GET /admin
+GET https://localhost:8080/api/admin
+Authorization: Bearer {{token}}
+
 ### GET /admin/user
 GET https://localhost:8080/api/admin/user
 Authorization: Bearer {{token}}

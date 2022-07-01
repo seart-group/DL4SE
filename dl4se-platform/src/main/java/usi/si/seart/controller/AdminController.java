@@ -39,6 +39,11 @@ public class AdminController {
     ConversionService conversionService;
     ConfigurationService configurationService;
 
+    @GetMapping
+    public ResponseEntity<?> isAdmin() {
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/user")
     public ResponseEntity<?> listUsers(
             @SortDefault(sort = "registered", direction = Sort.Direction.DESC) Pageable pageable
