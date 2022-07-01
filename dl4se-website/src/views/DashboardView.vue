@@ -59,6 +59,12 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-modal :id="detailsModal.id" :title="detailsModal.title"
+             content-class="rounded-0" footer-class="d-none"
+             @hidden="reset" scrollable centered
+    >
+      <pre class="m-0" v-html="detailsModal.content" />
+    </b-modal>
   </div>
 </template>
 
@@ -85,10 +91,24 @@ export default {
         this.$root.$emit("bv::refresh::table", "user-table")
       }).catch(console.log)
       // TODO 23.06.22: Better error handling
+    },
+    display(title, item, button) {
+      this.detailsModal.title = title
+      this.detailsModal.content = JSON.stringify(item, null, 2)
+      this.$root.$emit('bv::show::modal', this.detailsModal.id, button)
+    },
+    reset() {
+      this.detailsModal.title = ""
+      this.detailsModal.content = ""
     }
   },
   data() {
     return {
+      detailsModal: {
+        id: "details-modal",
+        title: "",
+        content: "",
+      },
       userTable: {
         id: "user-table",
         apiUrl: "https://localhost:8080/api/admin/user",
