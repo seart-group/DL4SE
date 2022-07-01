@@ -114,12 +114,15 @@ public class TaskController {
     public ResponseEntity<?> cancel(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
+
         Status status = task.getStatus();
         if (Status.Category.INACTIVE.contains(status))
             return ResponseEntity.badRequest().build();
 
         User owner = task.getUser();
-        boolean canCancel = requester.equals(owner) || requester.getRole().equals(Role.ADMIN);
+        boolean isOwner = requester.equals(owner);
+        boolean isAdmin = requester.getRole().equals(Role.ADMIN);
+        boolean canCancel = isOwner || isAdmin;
         if (!canCancel)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
