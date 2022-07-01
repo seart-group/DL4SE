@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator/**")
                 .hasAnyRole("ADMIN")
                 .antMatchers(
+                        "/",
                         "/user/login",
                         "/user/register",
                         "/user/verify",
