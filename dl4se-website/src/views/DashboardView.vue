@@ -60,10 +60,16 @@
       </b-row>
     </b-container>
     <b-modal :id="detailsModal.id" :title="detailsModal.title"
-             content-class="rounded-0" footer-class="d-none"
-             @hidden="reset" scrollable centered
+             content-class="rounded-0" scrollable centered
+             footer-class="justify-content-start"
+             @hidden="reset"
     >
-      <pre class="m-0" v-html="detailsModal.content" />
+      <pre :id="detailsModal.id+'-content'" class="m-0" v-html="detailsModal.content" />
+      <template #modal-footer>
+        <b-button class="action-btn" @click="copy">
+          <b-icon-clipboard />
+        </b-button>
+      </template>
     </b-modal>
   </div>
 </template>
@@ -100,6 +106,11 @@ export default {
     reset() {
       this.detailsModal.title = ""
       this.detailsModal.content = ""
+    },
+    copy() {
+      navigator.clipboard.writeText(this.detailsModal.content)
+          .then(() => {})
+          .catch(() => {})
     }
   },
   data() {
