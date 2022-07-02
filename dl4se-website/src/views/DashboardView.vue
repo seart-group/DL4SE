@@ -66,9 +66,14 @@
     >
       <pre :id="detailsModal.id+'-content'" class="m-0" v-html="detailsModal.content" />
       <template #modal-footer>
-        <b-button class="action-btn" @click="copy">
+        <b-button :id="detailsModal.id+'-btn'" class="action-btn" @click="copy">
           <b-icon-clipboard />
         </b-button>
+        <b-tooltip :target="detailsModal.id+'-btn'"
+                   :show.sync="detailsModal.showTooltip"
+                   @shown="autoHideTooltip" triggers="click"
+                   title="Copied!"
+        />
       </template>
     </b-modal>
   </div>
@@ -106,11 +111,14 @@ export default {
     reset() {
       this.detailsModal.title = ""
       this.detailsModal.content = ""
+      this.detailsModal.showTooltip = false
     },
     copy() {
       navigator.clipboard.writeText(this.detailsModal.content)
-          .then(() => {})
-          .catch(() => {})
+          .then(() => this.detailsModal.showTooltip = true)
+    },
+    autoHideTooltip() {
+      setTimeout(() => this.detailsModal.showTooltip = false, 2000)
     }
   },
   data() {
@@ -119,6 +127,7 @@ export default {
         id: "details-modal",
         title: "",
         content: "",
+        showTooltip: false
       },
       userTable: {
         id: "user-table",
