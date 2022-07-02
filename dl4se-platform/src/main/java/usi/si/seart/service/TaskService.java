@@ -141,6 +141,7 @@ public interface TaskService {
             String stackTrace = stringWriter.toString();
 
             task.setStatus(Status.ERROR);
+            task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
             task.setExpired(true);
             task.setErrorStackTrace(stackTrace);
 
