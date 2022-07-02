@@ -94,7 +94,7 @@ export default {
         headers: { 'authorization': this.$store.getters.getToken }
       }
       await axios.post(url, null, config).then(() => {
-        this.$root.$emit("bv::refresh::table", "user-table")
+        this.$root.$emit("bv::refresh::table", this.userTable.id)
       }).catch(console.log)
       // TODO 23.06.22: Better error handling
     },
