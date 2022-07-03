@@ -20,9 +20,9 @@
             <template #cell(details)="row">
               <b-icon :icon="(row.item.verified) ? 'patch-check-fill' : 'patch-question-fill'"
                       v-b-tooltip="(row.item.verified) ? 'Email Verified' : 'Email Unverified'"
-                      class="mr-1"
+                      class="mr-2" scale="1.35"
               />
-              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitleCase(row.item.role)">
+              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitleCase(row.item.role)"  scale="1.35">
                 <b-icon :icon="(row.item.role === 'ADMIN') ? 'person-plus-fill' : 'person-fill'"
                         :shift-h="(row.item.role === 'ADMIN') ? 2 : 0"
                         stacked
