@@ -4,7 +4,7 @@
     <b-container>
       <b-row>
         <b-col>
-          <h3 class="mb-3">Platform Tasks</h3>
+          <h3 class="mb-3">Tasks</h3>
         </b-col>
       </b-row>
       <b-row align-h="center">
@@ -111,7 +111,7 @@
     <b-container>
       <b-row>
         <b-col>
-          <h3 class="mb-3">Platform Users</h3>
+          <h3 class="mb-3">Users</h3>
         </b-col>
       </b-row>
       <b-row align-h="center">
