@@ -1,6 +1,7 @@
 <template>
   <div class="paginated-table-container">
     <b-table :id="id" borderless responsive hover sticky-header="370px"
+             class="paginated-table-border"
              table-class="paginated-table" head-variant="dark"
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
              tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row"
