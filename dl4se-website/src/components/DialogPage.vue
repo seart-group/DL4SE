@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import Router from '../router'
-
 export default {
   name: "b-dialog-page",
   props: {
@@ -36,13 +34,7 @@ export default {
     actions: {
       type: Array,
       default(){
-        return [
-          {
-            text: "Home",
-            icon: "house-door",
-            action: () => Router.push({ name: "home" })
-          }
-        ]
+        return []
       }
     }
   },

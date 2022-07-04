@@ -1,10 +1,18 @@
 <template>
-  <b-dropdown :id="id" no-caret block toggle-class="dropdown-toggle-btn" :disabled="disabled">
+  <b-dropdown :id="id" no-caret block
+              toggle-class="dropdown-select-toggle"
+              menu-class="dropdown-select-menu"
+              :disabled="disabled"
+  >
     <template #button-content>
       {{ toggleContent }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-    <b-dropdown-item v-for="option in options" :key="option" :value="option" @click="selected = option">
+    <b-dropdown-item v-for="option in options"
+                     :key="option" :value="option"
+                     @click="selected = option"
+                     class="dropdown-select-item"
+    >
       {{ option }}
     </b-dropdown-item>
   </b-dropdown>

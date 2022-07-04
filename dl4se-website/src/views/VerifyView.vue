@@ -50,11 +50,6 @@ export default {
           text: "Resend",
           icon: "arrow-clockwise",
           action: this.resendToken
-        },
-        {
-          text: "Home",
-          icon: "house-door",
-          action: () => this.$router.push({ name: "home" })
         }
       ],
       verifySuccess: () => {
