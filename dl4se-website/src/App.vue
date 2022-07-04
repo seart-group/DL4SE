@@ -4,7 +4,7 @@
       <b-smart-navbar />
     </header>
     <main id="app">
-      <router-view />
+      <router-view class="router-view" />
     </main>
     <footer>
       <b-footer />
