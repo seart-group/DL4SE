@@ -62,7 +62,7 @@
              footer-class="justify-content-start"
              @hidden="reset"
     >
-      <pre :id="detailsModal.id+'-content'" class="m-0" v-html="detailsModal.content" />
+      <pre :id="detailsModal.id+'-content'" class="m-0">{{ detailsModal.content }}</pre>
       <template #modal-footer>
         <b-button :id="detailsModal.id+'-btn'" class="action-btn" @click="copy">
           <b-icon-clipboard />
