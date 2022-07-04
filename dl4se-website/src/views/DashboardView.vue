@@ -328,6 +328,14 @@ export default {
                 total: item.total_results
               }
             }
+          },
+          {
+            key: "details",
+            sortable: false
+          },
+          {
+            key: "actions",
+            sortable: false
           }
         ]
       },
@@ -352,6 +360,14 @@ export default {
             key: "registered",
             sortable: true,
             formatter: (value) => new Date(Date.parse(value + 'Z'))
+          },
+          {
+            key: "details",
+            sortable: false
+          },
+          {
+            key: "actions",
+            sortable: false
           }
         ]
       }

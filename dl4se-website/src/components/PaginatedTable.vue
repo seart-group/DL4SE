@@ -5,7 +5,7 @@
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
              tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row" hover
              show-empty :items="provider" :api-url="apiUrl"
-             :primary-key="primaryKey" :fields="allFields" sort-icon-left
+             :primary-key="primaryKey" :fields="fields" sort-icon-left
              :per-page="perPage" :current-page="currentPage"
              v-bind="$attrs" v-on="$listeners"
     >
@@ -73,11 +73,6 @@ export default {
     refreshRate: {
       type: Number,
       default: 5000
-    }
-  },
-  computed: {
-    allFields() {
-      return [ ...this.fields, { key: "details", sortable: false }, { key: "actions", sortable: false } ]
     }
   },
   methods: {
