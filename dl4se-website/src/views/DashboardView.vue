@@ -18,33 +18,31 @@
               <b-abbreviation :value="row.value.toISOString()" :transformer="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
-              <b-icon :icon="(row.item.verified) ? 'patch-check-fill' : 'patch-question-fill'"
-                      v-b-tooltip="(row.item.verified) ? 'Email Verified' : 'Email Unverified'"
+              <b-icon :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
+                      v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
                       class="mr-2" scale="1.35"
               />
-              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitleCase(row.item.role)"  scale="1.35">
+              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitleCase(row.item.role)" scale="1.35">
                 <b-icon :icon="(row.item.role === 'ADMIN') ? 'person-plus-fill' : 'person-fill'"
                         :shift-h="(row.item.role === 'ADMIN') ? 2 : 0"
                         stacked
                 />
-                <b-icon icon="x-circle" stacked variant="danger"
-                        v-if="!row.item.enabled"
-                />
+                <b-icon icon="x-circle" stacked variant="danger" v-if="!row.item.enabled" />
               </b-iconstack>
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
                 <b-button class="action-btn mr-1" size="sm"
-                          v-b-tooltip="(!row.item.enabled) ? 'Enable' : 'Disable'"
-                          @click="userAction(row.item.uid, (!row.item.enabled) ? 'enable' : 'disable')"
+                          v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
+                          @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
                 >
-                  <b-icon :icon="(!row.item.enabled) ? 'person-check-fill' : 'person-x-fill'" />
+                  <b-icon :icon="`person-${row.item.enabled ? 'x' : 'check'}-fill`" />
                 </b-button>
                 <b-button class="action-btn" size="sm"
                           v-b-tooltip="(row.item.role === 'ADMIN') ? 'Demote' : 'Promote'"
                           @click="userAction(row.item.uid, (row.item.role === 'ADMIN') ? 'demote' : 'promote')"
                 >
-                  <b-icon :icon="(row.item.role === 'ADMIN') ? 'person-dash-fill' : 'person-plus-fill'" />
+                  <b-icon :icon="`person-${(row.item.role === 'ADMIN') ? 'dash' : 'plus'}-fill`" />
                 </b-button>
               </div>
             </template>
