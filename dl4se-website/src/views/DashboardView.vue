@@ -54,7 +54,7 @@
                 <span v-html="row.value.percentage" />
                 <b-progress :max="row.value.total" :value="row.value.processed"
                             v-b-tooltip.html="`Total Instances:<br />${row.value.total}`"
-                            variant="dark" class="border-secondary"
+                            variant="dark" class="border-secondary" tabindex="0"
                 />
               </div>
             </template>
