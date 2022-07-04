@@ -1,3 +1,7 @@
+### GET /admin
+GET https://localhost:8080/api/admin
+Authorization: Bearer {{token}}
+
 ### GET /admin/user
 GET https://localhost:8080/api/admin/user
 Authorization: Bearer {{token}}
@@ -22,12 +26,12 @@ Authorization: Bearer {{token}}
 POST https://localhost:8080/api/admin/user/{{target_uid}}/demote
 Authorization: Bearer {{token}}
 
-### GET /admin/tasks
-GET https://localhost:8080/api/admin/tasks
+### GET /admin/task
+GET https://localhost:8080/api/admin/task
 Authorization: Bearer {{token}}
 
-### GET /admin/stats/tasks
-GET https://localhost:8080/api/admin/stats/tasks
+### GET /admin/task/stats
+GET https://localhost:8080/api/admin/task/stats
 Authorization: Bearer {{token}}
 
 ### POST /admin/configuration

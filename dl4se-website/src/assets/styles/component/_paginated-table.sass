@@ -1,0 +1,37 @@
+// This is required to undo a bug that was introduced in version 2.22 of BSV:
+// https://github.com/bootstrap-vue/bootstrap-vue/issues/6961
+.paginated-table-header tr th
+  position: sticky!important
+
+.paginated-table-controls
+  @extend .p-0
+
+.paginated-table .paginated-table-header-row
+  height: 50px!important
+
+.paginated-table .paginated-table-row
+  height: 64px!important
+
+.paginated-table .paginated-table-header-row th,
+.paginated-table .paginated-table-row td
+  vertical-align: middle!important
+
+.paginated-table-refresh
+  @include fixed-width(40)
+  @include fixed-height(40)
+  @extend .mb-3
+  @extend .btn
+  @extend .btn-outline-secondary
+  @extend .bg-light-gray
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
+
+.paginated-table-border
+  @extend .border-secondary
+  @extend .border-bottom
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0

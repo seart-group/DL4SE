@@ -7,6 +7,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.task.CodeTaskDto;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
@@ -65,13 +68,12 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<?> tasks(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "submitted") String column,
+            @SortDefault(sort = "submitted", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithId(principal.getId());
-        Integer pageSize = configurationService.get("page_size", Integer.class);
-        return ResponseEntity.ok(taskService.getAll(requester, page, pageSize, column));
+        Page<Task> tasks = taskService.getAll(requester, pageable);
+        return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/stats")
@@ -112,12 +114,15 @@ public class TaskController {
     public ResponseEntity<?> cancel(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
+
         Status status = task.getStatus();
         if (Status.Category.INACTIVE.contains(status))
             return ResponseEntity.badRequest().build();
 
         User owner = task.getUser();
-        boolean canCancel = requester.equals(owner) || requester.getRole().equals(Role.ADMIN);
+        boolean isOwner = requester.equals(owner);
+        boolean isAdmin = requester.getRole().equals(Role.ADMIN);
+        boolean canCancel = isOwner || isAdmin;
         if (!canCancel)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
