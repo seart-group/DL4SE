@@ -1,10 +1,9 @@
 <template>
   <div class="paginated-table-container">
-    <b-table :id="id" borderless responsive hover sticky-header="370px"
-             class="paginated-table-border"
-             table-class="paginated-table" head-variant="dark"
+    <b-table :id="id" class="paginated-table-border" borderless responsive
+             table-class="paginated-table" head-variant="dark" sticky-header="370px"
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
-             tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row"
+             tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row" hover
              show-empty :items="provider" :api-url="apiUrl"
              :primary-key="primaryKey" :fields="allFields" sort-icon-left
              :per-page="perPage" :current-page="currentPage"
@@ -48,8 +47,8 @@
 </template>
 
 <script>
-import BDropdownSelect from "@/components/DropdownSelect";
-import axios from "axios";
+import axios from "axios"
+import BDropdownSelect from "@/components/DropdownSelect"
 
 export default {
   name: "b-paginated-table",
