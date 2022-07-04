@@ -4,6 +4,113 @@
     <b-container>
       <b-row>
         <b-col>
+          <h3 class="mb-3">Platform Tasks</h3>
+        </b-col>
+      </b-row>
+      <b-row align-h="center">
+        <b-col>
+          <b-paginated-table :id="taskTable.id"
+                             :api-url="taskTable.apiUrl"
+                             :fields="taskTable.fields"
+                             :primary-key="taskTable.fields[0].key"
+          >
+            <template #cell(uuid)="row">
+              <span v-html="row.value" class="text-nowrap" />
+            </template>
+            <template #cell(status)="row">
+              <div class="d-flex justify-content-center">
+                <b-icon :icon="statusToSquareIcon(row.value)"
+                        v-b-tooltip="statusToTitle(row.value)"
+                        font-scale="1.25" class="align-middle"
+                />
+              </div>
+
+            </template>
+            <template #cell(timeline)="row">
+              <div class="d-lg-table-cell d-inline-flex">
+                <template v-if="row.value.submitted">
+                  <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
+                                        font-scale="1.35" class="align-middle"
+                  />
+                </template>
+                <template v-if="row.value.started">
+                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
+                                        font-scale="1.35" class="align-middle"
+                  />
+                </template>
+                <template v-if="row.value.finished">
+                  <b-icon-dash-lg shift-v="-3" />
+                  <component :is="statusToCalendarIcon(row.item.status)"
+                             v-b-tooltip.html="`${statusToTitle(row.item.status)} at:<br />
+                                                ${row.value.finished.toISOString()}`"
+                             font-scale="1.35" class="align-middle"
+                  />
+                </template>
+              </div>
+            </template>
+            <template #cell(progress)="row">
+              <div class="d-flex flex-column text-center">
+                <span v-html="row.value.percentage" />
+                <b-progress :max="row.value.total" :value="row.value.processed"
+                            v-b-tooltip.html="`Total Instances:<br />${row.value.total}`"
+                            variant="dark" class="border-secondary"
+                />
+              </div>
+            </template>
+            <template #cell(details)="row">
+              <div class="d-lg-table-cell d-inline-flex">
+                <b-button class="action-btn mr-1" size="sm"
+                          v-b-tooltip="'Show User Details'"
+                          @click="display('Submitter', row.item.user, $event.target)"
+                >
+                  <b-icon-person-lines-fill />
+                </b-button>
+                <b-button class="action-btn mr-1" size="sm"
+                          v-b-tooltip="'Show Query Details'"
+                          @click="display('Query', row.item.query, $event.target)"
+                >
+                  <b-icon-search />
+                </b-button>
+                <b-button class="action-btn" size="sm"
+                          v-b-tooltip="'Show Processing Details'"
+                          @click="display('Processing', row.item.processing, $event.target)"
+                >
+                  <b-icon-gear-fill />
+                </b-button>
+              </div>
+            </template>
+            <template #cell(actions)="row">
+              <div class="d-lg-table-cell d-inline-flex">
+                <b-button class="action-btn mr-1" size="sm"
+                          v-b-tooltip="'Cancel Task'"
+                          :disabled="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)"
+                          @click="taskCancel(row.item.uuid)"
+                >
+                  <b-icon-trash />
+                </b-button>
+                <b-button class="action-btn mr-1" size="sm"
+                          v-b-tooltip="'Edit Task'"
+                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                >
+                  <b-icon-pencil-square />
+                </b-button>
+                <b-button class="action-btn mr-1" size="sm"
+                          v-b-tooltip="'Download Results'"
+                          :to="{ name: 'download', params: { uuid: row.item.uuid } }"
+                          :disabled="(row.item.status !== 'FINISHED') || row.item.expired"
+                >
+                  <b-icon-download />
+                </b-button>
+              </div>
+            </template>
+          </b-paginated-table>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container>
+      <b-row>
+        <b-col>
           <h3 class="mb-3">Platform Users</h3>
         </b-col>
       </b-row>
@@ -79,17 +186,68 @@
 
 <script>
 import axios from "axios"
-import BAbbreviation from "@/components/Abbreviation";
+import BAbbreviation from "@/components/Abbreviation"
+import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
+import BIconCalendarPlay from "@/components/IconCalendarPlay"
+import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
 import BPaginatedTable from "@/components/PaginatedTable"
 
 export default {
-  components: { BAbbreviation, BPaginatedTable },
+  components: {
+    BAbbreviation,
+    BIconCalendarExclamation,
+    BIconCalendarPlay,
+    BIconCalendarQuestion,
+    BPaginatedTable
+  },
   methods: {
     toTitleCase(str) {
       return str.replace(
           /\w\S*/g,
           (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
       )
+    },
+    statusToTitle(status) {
+      switch (status) {
+        case 'QUEUED':
+        case 'EXECUTING':
+        case 'FINISHED':
+        case 'CANCELLED':
+        case 'ERROR':
+          return this.toTitleCase(status)
+        default:
+          return "Unknown"
+      }
+    },
+    statusToSquareIcon(status) {
+      switch (status) {
+        case 'QUEUED': return "plus-square-fill"
+        case 'EXECUTING': return "caret-right-square-fill"
+        case 'FINISHED': return "check-square-fill"
+        case 'CANCELLED': return "x-square-fill"
+        case 'ERROR': return "exclamation-square-fill"
+        default: return "question-square-fill"
+      }
+    },
+    statusToCalendarIcon(status) {
+      switch (status) {
+        case 'QUEUED': return "b-icon-calendar-plus"
+        case 'EXECUTING': return "b-icon-calendar-play"
+        case 'FINISHED': return "b-icon-calendar-check"
+        case 'CANCELLED': return "b-icon-calendar-x"
+        case 'ERROR': return "b-icon-calendar-exclamation"
+        default: return "b-icon-calendar-question"
+      }
+    },
+    async taskCancel(uuid) {
+      const url = `https://localhost:8080/api/task/cancel/${uuid}`
+      const config = {
+        headers: { 'authorization': this.$store.getters.getToken }
+      }
+      await axios.post(url, null, config).then(() => {
+        this.$root.$emit("bv::refresh::table", this.taskTable.id)
+      }).catch(console.log)
+      // TODO 23.06.22: Better error handling
     },
     async userAction(uid, action) {
       const url = `https://localhost:8080/api/admin/user/${uid}/${action}`
@@ -126,6 +284,52 @@ export default {
         title: "",
         content: "",
         showTooltip: false
+      },
+      taskTable: {
+        id: "task-table",
+        apiUrl: "https://localhost:8080/api/admin/task",
+        fields: [
+          {
+            key: "uuid",
+            label: "UUID",
+            sortable: true
+          },
+          {
+            key: "status",
+            sortable: true
+          },
+          {
+            key: "timeline",
+            sortable: false,
+            formatter: (_value, _key, item) => {
+              return {
+                submitted: (item.submitted) ? new Date(Date.parse(item.submitted + 'Z')) : null,
+                started: (item.started) ? new Date(Date.parse(item.started + 'Z')) : null,
+                finished: (item.finished) ? new Date(Date.parse(item.finished + 'Z')) : null
+              }
+            }
+          },
+          {
+            key: "progress",
+            sortable: false,
+            formatter: (_value, _key, item) => {
+              let percentage
+              if (item.total_results === 0) {
+                percentage = "0.00%"
+              } else if (item.status === 'FINISHED' || item.processed_results > item.total_results) {
+                percentage = "100.00%"
+              } else {
+                percentage = `${((item.processed_results / item.total_results) * 100).toFixed(2)}%`
+              }
+
+              return {
+                percentage: percentage,
+                processed: item.processed_results,
+                total: item.total_results
+              }
+            }
+          }
+        ]
       },
       userTable: {
         id: "user-table",
