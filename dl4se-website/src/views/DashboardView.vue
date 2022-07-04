@@ -82,26 +82,29 @@
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <b-button class="action-btn mr-1" size="sm"
-                          v-b-tooltip="'Cancel Task'"
-                          :disabled="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)"
-                          @click="taskCancel(row.item.uuid)"
-                >
-                  <b-icon-trash />
-                </b-button>
-                <b-button class="action-btn mr-1" size="sm"
-                          v-b-tooltip="'Edit Task'"
-                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
-                >
-                  <b-icon-pencil-square />
-                </b-button>
-                <b-button class="action-btn mr-1" size="sm"
-                          v-b-tooltip="'Download Results'"
-                          :to="{ name: 'download', params: { uuid: row.item.uuid } }"
-                          :disabled="(row.item.status !== 'FINISHED') || row.item.expired"
-                >
-                  <b-icon-download />
-                </b-button>
+                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
+                  <b-button class="action-btn" size="sm"
+                            :disabled="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)"
+                            @click="taskCancel(row.item.uuid)"
+                  >
+                    <b-icon-trash />
+                  </b-button>
+                </span>
+                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Edit Task'">
+                  <b-button class="action-btn" size="sm"
+                            :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                  >
+                    <b-icon-pencil-square />
+                  </b-button>
+                </span>
+                <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
+                  <b-button class="action-btn" size="sm"
+                            :to="{ name: 'download', params: { uuid: row.item.uuid } }"
+                            :disabled="(row.item.status !== 'FINISHED') || row.item.expired"
+                  >
+                    <b-icon-download />
+                  </b-button>
+                </span>
               </div>
             </template>
           </b-paginated-table>
