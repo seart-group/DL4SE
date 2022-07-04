@@ -20,7 +20,7 @@
             <template #cell(status)="row">
               <div class="d-flex justify-content-center">
                 <b-icon :icon="statusToSquareIcon(row.value)"
-                        v-b-tooltip="statusToTitle(row.value)"
+                        v-b-tooltip="toTitle(row.value)"
                         font-scale="1.25" class="align-middle"
                 />
               </div>
@@ -42,7 +42,7 @@
                 <template v-if="row.value.finished">
                   <b-icon-dash-lg shift-v="-3" />
                   <component :is="statusToCalendarIcon(row.item.status)"
-                             v-b-tooltip.html="`${statusToTitle(row.item.status)} at:<br />
+                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />
                                                 ${row.value.finished.toISOString()}`"
                              font-scale="1.35" class="align-middle"
                   />
@@ -129,7 +129,7 @@
                       v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
                       class="mr-2" scale="1.35"
               />
-              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitleCase(row.item.role)" scale="1.35">
+              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
                 <b-icon :icon="(row.item.role === 'ADMIN') ? 'person-plus-fill' : 'person-fill'"
                         :shift-h="(row.item.role === 'ADMIN') ? 2 : 0"
                         stacked
@@ -201,23 +201,14 @@ export default {
     BPaginatedTable
   },
   methods: {
-    toTitleCase(str) {
-      return str.replace(
-          /\w\S*/g,
-          (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    toTitle(value) {
+      return this.$_.startCase(
+          this.$_.lowerCase(
+              this.$_.defaultTo(
+                  value, "???"
+              )
+          )
       )
-    },
-    statusToTitle(status) {
-      switch (status) {
-        case 'QUEUED':
-        case 'EXECUTING':
-        case 'FINISHED':
-        case 'CANCELLED':
-        case 'ERROR':
-          return this.toTitleCase(status)
-        default:
-          return "Unknown"
-      }
     },
     statusToSquareIcon(status) {
       switch (status) {
