@@ -54,7 +54,7 @@ export default {
             "warning"
         )
       },
-      loginTarget: "https://localhost:8080/api/user/login",
+      loginTarget: "/user/login",
       loginSuccess: (response) => {
         const token = response.data
         this.$store.commit("setToken", token)

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store"
-import axios from "axios"
+import axios from "@/axios"
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
 import DashboardView from '@/views/DashboardView'
@@ -22,7 +22,7 @@ const sessionRestore = (_to, _from, next) => {
 const authCheck = async (_to, _from, next) => {
   const token = store.getters.getToken
   const config = { headers : { "authorization": token } }
-  await axios.get("https://localhost:8080/api/user", config)
+  await axios.get("/user", config)
       .then(() => { next() })
       .catch((err) => {
         const code = err.response.status

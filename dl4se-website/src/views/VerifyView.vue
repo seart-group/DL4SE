@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import routerMixin from "@/mixins/routerMixin"
 import BDialogPage from "@/components/DialogPage"
 
@@ -17,34 +16,28 @@ export default {
   },
   components: { BDialogPage },
   mixins: [ routerMixin ],
-  async created() {
-    await this.apiCall(this.verifyLink, this.verifySuccess, this.verifyError)
-  },
   methods: {
-    async apiCall(link, successHandler, errorHandler) {
-      const config = {
-        params: {
-          token: this.token
-        }
-      }
-
-      await axios.get(link, config).then(successHandler).catch(errorHandler)
+    async apiCall(endpoint, successHandler, errorHandler) {
+      const config = { params: { token: this.token } }
+      await this.$http.get(endpoint, config)
+          .then(successHandler)
+          .catch(errorHandler)
     },
     async resendToken() {
-      this.blockInput = true
-      await this.apiCall(this.resendLink, this.resendSuccess, this.resendError)
+      await this.apiCall(this.resendEndpoint, this.resendSuccess, this.resendError)
+    },
+    async verifyToken() {
+      await this.apiCall(this.verifyEndpoint, this.verifySuccess, this.verifyError)
     }
   },
-  computed: {
-    resendLink: function () {
-      return this.verifyLink + "/resend"
-    }
+  async created() {
+    await this.verifyToken()
   },
   data() {
     return {
       showHtml: false,
-      blockInput: false,
-      verifyLink: "https://localhost:8080/api/user/verify",
+      verifyEndpoint: "/user/verify",
+      resendEndpoint: "/user/verify/resend",
       actions: [
         {
           text: "Resend",

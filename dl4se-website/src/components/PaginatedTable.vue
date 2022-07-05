@@ -4,7 +4,7 @@
              table-class="paginated-table" head-variant="dark" sticky-header="370px"
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
              tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row" hover
-             show-empty :items="provider" :api-url="apiUrl"
+             show-empty :items="provider" :api-url="apiEndpoint"
              :primary-key="primaryKey" :fields="fields" sort-icon-left
              :per-page="perPage" :current-page="currentPage"
              v-bind="$attrs" v-on="$listeners"
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import BDropdownSelect from "@/components/DropdownSelect"
 
 export default {
@@ -65,7 +64,7 @@ export default {
       type: String,
       required: false
     },
-    apiUrl: {
+    apiEndpoint: {
       type: String,
       required: true
     },
@@ -88,7 +87,7 @@ export default {
         params: params,
         headers: { 'authorization': this.$store.getters.getToken }
       }
-      return axios.get(ctx.apiUrl, config).then(res => {
+      return this.$http.get(ctx.apiUrl, config).then(res => {
         this.totalRows = res.data["total_items"]
         return res.data.items
       })

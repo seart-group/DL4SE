@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import useVuelidate from "@vuelidate/core"
@@ -187,18 +186,21 @@ export default {
     async submit() {
       const payload = this.task
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
-      const url = "https://localhost:8080/api/task/create"
-      await axios.post(url, payload, config).then(this.submitSuccess).catch(this.submitFailure)
+      const endpoint = "/task/create"
+      await this.$http.post(endpoint, payload, config)
+          .then(this.submitSuccess)
+          .catch(this.submitFailure)
     },
     async getLanguages() {
       const config = { headers : { 'authorization': this.$store.getters.getToken } }
-      const url = "https://localhost:8080/api/language"
-      await axios.get(url, config).then((res) => { this.options.languages = res.data })
+      const endpoint = "/language"
+      await this.$http.get(endpoint, config)
+          .then((res) => { this.options.languages = res.data })
     },
     async getParameters() {
       if (this.uuid) {
+        const endpoint = `/task/${this.uuid}`
         const config = { headers : { 'authorization': this.$store.getters.getToken } }
-        const url = "https://localhost:8080/api/task/" + this.uuid
 
         const errorHandlers = {
           0: () => this.$router.push({ name: 'home', params: { showServerError: true } }),
@@ -218,7 +220,7 @@ export default {
           )
         }
 
-        await axios(url, config)
+        await this.$http(endpoint, config)
             .then((res) => {
               const task = res.data
               Object.assign(this.task.query, task.query)

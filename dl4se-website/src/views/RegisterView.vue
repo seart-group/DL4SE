@@ -40,7 +40,7 @@ export default {
             "warning"
         )
       },
-      registerTarget: "https://localhost:8080/api/user/register",
+      registerTarget: "/user/register",
       registerSuccess: () => {
         this.redirectHomeAndToast(
             "Account Created",

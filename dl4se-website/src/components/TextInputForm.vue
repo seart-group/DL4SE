@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import useVuelidate from "@vuelidate/core"
 
 export default {
@@ -87,7 +86,7 @@ export default {
         }
       }
 
-      await axios.post(this.apiTarget, payload, config)
+      await this.$http.post(this.apiTarget, payload, config)
           .then(this.successHandler)
           .catch(this.failureHandler)
 

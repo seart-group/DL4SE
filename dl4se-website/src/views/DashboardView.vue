@@ -10,7 +10,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
-                             :api-url="taskTable.apiUrl"
+                             :api-endpoint="taskTable.apiEndpoint"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
           >
@@ -120,7 +120,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
-                             :api-url="userTable.apiUrl"
+                             :api-endpoint="userTable.apiEndpoint"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
           >
@@ -281,7 +281,7 @@ export default {
       },
       taskTable: {
         id: "task-table",
-        apiUrl: "https://localhost:8080/api/admin/task",
+        apiEndpoint: "/admin/task",
         fields: [
           {
             key: "uuid",
@@ -335,7 +335,7 @@ export default {
       },
       userTable: {
         id: "user-table",
-        apiUrl: "https://localhost:8080/api/admin/user",
+        apiEndpoint: "/admin/user",
         fields: [
           {
             key: "uid",
