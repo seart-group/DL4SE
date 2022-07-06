@@ -10,9 +10,10 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
-                             :api-endpoint="taskTable.apiEndpoint"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
+                             :total-items="taskTable.totalItems"
+                             :provider="taskProvider"
           >
             <template #cell(uuid)="row">
               <span v-html="row.value" class="text-nowrap" />
@@ -120,9 +121,10 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
-                             :api-endpoint="userTable.apiEndpoint"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
+                             :total-items="userTable.totalItems"
+                             :provider="userProvider"
           >
             <template #cell(registered)="row">
               <b-abbreviation :value="row.value.toISOString()" :transformer="(iso) => iso.split('T')[0]" />
@@ -233,6 +235,42 @@ export default {
         default: return "b-icon-calendar-question"
       }
     },
+    async taskProvider(ctx) {
+      const params = {
+        page: ctx.currentPage,
+        size: ctx.perPage
+      }
+      if (ctx.sortBy) {
+        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
+      }
+      const config = {
+        params: params,
+        headers: { 'authorization': this.$store.getters.getToken }
+      }
+      return this.$http.get("/admin/task", config)
+          .then(res => {
+            this.taskTable.totalItems = res.data.total_items
+            return res.data.items
+          })
+    },
+    async userProvider(ctx) {
+      const params = {
+        page: ctx.currentPage,
+        size: ctx.perPage
+      }
+      if (ctx.sortBy) {
+        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
+      }
+      const config = {
+        params: params,
+        headers: { 'authorization': this.$store.getters.getToken }
+      }
+      return this.$http.get("/admin/user", config)
+          .then(res => {
+            this.userTable.totalItems = res.data.total_items
+            return res.data.items
+          })
+    },
     async taskCancel(uuid) {
       const url = `https://localhost:8080/api/task/cancel/${uuid}`
       const config = {
@@ -281,7 +319,6 @@ export default {
       },
       taskTable: {
         id: "task-table",
-        apiEndpoint: "/admin/task",
         fields: [
           {
             key: "uuid",
@@ -331,11 +368,11 @@ export default {
             key: "actions",
             sortable: false
           }
-        ]
+        ],
+        totalItems: 0
       },
       userTable: {
         id: "user-table",
-        apiEndpoint: "/admin/user",
         fields: [
           {
             key: "uid",
@@ -363,7 +400,8 @@ export default {
             key: "actions",
             sortable: false
           }
-        ]
+        ],
+        totalItems: 0
       }
     }
   }

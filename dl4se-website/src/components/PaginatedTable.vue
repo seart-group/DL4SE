@@ -4,9 +4,8 @@
              table-class="paginated-table" head-variant="dark" sticky-header="370px"
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
              tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row" hover
-             show-empty :items="provider" :api-url="apiEndpoint"
-             :primary-key="primaryKey" :fields="fields" sort-icon-left
-             :per-page="perPage" :current-page="currentPage"
+             show-empty :items="provider" :primary-key="primaryKey" :fields="fields"
+             sort-icon-left :per-page="perPage" :current-page="currentPage"
              v-bind="$attrs" v-on="$listeners"
     >
       <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
@@ -21,7 +20,7 @@
         <b-col md="auto" cols="12">
           <b-pagination v-model="currentPage"
                         :per-page="perPage"
-                        :total-rows="totalRows"
+                        :total-rows="totalItems"
                         last-number first-number
                         align="center"
           >
@@ -64,8 +63,15 @@ export default {
       type: String,
       required: false
     },
-    apiEndpoint: {
-      type: String,
+    totalItems: {
+      type: Number,
+      required: true,
+      validator(value) {
+        return value >= 0
+      }
+    },
+    provider: {
+      type: Function,
       required: true
     },
     refreshRate: {
@@ -74,23 +80,6 @@ export default {
     }
   },
   methods: {
-    async provider(ctx) {
-      const params = {
-        page: ctx.currentPage,
-        size: ctx.perPage
-      }
-      if (ctx.sortBy) {
-        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
-      }
-      const config = {
-        params: params,
-        headers: { 'authorization': this.$store.getters.getToken }
-      }
-      return this.$http.get(ctx.apiUrl, config).then(res => {
-        this.totalRows = res.data["total_items"]
-        return res.data.items
-      })
-    },
     refresh() {
       this.$root.$emit('bv::refresh::table', this.id)
     }
@@ -104,8 +93,7 @@ export default {
     return {
       currentPage: 1,
       perPage: 20,
-      perPageOptions: [ 10, 20, 50, 100 ],
-      totalRows: 0
+      perPageOptions: [ 10, 20, 50, 100 ]
     }
   }
 }
