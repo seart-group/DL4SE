@@ -40,6 +40,9 @@
             <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
           </b-button>
         </b-col>
+        <b-col md="auto" cols="12">
+          <slot name="controls" />
+        </b-col>
       </b-row>
     </b-container>
   </div>

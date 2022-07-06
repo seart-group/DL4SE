@@ -16,8 +16,7 @@
 .paginated-table .paginated-table-row td
   vertical-align: middle!important
 
-.paginated-table-refresh
-  @include fixed-width(40)
+.paginated-table-btn
   @include fixed-height(40)
   @extend .mb-3
   @extend .btn
@@ -28,6 +27,10 @@
   @extend .border-top-0
   @extend .border-right-0
   @extend .rounded-0
+
+.paginated-table-refresh
+  @include fixed-width(40)
+  @extend .paginated-table-btn
 
 .paginated-table-border
   @extend .border-secondary

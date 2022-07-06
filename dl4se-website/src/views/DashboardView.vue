@@ -15,6 +15,12 @@
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
           >
+            <template #controls>
+              <b-button to="task" class="paginated-table-btn" block>
+                <b-icon-plus class="align-middle" font-scale="1.5" />
+                <span class="align-middle">Create Task</span>
+              </b-button>
+            </template>
             <template #cell(uuid)="row">
               <span v-html="row.value" class="text-nowrap" />
             </template>
@@ -159,13 +165,6 @@
               </div>
             </template>
           </b-paginated-table>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-container>
-      <b-row align-h="center">
-        <b-col cols="auto">
-          <b-button to="task" class="action-btn">Create Task</b-button>
         </b-col>
       </b-row>
     </b-container>
