@@ -27,7 +27,7 @@
               </div>
 
             </template>
-            <template #cell(timeline)="row">
+            <template #cell(submitted)="row">
               <div class="d-lg-table-cell d-inline-flex">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
@@ -329,8 +329,9 @@ export default {
             sortable: true
           },
           {
-            key: "timeline",
-            sortable: false,
+            key: "submitted",
+            label: "Timeline",
+            sortable: true,
             formatter: (_value, _key, item) => {
               return {
                 submitted: (item.submitted) ? new Date(Date.parse(item.submitted + 'Z')) : null,
