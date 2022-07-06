@@ -190,7 +190,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import BAbbreviation from "@/components/Abbreviation"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
@@ -272,21 +271,21 @@ export default {
           })
     },
     async taskCancel(uuid) {
-      const url = `https://localhost:8080/api/task/cancel/${uuid}`
+      const endpoint = `/task/cancel/${uuid}`
       const config = {
         headers: { 'authorization': this.$store.getters.getToken }
       }
-      await axios.post(url, null, config).then(() => {
+      await this.$http.post(endpoint, null, config).then(() => {
         this.$root.$emit("bv::refresh::table", this.taskTable.id)
       }).catch(console.log)
       // TODO 23.06.22: Better error handling
     },
     async userAction(uid, action) {
-      const url = `https://localhost:8080/api/admin/user/${uid}/${action}`
+      const endpoint = `/admin/user/${uid}/${action}`
       const config = {
         headers: { 'authorization': this.$store.getters.getToken }
       }
-      await axios.post(url, null, config).then(() => {
+      await this.$http.post(endpoint, null, config).then(() => {
         this.$root.$emit("bv::refresh::table", this.userTable.id)
       }).catch(console.log)
       // TODO 23.06.22: Better error handling
