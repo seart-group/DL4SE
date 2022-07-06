@@ -1,13 +1,15 @@
 <template>
   <div id="home">
-    <b-img :src="image" alt="DL4SE" center fluid class="logo-image" />
+    <b-img :src="image" alt="DL4SE" class="logo-image" center fluid />
     <div class="card-stack">
-      <b-card
-          v-for="({title, description, linksTo}, idx) in cards" :key="idx"
-          no-body :class="cardClasses(idx)"
+      <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
+              :key="idx" :class="cardClasses(idx)" no-body
       >
         <b-card-body>
-          <b-link :to="linksTo" class="text-secondary">
+          <b-link :disabled="needsConnection && !connected"
+                  class="card-link text-secondary"
+                  :to="linksTo"
+          >
             <h4 class="card-title">{{ title }}</h4>
           </b-link>
           <p class="card-text">{{ description }}</p>
@@ -35,6 +37,7 @@ export default {
   },
   async beforeMount() {
     await this.$http.get("/").catch(() => {
+      this.connected = false
       this.appendToast(
           "Server Connection Refused",
           "The DL4SE server is currently unavailable. Please try accessing the site later.",
@@ -44,22 +47,26 @@ export default {
   },
   data() {
     return {
+      connected: true,
       image: require('@/assets/img/logo.png'),
       cards: [
         {
           title: "Log In",
           description: "Start generating datasets for your models in just a few clicks!",
-          linksTo: "login"
+          linksTo: "login",
+          needsConnection: true
         },
         {
           title: "Register",
           description: "Don't have an account? Register for free today!",
-          linksTo: "register"
+          linksTo: "register",
+          needsConnection: true
         },
         {
           title: "About",
           description: "Want to learn more about the project?",
-          linksTo: "about"
+          linksTo: "about",
+          needsConnection: false
         }
       ]
     }
