@@ -68,10 +68,9 @@ export default {
       type: String,
       required: true
     },
-    autoRefresh: Boolean,
     refreshRate: {
       type: Number,
-      default: 5000
+      default: -1
     }
   },
   methods: {
@@ -97,7 +96,7 @@ export default {
     }
   },
   mounted() {
-    if (this.autoRefresh) {
+    if (this.refreshRate >= 0) {
       setInterval(this.refresh, this.refreshRate)
     }
   },
