@@ -92,7 +92,7 @@ export default {
             "secondary"
         )
       }
-      const fallbackHandler = () => this.$router.push({ name: 'home', params: { showServerError: true } })
+      const fallbackHandler = () => this.$router.push({ name: 'home' })
       const handler = responseHandlers[status] || fallbackHandler
       handler()
     })

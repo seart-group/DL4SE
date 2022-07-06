@@ -203,7 +203,7 @@ export default {
         const config = { headers : { 'authorization': this.$store.getters.getToken } }
 
         const errorHandlers = {
-          0: () => this.$router.push({ name: 'home', params: { showServerError: true } }),
+          0: () => this.$router.push({ name: 'home' }),
           400: () => this.redirectDashboardAndToast(
               "Invalid UUID",
               "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",

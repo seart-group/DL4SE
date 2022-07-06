@@ -22,12 +22,6 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 
 export default {
   mixins: [ bootstrapMixin ],
-  props: {
-    showServerError: {
-      type: Boolean,
-      default: false
-    }
-  },
   methods: {
     cardClasses(idx) {
       return {
@@ -39,14 +33,14 @@ export default {
       }
     }
   },
-  created() {
-    if (this.showServerError) {
+  async beforeMount() {
+    await this.$http.get("/").catch(() => {
       this.appendToast(
-          "Server Error",
-          "An unexpected server error has occurred. Please try again later.",
+          "Server Connection Refused",
+          "The DL4SE server is currently unavailable. Please try accessing the site later.",
           "danger"
       )
-    }
+    })
   },
   data() {
     return {

@@ -31,8 +31,7 @@ const authCheck = async (_to, _from, next) => {
           store.commit("clearToken")
           next({ name: "login", params: params })
         } else {
-          const params = { showServerError: true }
-          next({ name: "home", params: params })
+          next({ name: "home" })
         }
       })
 }
@@ -42,7 +41,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    props: true,
     meta: {
       public: true
     }
