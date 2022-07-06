@@ -1,12 +1,7 @@
 <template>
   <div id="register">
     <h1 class="page-title">Register</h1>
-    <text-input-form
-        v-model="inputs"
-        :api-target="registerTarget"
-        :success-handler="registerSuccess"
-        :failure-handler="registerFailure"
-    />
+    <b-text-input-form v-model="inputs" :consumer="register" />
   </div>
 </template>
 
@@ -14,13 +9,33 @@
 import {email, helpers, required} from "@vuelidate/validators"
 import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
-import TextInputForm from '@/components/TextInputForm'
+import BTextInputForm from '@/components/TextInputForm'
 
 export default {
-  components: {
-    TextInputForm
-  },
+  components: { BTextInputForm },
   mixins: [ routerMixin, bootstrapMixin ],
+  methods: {
+    async register() {
+      const payload = {}
+      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
+
+      const config = { headers : { 'content-type': 'application/json' }}
+
+      await this.$http.post("/user/register", payload, config)
+          .then(() => {
+            this.redirectHomeAndToast(
+                "Account Created",
+                "Your account has been created. We have sent you a verification link. Please check your email.",
+                "secondary"
+            )
+          })
+          .catch((err) => {
+            const status = err.response.status
+            const handler = this.errorHandlers[status]
+            handler()
+          })
+    }
+  },
   data () {
     return {
       errorHandlers: {
@@ -39,19 +54,6 @@ export default {
             "Email already in use.",
             "warning"
         )
-      },
-      registerTarget: "/user/register",
-      registerSuccess: () => {
-        this.redirectHomeAndToast(
-            "Account Created",
-            "Your account has been created. We have sent you a verification link. Please check your email.",
-            "secondary"
-        )
-      },
-      registerFailure: (err) => {
-        const status = err.response.status
-        const handler = this.errorHandlers[status]
-        handler()
       },
       inputs: {
         email: {

@@ -1,29 +1,42 @@
 <template>
   <div id="login">
     <h1 class="page-title">Log In</h1>
-    <text-input-form
-        v-model="inputs"
-        :api-target="loginTarget"
-        :success-handler="loginSuccess"
-        :failure-handler="loginFailure"
-    />
+    <b-text-input-form v-model="inputs" :consumer="login" />
   </div>
 </template>
 
 <script>
 import {email, helpers, required} from "@vuelidate/validators"
 import bootstrapMixin from '@/mixins/bootstrapMixin'
-import TextInputForm from '@/components/TextInputForm'
+import BTextInputForm from '@/components/TextInputForm'
 
 export default {
-  components: {
-    TextInputForm
-  },
+  components: { BTextInputForm },
   mixins: [ bootstrapMixin ],
   props: {
     showLoggedOut: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    async login() {
+      const payload = {}
+      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
+
+      const config = { headers : { 'content-type': 'application/json' }}
+
+      await this.$http.post("/user/login", payload, config)
+          .then((response) => {
+            const token = response.data
+            this.$store.commit("setToken", token)
+            this.$router.push({name: "dashboard"})
+          })
+          .catch((err) => {
+            const status = err.response.status
+            const handler = this.errorHandlers[status]
+            handler()
+          })
     }
   },
   created() {
@@ -53,17 +66,6 @@ export default {
             "Invalid login credentials.",
             "warning"
         )
-      },
-      loginTarget: "/user/login",
-      loginSuccess: (response) => {
-        const token = response.data
-        this.$store.commit("setToken", token)
-        this.$router.push({ name: "dashboard" })
-      },
-      loginFailure: (err) => {
-        const status = err.response.status
-        const handler = this.errorHandlers[status]
-        handler()
       },
       inputs : {
         email: {

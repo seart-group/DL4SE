@@ -1,14 +1,14 @@
 <template>
-  <b-form @submit.prevent.stop="postData" novalidate class="text-input-form">
+  <b-form @submit.prevent.stop="submit" novalidate class="text-input-form">
     <b-form-row v-for="[key, data] in Object.entries(inputs)" :key="key">
-      <b-form-group :id="'label-'+key" class="text-input-group"
-                    :label-for="'input-' + key" :state="entryState(key)"
+      <b-form-group :id="`label-${key}`" class="text-input-group"
+                    :label-for="`input-${key}`" :state="entryState(key)"
       >
         <template #label>
           {{ data.label }}
           <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
         </template>
-        <b-form-input :id="'input-' + key" :type="data.type" class="text-input-field"
+        <b-form-input :id="`input-${key}`" :type="data.type" class="text-input-field"
                       :state="entryState(key)" :disabled="submitted"
                       :placeholder="data.placeholder" v-model.trim="data.value"
         />
@@ -35,14 +35,17 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
+import bootstrapMixin from "@/mixins/bootstrapMixin"
 
 export default {
-  name: "text-input-form",
+  name: "b-text-input-form",
+  mixins: [ bootstrapMixin ],
   props: {
     value: Object,
-    apiTarget: String,
-    successHandler: Function,
-    failureHandler: Function
+    consumer: {
+      type: Function,
+      required: true
+    }
   },
   computed: {
     anyRequired() {
@@ -74,22 +77,9 @@ export default {
     entryFeedback(key) {
       return this.inputs[key].feedback && !!this.entryErrors(key).length
     },
-    async postData() {
+    async submit() {
       this.submitted = true
-
-      const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
-      const config = {
-        headers : {
-          'content-type': 'application/json'
-        }
-      }
-
-      await this.$http.post(this.apiTarget, payload, config)
-          .then(this.successHandler)
-          .catch(this.failureHandler)
-
+      await this.consumer()
       this.submitted = false
     }
   },
