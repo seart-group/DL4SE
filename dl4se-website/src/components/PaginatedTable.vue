@@ -1,5 +1,6 @@
 <template>
   <div class="paginated-table-container">
+    <h3 v-if="title">{{ title }}</h3>
     <b-table :id="id" class="paginated-table-border" borderless responsive
              table-class="paginated-table" head-variant="dark" sticky-header="370px"
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
@@ -56,6 +57,7 @@ export default {
   components: { BDropdownSelect },
   props: {
     id: String,
+    title: String,
     fields: {
       type: Array,
       default() {

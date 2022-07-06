@@ -2,14 +2,10 @@
   <div id="dashboard">
     <h1 class="page-title">Dashboard</h1>
     <b-container>
-      <b-row>
-        <b-col>
-          <h3 class="mb-3">Tasks</h3>
-        </b-col>
-      </b-row>
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
+                             title="Tasks"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
@@ -119,14 +115,10 @@
       </b-row>
     </b-container>
     <b-container>
-      <b-row>
-        <b-col>
-          <h3 class="mb-3">Users</h3>
-        </b-col>
-      </b-row>
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
+                             title="Users"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
