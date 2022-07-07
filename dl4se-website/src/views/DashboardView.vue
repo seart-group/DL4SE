@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard">
+  <div id="dashboard" v-if="show">
     <h1 class="page-title">Dashboard</h1>
     <b-container>
       <b-row align-h="center">
@@ -114,7 +114,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container>
+    <b-container v-if="isAdmin">
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
@@ -226,6 +226,7 @@ export default {
       }
     },
     async taskProvider(ctx) {
+      const url = this.isAdmin ? "/admin/task" : "/task"
       const params = {
         page: ctx.currentPage,
         size: ctx.perPage
@@ -233,7 +234,7 @@ export default {
       if (ctx.sortBy) {
         params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
       }
-      return this.$http.get("/admin/task", { params: params })
+      return this.$http.get(url, { params: params })
           .then(res => {
             this.taskTable.totalItems = res.data.total_items
             return res.data.items
@@ -289,8 +290,16 @@ export default {
       setTimeout(() => this.detailsModal.showTooltip = false, 2000)
     }
   },
+  async beforeMount() {
+    await this.$http.get("/admin")
+        .then(() => this.isAdmin = true)
+        .catch(() => this.isAdmin = false)
+    this.show = true
+  },
   data() {
     return {
+      show: false,
+      isAdmin: undefined,
       detailsModal: {
         id: "details-modal",
         title: "",
