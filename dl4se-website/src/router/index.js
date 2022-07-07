@@ -20,16 +20,13 @@ const sessionRestore = (_to, _from, next) => {
 }
 
 const authCheck = async (_to, _from, next) => {
-  const token = store.getters.getToken
-  const config = { headers : { "authorization": token } }
-  await axios.get("/user", config)
-      .then(() => { next() })
+  await axios.get("/user")
+      .then(next)
       .catch((err) => {
         const code = err.response.status
-        if (code) {
-          const params = { showLoggedOut: !!token?.length }
+        if (code === 401) {
           store.commit("clearToken")
-          next({ name: "login", params: params })
+          next({ name: "login" })
         } else {
           next({ name: "home" })
         }
@@ -50,7 +47,6 @@ const routes = [
     name: 'login',
     component: LogInView,
     beforeEnter: sessionRestore,
-    props: true,
     meta: {
       public: true
     }

@@ -74,7 +74,7 @@ export default {
         ),
         401: () => {
           this.$store.commit("clearToken")
-          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+          this.$router.push({ name: 'login' })
         },
         403: () => this.redirectDashboardAndToast(
             "Task Download Refused",

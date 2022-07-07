@@ -184,24 +184,22 @@ export default {
       handler()
     },
     async submit() {
-      const payload = this.task
-      const config = { headers : { 'authorization': this.$store.getters.getToken } }
       const endpoint = "/task/create"
-      await this.$http.post(endpoint, payload, config)
+      const payload = this.task
+      await this.$http.post(endpoint, payload)
           .then(this.submitSuccess)
           .catch(this.submitFailure)
     },
     async getLanguages() {
-      const config = { headers : { 'authorization': this.$store.getters.getToken } }
       const endpoint = "/language"
-      await this.$http.get(endpoint, config)
-          .then((res) => { this.options.languages = res.data })
+      await this.$http.get(endpoint)
+          .then((res) => {
+            this.options.languages = res.data
+          })
     },
     async getParameters() {
       if (this.uuid) {
         const endpoint = `/task/${this.uuid}`
-        const config = { headers : { 'authorization': this.$store.getters.getToken } }
-
         const errorHandlers = {
           0: () => this.$router.push({ name: 'home' }),
           400: () => this.redirectDashboardAndToast(
@@ -211,7 +209,7 @@ export default {
           ),
           401: () => {
             this.$store.commit("clearToken")
-            this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+            this.$router.push({ name: 'login' })
           },
           404: () => this.redirectDashboardAndToast(
               "Task Not Found",
@@ -220,7 +218,7 @@ export default {
           )
         }
 
-        await this.$http(endpoint, config)
+        await this.$http(endpoint)
             .then((res) => {
               const task = res.data
               Object.assign(this.task.query, task.query)
@@ -255,7 +253,7 @@ export default {
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         401: () => {
           this.$store.commit("clearToken")
-          this.$router.push({ name: 'login', params: { showLoggedOut: true } })
+          this.$router.push({ name: 'login' })
         },
         409: () => this.redirectDashboardAndToast(
             "Task Exists",

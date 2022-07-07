@@ -13,39 +13,23 @@ import BTextInputForm from '@/components/TextInputForm'
 export default {
   components: { BTextInputForm },
   mixins: [ bootstrapMixin ],
-  props: {
-    showLoggedOut: {
-      type: Boolean,
-      default: false
-    }
-  },
   methods: {
     async login() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
       const config = { headers : { 'content-type': 'application/json' }}
 
       await this.$http.post("/user/login", payload, config)
           .then((response) => {
             const token = response.data
             this.$store.commit("setToken", token)
-            this.$router.push({name: "dashboard"})
+            this.$router.push({ name: "dashboard" })
           })
           .catch((err) => {
             const status = err.response.status
             const handler = this.errorHandlers[status]
             handler()
           })
-    }
-  },
-  created() {
-    if (this.showLoggedOut) {
-      this.appendToast(
-          "Logged Out",
-          "Your session has expired. Please log in again.",
-          "secondary"
-      )
     }
   },
   data () {

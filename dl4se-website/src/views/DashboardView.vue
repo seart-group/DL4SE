@@ -233,11 +233,7 @@ export default {
       if (ctx.sortBy) {
         params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
       }
-      const config = {
-        params: params,
-        headers: { 'authorization': this.$store.getters.getToken }
-      }
-      return this.$http.get("/admin/task", config)
+      return this.$http.get("/admin/task", { params: params })
           .then(res => {
             this.taskTable.totalItems = res.data.total_items
             return res.data.items
@@ -251,11 +247,7 @@ export default {
       if (ctx.sortBy) {
         params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
       }
-      const config = {
-        params: params,
-        headers: { 'authorization': this.$store.getters.getToken }
-      }
-      return this.$http.get("/admin/user", config)
+      return this.$http.get("/admin/user", { params: params })
           .then(res => {
             this.userTable.totalItems = res.data.total_items
             return res.data.items
@@ -263,22 +255,20 @@ export default {
     },
     async taskCancel(uuid) {
       const endpoint = `/task/cancel/${uuid}`
-      const config = {
-        headers: { 'authorization': this.$store.getters.getToken }
-      }
-      await this.$http.post(endpoint, null, config).then(() => {
-        this.$root.$emit("bv::refresh::table", this.taskTable.id)
-      }).catch(console.log)
+      await this.$http.post(endpoint)
+          .then(() => {
+            this.$root.$emit("bv::refresh::table", this.taskTable.id)
+          })
+          .catch(console.log)
       // TODO 23.06.22: Better error handling
     },
     async userAction(uid, action) {
       const endpoint = `/admin/user/${uid}/${action}`
-      const config = {
-        headers: { 'authorization': this.$store.getters.getToken }
-      }
-      await this.$http.post(endpoint, null, config).then(() => {
-        this.$root.$emit("bv::refresh::table", this.userTable.id)
-      }).catch(console.log)
+      await this.$http.post(endpoint)
+          .then(() => {
+            this.$root.$emit("bv::refresh::table", this.userTable.id)
+          })
+          .catch(console.log)
       // TODO 23.06.22: Better error handling
     },
     display(title, item, button) {
