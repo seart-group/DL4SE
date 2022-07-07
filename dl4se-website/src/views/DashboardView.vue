@@ -54,11 +54,16 @@
             </template>
             <template #cell(progress)="row">
               <div class="d-flex flex-column text-center">
-                <span v-html="row.value.percentage" />
-                <b-progress :max="row.value.total" :value="row.value.processed"
-                            v-b-tooltip.html="`Total Instances:<br />${row.value.total}`"
-                            variant="dark" class="border-secondary" tabindex="0"
-                />
+                <template v-if="row.value.status === 'FINISHED' && !row.value.total">
+                  No Results
+                </template>
+                <template v-else>
+                  <span v-html="row.value.percentage" />
+                  <b-progress :max="row.value.total" :value="row.value.processed"
+                              v-b-tooltip.html="`Total Instances:<br />${row.value.total}`"
+                              variant="dark" class="border-secondary" tabindex="0"
+                  />
+                </template>
               </div>
             </template>
             <template #cell(details)="row">
@@ -344,6 +349,7 @@ export default {
               }
 
               return {
+                status: item.status,
                 percentage: percentage,
                 processed: item.processed_results,
                 total: item.total_results
