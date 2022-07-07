@@ -103,7 +103,7 @@
                 <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
                   <b-button class="action-btn" size="sm"
                             :to="{ name: 'download', params: { uuid: row.item.uuid } }"
-                            :disabled="(row.item.status !== 'FINISHED') || row.item.expired"
+                            :disabled="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0"
                   >
                     <b-icon-download />
                   </b-button>
