@@ -19,20 +19,6 @@ const sessionRestore = (_to, _from, next) => {
   else next()
 }
 
-const authCheck = async (_to, _from, next) => {
-  await axios.get("/user")
-      .then(next)
-      .catch((err) => {
-        const code = err.response.status
-        if (code === 401) {
-          store.commit("clearToken")
-          next({ name: "login" })
-        } else {
-          next({ name: "home" })
-        }
-      })
-}
-
 const routes = [
   {
     path: '/',
@@ -72,7 +58,6 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
-    beforeEnter: authCheck,
     meta: {
       public: false
     }
@@ -81,7 +66,6 @@ const routes = [
     path: '/task/:uuid?',
     name: 'task',
     component: TaskCreateView,
-    beforeEnter: authCheck,
     props: true,
     meta: {
       public: false
@@ -91,7 +75,6 @@ const routes = [
     path: '/download/:uuid',
     name: 'download',
     component: DownloadView,
-    beforeEnter: authCheck,
     props: true,
     meta: {
       public: false
@@ -110,6 +93,24 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach(async (to, _from, next) => {
+  if (to.meta.public) {
+    next()
+  } else {
+    await axios.get("/user")
+        .then(() => next())
+        .catch((err) => {
+          const code = err.response.status
+          if (code === 401) {
+            store.commit("clearToken")
+            next({ name: "login" })
+          } else {
+            next({ name: "home" })
+          }
+        })
+  }
 })
 
 export default router
