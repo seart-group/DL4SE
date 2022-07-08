@@ -30,6 +30,7 @@
     <b-button type="submit" :disabled="submitDisabled" class="action-btn">
       Submit
     </b-button>
+    <b-overlay :show="submitted" variant="light" no-wrap :z-index="Number.MAX_SAFE_INTEGER" />
   </b-form>
 </template>
 
