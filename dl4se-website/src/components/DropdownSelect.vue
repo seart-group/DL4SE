@@ -70,7 +70,8 @@ export default {
   validations() {
     return {
       selected: {
-        required: requiredIf(this.required),
+        $autoDirty: true,
+        required: requiredIf(this.required)
       }
     }
   }
