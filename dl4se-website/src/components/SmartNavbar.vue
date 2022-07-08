@@ -1,5 +1,5 @@
 <template>
-  <b-navbar id="smart-navbar" v-if="!onDefaultPage"
+  <b-navbar id="smart-navbar" v-show="!onDefaultPage"
             class="smart-navbar" sticky toggleable="sm"
   >
     <b-navbar-brand>DL4SE</b-navbar-brand>
