@@ -1,24 +1,22 @@
 <template>
-  <div id="download" v-if="show">
-    <h1 class="page-title">
-      Download will commence shortly
-    </h1>
-    <h3 class="page-description text-center">
-      Do not close this window, or navigate to other pages until the download is finished.
-    </h3>
-  </div>
+  <b-dialog-page
+      id="download" v-if="show"
+      title="Download will commence shortly"
+      description="Do not close this window, or navigate to other pages until the download is finished."
+  />
 </template>
 
 <script>
 import streamSaver from "streamsaver"
 import {WritableStream} from "web-streams-polyfill/ponyfill"
 import routerMixin from "@/mixins/routerMixin"
-// Override the MITM file hosted on GitHub that streamSaver
-// uses with the locally stored one
+import BDialogPage from "@/components/DialogPage"
+// Override the MITM file hosted on GitHub that streamSaver uses with the locally stored one
 // https://github.com/jimmywarting/StreamSaver.js/issues/242
 streamSaver.mitm = "/mitm.html"
 
 export default {
+  components: { BDialogPage },
   props: {
     uuid: String
   },
