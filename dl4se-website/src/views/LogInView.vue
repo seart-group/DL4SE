@@ -68,7 +68,6 @@ export default {
           label: "Password",
           type: "password",
           value: null,
-          placeholder: "",
           feedback: false,
           rules: {
             $autoDirty: true,

@@ -72,7 +72,6 @@ export default {
           label: "Password",
           type: "password",
           value: null,
-          placeholder: "",
           feedback: true,
           rules: {
             $autoDirty: true,
@@ -87,7 +86,6 @@ export default {
           label: "Organisation",
           type: "text",
           value: null,
-          placeholder: "",
           feedback: true,
           rules: {
             $autoDirty: true,
