@@ -14,7 +14,7 @@
             <template #controls>
               <b-button to="task" class="paginated-table-btn" block>
                 <b-icon-plus class="align-middle" font-scale="1.5" />
-                <span class="align-middle">Create Task</span>
+                <span class="align-middle">New Task</span>
               </b-button>
             </template>
             <template #cell(uuid)="row">
@@ -186,6 +186,8 @@
 </template>
 
 <script>
+import bootstrapMixin from "@/mixins/bootstrapMixin"
+import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
@@ -200,6 +202,7 @@ export default {
     BIconCalendarQuestion,
     BPaginatedTable
   },
+  mixins: [ bootstrapMixin, routerMixin ],
   methods: {
     toTitle(value) {
       return this.$_.startCase(
@@ -262,20 +265,67 @@ export default {
     async taskCancel(uuid) {
       const endpoint = `/task/cancel/${uuid}`
       await this.$http.post(endpoint)
-          .then(() => {
-            this.$root.$emit("bv::refresh::table", this.taskTable.id)
+          .catch((err) => {
+            const status = err.response.status
+            switch (status) {
+              case 400:
+                this.appendToast(
+                    "Cannot cancel task",
+                    "The task has already finished executing and can not be cancelled.",
+                    "secondary"
+                )
+                break
+              case 401:
+                this.$store.commit("clearToken")
+                this.redirectLoginAndToast(
+                    "Session Expired",
+                    "Your current session has expired. Please log in again.",
+                    "secondary"
+                )
+                break
+              case 403:
+                this.$store.commit("clearToken")
+                this.redirectLoginAndToast(
+                    "Access Restricted",
+                    "You do not have the rights to modify the requested resource.",
+                    "secondary"
+                )
+                break
+              default:
+                this.$router.push({ name: 'home' })
+                break
+            }
           })
-          .catch(console.log)
-      // TODO 23.06.22: Better error handling
+      this.$root.$emit("bv::refresh::table", this.taskTable.id)
     },
     async userAction(uid, action) {
       const endpoint = `/admin/user/${uid}/${action}`
       await this.$http.post(endpoint)
-          .then(() => {
-            this.$root.$emit("bv::refresh::table", this.userTable.id)
+          .catch((err) => {
+            const status = err.response.status
+            switch (status) {
+              case 401:
+                this.$store.commit("clearToken")
+                this.redirectLoginAndToast(
+                    "Login Required",
+                    "Your current session has expired. Please log in again.",
+                    "secondary"
+                )
+                break
+              case 403:
+                this.$store.commit("clearToken")
+                this.redirectLoginAndToast(
+                    "Access Restricted",
+                    "You do not have the rights to modify the requested resource.",
+                    "secondary"
+                )
+                break
+              default:
+                this.$router.push({ name: 'home' })
+                break
+            }
           })
-          .catch(console.log)
-      // TODO 23.06.22: Better error handling
+      this.$root.$emit("bv::refresh::table", this.userTable.id)
     },
     display(title, item, button) {
       this.detailsModal.title = title
