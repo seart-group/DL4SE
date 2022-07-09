@@ -8,8 +8,9 @@
           {{ data.label }}
           <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
         </template>
-        <b-form-input :id="`input-${key}`" :type="data.type" class="text-input-field"
-                      :state="entryState(key)" :disabled="submitted" :autofocus="!idx"
+        <b-form-input :id="`input-${key}`" :name="key" :type="data.type" class="text-input-field"
+                      :state="entryState(key)" :disabled="submitted"
+                      :autofocus="!idx" :autocomplete="data.autocomplete"
                       :placeholder="data.placeholder" v-model.trim="data.value"
         />
         <template #invalid-feedback v-if="entryFeedback(key)">

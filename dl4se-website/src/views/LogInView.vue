@@ -57,6 +57,7 @@ export default {
           type: "email",
           value: null,
           placeholder: "example@email.com",
+          autocomplete: "email",
           feedback: false,
           rules: {
             $autoDirty: true,
@@ -68,6 +69,7 @@ export default {
           label: "Password",
           type: "password",
           value: null,
+          autocomplete: "current-password",
           feedback: false,
           rules: {
             $autoDirty: true,
