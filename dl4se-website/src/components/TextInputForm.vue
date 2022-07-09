@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.prevent.stop="submit" novalidate class="text-input-form">
-    <b-form-row v-for="[key, data] in Object.entries(inputs)" :key="key">
+    <b-form-row v-for="([key, data], idx) in Object.entries(inputs)" :key="key">
       <b-form-group :id="`label-${key}`" class="text-input-group"
                     :label-for="`input-${key}`" :state="entryState(key)"
       >
@@ -9,7 +9,7 @@
           <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
         </template>
         <b-form-input :id="`input-${key}`" :type="data.type" class="text-input-field"
-                      :state="entryState(key)" :disabled="submitted"
+                      :state="entryState(key)" :disabled="submitted" :autofocus="!idx"
                       :placeholder="data.placeholder" v-model.trim="data.value"
         />
         <template #invalid-feedback v-if="entryFeedback(key)">
