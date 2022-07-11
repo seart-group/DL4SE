@@ -89,13 +89,17 @@ export default {
       this.$root.$emit('bv::refresh::table', this.id)
     }
   },
-  mounted() {
+  beforeMount() {
     if (this.refreshRate >= 0) {
-      setInterval(this.refresh, this.refreshRate)
+      this.intervalId = setInterval(this.refresh, this.refreshRate)
     }
+  },
+  beforeDestroy() {
+    this.intervalId = clearInterval(this.intervalId)
   },
   data() {
     return {
+      intervalId: undefined,
       currentPage: 1,
       perPage: 20,
       perPageOptions: [ 10, 20, 50, 100 ]
