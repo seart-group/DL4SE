@@ -3,7 +3,7 @@
     <header>
       <b-smart-navbar />
     </header>
-    <main id="app">
+    <main>
       <router-view class="router-view" />
     </main>
     <footer>
