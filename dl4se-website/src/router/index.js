@@ -104,8 +104,22 @@ router.beforeEach(async (to, _from, next) => {
         .catch((err) => {
           const code = err.response.status
           if (code === 401) {
-            store.commit("clearToken")
-            next({ name: "login" })
+            const wasLoggedIn = !!router.app.$store.getters.getToken
+            router.app.$store.dispatch("logOut").then(() => {
+              if (wasLoggedIn) {
+                router.app.$bvToast.toast(
+                    "Your session has expired, please log in again.",
+                    {
+                      toaster: "b-toaster-top-right",
+                      title: "Logged Out",
+                      variant: "secondary",
+                      autoHideDelay: 3000,
+                      appendToast: true,
+                      solid: true
+                    }
+                )
+              }
+            })
           } else {
             next({ name: "home" })
           }
