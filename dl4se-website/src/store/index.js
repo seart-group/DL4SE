@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import router from "@/router"
 
 Vue.use(Vuex)
 
@@ -26,6 +27,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async logOut(context) {
+      context.commit("clearToken")
+      await router.replace({ name: "login" })
+    }
   },
   modules: {
   },
