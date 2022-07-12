@@ -207,10 +207,13 @@ export default {
               "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
               "warning"
           ),
-          401: () => {
-            this.$store.commit("clearToken")
-            this.$router.push({ name: 'login' })
-          },
+          401: this.$store.dispatch("logOut").then(() => {
+            this.appendToast(
+                "Login Required",
+                "Your session has expired. Please log in again.",
+                "secondary"
+            )
+          }),
           404: () => this.redirectDashboardAndToast(
               "Task Not Found",
               "The specified task could not be found.",
@@ -251,10 +254,13 @@ export default {
             "danger"
         ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
-        401: () => {
-          this.$store.commit("clearToken")
-          this.$router.push({ name: 'login' })
-        },
+        401: () => this.$store.dispatch("logOut").then(() => {
+          this.appendToast(
+              "Login Required",
+              "Your session has expired. Please log in again.",
+              "secondary"
+          )
+        }),
         409: () => this.redirectDashboardAndToast(
             "Task Exists",
             "A similar task is already queued or executing." +

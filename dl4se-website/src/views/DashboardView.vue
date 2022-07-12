@@ -288,20 +288,22 @@ export default {
                 )
                 break
               case 401:
-                this.$store.commit("clearToken")
-                this.redirectLoginAndToast(
-                    "Session Expired",
-                    "Your current session has expired. Please log in again.",
-                    "secondary"
-                )
+                this.$store.dispatch("logOut").then(() => {
+                  this.appendToast(
+                      "Login Required",
+                      "Your session has expired. Please log in again.",
+                      "secondary"
+                  )
+                })
                 break
               case 403:
-                this.$store.commit("clearToken")
-                this.redirectLoginAndToast(
-                    "Access Restricted",
-                    "You do not have the rights to modify the requested resource.",
-                    "secondary"
-                )
+                this.$store.dispatch("logOut").then(() => {
+                  this.appendToast(
+                      "Access Restricted",
+                      "You do not have the necessary authorization to modify the requested resource.",
+                      "secondary"
+                  )
+                })
                 break
               default:
                 this.$router.push({ name: 'home' })
@@ -317,20 +319,22 @@ export default {
             const status = err.response.status
             switch (status) {
               case 401:
-                this.$store.commit("clearToken")
-                this.redirectLoginAndToast(
-                    "Login Required",
-                    "Your current session has expired. Please log in again.",
-                    "secondary"
-                )
+                this.$store.dispatch("logOut").then(() => {
+                  this.appendToast(
+                      "Login Required",
+                      "Your session has expired. Please log in again.",
+                      "secondary"
+                  )
+                })
                 break
               case 403:
-                this.$store.commit("clearToken")
-                this.redirectLoginAndToast(
-                    "Access Restricted",
-                    "You do not have the rights to modify the requested resource.",
-                    "secondary"
-                )
+                this.$store.dispatch("logOut").then(() => {
+                  this.appendToast(
+                      "Access Restricted",
+                      "You do not have the necessary authorization to modify the requested resource.",
+                      "secondary"
+                  )
+                })
                 break
               default:
                 this.$router.push({ name: 'home' })
