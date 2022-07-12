@@ -18,7 +18,7 @@
           <b-dropdown-item>Profile</b-dropdown-item>
           <b-dropdown-item :to="{ name: 'dashboard' }">Dashboard</b-dropdown-item>
           <b-dropdown-divider />
-          <b-dropdown-item @click="logOut">Log Out</b-dropdown-item>
+          <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -26,8 +26,11 @@
 </template>
 
 <script>
+import bootstrapMixin from "@/mixins/bootstrapMixin"
+
 export default {
   name: "b-smart-navbar",
+  mixins: [ bootstrapMixin ],
   computed: {
     onDefaultPage() {
       return this.$route.name === 'home'
@@ -37,9 +40,13 @@ export default {
     }
   },
   methods: {
-    logOut() {
-      this.$store.commit("clearToken")
-      this.$router.push({ name: 'login' })
+    showLogOutModal() {
+      this.showConfirmModal(
+          "Log Out",
+          "Any unsaved changes will be lost. Are you sure you want to continue?"
+      ).then((confirmed) => {
+        if (confirmed) this.$store.dispatch("logOut")
+      })
     }
   }
 }
