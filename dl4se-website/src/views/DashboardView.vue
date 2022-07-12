@@ -243,9 +243,15 @@ export default {
         params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
       }
       return this.$http.get(url, { params: params })
-          .then(res => {
+          .then((res) => {
             this.taskTable.totalItems = res.data.total_items
             return res.data.items
+          }).catch(() => {
+            this.appendToast(
+                "Error Fetching Task Data",
+                "There was a problem retrieving the task data. Refresh the page and try again.",
+                "warning"
+            )
           })
     },
     async userProvider(ctx) {
@@ -257,9 +263,15 @@ export default {
         params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
       }
       return this.$http.get("/admin/user", { params: params })
-          .then(res => {
+          .then((res) => {
             this.userTable.totalItems = res.data.total_items
             return res.data.items
+          }).catch(() => {
+            this.appendToast(
+                "Error Fetching User Data",
+                "There was a problem retrieving the user data. Refresh the page and try again.",
+                "warning"
+            )
           })
     },
     async taskCancel(uuid) {
