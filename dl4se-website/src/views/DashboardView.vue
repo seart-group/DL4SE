@@ -170,15 +170,26 @@
              footer-class="justify-content-start"
              @hidden="reset"
     >
-      <pre :id="detailsModal.id+'-content'" class="m-0">{{ detailsModal.content }}</pre>
+      <b-card no-body class="rounded-0">
+        <b-tabs v-model="detailsModal.activeTab" card>
+          <b-tab v-for="{name, formatter} in detailsModal.formatters"
+                 :title="name" :key="name" lazy
+                 title-link-class="text-secondary rounded-0"
+          >
+            <b-card-body>
+              <pre class="m-0">{{ formatter(detailsModal.content) }}</pre>
+            </b-card-body>
+          </b-tab>
+        </b-tabs>
+      </b-card>
       <template #modal-footer>
-        <b-button :id="detailsModal.id+'-btn'" class="action-btn" @click="copy">
+        <b-button :id="`${detailsModal.id}-btn`" class="action-btn" @click="copy">
           <b-icon-clipboard />
         </b-button>
-        <b-tooltip :target="detailsModal.id+'-btn'"
+        <b-tooltip title="Copied!" triggers="click"
+                   :target="`${detailsModal.id}-btn`"
                    :show.sync="detailsModal.showTooltip"
-                   @shown="autoHideTooltip" triggers="click"
-                   title="Copied!"
+                   @shown="autoHideTooltip"
         />
       </template>
     </b-modal>
@@ -212,6 +223,40 @@ export default {
               )
           )
       )
+    },
+    plaintextFormatter(item) {
+      return Object.entries(item)
+          .filter(([, value]) => {
+            if (value instanceof String || value instanceof Array || value instanceof Object) {
+              return value?.length
+            } else {
+              return Boolean(value)
+            }
+          })
+          .sort(([, value1], [, value2]) => {
+            const type1 = typeof value1
+            const type2 = typeof value2
+            return type2.localeCompare(type1)
+          })
+          .map(([key, value]) => {
+            const label = this.$_.startCase(key)
+            switch (typeof value) {
+              case "boolean":
+                return `- ${label}`
+              case "object":
+                if (value instanceof Array) {
+                  const array = value.map(v => `  - ${v}`).join("\n")
+                  return `- ${label}:\n${array}`
+                } else {
+                  const object = this.plaintextFormatter(value)
+                  const indented = object.split("\n").map(line => `  ${line}`).join("\n")
+                  return `- ${label}:\n${indented}`
+                }
+              default:
+                return `- ${label}: ${value}`
+            }
+          })
+          .join("\n")
     },
     statusToSquareIcon(status) {
       switch (status) {
@@ -345,17 +390,20 @@ export default {
     },
     display(title, item, button) {
       this.detailsModal.title = title
-      this.detailsModal.content = JSON.stringify(item, null, 2)
+      this.detailsModal.content = item
       this.$root.$emit('bv::show::modal', this.detailsModal.id, button)
     },
     reset() {
       this.detailsModal.title = ""
       this.detailsModal.content = ""
       this.detailsModal.showTooltip = false
+      this.detailsModal.activeTab = 0
     },
     copy() {
-      navigator.clipboard.writeText(this.detailsModal.content)
-          .then(() => this.detailsModal.showTooltip = true)
+      const idx = this.detailsModal.activeTab
+      const formatter = this.detailsModal.formatters[idx].formatter
+      const value = formatter(this.detailsModal.content)
+      navigator.clipboard.writeText(value).then(() => this.detailsModal.showTooltip = true)
     },
     autoHideTooltip() {
       setTimeout(() => this.detailsModal.showTooltip = false, 2000)
@@ -375,7 +423,18 @@ export default {
         id: "details-modal",
         title: "",
         content: "",
-        showTooltip: false
+        showTooltip: false,
+        activeTab: 0,
+        formatters: [
+          {
+            name: "JSON",
+            formatter: item => JSON.stringify(item, null, 2)
+          },
+          {
+            name: "Plaintext",
+            formatter: this.plaintextFormatter
+          }
+        ]
       },
       taskTable: {
         id: "task-table",
