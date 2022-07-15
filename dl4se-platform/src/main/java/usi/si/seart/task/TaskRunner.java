@@ -38,7 +38,6 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -118,7 +117,7 @@ public class TaskRunner implements Runnable {
         org.jooq.Query resultQuery;
         org.jooq.Query countQuery;
 
-        UnaryOperator<Code> pipeline;
+        java.util.function.Function<Code, Code> pipeline;
 
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -135,7 +134,7 @@ public class TaskRunner implements Runnable {
                 task.setTotalResults(totalResults);
                 task = taskService.update(task);
 
-                @Cleanup Stream<Code> stream = codeService.createPipeline(resultQuery, pipeline, codeClass);
+                @Cleanup Stream<Code> stream = codeService.streamAndProcess(resultQuery, pipeline, codeClass);
                 Iterable<Code> iterable = stream::iterator;
                 long count = task.getProcessedResults();
                 for (Code code : iterable) {
