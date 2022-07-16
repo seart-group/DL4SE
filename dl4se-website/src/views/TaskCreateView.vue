@@ -207,7 +207,7 @@ export default {
               "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
               "warning"
           ),
-          401: this.$store.dispatch("logOut").then(() => {
+          401: () => this.$store.dispatch("logOut").then(() => {
             this.appendToast(
                 "Login Required",
                 "Your session has expired. Please log in again.",

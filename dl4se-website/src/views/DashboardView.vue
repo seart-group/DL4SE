@@ -233,10 +233,13 @@ export default {
               return Boolean(value)
             }
           })
-          .sort(([, value1], [, value2]) => {
-            const type1 = typeof value1
-            const type2 = typeof value2
-            return type2.localeCompare(type1)
+          .sort(([key1, value1], [key2, value2]) => {
+            const order = [ "boolean", "number", "string", "object" ]
+            const type1 = this.$_.indexOf(order, typeof value1)
+            const type2 = this.$_.indexOf(order, typeof value2)
+            if (type1 < type2) return 1
+            if (type1 > type2) return -1
+            else return key2.localeCompare(key1)
           })
           .map(([key, value]) => {
             const label = this.$_.startCase(key)
