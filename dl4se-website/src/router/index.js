@@ -10,6 +10,7 @@ import VerifyView from "@/views/VerifyView"
 import NotFoundView from "@/views/NotFoundView"
 import TaskCreateView from "@/views/TaskCreateView"
 import DownloadView from "@/views/DownloadView"
+import AboutView from "@/views/AboutView"
 
 Vue.use(VueRouter)
 
@@ -78,6 +79,14 @@ const routes = [
     props: true,
     meta: {
       public: false
+    }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutView,
+    meta: {
+      public: true
     }
   },
   {
