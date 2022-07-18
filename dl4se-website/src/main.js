@@ -8,6 +8,7 @@ import axios from '@/axios'
 import VueAxios from 'vue-axios'
 import _ from 'lodash'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
+import VueLoremIpsum from 'vue-lorem-ipsum'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/styles/style.sass'
@@ -21,6 +22,8 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
 Vue.prototype.$_ = _
+
+Vue.component('lorem-ipsum', VueLoremIpsum)
 
 new Vue({
   router,
