@@ -20,7 +20,13 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-form-group label="Each instance is a:" label-class="font-weight-bold" class="m-0">
+            <b-form-group label-class="font-weight-bold" class="m-0">
+              <template #label>
+                Granularity
+                <b-link :to="{ name: 'about', hash: '#granularity' }" target="_blank" class="text-dark">
+                  <b-icon-question-circle-fill />
+                </b-link>
+              </template>
               <b-form-radio-group id="type-radio" required
                                   v-model="task.query.granularity"
                                   :options="options.granularities"
