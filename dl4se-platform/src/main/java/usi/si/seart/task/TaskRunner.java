@@ -15,6 +15,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import usi.si.seart.exception.TaskFailedException;
+import usi.si.seart.function.CodeProcessingPipeline;
 import usi.si.seart.model.code.Code;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
@@ -83,8 +84,7 @@ public class TaskRunner implements Runnable {
     private void run(CodeTask task) {
         @SuppressWarnings("ConstantConditions")
         org.jooq.Query[] queries = conversionService.convert(task, Queries.class).queries();
-        // TODO 14.04.22: Convert CodeProcessing to a UnaryOperator
-        UnaryOperator<Code> pipeline = UnaryOperator.identity();
+        CodeProcessingPipeline pipeline = conversionService.convert(task, CodeProcessingPipeline.class);
 
         Class<? extends Code> codeClass;
         Query codeQuery = task.getQuery();
