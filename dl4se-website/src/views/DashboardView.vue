@@ -173,6 +173,7 @@
       <b-card no-body class="rounded-0">
         <b-tabs v-model="detailsModal.activeTab" card>
           <b-tab v-for="{name, formatter} in detailsModal.formatters"
+                 :disabled="!formatter(detailsModal.content)"
                  :title="name" :key="name" lazy
                  title-link-class="text-secondary rounded-0"
           >
