@@ -165,35 +165,12 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-modal :id="detailsModal.id" :title="detailsModal.title"
-             content-class="rounded-0" scrollable centered
-             footer-class="justify-content-start"
-             @hidden="reset"
-    >
-      <b-card no-body class="rounded-0">
-        <b-tabs v-model="detailsModal.activeTab" card>
-          <b-tab v-for="{name, formatter} in detailsModal.formatters"
-                 :disabled="!formatter(detailsModal.content)"
-                 :title="name" :key="name" lazy
-                 title-link-class="text-secondary rounded-0"
-          >
-            <b-card-body>
-              <pre class="m-0">{{ formatter(detailsModal.content) }}</pre>
-            </b-card-body>
-          </b-tab>
-        </b-tabs>
-      </b-card>
-      <template #modal-footer>
-        <b-button :id="`${detailsModal.id}-btn`" class="action-btn" @click="copy">
-          <b-icon-clipboard />
-        </b-button>
-        <b-tooltip title="Copied!" triggers="click"
-                   :target="`${detailsModal.id}-btn`"
-                   :show.sync="detailsModal.showTooltip"
-                   @shown="autoHideTooltip"
-        />
-      </template>
-    </b-modal>
+    <b-details-modal :id="detailsModal.id"
+                     :title="detailsModal.title"
+                     :content="detailsModal.content"
+                     :formatters="detailsModal.formatters"
+                     @reset="detailsModal.title = ''; detailsModal.content = {}"
+    />
   </div>
 </template>
 
@@ -201,6 +178,7 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BDetailsModal from "@/components/DetailsModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
@@ -209,6 +187,7 @@ import BPaginatedTable from "@/components/PaginatedTable"
 export default {
   components: {
     BAbbreviation,
+    BDetailsModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
@@ -398,21 +377,6 @@ export default {
       this.detailsModal.title = title
       this.detailsModal.content = item
       this.$root.$emit('bv::show::modal', this.detailsModal.id, button)
-    },
-    reset() {
-      this.detailsModal.title = ""
-      this.detailsModal.content = ""
-      this.detailsModal.showTooltip = false
-      this.detailsModal.activeTab = 0
-    },
-    copy() {
-      const idx = this.detailsModal.activeTab
-      const formatter = this.detailsModal.formatters[idx].formatter
-      const value = formatter(this.detailsModal.content)
-      navigator.clipboard.writeText(value).then(() => this.detailsModal.showTooltip = true)
-    },
-    autoHideTooltip() {
-      setTimeout(() => this.detailsModal.showTooltip = false, 2000)
     }
   },
   async beforeMount() {
@@ -429,8 +393,6 @@ export default {
         id: "details-modal",
         title: "",
         content: "",
-        showTooltip: false,
-        activeTab: 0,
         formatters: [
           {
             name: "JSON",
