@@ -227,10 +227,12 @@ export default {
     plaintextFormatter(item) {
       return Object.entries(item)
           .filter(([, value]) => {
-            if (value instanceof String || value instanceof Array || value instanceof Object) {
-              return value?.length
-            } else {
-              return Boolean(value)
+            switch (typeof value) {
+              case "string":
+              case "object":
+                return value?.length
+              default:
+                return Boolean(value)
             }
           })
           .sort(([key1, value1], [key2, value2]) => {
