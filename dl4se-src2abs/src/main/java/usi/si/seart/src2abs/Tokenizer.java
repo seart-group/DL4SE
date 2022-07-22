@@ -4,6 +4,7 @@ import edu.wm.cs.compiler.tools.generators.scanners.JavaLexer;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Token;
 
@@ -18,43 +19,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Tokenizer {
 
-	static final String ERROR_LEXER = "<ERROR>";
-	static final String SPACED_DOT = " . ";
+	private static final String ERROR_LEXER = "<ERROR>";
+	private static final String SPACED_DOT = " . ";
 
-	// int count_identifiers = 0;
-	int count_types = 0;
-	int count_methods = 0;
-	int count_annotations = 0;
-	int count_vars = 0;
-	int count_character = 0;
-	int count_floatingpoint = 0;
-	int count_integer = 0;
-	int count_string = 0;
+	Map<String, String> stringLiterals = new HashMap<>();
+	Map<String, String> charLiterals = new HashMap<>();
+	Map<String, String> intLiterals = new HashMap<>();
+	Map<String, String> floatLiterals = new HashMap<>();
+	Map<String, String> typeMap = new HashMap<>();
+	Map<String, String> methodMap = new HashMap<>();
+	Map<String, String> annotationMap = new HashMap<>();
+	Map<String, String> varMap = new HashMap<>();
 
-	// final Map<String, String> identifiers = new HashMap<>();
-	final Map<String, String> stringLiterals = new HashMap<>();
-	final Map<String, String> charLiterals = new HashMap<>();
-	final Map<String, String> intLiterals = new HashMap<>();
-	final Map<String, String> floatLiterals = new HashMap<>();
-
-	final Map<String, String> typeMap = new HashMap<>();
-	final Map<String, String> methodMap = new HashMap<>();
-	final Map<String, String> annotationMap = new HashMap<>();
-	final Map<String, String> varMap = new HashMap<>();
-
-	//Parser sets
+	@NonFinal
 	@Setter
 	Set<String> idioms;
+	@NonFinal
 	@Setter
 	Set<String> types;
+	@NonFinal
 	@Setter
 	Set<String> methods;
+	@NonFinal
 	@Setter
 	Set<String> annotations;
 
@@ -115,13 +109,13 @@ public class Tokenizer {
 
 				token = analyzeIdentifier(tokenName, tokens, i);
 			} else if (t.getType() == JavaLexer.CharacterLiteral) {
-				token = getCharacterID(t);
+				token = getCharId(t);
 			} else if (t.getType() == JavaLexer.FloatingPointLiteral) {
-				token = getFloatingPointID(t);
+				token = getFloatId(t);
 			} else if (t.getType() == JavaLexer.IntegerLiteral) {
-				token = getIntegerID(t);
+				token = getIntId(t);
 			} else if (t.getType() == JavaLexer.StringLiteral) {
-				token = getStringID(t);
+				token = getStringId(t);
 			} else {
 				token = t.getText();
 			}
@@ -199,25 +193,25 @@ public class Tokenizer {
 					return firstPart + SPACED_DOT + lastPart;
 				} else if (types.contains(firstPart)) {
 					// type_# . idiom
-					return getTypeID(firstPart)	+ SPACED_DOT + lastPart;
+					return getTypeId(firstPart)	+ SPACED_DOT + lastPart;
 				} else {
 					// var_# . idiom
-					return getVarID(firstPart) + SPACED_DOT + lastPart;
+					return getVarId(firstPart) + SPACED_DOT + lastPart;
 				}
 			} else if (idioms.contains(firstPart)){
 				if (types.contains(lastPart)) {
 					// idiom . type_#
-					return firstPart + SPACED_DOT + getTypeID(lastPart);
+					return firstPart + SPACED_DOT + getTypeId(lastPart);
 				} else {
 					// idiom . var_#
-					return firstPart + SPACED_DOT + getVarID(lastPart);
+					return firstPart + SPACED_DOT + getVarId(lastPart);
 				}
 			}
 		}
 
 		if (types.contains(token)) {
 			// type_#
-			return getTypeID(token);
+			return getTypeId(token);
 		}
 
 		//Check if it could be a method (the next token is a parenthesis)
@@ -240,7 +234,7 @@ public class Tokenizer {
 
 		if (methods.contains(token) && couldBeMethod) {
 			// method_#
-			return getMethodID(token);
+			return getMethodId(token);
 		}
 
 		if (tokenParts.length > 1) {
@@ -250,13 +244,13 @@ public class Tokenizer {
 			if (methods.contains(lastPart) && couldBeMethod) {
 				if (idioms.contains(firstPart)) {
 					// idiom . method_#
-					return firstPart + SPACED_DOT + getMethodID(lastPart);
+					return firstPart + SPACED_DOT + getMethodId(lastPart);
 				} else if (types.contains(firstPart)) {
 					// type . method_#
-					return getTypeID(firstPart)	+ SPACED_DOT + getMethodID(lastPart);
+					return getTypeId(firstPart)	+ SPACED_DOT + getMethodId(lastPart);
 				} else {
 					// var_# . method_#
-					return getVarID(firstPart) + SPACED_DOT + getMethodID(lastPart);
+					return getVarId(firstPart) + SPACED_DOT + getMethodId(lastPart);
 				}
 			}
 		}
@@ -268,13 +262,13 @@ public class Tokenizer {
 			if (varMap.containsKey(lastPart)){
 				if (idioms.contains(firstPart)) {
 					// idiom . var_#
-					return firstPart + SPACED_DOT + getVarID(lastPart);
+					return firstPart + SPACED_DOT + getVarId(lastPart);
 				} else if (types.contains(firstPart)) {
 					// type . var_#
-					return getTypeID(firstPart)	+ SPACED_DOT + getVarID(lastPart);
+					return getTypeId(firstPart)	+ SPACED_DOT + getVarId(lastPart);
 				} else {
 					// var_# . var_#
-					return getVarID(firstPart) + SPACED_DOT + getVarID(lastPart);
+					return getVarId(firstPart) + SPACED_DOT + getVarId(lastPart);
 				}
 			}
 		}
@@ -286,20 +280,20 @@ public class Tokenizer {
 			if (types.contains(firstPart)){
 				if (idioms.contains(lastPart) || lastPart.equals("this") || lastPart.equals("class")) {
 					// type_# . idiom
-					return getTypeID(firstPart) + SPACED_DOT + lastPart;
+					return getTypeId(firstPart) + SPACED_DOT + lastPart;
 				} else {
 					// type_# . var_#
-					return getTypeID(firstPart) + SPACED_DOT + getVarID(lastPart);
+					return getTypeId(firstPart) + SPACED_DOT + getVarId(lastPart);
 				}
 			} else if (varMap.containsKey(firstPart)){
 				if (idioms.contains(lastPart)) {
 					// var_# . idiom
-					return getVarID(firstPart) + SPACED_DOT + lastPart;
+					return getVarId(firstPart) + SPACED_DOT + lastPart;
 				} else if (lastPart.equals("new")){
-					return getVarID(firstPart) + SPACED_DOT + lastPart;
+					return getVarId(firstPart) + SPACED_DOT + lastPart;
 				} else{
 					// var_# . var_#
-					return getVarID(firstPart) + SPACED_DOT + getVarID(lastPart);
+					return getVarId(firstPart) + SPACED_DOT + getVarId(lastPart);
 				}
 			}
 		}
@@ -313,125 +307,107 @@ public class Tokenizer {
 				if (idioms.contains(firstPart)){
 					return firstPart + SPACED_DOT + lastPart;
 				} else {
-					return getVarID(firstPart) + SPACED_DOT + lastPart;
+					return getVarId(firstPart) + SPACED_DOT + lastPart;
 				}
 			}
 
 			if (idioms.contains(firstPart) && idioms.contains(lastPart)){
 				return firstPart + SPACED_DOT + lastPart;
 			} else if (idioms.contains(firstPart)){
-				return firstPart + SPACED_DOT + getVarID(lastPart);
+				return firstPart + SPACED_DOT + getVarId(lastPart);
 			} else if (idioms.contains(lastPart)){
-				return getVarID(firstPart) + SPACED_DOT + lastPart;
+				return getVarId(firstPart) + SPACED_DOT + lastPart;
 			}
 
-			return getVarID(firstPart) + SPACED_DOT + getVarID(lastPart);
+			return getVarId(firstPart) + SPACED_DOT + getVarId(lastPart);
 		}
 
 		// var_#
-		return getVarID(token);
+		return getVarId(token);
 	}
 
 	//------------------ IDs ----------------------
 
-	private String getTypeID(String token) {
-		if (typeMap.containsKey(token)) {
-			return typeMap.get(token);
-		} else {
-			count_types += 1;
-			String ID = "TYPE_" + count_types;
-			typeMap.put(token, ID);
-			return ID;
-		}
+	Function<String, String> getTypeId = _idGetter(typeMap, "TYPE_");
+	private String getTypeId(String token) {
+		return getTypeId.apply(token);
 	}
 
-	private String getVarID(String token) {
-		if (varMap.containsKey(token)) {
-			return varMap.get(token);
-		} else {
-			count_vars += 1;
-			String ID = "VAR_" + count_vars;
-			varMap.put(token, ID);
-			return ID;
-		}
+	Function<String, String> getVarId = _idGetter(varMap, "VAR_");
+	private String getVarId(String token) {
+		return getVarId.apply(token);
 	}
 
-	private String getMethodID(String token) {
-		if (methodMap.containsKey(token)) {
-			return methodMap.get(token);
-		} else {
-			count_methods += 1;
-			String ID = "METHOD_" + count_methods;
-			methodMap.put(token, ID);
-			return ID;
-		}
+	Function<String, String> getMethodId = _idGetter(methodMap, "METHOD_");
+	private String getMethodId(String token) {
+		return getMethodId.apply(token);
+	}
+	
+	private Function<String, String> _idGetter(
+			Map<String, String> literals, String prefix
+	) {
+		AtomicInteger counter = new AtomicInteger();
+		return (text) -> {
+			if (literals.containsKey(text)) {
+				return literals.get(text);
+			} else {
+				String id = prefix + counter.incrementAndGet();
+				literals.put(text, id);
+				return id;
+			}
+		};
 	}
 
+	AtomicInteger annotationsCounter = new AtomicInteger();
 	private String getAnnotationID(String token) {
 		if (idioms.contains("@" + token)) {
 			return "@" + token;
-		}
-		if (annotationMap.containsKey(token)) {
+		} else if (annotationMap.containsKey(token)) {
 			return annotationMap.get(token);
 		} else {
-			count_annotations += 1;
-			String ID = "ANNOTATION_" + count_annotations;
-			annotationMap.put(token, ID);
-			return ID;
+			String id = "ANNOTATION_" + annotationsCounter.incrementAndGet();
+			annotationMap.put(token, id);
+			return id;
 		}
 	}
 
 	//------------------ LITERALS ----------------------
 
-	private String getCharacterID(Token t) {
-		if (idioms.contains(t.getText())) {
-			return t.getText();
-		} else if (charLiterals.containsKey(t.getText())) {
-			return charLiterals.get(t.getText());
-		} else {
-			count_character += 1;
-			String Id = "CHAR_" + count_character;
-			charLiterals.put(t.getText(), Id);
-			return Id;
-		}
+	Function<Token, String> getCharId = _literalIdGetter(charLiterals, "CHAR_");
+	private String getCharId(Token token) {
+		return getCharId.apply(token);
 	}
 
-	private String getFloatingPointID(Token t) {
-		if (idioms.contains(t.getText())) {
-			return t.getText();
-		} else if (floatLiterals.containsKey(t.getText())) {
-			return floatLiterals.get(t.getText());
-		} else {
-			count_floatingpoint += 1;
-			String Id = "FLOAT_" + count_floatingpoint;
-			floatLiterals.put(t.getText(), Id);
-			return Id;
-		}
+	Function<Token, String> getFloatId = _literalIdGetter(floatLiterals, "FLOAT_");
+	private String getFloatId(Token token) {
+		return getFloatId.apply(token);
 	}
 
-	private String getIntegerID(Token t) {
-		if (idioms.contains(t.getText())) {
-			return t.getText();
-		} else if (intLiterals.containsKey(t.getText())) {
-			return intLiterals.get(t.getText());
-		} else {
-			count_integer += 1;
-			String Id = "INT_" + count_integer;
-			intLiterals.put(t.getText(), Id);
-			return Id;
-		}
+	Function<Token, String> getIntId = _literalIdGetter(intLiterals, "INT_");
+	private String getIntId(Token token) {
+		return getIntId.apply(token);
 	}
 
-	private String getStringID(Token t) {
-		if (idioms.contains(t.getText())) {
-			return t.getText();
-		} else if (stringLiterals.containsKey(t.getText())) {
-			return stringLiterals.get(t.getText());
-		} else {
-			count_string += 1;
-			String Id = "STRING_" + count_string;
-			stringLiterals.put(t.getText(), Id);
-			return Id;
-		}
+	Function<Token, String> getStringId = _literalIdGetter(stringLiterals, "STRING_");
+	private String getStringId(Token token) {
+		return getStringId.apply(token);
+	}
+
+	private Function<Token, String> _literalIdGetter(
+			Map<String, String> literals, String prefix
+	) {
+		AtomicInteger counter = new AtomicInteger();
+		return (token) -> {
+			String text = token.getText();
+			if (idioms.contains(text)) {
+				return text;
+			} else if (literals.containsKey(text)) {
+				return literals.get(text);
+			} else {
+				String id = prefix + counter.incrementAndGet();
+				literals.put(text, id);
+				return id;
+			}
+		};
 	}
 }
