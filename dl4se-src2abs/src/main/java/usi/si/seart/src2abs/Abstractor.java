@@ -1,6 +1,5 @@
 package usi.si.seart.src2abs;
 
-import usi.si.seart.src2abs.jlexer.JLexerTokenizer;
 import usi.si.seart.src2abs.vocabulary.IdiomManager;
 
 import java.io.File;
@@ -11,18 +10,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
 
-public class AbstractorManager {
+public class Abstractor {
 
-
-	public void abstractCode(Parser.CodeGranularity granularity, String inputCodePath, String outputCodePath, String idiomsFilePath) {
+	public void abstractCode(
+			Parser.CodeGranularity granularity, String inputCodePath, String outputCodePath, String idiomsFilePath
+	) {
 
 		//Check inputs
 		checkInputs(inputCodePath, idiomsFilePath, outputCodePath);
 		String mapOutputFile = outputCodePath+".map";
-		
+
 		//Idioms
 		Set<String> idioms = IdiomManager.readIdioms(idiomsFilePath);
-		
+
 		//Parser
 		Parser parser = new Parser(granularity);
 		try {
@@ -42,24 +42,20 @@ public class AbstractorManager {
 			return;
 		}
 
-
 		//Tokenizer
-		JLexerTokenizer tokenizer = new JLexerTokenizer();
-
-		//System.out.println("Types: "+parser.getTypes());
-		//System.out.println("Methods: "+parser.getMethods());
+		Tokenizer tokenizer = new Tokenizer();
 
 		tokenizer.setTypes(parser.getTypes());
 		tokenizer.setMethods(parser.getMethods());
 		tokenizer.setIdioms(idioms);
 		tokenizer.setAnnotations(parser.getAnnotations());
-		
+
 		String abstractCode = tokenizer.tokenize(inputCodePath);
 
 		//Write output files
 		writeAbstractCode(abstractCode, outputCodePath);
 		tokenizer.exportMaps(mapOutputFile);
-		
+
 		System.out.println("Source Code Abstracted successfully!");
 		System.out.println("Abstracted Code: "+outputCodePath);
 		System.out.println("Mapping: "+mapOutputFile);
@@ -71,7 +67,7 @@ public class AbstractorManager {
 		checkInputs(inputCodePath1, idiomsFilePath, outputCodePath1);
 		checkInputs(inputCodePath2, idiomsFilePath, outputCodePath2);
 		String mapOutputFile = outputCodePath1+".map";
-		
+
 		//Idioms
 		Set<String> idioms = IdiomManager.readIdioms(idiomsFilePath);
 
@@ -88,7 +84,7 @@ public class AbstractorManager {
 
 
 		//Tokenizer
-		JLexerTokenizer tokenizer = new JLexerTokenizer();
+		Tokenizer tokenizer = new Tokenizer();
 
 		//System.out.println("Types: "+parser.getTypes());
 		//System.out.println("Methods: "+parser.getMethods());
@@ -105,13 +101,13 @@ public class AbstractorManager {
 		writeAbstractCode(abstractCode1, outputCodePath1);
 		writeAbstractCode(abstractCode2, outputCodePath2);
 		tokenizer.exportMaps(mapOutputFile);
-		
+
 		System.out.println("Source Code Abstracted successfully!");
 		System.out.println("Abstracted Code: "+outputCodePath1 + " and " + outputCodePath2);
 		System.out.println("Mapping: "+mapOutputFile);
 	}
-	
-	
+
+
 	private void writeAbstractCode(String abstractCode, String outputCodePath) {
 		try {
 			Files.write(Paths.get(outputCodePath), abstractCode.getBytes());
@@ -119,7 +115,7 @@ public class AbstractorManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	private void checkInputs(String inputCodePath, String idiomsFilePath, String outputCodePath) {
 		checkFileExists(inputCodePath, "Input code file does not exist: ");
@@ -128,7 +124,7 @@ public class AbstractorManager {
 	}
 
 	private void checkParentFolderExists(String filePath, String error) {
-		if(!Files.isDirectory(Paths.get(filePath).getParent())) {
+		if (!Files.isDirectory(Paths.get(filePath).getParent())) {
 			try {
 				throw new FileNotFoundException(error+filePath);
 			} catch (FileNotFoundException e) {
@@ -136,9 +132,9 @@ public class AbstractorManager {
 			}
 		}
 	}
-	
+
 	private void checkFileExists(String filePath, String error) {
-		if(!fileExists(filePath)){
+		if (!fileExists(filePath)){
 			try {
 				throw new FileNotFoundException(error+filePath);
 			} catch (FileNotFoundException e) {
@@ -150,5 +146,4 @@ public class AbstractorManager {
 	private static boolean fileExists(String path) {
 		return new File(path).isFile();
 	}
-
 }

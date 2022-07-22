@@ -15,65 +15,64 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class Parser {
 
 	public enum CodeGranularity { METHOD, CLASS; }
 	private Set<String> types = new HashSet<String>();
 	private Set<String> methods = new HashSet<String>();
 	private Set<String> annotations = new HashSet<String>();
-	private CodeGranularity granularity; 
-	
+	private CodeGranularity granularity;
+
 	public Parser() {
 		this.granularity = CodeGranularity.METHOD;
 	}
-	
+
 	public Parser(CodeGranularity granularity) {
 		this.granularity = granularity;
 	}
-	
-	
+
+
 	public void parseFile(String filePath) {
-		
+
 		String sourceCode = SourceCodeAnalyzer.readSourceCode(filePath);
 
 		//Remove comments and annotations
 		sourceCode = SourceCodeAnalyzer.removeCommentsAndAnnotations(sourceCode);
-		
+
 		parse(sourceCode);
 	}
-	
-	
+
+
 	public void parseCode(String sourceCode) {
 		//Remove comments and annotations
 		sourceCode = SourceCodeAnalyzer.removeCommentsAndAnnotations(sourceCode);
-		
+
 		parse(sourceCode);
 	}
-	
-	
-	
-	
+
+
+
+
 	public void parse(String sourceCode) {
 
-		
+
 		//Check Granularity
 		String sourceCodeClass = "";
 		if(granularity == CodeGranularity.METHOD) {
 			sourceCodeClass = "public class DummyClass {" + sourceCode + "}";
 		} else {
 			sourceCodeClass = sourceCode;
-		}		
+		}
 
 		// create compilation unit
 		CompilationUnit cu = StaticJavaParser.parse(sourceCodeClass);
-		
+
 		// create set of annotations
 		List<AnnotationExpr> annotation = cu.getNodesByType(AnnotationExpr.class).stream().collect(Collectors.toList());
 		for(AnnotationExpr a: annotation){
 			annotations.add(a.getNameAsString());
 		}
-		
+
 		// create set of types
 		List<Type> type = cu.getNodesByType(Type.class).stream().collect(Collectors.toList());
 		for(Type t: type) {
@@ -98,10 +97,10 @@ public class Parser {
 		// insert scope of methods into types
 		List<MethodCallExpr> methodscope = cu.getNodesByType(MethodCallExpr.class).stream().collect(Collectors.toList());
 		for(MethodCallExpr ms: methodscope) {
-			
+
 			// is a scope is present in the method call
 			if(ms.getScope().isPresent()) {
-				
+
 				// if the scope is a field access expression
 				if(ms.getScope().get().isFieldAccessExpr()) {
 					String field = ms.getScope().get().toString();
@@ -112,7 +111,7 @@ public class Parser {
 						types.addAll(Arrays.asList(addtypes));
 					}
 				}
-				
+
 				// if the scope is a name expression
 				if(ms.getScope().get().isNameExpr()) {
 					String name = ms.getScope().get().toString();
@@ -125,15 +124,15 @@ public class Parser {
 				}
 			}
 		}
-		
+
 		// insert scope of methods into types
 		List<MethodReferenceExpr> methodref = cu.getNodesByType(MethodReferenceExpr.class).stream().collect(Collectors.toList());
 		for(MethodReferenceExpr mf: methodref) {
 			methods.add(mf.getIdentifier());
 		}
-		
+
 	}
-	
+
 	public String[] filterString(String typeString){
 		String[] listString;
 		typeString = typeString.replaceAll("\\[", " ");
@@ -151,20 +150,20 @@ public class Parser {
 		listString = typeString.split(" ");
 		return listString;
 	}
-	
+
 	// getter method for getting the types set
 	public Set<String> getTypes(){
 		return types;
 	}
-	
+
 	// getter method for getting the methods set
 	public Set<String> getMethods(){
 		return methods;
 	}
-	
+
 	// getter method for getting the annotations set
 	public Set<String> getAnnotations(){
 		return annotations;
 	}
-	
+
 }

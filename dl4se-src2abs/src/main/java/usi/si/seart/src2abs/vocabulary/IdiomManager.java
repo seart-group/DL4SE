@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 public class IdiomManager {
 
 	public static Set<String> readIdioms(String filePath){
-		
 		Set<String> idioms = new HashSet<>();
 
 		try (Stream<String> stream = Files.lines(Paths.get(filePath))) {
@@ -21,8 +20,5 @@ public class IdiomManager {
 		}
 		
 		return idioms;
-		
 	}
-	
-	
 }

@@ -13,5 +13,4 @@ public class Vocabulary {
 	public Set<String> chars = new HashSet<>();
 	public Set<String> ints = new HashSet<>();
 	public Set<String> floats = new HashSet<>();
-
 }

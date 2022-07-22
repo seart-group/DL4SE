@@ -1,5 +1,4 @@
-package usi.si.seart.src2abs.jlexer;
-
+package usi.si.seart.src2abs;
 
 import edu.wm.cs.compiler.tools.generators.scanners.JavaLexer;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -19,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-public class JLexerTokenizer {
+public class Tokenizer {
 
 	public static final String ERROR_LEXER = "<ERROR>";
 	public static final String SPACED_DOT = " . ";
@@ -52,7 +50,7 @@ public class JLexerTokenizer {
 
 
 
-	public String tokenize(String filePath) {	
+	public String tokenize(String filePath) {
 
 		List<Token> tokens = null;
 		try {
@@ -61,29 +59,29 @@ public class JLexerTokenizer {
 			System.err.println("STACKOVERFLOW DURING LEXICAL ANALYSIS!");
 			return ERROR_LEXER;
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 
 		for(int i = 0; i < tokens.size(); i++) {
 			String token = "";
 			Token t = tokens.get(i);
-			
+
 			//Handling annotations
 			if(t.getType() == JavaLexer.AT){
 				int j = i + 1;
 				Token nextToken = tokens.get(j);
-				
+
 				if(nextToken.getType() == JavaLexer.Identifier && annotations.contains(nextToken.getText())){
 					//This is an annotation
 					token = getAnnotationID(nextToken.getText());
 					i = j;
 				}
-				
+
 			} else if(t.getType() == JavaLexer.Identifier) {
-				
+
 				String tokenName = t.getText();
 				int j = i + 1;
-				
+
 				boolean expectDOT = true;
 				while(j < tokens.size()) {
 					Token nextToken = tokens.get(j);
@@ -107,7 +105,7 @@ public class JLexerTokenizer {
 					}
 					j++;
 				}
-				
+
 
 				token = analyzeIdentifier(tokenName, tokens, i);
 			}
@@ -124,12 +122,12 @@ public class JLexerTokenizer {
 			}
 			else {
 				token = t.getText();
-			}	
+			}
 
 			sb.append(token + " ");
 		}
 
-		return sb.toString().trim();	
+		return sb.toString().trim();
 	}
 
 
@@ -141,7 +139,7 @@ public class JLexerTokenizer {
 			String sourceCode = SourceCodeAnalyzer.readSourceCode(filePath);
 			//Remove comments and annotations
 			sourceCode = SourceCodeAnalyzer.removeCommentsAndAnnotations(sourceCode);
-			
+
 			InputStream inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8.name()));
 			jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
 		} catch (Exception e) {
@@ -176,7 +174,7 @@ public class JLexerTokenizer {
 
 		for(int i = 0; i < tokens.size(); i++) {
 			Token t = tokens.get(i);
-			
+
 			if(t.getType() == JavaLexer.Identifier) {
 
 				String tokenName = t.getText();
@@ -274,7 +272,7 @@ public class JLexerTokenizer {
 		keysAndVals.add(keys);
 		keysAndVals.add(values);
 
-		return keysAndVals;		
+		return keysAndVals;
 	}
 
 	private String getListOfValues(Collection<String> collection) {
@@ -290,15 +288,15 @@ public class JLexerTokenizer {
 
 
 	private String analyzeIdentifier(String token, List<Token> tokens, int i) {
-		
+
 		// idiom
 		if(idioms.contains(token)) {
 			return token;
 		}
-		
+
 		//Split the token
 		String[] tokenParts = token.split("\\.");
-		
+
 		if(tokenParts.length > 1) {
 			String lastPart = tokenParts[tokenParts.length-1];
 			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
@@ -306,7 +304,7 @@ public class JLexerTokenizer {
 			if(idioms.contains(lastPart)) {
 				if(idioms.contains(firstPart)) {
 					// idiom . idiom
-					return firstPart + SPACED_DOT + lastPart; 
+					return firstPart + SPACED_DOT + lastPart;
 
 				} else if(types.contains(firstPart)) {
 					// type_# . idiom
@@ -332,7 +330,7 @@ public class JLexerTokenizer {
 			// type_#
 			return getTypeID(token);
 		}
-		
+
 		//Check if it could be a method (the next token is a parenthesis)
 		boolean couldBeMethod = false;
 		if(i+1 < tokens.size()) {
@@ -345,11 +343,11 @@ public class JLexerTokenizer {
 		if(i > 2) {
 			Token t1 = tokens.get(i-1);
 			Token t2 = tokens.get(i-2);
-			
+
 			if(t1.getType() == JavaLexer.COLON && t2.getType() == JavaLexer.COLON) {
 				couldBeMethod = true;
 			}
-		}		
+		}
 
 		if(methods.contains(token) && couldBeMethod) {
 			// method_#
@@ -374,19 +372,19 @@ public class JLexerTokenizer {
 					// var_# . method_#
 					return getVarID(firstPart) + SPACED_DOT + getMethodID(lastPart);
 				}
-			} 
+			}
 		}
-		
-		
+
+
 		if(tokenParts.length > 1) {
 			String lastPart = tokenParts[tokenParts.length-1];
 			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
-			
+
 			if(varMap.containsKey(lastPart)){
 				if(idioms.contains(firstPart)) {
 					// idiom . var_#
 					return firstPart + SPACED_DOT + getVarID(lastPart);
-					
+
 				} else if (types.contains(firstPart)) {
 					// type . var_#
 					return getTypeID(firstPart)	+ SPACED_DOT + getVarID(lastPart);
@@ -397,16 +395,16 @@ public class JLexerTokenizer {
 				}
 			}
 		}
-		
+
 		if(tokenParts.length > 1) {
 			String lastPart = tokenParts[tokenParts.length-1];
 			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
-			
+
 			if(types.contains(firstPart)){
 				if(idioms.contains(lastPart) || lastPart.equals("this") || lastPart.equals("class")) {
 					// type_# . idiom
 					return getTypeID(firstPart) + SPACED_DOT + lastPart;
-					
+
 				} else {
 					// type_# . var_#
 					return getTypeID(firstPart) + SPACED_DOT + getVarID(lastPart);
@@ -415,7 +413,7 @@ public class JLexerTokenizer {
 				if(idioms.contains(lastPart)) {
 					// var_# . idiom
 					return getVarID(firstPart) + SPACED_DOT + lastPart;
-					
+
 				} else if (lastPart.equals("new")){
 					return getVarID(firstPart) + SPACED_DOT + lastPart;
 				} else{
@@ -424,13 +422,13 @@ public class JLexerTokenizer {
 				}
 			}
 		}
-		
+
 		// var_# . var_#
 		if(tokenParts.length > 1) {
 			String lastPart = tokenParts[tokenParts.length-1];
 			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
-			
-			
+
+
 			if(lastPart.equals("this") || lastPart.equals("class")){
 				if(idioms.contains(firstPart)){
 					return firstPart + SPACED_DOT + lastPart;
@@ -438,7 +436,7 @@ public class JLexerTokenizer {
 					return getVarID(firstPart) + SPACED_DOT + lastPart;
 				}
 			}
-			
+
 			if(idioms.contains(firstPart) && idioms.contains(lastPart)){
 				return firstPart + SPACED_DOT + lastPart;
 			} else if (idioms.contains(firstPart)){
@@ -446,10 +444,10 @@ public class JLexerTokenizer {
 			} else if (idioms.contains(lastPart)){
 				return getVarID(firstPart) + SPACED_DOT + lastPart;
 			}
-			
+
 			return getVarID(firstPart) + SPACED_DOT + getVarID(lastPart);
 		}
-		
+
 		// var_#
 		return getVarID(token);
 
@@ -493,7 +491,7 @@ public class JLexerTokenizer {
 			return ID;
 		}
 	}
-	
+
 	private String getAnnotationID(String token) {
 		if(idioms.contains("@" + token)) {
 			return "@" + token;
@@ -577,7 +575,7 @@ public class JLexerTokenizer {
 	public void setMethods(Set<String> methods) {
 		this.methods = methods;
 	}
-	
+
 	public void setAnnotations(Set<String> annotations) {
 		this.annotations = annotations;
 	}
