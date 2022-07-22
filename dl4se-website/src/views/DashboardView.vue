@@ -55,7 +55,7 @@
             <template #cell(progress)="row">
               <div class="d-flex flex-column text-center">
                 <template v-if="row.value.status === 'FINISHED' && !row.value.total">
-                  No Results
+                  <span class="text-nowrap">No Results</span>
                 </template>
                 <template v-else>
                   <span v-html="row.value.percentage" />
