@@ -1,6 +1,9 @@
 package usi.si.seart.src2abs;
 
 import edu.wm.cs.compiler.tools.generators.scanners.JavaLexer;
+import lombok.AccessLevel;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Token;
 
@@ -11,47 +14,52 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Tokenizer {
 
-	public static final String ERROR_LEXER = "<ERROR>";
-	public static final String SPACED_DOT = " . ";
+	static final String ERROR_LEXER = "<ERROR>";
+	static final String SPACED_DOT = " . ";
 
-	private int count_identifiers = 0;
-	private int count_types = 0;
-	private int count_methods = 0;
-	private int count_annotations = 0;
-	private int count_vars = 0;
-	private int count_character = 0;
-	private int count_floatingpoint = 0;
-	private int count_integer = 0;
-	private int count_string = 0;
+	// int count_identifiers = 0;
+	int count_types = 0;
+	int count_methods = 0;
+	int count_annotations = 0;
+	int count_vars = 0;
+	int count_character = 0;
+	int count_floatingpoint = 0;
+	int count_integer = 0;
+	int count_string = 0;
 
-	private Map<String, String> identifiers = new HashMap<>();
-	private Map<String, String> stringLiteral = new HashMap<>();
-	private Map<String, String> characterLiteral = new HashMap<>();
-	private Map<String, String> integerLiteral = new HashMap<>();
-	private Map<String, String> floatingPointLiteral = new HashMap<>();
+	// final Map<String, String> identifiers = new HashMap<>();
+	final Map<String, String> stringLiterals = new HashMap<>();
+	final Map<String, String> charLiterals = new HashMap<>();
+	final Map<String, String> intLiterals = new HashMap<>();
+	final Map<String, String> floatLiterals = new HashMap<>();
 
-	private Map<String, String> typeMap = new HashMap<>();
-	private Map<String, String> methodMap = new HashMap<>();
-	private Map<String, String> annotationMap = new HashMap<>();
-	private Map<String, String> varMap = new HashMap<>();
+	final Map<String, String> typeMap = new HashMap<>();
+	final Map<String, String> methodMap = new HashMap<>();
+	final Map<String, String> annotationMap = new HashMap<>();
+	final Map<String, String> varMap = new HashMap<>();
 
 	//Parser sets
-	private Set<String> idioms;
-	private Set<String> types;
-	private Set<String> methods;
-	private Set<String> annotations;
+	@Setter
+	Set<String> idioms;
+	@Setter
+	Set<String> types;
+	@Setter
+	Set<String> methods;
+	@Setter
+	Set<String> annotations;
 
 	public String tokenize(String filePath) {
-
-		List<Token> tokens = null;
+		List<Token> tokens;
 		try {
 			tokens = readTokens(filePath);
 		} catch(StackOverflowError e){
@@ -126,7 +134,7 @@ public class Tokenizer {
 
 
 
-	private static  List<Token> readTokens(String filePath) {
+	private static List<Token> readTokens(String filePath) {
 		JavaLexer jLexer = null;
 		try {
 			//Read source code
@@ -157,10 +165,10 @@ public class Tokenizer {
 		lines.addAll(getKeysAndValues(methodMap));
 		lines.addAll(getKeysAndValues(varMap));
 		lines.addAll(getKeysAndValues(annotationMap));
-		lines.addAll(getKeysAndValues(characterLiteral));
-		lines.addAll(getKeysAndValues(floatingPointLiteral));
-		lines.addAll(getKeysAndValues(integerLiteral));
-		lines.addAll(getKeysAndValues(stringLiteral));
+		lines.addAll(getKeysAndValues(charLiterals));
+		lines.addAll(getKeysAndValues(floatLiterals));
+		lines.addAll(getKeysAndValues(intLiterals));
+		lines.addAll(getKeysAndValues(stringLiterals));
 
 		try {
 			Files.write(Paths.get(outFile), lines);
@@ -170,19 +178,10 @@ public class Tokenizer {
 	}
 
 	private List<String> getKeysAndValues(Map<String, String> map){
-		String keys = getListOfValues(map.keySet());
-		String values = getListOfValues(map.values());
+		Collector<CharSequence, ?, String> commaCollector = Collectors.joining(",");
+		String keys = map.keySet().stream().collect(commaCollector);
+		String values = map.values().stream().collect(commaCollector);
 		return List.of(keys, values);
-	}
-
-	private String getListOfValues(Collection<String> collection) {
-
-		StringBuilder sb = new StringBuilder();
-		for (String s : collection) {
-			sb.append(s).append(",");
-		}
-
-		return sb.toString();
 	}
 
 	private String analyzeIdentifier(String token, List<Token> tokens, int i) {
@@ -387,12 +386,12 @@ public class Tokenizer {
 	private String getCharacterID(Token t) {
 		if (idioms.contains(t.getText())) {
 			return t.getText();
-		} else if (characterLiteral.containsKey(t.getText())) {
-			return characterLiteral.get(t.getText());
+		} else if (charLiterals.containsKey(t.getText())) {
+			return charLiterals.get(t.getText());
 		} else {
 			count_character += 1;
 			String Id = "CHAR_" + count_character;
-			characterLiteral.put(t.getText(), Id);
+			charLiterals.put(t.getText(), Id);
 			return Id;
 		}
 	}
@@ -400,12 +399,12 @@ public class Tokenizer {
 	private String getFloatingPointID(Token t) {
 		if (idioms.contains(t.getText())) {
 			return t.getText();
-		} else if (floatingPointLiteral.containsKey(t.getText())) {
-			return floatingPointLiteral.get(t.getText());
+		} else if (floatLiterals.containsKey(t.getText())) {
+			return floatLiterals.get(t.getText());
 		} else {
 			count_floatingpoint += 1;
 			String Id = "FLOAT_" + count_floatingpoint;
-			floatingPointLiteral.put(t.getText(), Id);
+			floatLiterals.put(t.getText(), Id);
 			return Id;
 		}
 	}
@@ -413,12 +412,12 @@ public class Tokenizer {
 	private String getIntegerID(Token t) {
 		if (idioms.contains(t.getText())) {
 			return t.getText();
-		} else if (integerLiteral.containsKey(t.getText())) {
-			return integerLiteral.get(t.getText());
+		} else if (intLiterals.containsKey(t.getText())) {
+			return intLiterals.get(t.getText());
 		} else {
 			count_integer += 1;
 			String Id = "INT_" + count_integer;
-			integerLiteral.put(t.getText(), Id);
+			intLiterals.put(t.getText(), Id);
 			return Id;
 		}
 	}
@@ -426,31 +425,13 @@ public class Tokenizer {
 	private String getStringID(Token t) {
 		if (idioms.contains(t.getText())) {
 			return t.getText();
-		} else if (stringLiteral.containsKey(t.getText())) {
-			return stringLiteral.get(t.getText());
+		} else if (stringLiterals.containsKey(t.getText())) {
+			return stringLiterals.get(t.getText());
 		} else {
 			count_string += 1;
 			String Id = "STRING_" + count_string;
-			stringLiteral.put(t.getText(), Id);
+			stringLiterals.put(t.getText(), Id);
 			return Id;
 		}
-	}
-
-	//------------------ SETTERS ----------------------
-
-	public void setIdioms(Set<String> idioms) {
-		this.idioms = idioms;
-	}
-
-	public void setTypes(Set<String> types) {
-		this.types = types;
-	}
-
-	public void setMethods(Set<String> methods) {
-		this.methods = methods;
-	}
-
-	public void setAnnotations(Set<String> annotations) {
-		this.annotations = annotations;
 	}
 }
