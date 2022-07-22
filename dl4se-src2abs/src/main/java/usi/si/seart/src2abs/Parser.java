@@ -7,7 +7,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.type.Type;
-import usi.si.seart.src2abs.code.SourceCodeAnalyzer;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,10 +33,10 @@ public class Parser {
 
 	public void parseFile(String filePath) {
 
-		String sourceCode = SourceCodeAnalyzer.readSourceCode(filePath);
+		String sourceCode = Analyzer.readSourceCode(filePath);
 
 		//Remove comments and annotations
-		sourceCode = SourceCodeAnalyzer.removeCommentsAndAnnotations(sourceCode);
+		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
 
 		parse(sourceCode);
 	}
@@ -45,7 +44,7 @@ public class Parser {
 
 	public void parseCode(String sourceCode) {
 		//Remove comments and annotations
-		sourceCode = SourceCodeAnalyzer.removeCommentsAndAnnotations(sourceCode);
+		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
 
 		parse(sourceCode);
 	}

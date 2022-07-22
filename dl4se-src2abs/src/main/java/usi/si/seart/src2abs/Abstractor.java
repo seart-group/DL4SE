@@ -1,14 +1,15 @@
 package usi.si.seart.src2abs;
 
-import usi.si.seart.src2abs.vocabulary.IdiomManager;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Abstractor {
 
@@ -21,7 +22,12 @@ public class Abstractor {
 		String mapOutputFile = outputCodePath+".map";
 
 		//Idioms
-		Set<String> idioms = IdiomManager.readIdioms(idiomsFilePath);
+		Set<String> idioms = new HashSet<>();
+		try (Stream<String> stream = Files.lines(Paths.get(idiomsFilePath))) {
+			idioms = stream.collect(Collectors.toSet());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		//Parser
 		Parser parser = new Parser(granularity);
@@ -61,53 +67,6 @@ public class Abstractor {
 		System.out.println("Mapping: "+mapOutputFile);
 	}
 
-	public void abstractCodePair(Parser.CodeGranularity granularity, String inputCodePath1, String inputCodePath2, String outputCodePath1, String outputCodePath2, String idiomsFilePath) {
-
-		//Check inputs
-		checkInputs(inputCodePath1, idiomsFilePath, outputCodePath1);
-		checkInputs(inputCodePath2, idiomsFilePath, outputCodePath2);
-		String mapOutputFile = outputCodePath1+".map";
-
-		//Idioms
-		Set<String> idioms = IdiomManager.readIdioms(idiomsFilePath);
-
-		//Parser
-		Parser parser = new Parser(granularity);
-		try {
-			parser.parseFile(inputCodePath1);
-			parser.parseFile(inputCodePath2);
-		} catch(StackOverflowError e){
-			System.err.println("StackOverflow during parsing!");
-		} catch (Exception e) {
-			System.err.println("Parsing ERROR!");
-		}
-
-
-		//Tokenizer
-		Tokenizer tokenizer = new Tokenizer();
-
-		//System.out.println("Types: "+parser.getTypes());
-		//System.out.println("Methods: "+parser.getMethods());
-
-		tokenizer.setTypes(parser.getTypes());
-		tokenizer.setMethods(parser.getMethods());
-		tokenizer.setAnnotations(parser.getAnnotations());
-		tokenizer.setIdioms(idioms);
-
-		String abstractCode1 = tokenizer.tokenize(inputCodePath1);
-		String abstractCode2 = tokenizer.tokenize(inputCodePath2);
-
-		//Write output files
-		writeAbstractCode(abstractCode1, outputCodePath1);
-		writeAbstractCode(abstractCode2, outputCodePath2);
-		tokenizer.exportMaps(mapOutputFile);
-
-		System.out.println("Source Code Abstracted successfully!");
-		System.out.println("Abstracted Code: "+outputCodePath1 + " and " + outputCodePath2);
-		System.out.println("Mapping: "+mapOutputFile);
-	}
-
-
 	private void writeAbstractCode(String abstractCode, String outputCodePath) {
 		try {
 			Files.write(Paths.get(outputCodePath), abstractCode.getBytes());
@@ -115,7 +74,6 @@ public class Abstractor {
 			e.printStackTrace();
 		}
 	}
-
 
 	private void checkInputs(String inputCodePath, String idiomsFilePath, String outputCodePath) {
 		checkFileExists(inputCodePath, "Input code file does not exist: ");

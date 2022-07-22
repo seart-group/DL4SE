@@ -1,4 +1,4 @@
-package usi.si.seart.src2abs.code;
+package usi.si.seart.src2abs;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,9 +6,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SourceCodeAnalyzer {
-
-
+public class Analyzer {
 
 	public static String readSourceCode(String filePath) {
 		String sourceCode = "";
@@ -20,15 +18,14 @@ public class SourceCodeAnalyzer {
 		return sourceCode;	
 	}
 
-
 	public static String removeCommentsAndAnnotations(String sourceCode) {
 		String regex = "(\".+\")";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(sourceCode);
 
 		//save string with '//' and '@' inside
-		String group = "";
-		String okGroup = "";
+		String group;
+		String okGroup;
 		while (matcher.find()) {
 			for (int i = 0; i <= matcher.groupCount(); i++) {
 				group = matcher.group(i);
