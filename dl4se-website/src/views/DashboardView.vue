@@ -90,29 +90,42 @@
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
-                  <b-button class="action-btn" size="sm"
-                            :disabled="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)"
+                <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
+                  <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
+                    <b-button class="action-btn" size="sm" disabled>
+                      <b-icon-trash />
+                    </b-button>
+                  </span>
+                </template>
+                <template v-else>
+                  <b-button class="action-btn mr-1" size="sm"
+                            v-b-tooltip="'Cancel Task'"
                             @click="taskCancel(row.item.uuid)"
                   >
                     <b-icon-trash />
                   </b-button>
-                </span>
-                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Edit Task'">
-                  <b-button class="action-btn" size="sm"
-                            :to="{ name: 'task', params: { uuid: row.item.uuid } }"
-                  >
-                    <b-icon-pencil-square />
-                  </b-button>
-                </span>
-                <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
-                  <b-button class="action-btn" size="sm"
+                </template>
+                <b-button class="action-btn mr-1" size="sm"
+                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                          v-b-tooltip="'Edit Task'"
+                >
+                  <b-icon-pencil-square />
+                </b-button>
+                <template v-if="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0">
+                  <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
+                    <b-button class="action-btn" size="sm" disabled>
+                      <b-icon-download />
+                    </b-button>
+                  </span>
+                </template>
+                <template v-else>
+                  <b-button class="action-btn d-inline-block" size="sm"
                             :to="{ name: 'download', params: { uuid: row.item.uuid } }"
-                            :disabled="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0"
+                            v-b-tooltip="'Download Results'"
                   >
                     <b-icon-download />
                   </b-button>
-                </span>
+                </template>
               </div>
             </template>
           </b-paginated-table>
