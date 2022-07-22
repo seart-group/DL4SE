@@ -27,6 +27,7 @@
     <module>dl4se-crawler</module>
     <module>dl4se-model</module>
     <module>dl4se-platform</module>
+    <module>dl4se-src2abs</module>
   </modules>
 
   <dependencies>
