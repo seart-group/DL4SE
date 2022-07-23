@@ -126,9 +126,13 @@ public class Tokenizer {
 		return sb.toString().trim();
 	}
 
-	@SneakyThrows
 	private static List<Token> readTokens(Path filePath) {
 		String sourceCode = Analyzer.readSourceCode(filePath);
+		return readTokens(sourceCode);
+	}
+
+	@SneakyThrows
+	private static List<Token> readTokens(String sourceCode) {
 		String cleanedCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
 		InputStream inputStream = new ByteArrayInputStream(cleanedCode.getBytes(StandardCharsets.UTF_8));
 		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
