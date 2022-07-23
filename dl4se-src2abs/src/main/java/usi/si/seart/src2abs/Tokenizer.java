@@ -2,10 +2,9 @@ package usi.si.seart.src2abs;
 
 import edu.wm.cs.compiler.tools.generators.scanners.JavaLexer;
 import lombok.AccessLevel;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Token;
 
@@ -24,6 +23,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Tokenizer {
 
@@ -39,18 +39,14 @@ public class Tokenizer {
 	Map<String, String> annotationMap = new HashMap<>();
 	Map<String, String> varMap = new HashMap<>();
 
-	@NonFinal
-	@Setter
-	Set<String> idioms;
-	@NonFinal
-	@Setter
 	Set<String> types;
-	@NonFinal
-	@Setter
 	Set<String> methods;
-	@NonFinal
-	@Setter
 	Set<String> annotations;
+	Set<String> idioms;
+
+	public Tokenizer(Parser parser, Set<String> idioms) {
+		this(parser.getTypes(), parser.getMethods(), parser.getAnnotations(), idioms);
+	}
 
 	public String tokenize(Path filePath) {
 		List<Token> tokens;

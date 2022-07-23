@@ -31,12 +31,7 @@ public class Abstractor {
 		parser.parseFile(inputCodePath);
 
 		//Tokenizer
-		Tokenizer tokenizer = new Tokenizer();
-
-		tokenizer.setTypes(parser.getTypes());
-		tokenizer.setMethods(parser.getMethods());
-		tokenizer.setAnnotations(parser.getAnnotations());
-		tokenizer.setIdioms(idioms);
+		Tokenizer tokenizer = new Tokenizer(parser, idioms);
 
 		String abstractCode = tokenizer.tokenize(inputCodePath);
 
