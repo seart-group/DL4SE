@@ -1,12 +1,14 @@
 package usi.si.seart.src2abs;
 
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@UtilityClass
 public class Analyzer {
 
 	@SneakyThrows
