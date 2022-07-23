@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Tokenizer {
 
-	private static final String ERROR_LEXER = "<ERROR>";
 	private static final String SPACED_DOT = " . ";
 
 	Map<String, String> stringLiterals = new HashMap<>();
@@ -48,14 +47,8 @@ public class Tokenizer {
 		this(parser.getTypes(), parser.getMethods(), parser.getAnnotations(), idioms);
 	}
 
-	public String tokenize(Path filePath) {
-		List<Token> tokens;
-		try {
-			tokens = readTokens(filePath);
-		} catch (StackOverflowError e){
-			System.err.println("STACKOVERFLOW DURING LEXICAL ANALYSIS!");
-			return ERROR_LEXER;
-		}
+	public String tokenize(String sourceCode) {
+		List<Token> tokens = readTokens(sourceCode);
 
 		StringBuilder sb = new StringBuilder();
 
@@ -122,15 +115,9 @@ public class Tokenizer {
 		return sb.toString().trim();
 	}
 
-	private static List<Token> readTokens(Path filePath) {
-		String sourceCode = Analyzer.readSourceCode(filePath);
-		return readTokens(sourceCode);
-	}
-
 	@SneakyThrows
 	private static List<Token> readTokens(String sourceCode) {
-		String cleanedCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-		InputStream inputStream = new ByteArrayInputStream(cleanedCode.getBytes(StandardCharsets.UTF_8));
+		InputStream inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
 		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
 
 		List<Token> tokens = new ArrayList<>();

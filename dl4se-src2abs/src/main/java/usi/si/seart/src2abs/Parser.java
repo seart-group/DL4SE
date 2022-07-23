@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -34,18 +33,7 @@ public class Parser {
 
 	Granularity granularity;
 
-	public void parseFile(Path filePath) {
-		String sourceCode = Analyzer.readSourceCode(filePath);
-		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-		_parse(sourceCode);
-	}
-
-	public void parseCode(String sourceCode) {
-		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-		_parse(sourceCode);
-	}
-
-	public void _parse(String code) {
+	public void parseCode(String code) {
 		if (granularity == Granularity.METHOD) {
 			code = "public class DummyClass {" + code + "}";
 		}

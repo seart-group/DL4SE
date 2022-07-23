@@ -7,6 +7,8 @@ import lombok.experimental.UtilityClass;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,26 +19,44 @@ public class Abstractor {
 	public void abstractCode(
 			Parser.Granularity granularity, Path inputCodePath, Path outputCodePath, Path idiomsFilePath
 	) {
-		//Check inputs
 		String mapFileName = outputCodePath.getFileName() + ".map";
 		Path mapOutputFile = outputCodePath.resolveSibling(mapFileName);
 
-		//Idioms
+		String sourceCode = new String(Files.readAllBytes(inputCodePath));
+		sourceCode = removeCommentsAndAnnotations(sourceCode);
+
 		Set<String> idioms;
 		@Cleanup Stream<String> stream = Files.lines(idiomsFilePath);
 		idioms = stream.collect(Collectors.toSet());
 
-		//Parser
 		Parser parser = new Parser(granularity);
-		parser.parseFile(inputCodePath);
+		parser.parseCode(sourceCode);
 
-		//Tokenizer
 		Tokenizer tokenizer = new Tokenizer(parser, idioms);
+		String abstractCode = tokenizer.tokenize(sourceCode);
 
-		String abstractCode = tokenizer.tokenize(inputCodePath);
-
-		//Write output files
 		Files.write(outputCodePath, abstractCode.getBytes());
 		tokenizer.exportMaps(mapOutputFile);
+	}
+
+	public static String removeCommentsAndAnnotations(String sourceCode) {
+		Pattern pattern = Pattern.compile("(\".+\")");
+		Matcher matcher = pattern.matcher(sourceCode);
+
+		String group;
+		String okGroup;
+		while (matcher.find()) {
+			for (int i = 0; i <= matcher.groupCount(); i++) {
+				group = matcher.group(i);
+				//okGroup = group.replaceAll("@", "<AT>");
+				okGroup = group.replaceAll("//", "<DOUBLE_SLASH>");
+				sourceCode = sourceCode.replace(group, okGroup);
+			}
+		}
+
+		sourceCode = sourceCode.replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)", "");
+		//sourceCode = sourceCode.replaceAll("@.+", "");
+
+		return sourceCode;
 	}
 }
