@@ -126,20 +126,13 @@ public class Tokenizer {
 		return sb.toString().trim();
 	}
 
+	@SneakyThrows
 	private static List<Token> readTokens(Path filePath) {
-		JavaLexer jLexer = null;
-		try {
-			//Read source code
-			String sourceCode = Analyzer.readSourceCode(filePath);
-			//Remove comments and annotations
-			String cleanedCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-			InputStream inputStream = new ByteArrayInputStream(cleanedCode.getBytes(StandardCharsets.UTF_8));
-			jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sourceCode = Analyzer.readSourceCode(filePath);
+		String cleanedCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
+		InputStream inputStream = new ByteArrayInputStream(cleanedCode.getBytes(StandardCharsets.UTF_8));
+		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
 
-		//Extract tokens
 		List<Token> tokens = new ArrayList<>();
 		for (Token t = jLexer.nextToken(); t.getType() != Token.EOF; t = jLexer.nextToken()) {
 			tokens.add(t);
