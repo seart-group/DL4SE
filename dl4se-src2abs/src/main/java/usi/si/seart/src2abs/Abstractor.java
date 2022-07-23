@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class Abstractor {
 
 	public void abstractCode(
-			Parser.CodeGranularity granularity, String inputCodePath, String outputCodePath, String idiomsFilePath
+			Parser.Granularity granularity, String inputCodePath, String outputCodePath, String idiomsFilePath
 	) {
 
 		//Check inputs

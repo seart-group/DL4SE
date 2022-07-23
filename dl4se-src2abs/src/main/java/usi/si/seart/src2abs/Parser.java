@@ -23,12 +23,15 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Parser {
 
-	public enum CodeGranularity { METHOD, CLASS }
+	public enum Granularity {
+		METHOD, CLASS
+	}
 
 	Set<String> types = new HashSet<>();
 	Set<String> methods = new HashSet<>();
 	Set<String> annotations = new HashSet<>();
-	CodeGranularity granularity;
+
+	Granularity granularity;
 
 	public void parseFile(String filePath) {
 		String sourceCode = Analyzer.readSourceCode(filePath);
@@ -42,7 +45,7 @@ public class Parser {
 	}
 
 	public void _parse(String code) {
-		if (granularity == CodeGranularity.METHOD) {
+		if (granularity == Granularity.METHOD) {
 			code = "public class DummyClass {" + code + "}";
 		}
 
