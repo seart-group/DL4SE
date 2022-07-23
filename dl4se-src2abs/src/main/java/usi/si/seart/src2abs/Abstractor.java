@@ -19,9 +19,6 @@ public class Abstractor {
 	public void abstractCode(
 			Parser.Granularity granularity, Path inputCodePath, Path outputCodePath, Path idiomsFilePath
 	) {
-		String mapFileName = outputCodePath.getFileName() + ".map";
-		Path mapOutputFile = outputCodePath.resolveSibling(mapFileName);
-
 		String sourceCode = new String(Files.readAllBytes(inputCodePath));
 		sourceCode = removeCommentsAndAnnotations(sourceCode);
 
@@ -36,7 +33,10 @@ public class Abstractor {
 		String abstractCode = tokenizer.tokenize(sourceCode);
 
 		Files.write(outputCodePath, abstractCode.getBytes());
-		tokenizer.exportMaps(mapOutputFile);
+
+		String mapFileName = outputCodePath.getFileName() + ".map";
+		Path mapOutputFile = outputCodePath.resolveSibling(mapFileName);
+		tokenizer.export(mapOutputFile);
 	}
 
 	public static String removeCommentsAndAnnotations(String sourceCode) {

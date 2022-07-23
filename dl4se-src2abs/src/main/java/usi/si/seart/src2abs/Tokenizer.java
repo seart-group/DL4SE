@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -29,14 +30,14 @@ public class Tokenizer {
 
 	private static final String SPACED_DOT = " . ";
 
-	Map<String, String> stringLiterals = new HashMap<>();
-	Map<String, String> charLiterals = new HashMap<>();
-	Map<String, String> intLiterals = new HashMap<>();
-	Map<String, String> floatLiterals = new HashMap<>();
-	Map<String, String> typeMap = new HashMap<>();
-	Map<String, String> methodMap = new HashMap<>();
-	Map<String, String> annotationMap = new HashMap<>();
-	Map<String, String> varMap = new HashMap<>();
+	Map<String, String> stringLiterals = new LinkedHashMap<>();
+	Map<String, String> charLiterals = new LinkedHashMap<>();
+	Map<String, String> intLiterals = new LinkedHashMap<>();
+	Map<String, String> floatLiterals = new LinkedHashMap<>();
+	Map<String, String> typeMap = new LinkedHashMap<>();
+	Map<String, String> methodMap = new LinkedHashMap<>();
+	Map<String, String> annotationMap = new LinkedHashMap<>();
+	Map<String, String> varMap = new LinkedHashMap<>();
 
 	Set<String> types;
 	Set<String> methods;
@@ -129,20 +130,23 @@ public class Tokenizer {
 	}
 
 	@SneakyThrows
-	public void exportMaps(Path outFile) {
-		List<String> lines = new ArrayList<>();
+	public void export(Path outFile) {
+		Files.write(outFile, getKeysAndValues(export()));
+	}
 
-		//lines.addAll(getKeysAndValues(identifiers));
-		lines.addAll(getKeysAndValues(typeMap));
-		lines.addAll(getKeysAndValues(methodMap));
-		lines.addAll(getKeysAndValues(varMap));
-		lines.addAll(getKeysAndValues(annotationMap));
-		lines.addAll(getKeysAndValues(charLiterals));
-		lines.addAll(getKeysAndValues(floatLiterals));
-		lines.addAll(getKeysAndValues(intLiterals));
-		lines.addAll(getKeysAndValues(stringLiterals));
-
-		Files.write(outFile, lines);
+	public Map<String, String> export() {
+		return Stream.of(
+				typeMap.entrySet().stream(),
+				methodMap.entrySet().stream(),
+				varMap.entrySet().stream(),
+				annotationMap.entrySet().stream(),
+				charLiterals.entrySet().stream(),
+				floatLiterals.entrySet().stream(),
+				intLiterals.entrySet().stream(),
+				stringLiterals.entrySet().stream()
+		)
+		.flatMap(Function.identity())
+		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
 	}
 
 	private List<String> getKeysAndValues(Map<String, String> map){
