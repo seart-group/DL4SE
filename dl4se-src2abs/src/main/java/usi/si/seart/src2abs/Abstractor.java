@@ -41,9 +41,5 @@ public class Abstractor {
 		//Write output files
 		Files.write(outputCodePath, abstractCode.getBytes());
 		tokenizer.exportMaps(mapOutputFile);
-
-		System.out.println("Source Code Abstracted successfully!");
-		System.out.println("Abstracted Code: "+outputCodePath);
-		System.out.println("Mapping: "+mapOutputFile);
 	}
 }
