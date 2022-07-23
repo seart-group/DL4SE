@@ -27,7 +27,7 @@ public class Abstractor {
 		idioms = stream.collect(Collectors.toSet());
 
 		Parser parser = new Parser(granularity);
-		parser.parseCode(sourceCode);
+		parser.parse(sourceCode);
 
 		Tokenizer tokenizer = new Tokenizer(parser, idioms);
 		String abstractCode = tokenizer.tokenize(sourceCode);

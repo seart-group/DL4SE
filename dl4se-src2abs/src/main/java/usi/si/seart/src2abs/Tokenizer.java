@@ -24,7 +24,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Tokenizer {
 
@@ -117,7 +117,7 @@ public class Tokenizer {
 	}
 
 	@SneakyThrows
-	private static List<Token> readTokens(String sourceCode) {
+	private List<Token> readTokens(String sourceCode) {
 		InputStream inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
 		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
 
@@ -194,8 +194,8 @@ public class Tokenizer {
 
 		//Check if it could be a method (the next token is a parenthesis)
 		boolean couldBeMethod = false;
-		if (i+1 < tokens.size()) {
-			Token t = tokens.get(i+1);
+		if (i + 1 < tokens.size()) {
+			Token t = tokens.get(i + 1);
 			if (t.getType() == JavaLexer.LPAREN) {
 				couldBeMethod = true;
 			}
@@ -216,8 +216,8 @@ public class Tokenizer {
 		}
 
 		if (tokenParts.length > 1) {
-			String lastPart = tokenParts[tokenParts.length-1];
-			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
+			String lastPart = tokenParts[tokenParts.length - 1];
+			String firstPart = token.substring(0, token.length()-lastPart.length() - 1);
 
 			if (methods.contains(lastPart) && couldBeMethod) {
 				if (idioms.contains(firstPart)) {
@@ -235,7 +235,7 @@ public class Tokenizer {
 
 		if (tokenParts.length > 1) {
 			String lastPart = tokenParts[tokenParts.length-1];
-			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
+			String firstPart = token.substring(0, token.length()-lastPart.length() - 1);
 
 			if (varMap.containsKey(lastPart)){
 				if (idioms.contains(firstPart)) {
@@ -252,8 +252,8 @@ public class Tokenizer {
 		}
 
 		if (tokenParts.length > 1) {
-			String lastPart = tokenParts[tokenParts.length-1];
-			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
+			String lastPart = tokenParts[tokenParts.length - 1];
+			String firstPart = token.substring(0, token.length()-lastPart.length() - 1);
 
 			if (types.contains(firstPart)){
 				if (idioms.contains(lastPart) || lastPart.equals("this") || lastPart.equals("class")) {
@@ -278,8 +278,8 @@ public class Tokenizer {
 
 		// var_# . var_#
 		if (tokenParts.length > 1) {
-			String lastPart = tokenParts[tokenParts.length-1];
-			String firstPart = token.substring(0, token.length()-lastPart.length()-1);
+			String lastPart = tokenParts[tokenParts.length - 1];
+			String firstPart = token.substring(0, token.length()-lastPart.length() - 1);
 
 			if (lastPart.equals("this") || lastPart.equals("class")){
 				if (idioms.contains(firstPart)){

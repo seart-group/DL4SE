@@ -33,13 +33,13 @@ public class Parser {
 
 	Granularity granularity;
 
-	public void parseCode(String code) {
+	public void parse(String sourceCode) {
 		if (granularity == Granularity.METHOD) {
-			code = "public class DummyClass {" + code + "}";
+			sourceCode = "public class DummyClass {" + sourceCode + "}";
 		}
 
 		// create compilation unit
-		CompilationUnit cu = StaticJavaParser.parse(code);
+		CompilationUnit cu = StaticJavaParser.parse(sourceCode);
 
 		// create set of annotations
 		cu.findAll(AnnotationExpr.class).stream()
@@ -85,7 +85,7 @@ public class Parser {
 				.forEach(methods::add);
 	}
 
-	public String[] filterString(String typeString){
+	private String[] filterString(String typeString){
 		String[] listString;
 		typeString = typeString.replaceAll("\\[", " ");
 		typeString = typeString.replaceAll("\\]", " ");
