@@ -7,129 +7,90 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.type.Type;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Getter
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Parser {
 
-	public enum CodeGranularity { METHOD, CLASS; }
-	private Set<String> types = new HashSet<String>();
-	private Set<String> methods = new HashSet<String>();
-	private Set<String> annotations = new HashSet<String>();
-	private CodeGranularity granularity;
+	public enum CodeGranularity { METHOD, CLASS }
 
-	public Parser() {
-		this.granularity = CodeGranularity.METHOD;
-	}
-
-	public Parser(CodeGranularity granularity) {
-		this.granularity = granularity;
-	}
-
+	Set<String> types = new HashSet<>();
+	Set<String> methods = new HashSet<>();
+	Set<String> annotations = new HashSet<>();
+	CodeGranularity granularity;
 
 	public void parseFile(String filePath) {
-
 		String sourceCode = Analyzer.readSourceCode(filePath);
-
-		//Remove comments and annotations
 		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-
-		parse(sourceCode);
+		_parse(sourceCode);
 	}
-
 
 	public void parseCode(String sourceCode) {
-		//Remove comments and annotations
 		sourceCode = Analyzer.removeCommentsAndAnnotations(sourceCode);
-
-		parse(sourceCode);
+		_parse(sourceCode);
 	}
 
-
-
-
-	public void parse(String sourceCode) {
-
-
-		//Check Granularity
-		String sourceCodeClass = "";
-		if(granularity == CodeGranularity.METHOD) {
-			sourceCodeClass = "public class DummyClass {" + sourceCode + "}";
-		} else {
-			sourceCodeClass = sourceCode;
+	public void _parse(String code) {
+		if (granularity == CodeGranularity.METHOD) {
+			code = "public class DummyClass {" + code + "}";
 		}
 
 		// create compilation unit
-		CompilationUnit cu = StaticJavaParser.parse(sourceCodeClass);
+		CompilationUnit cu = StaticJavaParser.parse(code);
 
 		// create set of annotations
-		List<AnnotationExpr> annotation = cu.getNodesByType(AnnotationExpr.class).stream().collect(Collectors.toList());
-		for(AnnotationExpr a: annotation){
-			annotations.add(a.getNameAsString());
-		}
+		cu.findAll(AnnotationExpr.class).stream()
+				.map(AnnotationExpr::getNameAsString)
+				.forEach(annotations::add);
 
 		// create set of types
-		List<Type> type = cu.getNodesByType(Type.class).stream().collect(Collectors.toList());
-		for(Type t: type) {
-			String[] addtypes = filterString(t.asString());
-			for(int i=0; i < addtypes.length; i++) {
-				types.add(addtypes[i]);
-			}
-		}
+		cu.findAll(Type.class).stream()
+				.flatMap(type -> {
+					String[] allTypes = filterString(type.asString());
+					return Stream.of(allTypes);
+				})
+				.forEach(types::add);
 
 		// create set of methods and insert declared methods
-		List<MethodDeclaration> method = cu.getNodesByType(MethodDeclaration.class).stream().collect(Collectors.toList());
-		for(MethodDeclaration m: method) {
-			methods.add(m.getNameAsString());
-		}
+		cu.findAll(MethodDeclaration.class).stream()
+				.map(MethodDeclaration::getNameAsString)
+				.forEach(methods::add);
 
 		// insert referenced methods into methods set
-		List<MethodCallExpr> methodcall = cu.getNodesByType(MethodCallExpr.class).stream().collect(Collectors.toList());
-		for(MethodCallExpr mc: methodcall) {
-			methods.add(mc.getNameAsString());
-		}
+		cu.findAll(MethodCallExpr.class).stream()
+				.map(MethodCallExpr::getNameAsString)
+				.forEach(methods::add);
 
 		// insert scope of methods into types
-		List<MethodCallExpr> methodscope = cu.getNodesByType(MethodCallExpr.class).stream().collect(Collectors.toList());
-		for(MethodCallExpr ms: methodscope) {
-
-			// is a scope is present in the method call
-			if(ms.getScope().isPresent()) {
-
-				// if the scope is a field access expression
-				if(ms.getScope().get().isFieldAccessExpr()) {
-					String field = ms.getScope().get().toString();
-					String[] fieldsplit = field.split("\\.");
-					String[] letters = (fieldsplit[fieldsplit.length - 1]).split("");
-					if(!letters[0].equals(letters[0].toLowerCase())) {
-						String[] addtypes = filterString(field);
-						types.addAll(Arrays.asList(addtypes));
+		cu.findAll(MethodCallExpr.class).stream()
+				.map(MethodCallExpr::getScope)
+				.flatMap(Optional::stream)
+				.filter(expression -> expression.isFieldAccessExpr() || expression.isNameExpr())
+				.forEach(expression -> {
+					String exprStr = expression.toString();
+					String[] fragments = exprStr.split("\\.");
+					String[] letters = fragments[fragments.length - 1].split("");
+					if (!letters[0].equals(letters[0].toLowerCase())) {
+						String[] allTypes = filterString(exprStr);
+						types.addAll(Arrays.asList(allTypes));
 					}
-				}
-
-				// if the scope is a name expression
-				if(ms.getScope().get().isNameExpr()) {
-					String name = ms.getScope().get().toString();
-					String[] namesplit = name.split("\\.");
-					String[] letters = namesplit[namesplit.length - 1].split("");
-					if(!letters[0].equals(letters[0].toLowerCase())) {
-						String[] addtypes = filterString(name);
-						types.addAll(Arrays.asList(addtypes));
-					}
-				}
-			}
-		}
+				});
 
 		// insert scope of methods into types
-		List<MethodReferenceExpr> methodref = cu.getNodesByType(MethodReferenceExpr.class).stream().collect(Collectors.toList());
-		for(MethodReferenceExpr mf: methodref) {
-			methods.add(mf.getIdentifier());
-		}
-
+		cu.findAll(MethodReferenceExpr.class).stream()
+				.map(MethodReferenceExpr::getIdentifier)
+				.forEach(methods::add);
 	}
 
 	public String[] filterString(String typeString){
@@ -149,20 +110,4 @@ public class Parser {
 		listString = typeString.split(" ");
 		return listString;
 	}
-
-	// getter method for getting the types set
-	public Set<String> getTypes(){
-		return types;
-	}
-
-	// getter method for getting the methods set
-	public Set<String> getMethods(){
-		return methods;
-	}
-
-	// getter method for getting the annotations set
-	public Set<String> getAnnotations(){
-		return annotations;
-	}
-
 }
