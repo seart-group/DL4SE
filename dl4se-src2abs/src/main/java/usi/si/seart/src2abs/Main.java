@@ -23,7 +23,7 @@ public class Main {
 			if (Files.notExists(outputParent)) throw new NoSuchFileException(outputParent.toString());
 			if (Files.notExists(idiomsPath)) throw new NoSuchFileException(idiomsPath.toString());
 
-			new Abstractor().abstractCode(granularity, inputPath, outputPath, idiomsPath);
+			Abstractor.abstractCode(granularity, inputPath, outputPath, idiomsPath);
 		} catch (ArrayIndexOutOfBoundsException ignored) {
 			System.err.println("Not enough arguments!");
 			printUsage();
