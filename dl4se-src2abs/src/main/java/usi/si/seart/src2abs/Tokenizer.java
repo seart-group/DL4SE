@@ -3,17 +3,17 @@ package usi.si.seart.src2abs;
 import edu.wm.cs.compiler.tools.generators.scanners.JavaLexer;
 import lombok.AccessLevel;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Token;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,11 +52,11 @@ public class Tokenizer {
 	@Setter
 	Set<String> annotations;
 
-	public String tokenize(String filePath) {
+	public String tokenize(Path filePath) {
 		List<Token> tokens;
 		try {
 			tokens = readTokens(filePath);
-		} catch(StackOverflowError e){
+		} catch (StackOverflowError e){
 			System.err.println("STACKOVERFLOW DURING LEXICAL ANALYSIS!");
 			return ERROR_LEXER;
 		}
@@ -126,9 +126,7 @@ public class Tokenizer {
 		return sb.toString().trim();
 	}
 
-
-
-	private static List<Token> readTokens(String filePath) {
+	private static List<Token> readTokens(Path filePath) {
 		JavaLexer jLexer = null;
 		try {
 			//Read source code
@@ -150,8 +148,8 @@ public class Tokenizer {
 		return tokens;
 	}
 
-
-	public void exportMaps(String outFile) {
+	@SneakyThrows
+	public void exportMaps(Path outFile) {
 		List<String> lines = new ArrayList<>();
 
 		//lines.addAll(getKeysAndValues(identifiers));
@@ -164,11 +162,7 @@ public class Tokenizer {
 		lines.addAll(getKeysAndValues(intLiterals));
 		lines.addAll(getKeysAndValues(stringLiterals));
 
-		try {
-			Files.write(Paths.get(outFile), lines);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Files.write(outFile, lines);
 	}
 
 	private List<String> getKeysAndValues(Map<String, String> map){

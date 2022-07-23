@@ -1,29 +1,24 @@
 package usi.si.seart.src2abs;
 
-import java.io.IOException;
+import lombok.SneakyThrows;
+
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Analyzer {
 
-	public static String readSourceCode(String filePath) {
-		String sourceCode = "";
-		try {
-			sourceCode = new String(Files.readAllBytes(Paths.get(filePath)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sourceCode;	
+	@SneakyThrows
+	public static String readSourceCode(Path filePath) {
+		return new String(Files.readAllBytes(filePath));
 	}
 
 	public static String removeCommentsAndAnnotations(String sourceCode) {
-		String regex = "(\".+\")";
-		Pattern pattern = Pattern.compile(regex);
+		Pattern pattern = Pattern.compile("(\".+\")");
 		Matcher matcher = pattern.matcher(sourceCode);
 
-		//save string with '//' and '@' inside
+		// Save Strings with '//' and '@'
 		String group;
 		String okGroup;
 		while (matcher.find()) {
@@ -35,9 +30,9 @@ public class Analyzer {
 			}
 		}
 
-		//remove comments
-		sourceCode = sourceCode.replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)","");
-		//remove annotations
+		// Remove Comments
+		sourceCode = sourceCode.replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)", "");
+		// Remove Annotations
 		//sourceCode = sourceCode.replaceAll("@.+", "");
 
 		return sourceCode;

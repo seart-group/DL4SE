@@ -1,50 +1,41 @@
 package usi.si.seart.src2abs;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
+
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashSet;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Abstractor {
 
+	@SneakyThrows
 	public void abstractCode(
-			Parser.Granularity granularity, String inputCodePath, String outputCodePath, String idiomsFilePath
+			Parser.Granularity granularity, Path inputCodePath, Path outputCodePath, Path idiomsFilePath
 	) {
-
 		//Check inputs
 		checkInputs(inputCodePath, idiomsFilePath, outputCodePath);
-		String mapOutputFile = outputCodePath+".map";
+		String mapFileName = outputCodePath.getFileName() + ".map";
+		Path mapOutputFile = outputCodePath.resolveSibling(mapFileName);
 
 		//Idioms
-		Set<String> idioms = new HashSet<>();
-		try (Stream<String> stream = Files.lines(Paths.get(idiomsFilePath))) {
-			idioms = stream.collect(Collectors.toSet());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Set<String> idioms;
+		@Cleanup Stream<String> stream = Files.lines(idiomsFilePath);
+		idioms = stream.collect(Collectors.toSet());
 
 		//Parser
 		Parser parser = new Parser(granularity);
 		try {
 			parser.parseFile(inputCodePath);
-		} catch(StackOverflowError e){
+		} catch (StackOverflowError e){
 			System.err.println("StackOverflow during parsing!");
 		} catch (Exception e) {
 			System.err.println("Parsing ERROR!");
-			PrintWriter pw;
-			try {
-				pw = new PrintWriter(outputCodePath);
-				pw.println("<ERROR>");
-				pw.close();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
+			@Cleanup PrintWriter pw = new PrintWriter(outputCodePath.toFile());
+			pw.println("<ERROR>");
 			return;
 		}
 
@@ -53,13 +44,13 @@ public class Abstractor {
 
 		tokenizer.setTypes(parser.getTypes());
 		tokenizer.setMethods(parser.getMethods());
-		tokenizer.setIdioms(idioms);
 		tokenizer.setAnnotations(parser.getAnnotations());
+		tokenizer.setIdioms(idioms);
 
 		String abstractCode = tokenizer.tokenize(inputCodePath);
 
 		//Write output files
-		writeAbstractCode(abstractCode, outputCodePath);
+		Files.write(outputCodePath, abstractCode.getBytes());
 		tokenizer.exportMaps(mapOutputFile);
 
 		System.out.println("Source Code Abstracted successfully!");
@@ -67,41 +58,19 @@ public class Abstractor {
 		System.out.println("Mapping: "+mapOutputFile);
 	}
 
-	private void writeAbstractCode(String abstractCode, String outputCodePath) {
-		try {
-			Files.write(Paths.get(outputCodePath), abstractCode.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
+	private void checkInputs(Path inputCodePath, Path idiomsFilePath, Path outputCodePath) {
+		Path outputDirectory = outputCodePath.getParent();
+		if (!Files.isDirectory(outputDirectory)) {
+			System.err.println("Output folder does not exist: " + outputDirectory);
+			System.exit(1);
 		}
-	}
-
-	private void checkInputs(String inputCodePath, String idiomsFilePath, String outputCodePath) {
-		checkFileExists(inputCodePath, "Input code file does not exist: ");
-		checkFileExists(idiomsFilePath, "Idiom file does not exist: ");
-		checkParentFolderExists(outputCodePath, "Output folder does not exist: ");
-	}
-
-	private void checkParentFolderExists(String filePath, String error) {
-		if (!Files.isDirectory(Paths.get(filePath).getParent())) {
-			try {
-				throw new FileNotFoundException(error+filePath);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+		if (!Files.isRegularFile(inputCodePath)) {
+			System.err.println("Input code file does not exist: " + inputCodePath);
+			System.exit(1);
 		}
-	}
-
-	private void checkFileExists(String filePath, String error) {
-		if (!fileExists(filePath)){
-			try {
-				throw new FileNotFoundException(error+filePath);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+		if (!Files.isRegularFile(idiomsFilePath)) {
+			System.err.println("Idiom file does not exist: " + idiomsFilePath);
+			System.exit(1);
 		}
-	}
-
-	private static boolean fileExists(String path) {
-		return new File(path).isFile();
 	}
 }

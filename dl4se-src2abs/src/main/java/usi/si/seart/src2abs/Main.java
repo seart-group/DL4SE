@@ -1,13 +1,15 @@
 package usi.si.seart.src2abs;
 
+import java.nio.file.Path;
+
 public class Main {
 
 	public static void main(String[] args) {
 		try {
 			Parser.Granularity granularity = Parser.Granularity.valueOf(args[0].toUpperCase());
-			String inputCodePath = args[1];
-			String outputCodePath = args[2];
-			String idiomsFilePath = args[3];
+			Path inputCodePath = Path.of(args[1]);
+			Path outputCodePath = Path.of(args[2]);
+			Path idiomsFilePath = Path.of(args[3]);
 			new Abstractor().abstractCode(granularity, inputCodePath, outputCodePath, idiomsFilePath);
 		} catch (ArrayIndexOutOfBoundsException ignored) {
 			printIllegalArgumentError("Not enough arguments!");
