@@ -20,7 +20,7 @@ public class Abstractor {
 			Parser.Granularity granularity, Path inputCodePath, Path outputCodePath, Path idiomsFilePath
 	) {
 		String sourceCode = new String(Files.readAllBytes(inputCodePath));
-		sourceCode = removeCommentsAndAnnotations(sourceCode);
+		sourceCode = _clean(sourceCode);
 
 		Set<String> idioms;
 		@Cleanup Stream<String> stream = Files.lines(idiomsFilePath);
@@ -39,7 +39,7 @@ public class Abstractor {
 		tokenizer.export(mapOutputFile);
 	}
 
-	public static String removeCommentsAndAnnotations(String sourceCode) {
+	public static String _clean(String sourceCode) {
 		Pattern pattern = Pattern.compile("(\".+\")");
 		Matcher matcher = pattern.matcher(sourceCode);
 
