@@ -48,11 +48,15 @@ public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeP
         }
     }
 
+    private static final Function<String, Node> FILE_PARSER = StaticJavaParser::parse;
+    private static final Function<String, Node> FUNCTION_PARSER = StaticJavaParser::parseMethodDeclaration;
+
     private CodeProcessingPipeline convert(CodeQuery codeQuery, CodeProcessing codeProcessing) {
+        boolean includeAst = codeQuery.getIncludeAst();
         if (codeQuery instanceof FileQuery) {
-            return convert(codeProcessing, StaticJavaParser::parse);
+            return convert(codeProcessing, includeAst, FILE_PARSER);
         } else if (codeQuery instanceof FunctionQuery) {
-            return convert(codeProcessing, StaticJavaParser::parseMethodDeclaration);
+            return convert(codeProcessing, includeAst, FUNCTION_PARSER);
         } else {
             throw new UnsupportedOperationException(
                     "Converter not implemented for code granularity: " + codeProcessing.getClass().getName()
@@ -65,11 +69,18 @@ public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeP
     private static final Predicate<Comment> IS_BLOCK_COMMENT = Comment::isBlockComment;
     private static final Predicate<Comment> IS_JAVADOC_COMMENT = Comment::isJavadocComment;
 
-    private CodeProcessingPipeline convert(CodeProcessing codeProcessing, Function<String, Node> parser) {
-        // TODO 19.07.22: Abstraction
-        // TODO 19.07.22: Masking (make sure consecutive choices are "flattened")
-
+    private CodeProcessingPipeline convert(
+            CodeProcessing codeProcessing, boolean includeAst, Function<String, Node> parser
+    ) {
         CodeProcessingPipeline pipeline = new CodeProcessingPipeline();
+
+        if (!includeAst) {
+            pipeline.add(code -> {
+                code.setAst("");
+                return code;
+            });
+        }
+
         boolean removeDocstring = codeProcessing.getRemoveDocstring();
         boolean removeInnerComments = codeProcessing.getRemoveInnerComments();
         if (removeDocstring || removeInnerComments) {
@@ -91,6 +102,9 @@ public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeP
                 return code;
             });
         }
+
+        // TODO 19.07.22: Abstraction
+        // TODO 19.07.22: Masking (make sure consecutive choices are "flattened")
 
         return pipeline;
     }
