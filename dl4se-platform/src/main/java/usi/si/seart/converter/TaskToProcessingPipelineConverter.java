@@ -88,6 +88,7 @@ public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeP
                 try {
                     Node node = parser.apply(code.getContent());
                     List<Comment> comments = node.getAllContainedComments();
+                    node.getComment().ifPresent(comments::add);
                     Predicate<Comment> commentPredicate;
                     if (removeDocstring && removeInnerComments) {
                         commentPredicate = IS_ANY_COMMENT;
