@@ -4,6 +4,7 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.printer.XmlPrinter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import usi.si.seart.function.CodeProcessingPipeline;
@@ -20,7 +21,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeProcessingPipeline> {
+public class TaskToProcessingPipelineConverter implements Converter<Task, CodeProcessingPipeline> {
+
+    private static final XmlPrinter astPrinter = new XmlPrinter(true);
 
     @Override
     @NonNull
@@ -99,6 +102,9 @@ public class TaskToProcessingPipelineConverter  implements Converter<Task, CodeP
                     }
                     comments.stream().filter(commentPredicate).forEach(Comment::remove);
                     code.setContent(node.toString());
+                    if (includeAst) {
+                        code.setAst(astPrinter.output(node));
+                    }
                 } catch (ParseProblemException | StackOverflowError ignore) {}
                 return code;
             });
