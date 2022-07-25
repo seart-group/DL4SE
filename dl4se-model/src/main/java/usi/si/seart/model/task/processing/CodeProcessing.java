@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
@@ -25,7 +24,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 @Entity
@@ -64,10 +62,16 @@ public class CodeProcessing extends Processing {
     Boolean maskContiguousOnly;
 
     @NotNull
+    @Column(name = "abstract_code")
+    @JsonProperty(value = "abstract_code")
+    Boolean abstractCode;
+
+    @NotNull
     @Type(type = "list-array")
     @Singular
-    @ToString.Exclude
-    List<@NotBlank String> idioms = new ArrayList<>();
+    @Column(name = "abstract_idioms")
+    @JsonProperty(value = "abstract_idioms")
+    List<@NotBlank String> abstractIdioms = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -79,7 +83,6 @@ public class CodeProcessing extends Processing {
 
     @Override
     public int hashCode() {
-        SortedSet<String> sortedIdioms = new TreeSet<>(idioms);
         return Objects.hash(
                 super.hashCode(),
                 removeDocstring,
@@ -87,7 +90,7 @@ public class CodeProcessing extends Processing {
                 maskToken,
                 maskPercentage,
                 maskContiguousOnly,
-                sortedIdioms
+                new TreeSet<>(abstractIdioms)
         );
     }
 }

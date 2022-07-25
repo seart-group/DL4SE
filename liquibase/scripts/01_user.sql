@@ -77,7 +77,8 @@ CREATE TABLE "processing" (
     "mask_token" text,
     "mask_percentage" integer,
     "mask_contiguous_only" boolean,
-    "idioms" text[] NOT NULL
+    "abstract_code" boolean NOT NULL,
+    "abstract_idioms" text[] NOT NULL
 );
 
 -- FOREIGN KEYS

@@ -16,7 +16,8 @@ public class DtoToCodeProcessingConverter implements Converter<CodeProcessingDto
                 .maskToken(source.getMaskToken())
                 .maskPercentage(source.getMaskPercentage())
                 .maskContiguousOnly(source.getMaskContiguousOnly())
-                .idioms(source.getIdioms())
+                .abstractCode(source.getAbstractCode())
+                .abstractIdioms(source.getAbstractIdioms())
                 .build();
     }
 }
