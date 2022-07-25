@@ -27,8 +27,10 @@
       </b-col>
       <b-col xl="5" lg="5" md="6" sm="6" cols="12">
         <b-form-group label="Abstract:" label-class="font-weight-bold">
-          <p class="m-0">Abstract source code using the following idioms:</p>
-          <b-tag-select id="idioms-tag-select" v-model="local.idioms" placeholder="Idiom..." />
+          <b-checkbox id="abstract-enabled" v-model="local.abstract.enabled">
+            Abstract instances using the following idioms:
+          </b-checkbox>
+          <b-tag-select id="abstract-idioms" placeholder="Idiom..." v-model="local.abstract.idioms" />
         </b-form-group>
       </b-col>
     </b-row>
@@ -46,7 +48,7 @@ export default {
   props: {
     remove: Object,
     masking: Object,
-    idioms: Array
+    abstract: Object
   },
   watch: {
     "local.remove": {
@@ -61,9 +63,10 @@ export default {
         this.$emit("update:masking", this.local.masking)
       }
     },
-    "local.idioms": {
+    "local.abstract": {
+      deep: true,
       handler() {
-        this.$emit("update:idioms", this.local.idioms)
+        this.$emit("update:abstract", this.local.abstract)
       }
     }
   },
@@ -77,7 +80,7 @@ export default {
       local: {
         remove: this.remove,
         masking: this.masking,
-        idioms: this.idioms
+        abstract: this.abstract
       }
     }
   }
