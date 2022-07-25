@@ -35,13 +35,16 @@ public class Parser {
 	Granularity granularity;
 
 	public void parse(String sourceCode) {
-		Function<String, Node> parser = StaticJavaParser::parse;
+		Function<String, Node> parsingFunction = StaticJavaParser::parse;
 		if (granularity == Granularity.METHOD) {
-			parser = StaticJavaParser::parseMethodDeclaration;
+			parsingFunction = StaticJavaParser::parseMethodDeclaration;
 		}
 
-		// create compilation unit
-		Node node = parser.apply(sourceCode);
+		parse(sourceCode, parsingFunction);
+	}
+
+	public void parse(String sourceCode, Function<String, Node> parsingFunction) {
+		Node node = parsingFunction.apply(sourceCode);
 
 		// create set of annotations
 		node.findAll(AnnotationExpr.class).stream()
