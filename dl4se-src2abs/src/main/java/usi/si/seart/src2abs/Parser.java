@@ -45,7 +45,10 @@ public class Parser {
 
 	public void parse(String sourceCode, Function<String, Node> parsingFunction) {
 		Node node = parsingFunction.apply(sourceCode);
+		traverseNode(node);
+	}
 
+	public void traverseNode(Node node) {
 		// create set of annotations
 		node.findAll(AnnotationExpr.class).stream()
 				.map(AnnotationExpr::getNameAsString)
