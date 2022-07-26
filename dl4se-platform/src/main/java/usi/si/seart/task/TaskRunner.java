@@ -138,7 +138,6 @@ public class TaskRunner implements Runnable {
                 Iterable<Code> iterable = stream::iterator;
                 long count = task.getProcessedResults();
                 for (Code code : iterable) {
-                    entityManager.detach(code);
                     count += 1;
 
                     long id = code.getId();

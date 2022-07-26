@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.model.code.Code;
 import usi.si.seart.repository.CodeRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,6 +30,9 @@ public interface CodeService {
         DSLContext dslContext;
         CodeRepository codeRepository;
 
+        @PersistenceContext
+        EntityManager entityManager;
+
         @Override
         public Long countTotalResults(Query query) {
             String sql = dslContext.renderNamedParams(query);
@@ -41,7 +46,11 @@ public interface CodeService {
         ) {
             String sql = dslContext.renderNamedParams(query);
             Map<String, ?> parameters = getQueryParameters(query);
-            return codeRepository.stream(sql, parameters, codeClass).map(processing);
+            return codeRepository.stream(sql, parameters, codeClass)
+                    .map(code -> {
+                        entityManager.detach(code);
+                        return processing.apply(code);
+                    });
         }
 
         @SuppressWarnings("ConstantConditions")
