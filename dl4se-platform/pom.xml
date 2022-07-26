@@ -36,6 +36,11 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>usi.si.seart</groupId>
+      <artifactId>dl4se-src2abs</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
       <version>0.9.1</version>
