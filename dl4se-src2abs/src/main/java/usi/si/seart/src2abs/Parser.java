@@ -34,6 +34,10 @@ public class Parser {
 
 	Granularity granularity;
 
+	public Parser() {
+		this.granularity = null;
+	}
+
 	public void parse(String sourceCode) {
 		Function<String, Node> parsingFunction = StaticJavaParser::parse;
 		if (granularity == Granularity.METHOD) {
