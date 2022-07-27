@@ -8,6 +8,9 @@ import com.github.javaparser.printer.XmlPrinter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import usi.si.seart.function.CodeProcessingPipeline;
+import usi.si.seart.model.code.Code;
+import usi.si.seart.model.code.File;
+import usi.si.seart.model.code.Function;
 import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
@@ -16,9 +19,16 @@ import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.task.query.FileQuery;
 import usi.si.seart.model.task.query.FunctionQuery;
 import usi.si.seart.model.task.query.Query;
+import usi.si.seart.src2abs.Abstractor;
+import usi.si.seart.src2abs.Parser;
+import usi.si.seart.src2abs.Tokenizer;
+import usi.si.seart.wrapper.code.Abstracted;
+import usi.si.seart.wrapper.code.AbstractedFile;
+import usi.si.seart.wrapper.code.AbstractedFunction;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 
 public class TaskToProcessingPipelineConverter implements Converter<Task, CodeProcessingPipeline> {
@@ -51,15 +61,12 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         }
     }
 
-    private static final Function<String, Node> FILE_PARSER = StaticJavaParser::parse;
-    private static final Function<String, Node> FUNCTION_PARSER = StaticJavaParser::parseMethodDeclaration;
-
     private CodeProcessingPipeline convert(CodeQuery codeQuery, CodeProcessing codeProcessing) {
         boolean includeAst = codeQuery.getIncludeAst();
         if (codeQuery instanceof FileQuery) {
-            return convert(codeProcessing, includeAst, FILE_PARSER);
+            return convert(codeProcessing, includeAst, StaticJavaParser::parse);
         } else if (codeQuery instanceof FunctionQuery) {
-            return convert(codeProcessing, includeAst, FUNCTION_PARSER);
+            return convert(codeProcessing, includeAst, StaticJavaParser::parseMethodDeclaration);
         } else {
             throw new UnsupportedOperationException(
                     "Converter not implemented for code granularity: " + codeProcessing.getClass().getName()
@@ -73,7 +80,7 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
     private static final Predicate<Comment> IS_JAVADOC_COMMENT = Comment::isJavadocComment;
 
     private CodeProcessingPipeline convert(
-            CodeProcessing codeProcessing, boolean includeAst, Function<String, Node> parser
+            CodeProcessing codeProcessing, boolean includeAst, java.util.function.Function<String, Node> parser
     ) {
         CodeProcessingPipeline pipeline = new CodeProcessingPipeline();
 
@@ -110,7 +117,41 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
             });
         }
 
-        // TODO 19.07.22: Abstraction
+        boolean abstractCode = codeProcessing.getAbstractCode();
+        if (abstractCode) {
+            pipeline.add(code -> {
+                try {
+                    // Perform abstraction
+                    String sourceCode = code.getContent();
+                    String cleanedCode = Abstractor.cleanCode(sourceCode);
+                    Set<String> idioms = new TreeSet<>(codeProcessing.getAbstractIdioms());
+                    Parser absParser = new Parser();
+                    absParser.parse(cleanedCode, parser);
+                    Tokenizer tokenizer = new Tokenizer(absParser, idioms);
+                    Node node = parser.apply(tokenizer.tokenize(sourceCode));
+                    code.setContent(node.toString());
+                    if (includeAst) {
+                        code.setAst(astPrinter.output(node));
+                    }
+
+                    // Convert result to wrapper object that includes the mappings
+                    Abstracted abstracted;
+                    if (code instanceof File) {
+                        abstracted = AbstractedFile.from((File) code);
+                    } else if (code instanceof Function) {
+                        abstracted = AbstractedFunction.from((Function) code);
+                    } else {
+                        throw new UnsupportedOperationException(
+                                "Abstraction operation not implemented for granularity: " + code.getClass().getName()
+                        );
+                    }
+                    abstracted.setMappings(tokenizer.export());
+                    code = (Code) abstracted;
+                } catch (ParseProblemException | StackOverflowError ignore) {}
+                return code;
+            });
+        }
+
         // TODO 19.07.22: Masking (make sure consecutive choices are "flattened")
 
         return pipeline;
