@@ -117,7 +117,7 @@ public class Tokenizer {
 	}
 
 	@SneakyThrows
-	private List<Token> readTokens(String sourceCode) {
+	public static List<Token> readTokens(String sourceCode) {
 		InputStream inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
 		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
 
