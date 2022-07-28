@@ -120,6 +120,7 @@ public class Tokenizer {
 	public static List<Token> readTokens(String sourceCode) {
 		InputStream inputStream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
 		JavaLexer jLexer = new JavaLexer(new ANTLRInputStream(inputStream));
+		jLexer.removeErrorListeners();
 
 		List<Token> tokens = new ArrayList<>();
 		for (Token t = jLexer.nextToken(); t.getType() != Token.EOF; t = jLexer.nextToken()) {
