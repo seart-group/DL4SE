@@ -19,8 +19,8 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col>
-            <b-form-group label-class="font-weight-bold" class="m-0">
+          <b-col xl="2" lg="2" md="3" cols="12">
+            <b-form-group label-class="font-weight-bold" class="m-0 pb-2 pb-md-0">
               <template #label>
                 Granularity
                 <b-link :to="{ name: 'about', hash: '#granularity' }" target="_blank" class="text-dark">
@@ -31,6 +31,24 @@
                                   v-model="task.query.granularity"
                                   :options="options.granularities"
               />
+            </b-form-group>
+          </b-col>
+          <b-col xl="5" lg="6" md="9" cols="12">
+            <b-form-group label-class="font-weight-bold" class="m-0">
+              <template #label>
+                AST
+                <b-link :to="{ name: 'about', hash: '#ast' }" target="_blank" class="text-dark">
+                  <b-icon-question-circle-fill />
+                </b-link>
+              </template>
+              <b-form-checkbox id="ast-checkbox" v-model="task.query.include_ast">
+                Pair each instance with its AST-based representation
+              </b-form-checkbox>
+              <b-form-text v-show="task.query.include_ast" class="pl-4">
+                Choosing to include ASTs in your dataset will <strong>drastically</strong> increase the size of the
+                exported file, and may increase the amount of time needed to export individual instances if processing
+                is applied.
+              </b-form-text>
             </b-form-group>
           </b-col>
         </b-row>
@@ -302,7 +320,7 @@ export default {
           max_lines: null,
           min_characters: null,
           max_characters: null,
-          include_ast: true,
+          include_ast: false,
           exclude_forks: false,
           exclude_duplicates: false,
           exclude_identical: false,
