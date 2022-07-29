@@ -46,7 +46,7 @@
             </b-link>
           </template>
           <p class="m-0">Abstract source code using the following idioms:</p>
-          <b-tag-select id="idioms-tag-select" v-model="local.idioms" placeholder="Idiom..." />
+          <b-tag-select id="idioms-tag-select" v-model="local.abstract.idioms" placeholder="Idiom..." />
         </b-form-group>
       </b-col>
     </b-row>
