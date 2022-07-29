@@ -10,6 +10,7 @@ import VerifyView from "@/views/VerifyView"
 import NotFoundView from "@/views/NotFoundView"
 import TaskCreateView from "@/views/TaskCreateView"
 import DownloadView from "@/views/DownloadView"
+import AboutView from "@/views/AboutView"
 
 Vue.use(VueRouter)
 
@@ -81,6 +82,14 @@ const routes = [
     }
   },
   {
+    path: '/about',
+    name: 'about',
+    component: AboutView,
+    meta: {
+      public: true
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     component: NotFoundView,
     meta: {
@@ -92,7 +101,12 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior: (to) => {
+    if (to.hash) {
+      return { selector: to.hash }
+    }
+  }
 })
 
 router.beforeEach(async (to, _from, next) => {

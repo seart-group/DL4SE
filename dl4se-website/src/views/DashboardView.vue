@@ -55,7 +55,7 @@
             <template #cell(progress)="row">
               <div class="d-flex flex-column text-center">
                 <template v-if="row.value.status === 'FINISHED' && !row.value.total">
-                  No Results
+                  <span class="text-nowrap">No Results</span>
                 </template>
                 <template v-else>
                   <span v-html="row.value.percentage" />
@@ -90,29 +90,42 @@
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
-                  <b-button class="action-btn" size="sm"
-                            :disabled="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)"
+                <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
+                  <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
+                    <b-button class="action-btn" size="sm" disabled>
+                      <b-icon-trash />
+                    </b-button>
+                  </span>
+                </template>
+                <template v-else>
+                  <b-button class="action-btn mr-1" size="sm"
+                            v-b-tooltip="'Cancel Task'"
                             @click="taskCancel(row.item.uuid)"
                   >
                     <b-icon-trash />
                   </b-button>
-                </span>
-                <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Edit Task'">
-                  <b-button class="action-btn" size="sm"
-                            :to="{ name: 'task', params: { uuid: row.item.uuid } }"
-                  >
-                    <b-icon-pencil-square />
-                  </b-button>
-                </span>
-                <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
-                  <b-button class="action-btn" size="sm"
+                </template>
+                <b-button class="action-btn mr-1" size="sm"
+                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                          v-b-tooltip="'Edit Task'"
+                >
+                  <b-icon-pencil-square />
+                </b-button>
+                <template v-if="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0">
+                  <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
+                    <b-button class="action-btn" size="sm" disabled>
+                      <b-icon-download />
+                    </b-button>
+                  </span>
+                </template>
+                <template v-else>
+                  <b-button class="action-btn d-inline-block" size="sm"
                             :to="{ name: 'download', params: { uuid: row.item.uuid } }"
-                            :disabled="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0"
+                            v-b-tooltip="'Download Results'"
                   >
                     <b-icon-download />
                   </b-button>
-                </span>
+                </template>
               </div>
             </template>
           </b-paginated-table>
@@ -165,34 +178,12 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-modal :id="detailsModal.id" :title="detailsModal.title"
-             content-class="rounded-0" scrollable centered
-             footer-class="justify-content-start"
-             @hidden="reset"
-    >
-      <b-card no-body class="rounded-0">
-        <b-tabs v-model="detailsModal.activeTab" card>
-          <b-tab v-for="{name, formatter} in detailsModal.formatters"
-                 :title="name" :key="name" lazy
-                 title-link-class="text-secondary rounded-0"
-          >
-            <b-card-body>
-              <pre class="m-0">{{ formatter(detailsModal.content) }}</pre>
-            </b-card-body>
-          </b-tab>
-        </b-tabs>
-      </b-card>
-      <template #modal-footer>
-        <b-button :id="`${detailsModal.id}-btn`" class="action-btn" @click="copy">
-          <b-icon-clipboard />
-        </b-button>
-        <b-tooltip title="Copied!" triggers="click"
-                   :target="`${detailsModal.id}-btn`"
-                   :show.sync="detailsModal.showTooltip"
-                   @shown="autoHideTooltip"
-        />
-      </template>
-    </b-modal>
+    <b-details-modal :id="detailsModal.id"
+                     :title="detailsModal.title"
+                     :content="detailsModal.content"
+                     :formatters="detailsModal.formatters"
+                     @reset="detailsModal.title = ''; detailsModal.content = {}"
+    />
   </div>
 </template>
 
@@ -200,6 +191,7 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BDetailsModal from "@/components/DetailsModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
@@ -208,6 +200,7 @@ import BPaginatedTable from "@/components/PaginatedTable"
 export default {
   components: {
     BAbbreviation,
+    BDetailsModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
@@ -227,10 +220,12 @@ export default {
     plaintextFormatter(item) {
       return Object.entries(item)
           .filter(([, value]) => {
-            if (value instanceof String || value instanceof Array || value instanceof Object) {
-              return value?.length
-            } else {
-              return Boolean(value)
+            switch (typeof value) {
+              case "string":
+              case "object":
+                return value?.length
+              default:
+                return Boolean(value)
             }
           })
           .sort(([key1, value1], [key2, value2]) => {
@@ -395,21 +390,6 @@ export default {
       this.detailsModal.title = title
       this.detailsModal.content = item
       this.$root.$emit('bv::show::modal', this.detailsModal.id, button)
-    },
-    reset() {
-      this.detailsModal.title = ""
-      this.detailsModal.content = ""
-      this.detailsModal.showTooltip = false
-      this.detailsModal.activeTab = 0
-    },
-    copy() {
-      const idx = this.detailsModal.activeTab
-      const formatter = this.detailsModal.formatters[idx].formatter
-      const value = formatter(this.detailsModal.content)
-      navigator.clipboard.writeText(value).then(() => this.detailsModal.showTooltip = true)
-    },
-    autoHideTooltip() {
-      setTimeout(() => this.detailsModal.showTooltip = false, 2000)
     }
   },
   async beforeMount() {
@@ -426,8 +406,6 @@ export default {
         id: "details-modal",
         title: "",
         content: "",
-        showTooltip: false,
-        activeTab: 0,
         formatters: [
           {
             name: "JSON",

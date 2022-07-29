@@ -7,7 +7,13 @@
     </b-row>
     <b-row align-h="center">
       <b-col lg="3" md="6" sm="12">
-        <b-form-group label="Exclude:" label-class="font-weight-bold">
+        <b-form-group label-class="font-weight-bold">
+          <template #label>
+            Exclude
+            <b-link :to="{ name: 'about', hash: '#exclusion' }" target="_blank" class="text-dark">
+              <b-icon-question-circle-fill />
+            </b-link>
+          </template>
           <b-checkbox id="test-code-checkbox" v-model="local.exclude.test">
             Test code
           </b-checkbox>
@@ -29,7 +35,13 @@
         </b-form-group>
       </b-col>
       <b-col lg="2" md="6" sm="12">
-        <b-form-group label="Ignore:" label-class="font-weight-bold">
+        <b-form-group label-class="font-weight-bold">
+          <template #label>
+            Ignore
+            <b-link :to="{ name: 'about', hash: '#duplicates-and-clones' }" target="_blank" class="text-dark">
+              <b-icon-question-circle-fill />
+            </b-link>
+          </template>
           <b-checkbox id="duplicates-checkbox" inline
                       v-model="local.exclude.duplicates"
                       @change="() => { if (local.exclude.identical) local.exclude.identical = false }"

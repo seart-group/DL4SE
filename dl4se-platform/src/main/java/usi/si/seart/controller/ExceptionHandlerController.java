@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import usi.si.seart.exception.EntityNotFoundException;
 import usi.si.seart.exception.TokenExpiredException;
 
+import java.io.FileNotFoundException;
+
 @Slf4j
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -48,6 +50,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public void handleEntityNotFoundException(EntityNotFoundException ex) {
         log.debug("Entity not found: {}", ex.getMessage());
+        log.trace("", ex);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public void handleFileNotFoundException(FileNotFoundException ex) {
+        log.debug("File not found: {}", ex.getMessage());
         log.trace("", ex);
     }
 

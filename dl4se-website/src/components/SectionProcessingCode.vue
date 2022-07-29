@@ -9,7 +9,13 @@
       <b-col xl="7" lg="7" md="6" sm="6" cols="12">
         <b-row no-gutters>
           <b-col xl="3" lg="4" md="12" sm="12" cols="12">
-            <b-form-group label="Remove:" label-class="font-weight-bold">
+            <b-form-group label-class="font-weight-bold">
+              <template #label>
+                Remove
+                <b-link :to="{ name: 'about', hash: '#comment-removal' }" target="_blank" class="text-dark">
+                  <b-icon-question-circle-fill />
+                </b-link>
+              </template>
               <b-checkbox id="docstring-checkbox" v-model="local.remove.docstring" inline>
                 Docstrings
               </b-checkbox>
@@ -19,18 +25,28 @@
             </b-form-group>
           </b-col>
           <b-col xl="6" lg="7" md="12" sm="12" cols="12" offset-lg="1" offset-xl="2">
-            <b-form-group label="Mask:" label-class="font-weight-bold">
+            <b-form-group label-class="font-weight-bold">
+              <template #label>
+                Mask
+                <b-link :to="{ name: 'about', hash: '#masking' }" target="_blank" class="text-dark">
+                  <b-icon-question-circle-fill />
+                </b-link>
+              </template>
               <b-masking id="token-mask" v-model="local.masking" />
             </b-form-group>
           </b-col>
         </b-row>
       </b-col>
       <b-col xl="5" lg="5" md="6" sm="6" cols="12">
-        <b-form-group label="Abstract:" label-class="font-weight-bold">
-          <b-checkbox id="abstract-enabled" v-model="local.abstract.enabled">
-            Abstract instances using the following idioms:
-          </b-checkbox>
-          <b-tag-select id="abstract-idioms" placeholder="Idiom..." v-model="local.abstract.idioms" />
+        <b-form-group label-class="font-weight-bold">
+          <template #label>
+            Abstract
+            <b-link :to="{ name: 'about', hash: '#abstraction' }" target="_blank" class="text-dark">
+              <b-icon-question-circle-fill />
+            </b-link>
+          </template>
+          <p class="m-0">Abstract source code using the following idioms:</p>
+          <b-tag-select id="idioms-tag-select" v-model="local.idioms" placeholder="Idiom..." />
         </b-form-group>
       </b-col>
     </b-row>

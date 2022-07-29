@@ -6,7 +6,8 @@
              thead-class="paginated-table-header" thead-tr-class="paginated-table-header-row"
              tbody-class="paginated-table-body" tbody-tr-class="paginated-table-row" hover
              show-empty :items="provider" :primary-key="primaryKey" :fields="fields"
-             sort-icon-left :per-page="perPage" :current-page="currentPage"
+             sort-icon-left no-sort-reset no-local-sorting
+             :per-page="perPage" :current-page="currentPage"
              v-bind="$attrs" v-on="$listeners"
     >
       <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
