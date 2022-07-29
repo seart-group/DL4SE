@@ -5,6 +5,8 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.XmlPrinter;
+import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.Token;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import usi.si.seart.function.CodeProcessingPipeline;
@@ -26,10 +28,17 @@ import usi.si.seart.wrapper.code.Abstracted;
 import usi.si.seart.wrapper.code.AbstractedFile;
 import usi.si.seart.wrapper.code.AbstractedFunction;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 public class TaskToProcessingPipelineConverter implements Converter<Task, CodeProcessingPipeline> {
 
@@ -152,8 +161,87 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
             });
         }
 
-        // TODO 19.07.22: Masking (make sure consecutive choices are "flattened")
+        boolean maskCode = codeProcessing.getMaskPercentage() != null;
+        if (maskCode) {
+            pipeline.add(code -> {
+                try {
+                    int percentage = codeProcessing.getMaskPercentage();
+                    boolean contiguous = codeProcessing.getMaskContiguousOnly();
+                    String maskToken = codeProcessing.getMaskToken();
+
+                    // TODO 29.07.22: Use alternative method that does not remove comments
+                    List<Token> tokens = Tokenizer.readTokens(code.getContent());
+                    UnaryOperator<List<Token>> selector = generateTokenSelector(percentage, contiguous);
+                    UnaryOperator<List<Token>> masker = generateTokenMasker(maskToken);
+                    List<Token> selected = selector.apply(tokens);
+                    List<Token> flattened = flatten(selected);
+                    List<Token> masked = masker.apply(flattened);
+
+                    String maskedCode = masked.stream()
+                            .map(Token::getText)
+                            .collect(Collectors.joining(" "));
+                    code.setContent(maskedCode);
+                } catch (ParseProblemException | StackOverflowError ignore) {}
+                return code;
+            });
+        }
 
         return pipeline;
+    }
+
+    private UnaryOperator<List<Token>> generateTokenSelector(int percentage, boolean contiguous) {
+        return tokens -> {
+            tokens = new ArrayList<>(tokens);
+            if (!contiguous) Collections.shuffle(tokens);
+            int startMax = tokens.size() * (100 - percentage) / 100;
+            for (
+                    int i = ThreadLocalRandom.current().nextInt(startMax + 1), selected = 0;
+                    (i < tokens.size()) && (selected < (tokens.size() * percentage / 100));
+                    i++, selected++
+            ) {
+                Token original = tokens.get(i);
+                CommonToken replacement = new CommonToken(Token.INVALID_TYPE);
+                replacement.setTokenIndex(original.getTokenIndex());
+                replacement.setStartIndex(original.getStartIndex());
+                replacement.setStopIndex(original.getStopIndex());
+                replacement.setLine(original.getLine());
+                replacement.setCharPositionInLine(original.getCharPositionInLine());
+                tokens.set(i, replacement);
+            }
+            if (!contiguous) tokens.sort(Comparator.comparingInt(Token::getStartIndex));
+            return tokens;
+        };
+    }
+
+    private List<Token> flatten(List<Token> tokens) {
+        tokens = new ArrayList<>(tokens);
+        Token previous = null;
+        for (Iterator<Token> iterator = tokens.iterator(); iterator.hasNext();) {
+            Token current = iterator.next();
+            if (previous != null
+                    && previous.getType() == Token.INVALID_TYPE
+                    && current.getType() == Token.INVALID_TYPE
+            ) {
+                iterator.remove();
+            } else {
+                previous = current;
+            }
+        }
+        return tokens;
+    }
+
+    private UnaryOperator<List<Token>> generateTokenMasker(String mask) {
+        return tokens -> {
+            tokens = new ArrayList<>(tokens);
+            for (int i = 0; i < tokens.size(); i++) {
+                Token token = tokens.get(i);
+                if (token.getType() == Token.INVALID_TYPE && token.getText() == null) {
+                    CommonToken masked = new CommonToken(token);
+                    masked.setText(mask);
+                    tokens.set(i, masked);
+                }
+            }
+            return tokens;
+        };
     }
 }
