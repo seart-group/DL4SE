@@ -32,10 +32,11 @@ Content-Type: application/json
     "mask_token" : "<MASK>",
     "mask_percentage" : 50,
     "mask_contiguous_only" : true,
-    "idioms" : [
-      "idiom1",
-      "idiom2",
-      "idiom3"
+    "abstract_code": true,
+    "abstract_idioms" : [
+      "App",
+      "main",
+      "String"
     ]
   }
 }

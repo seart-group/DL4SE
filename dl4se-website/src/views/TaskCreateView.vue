@@ -44,7 +44,7 @@
       <b-section-processing-code class="task-form-section-middle"
                                  :remove="remove" @update:remove="updateRemove"
                                  :masking="masking" @update:masking="updateMasking"
-                                 :idioms="task.processing.idioms" @update:idioms="updateIdioms"
+                                 :abstract="abstract" @update:abstract="updateAbstract"
       />
       <b-container class="py-4 task-form-section-bottom">
         <b-row align-h="center">
@@ -129,6 +129,12 @@ export default {
         percentage: this.task.processing.mask_percentage,
         contiguousOnly: this.task.processing.mask_contiguous_only
       }
+    },
+    abstract() {
+      return {
+        enabled: this.task.processing.abstract_code,
+        idioms: this.task.processing.abstract_idioms
+      }
     }
   },
   methods: {
@@ -174,8 +180,9 @@ export default {
       this.task.processing.mask_percentage = event.percentage
       this.task.processing.mask_contiguous_only = event.contiguousOnly
     },
-    updateIdioms(event) {
-      this.task.processing.idioms = event
+    updateAbstract(event) {
+      this.task.processing.abstract_code = event.enabled
+      this.task.processing.abstract_idioms = event.idioms
     },
     submitSuccess() {
       this.redirectDashboardAndToast(
@@ -310,7 +317,8 @@ export default {
           mask_token: null,
           mask_percentage: null,
           mask_contiguous_only: null,
-          idioms: []
+          abstract_code: false,
+          abstract_idioms : [ ]
         }
       },
       options: {

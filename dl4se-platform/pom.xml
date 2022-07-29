@@ -36,6 +36,11 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>usi.si.seart</groupId>
+      <artifactId>dl4se-src2abs</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
       <version>0.9.1</version>
@@ -44,6 +49,11 @@
       <groupId>org.owasp.encoder</groupId>
       <artifactId>encoder</artifactId>
       <version>1.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>3.24.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

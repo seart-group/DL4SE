@@ -50,7 +50,14 @@ public class CodeProcessingDto {
     Boolean maskContiguousOnly;
 
     @NotNull
+    @JsonProperty(value = "abstract_code")
     @JsonSetter(nulls = Nulls.SKIP)
     @Builder.Default
-    List<@NotBlank String> idioms = new ArrayList<>();
+    Boolean abstractCode = false;
+
+    @NotNull
+    @JsonProperty(value = "abstract_idioms")
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    List<@NotBlank String> abstractIdioms = new ArrayList<>();
 }

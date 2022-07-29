@@ -64,7 +64,7 @@ export default {
   props: {
     remove: Object,
     masking: Object,
-    idioms: Array
+    abstract: Object
   },
   watch: {
     "local.remove": {
@@ -79,9 +79,10 @@ export default {
         this.$emit("update:masking", this.local.masking)
       }
     },
-    "local.idioms": {
+    "local.abstract": {
+      deep: true,
       handler() {
-        this.$emit("update:idioms", this.local.idioms)
+        this.$emit("update:abstract", this.local.abstract)
       }
     }
   },
@@ -95,7 +96,7 @@ export default {
       local: {
         remove: this.remove,
         masking: this.masking,
-        idioms: this.idioms
+        abstract: this.abstract
       }
     }
   }

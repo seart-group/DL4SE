@@ -20,6 +20,7 @@ import usi.si.seart.converter.DtoToCodeProcessingConverter;
 import usi.si.seart.converter.DtoToConfigurationConverter;
 import usi.si.seart.converter.DtoToUserConverter;
 import usi.si.seart.converter.GenericCodeQueryConverter;
+import usi.si.seart.converter.TaskToProcessingPipelineConverter;
 import usi.si.seart.converter.TaskToQueriesConverter;
 import usi.si.seart.jackson.PageSerializer;
 import usi.si.seart.jackson.SortSerializer;
@@ -79,6 +80,7 @@ public class MainConfig {
                 registry.addConverter(new DtoToConfigurationConverter());
                 registry.addConverter(new GenericCodeQueryConverter());
                 registry.addConverter(new DtoToCodeProcessingConverter());
+                registry.addConverter(new TaskToProcessingPipelineConverter());
                 registry.addConverter(new TaskToQueriesConverter(dslContext()));
             }
         };
