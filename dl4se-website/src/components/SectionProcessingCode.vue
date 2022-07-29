@@ -45,8 +45,10 @@
               <b-icon-question-circle-fill />
             </b-link>
           </template>
-          <p class="m-0">Abstract source code using the following idioms:</p>
-          <b-tag-select id="idioms-tag-select" v-model="local.abstract.idioms" placeholder="Idiom..." />
+          <b-form-checkbox id="abstract-enabled" v-model="local.abstract.enabled">
+            Abstract instances using the following idioms:
+          </b-form-checkbox>
+          <b-tag-select id="abstract-idioms" v-model="local.abstract.idioms" placeholder="Idiom..." />
         </b-form-group>
       </b-col>
     </b-row>
