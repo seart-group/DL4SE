@@ -10,7 +10,7 @@
         <b-form-group label-class="font-weight-bold">
           <template #label>
             Exclude
-            <b-link :to="{ name: 'about', hash: '#exclusion' }" target="_blank" class="text-dark">
+            <b-link :to="{ name: 'about', hash: '#exclusion' }" target="_blank" class="text-dark" tabindex="-1">
               <b-icon-question-circle-fill />
             </b-link>
           </template>
@@ -38,7 +38,7 @@
         <b-form-group label-class="font-weight-bold">
           <template #label>
             Ignore
-            <b-link :to="{ name: 'about', hash: '#duplicates-and-clones' }" target="_blank" class="text-dark">
+            <b-link :to="{ name: 'about', hash: '#duplicates-and-clones' }" target="_blank" class="text-dark" tabindex="-1">
               <b-icon-question-circle-fill />
             </b-link>
           </template>

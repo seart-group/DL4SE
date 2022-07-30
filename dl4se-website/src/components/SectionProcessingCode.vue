@@ -12,7 +12,7 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Remove
-                <b-link :to="{ name: 'about', hash: '#comment-removal' }" target="_blank" class="text-dark">
+                <b-link :to="{ name: 'about', hash: '#comment-removal' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
@@ -28,7 +28,7 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Mask
-                <b-link :to="{ name: 'about', hash: '#masking' }" target="_blank" class="text-dark">
+                <b-link :to="{ name: 'about', hash: '#masking' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
@@ -41,7 +41,7 @@
         <b-form-group label-class="font-weight-bold">
           <template #label>
             Abstract
-            <b-link :to="{ name: 'about', hash: '#abstraction' }" target="_blank" class="text-dark">
+            <b-link :to="{ name: 'about', hash: '#abstraction' }" target="_blank" class="text-dark" tabindex="-1">
               <b-icon-question-circle-fill />
             </b-link>
           </template>
