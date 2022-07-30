@@ -55,8 +55,8 @@ public class UserController {
     ConversionService conversionService;
 
     @NonFinal
-    @Value("${frontend.url}")
-    String frontendUrl;
+    @Value("${website.url}")
+    String websiteUrl;
 
     @GetMapping
     public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
@@ -108,9 +108,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @SneakyThrows({MalformedURLException.class})
+    @SneakyThrows(MalformedURLException.class)
     private String getVerificationURL(Token token) {
-        return UriComponentsBuilder.fromHttpUrl(frontendUrl)
+        return UriComponentsBuilder.fromHttpUrl(websiteUrl)
                 .path("/verify/" + token.getValue())
                 .build()
                 .toUri()
