@@ -7,10 +7,10 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>dl4se-platform</artifactId>
+  <artifactId>dl4se-server</artifactId>
   <version>0.1-SNAPSHOT</version>
 
-  <name>dl4se-platform</name>
+  <name>dl4se-server</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

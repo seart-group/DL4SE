@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 (
-cd dl4se-platform/src/main/resources || exit;
+cd dl4se-server/src/main/resources || exit;
 keytool -genkeypair -alias dl4se \
         -keyalg RSA -keysize 4096 \
         -storetype PKCS12 -validity 365 \

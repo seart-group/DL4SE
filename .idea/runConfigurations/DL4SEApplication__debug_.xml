@@ -21,7 +21,7 @@
       </param>
     </additionalParameters>
     <option name="HIDE_BANNER" value="true" />
-    <module name="dl4se-platform" />
+    <module name="dl4se-server" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
