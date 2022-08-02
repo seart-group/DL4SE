@@ -78,7 +78,7 @@ services:
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
       KEYSTORE_PASS: ${KEYSTORE_PASS}
-      WEBSITE_URL: ${WEBSITE_URL}
+      WEBSITE_URL: http://dl4se-website:${WEBSITE_PORT}
     volumes:
       - logs-server:/logs
       - tmp-server:/tmp
