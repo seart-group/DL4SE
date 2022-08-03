@@ -1,4 +1,9 @@
 **/target/
+**/node_modules/
+**/dist/
 **/dependency-reduced-pom.xml
 **/*.iml
 .DS_Store
+**/.env
+**/.env.local
+**/.env.development
