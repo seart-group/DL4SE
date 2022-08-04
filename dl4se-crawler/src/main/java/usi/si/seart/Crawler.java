@@ -98,10 +98,11 @@ public class Crawler {
 
     // FIXME 06.05.22: This is only a temporary workaround until I don't figure out why the validation does not work
     private static void saveProgress() {
+        Long id = lastJob.getId();
         LocalDateTime checkpoint = lastJob.getCheckpoint();
         if (checkpoint.isAfter(LocalDateTime.now())) return;
         log.debug("Saving progress... [Checkpoint: {}]", checkpoint);
-        HibernateUtils.save(lastJob);
+        HibernateUtils.updateCrawlJobById(id, checkpoint);
     }
 
     private static void checkRepoData(GhsGitRepo item) {

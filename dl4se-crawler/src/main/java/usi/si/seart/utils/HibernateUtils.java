@@ -16,6 +16,7 @@ import usi.si.seart.model.job.Job;
 
 import javax.persistence.PersistenceException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +35,9 @@ public class HibernateUtils {
             ).uniqueResultOptional();
 
             if (lastJobOptional.isPresent()) {
-                return lastJobOptional.get();
+                CrawlJob lastJob = lastJobOptional.get();
+                session.evict(lastJob);
+                return lastJob;
             } else {
                 CrawlJob startJob = CrawlJob.builder()
                         .checkpoint(CrawlerProperties.startDate.atStartOfDay())
@@ -94,24 +97,6 @@ public class HibernateUtils {
         }
     }
 
-    public void deleteRepoById(Long id) {
-        Session session = factory.openSession();
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM GitRepo WHERE id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-            session.flush();
-            transaction.commit();
-        } catch (PersistenceException ex) {
-            log.error("Exception occurred while deleting GitRepo[id="+id+"]!", ex);
-            if (transaction != null) transaction.rollback();
-        } finally {
-            session.close();
-        }
-    }
-
     public void deleteFileByRepoIdAndPath(Long id, Path path) {
         Session session = factory.openSession();
         Transaction transaction = null;
@@ -145,6 +130,25 @@ public class HibernateUtils {
             transaction.commit();
         } catch (PersistenceException ex) {
             log.error("Exception occurred while updating File[repo.id="+id+", path="+before+"]!", ex);
+            if (transaction != null) transaction.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateCrawlJobById(Long id, LocalDateTime checkpoint) {
+        Session session = factory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.createQuery("UPDATE CrawlJob SET checkpoint = :checkpoint WHERE id = :id")
+                    .setParameter("id", id)
+                    .setParameter("checkpoint", checkpoint)
+                    .executeUpdate();
+            session.flush();
+            transaction.commit();
+        } catch (PersistenceException ex) {
+            log.error("Exception occurred while updating CrawlJob[id="+id+"]!", ex);
             if (transaction != null) transaction.rollback();
         } finally {
             session.close();
