@@ -19,12 +19,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.scheduling.RepoMaintainer;
 import usi.si.seart.scheduling.TaskCleaner;
 import usi.si.seart.scheduling.TaskRunner;
 import usi.si.seart.service.CodeService;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
+import usi.si.seart.service.GitRepoService;
 import usi.si.seart.service.TaskService;
 
 import javax.persistence.EntityManager;
@@ -41,6 +43,7 @@ public class SchedulerConfig {
 
     CodeService codeService;
     TaskService taskService;
+    GitRepoService gitRepoService;
     EmailService emailService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
@@ -58,20 +61,26 @@ public class SchedulerConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         Integer runners = configurationService.get("task_runner_count", Integer.class);
-        String cron = configurationService.get("task_cleaner_cron", String.class);
+        String cleanerCron = configurationService.get("task_cleaner_cron", String.class);
+        String maintainerCron = configurationService.get("repo_maintainer_cron", String.class);
 
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
-        threadPoolTaskScheduler.setPoolSize(1 + runners);
+        threadPoolTaskScheduler.setPoolSize(2 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.initialize();
 
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(cron));
+        threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(maintainerCron));
+        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(cleanerCron));
         for (int i = 0; i < runners; i++)
             threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
 
         return threadPoolTaskScheduler;
+    }
+
+    private Runnable getRepoMaintainer() {
+        return new RepoMaintainer(gitRepoService);
     }
 
     private Runnable getTaskCleaner() {
