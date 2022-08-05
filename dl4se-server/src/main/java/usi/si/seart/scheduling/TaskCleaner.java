@@ -1,4 +1,4 @@
-package usi.si.seart.task;
+package usi.si.seart.scheduling;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
-
-import java.util.function.Consumer;
 
 @Slf4j
 @AllArgsConstructor
@@ -21,12 +19,13 @@ public class TaskCleaner implements Runnable {
     @Override
     public void run() {
         log.debug("Cleaning up expired task files...");
-        Consumer<Task> deleteAndMark = task -> {
-            log.trace("Deleting export file for task: [{}]", task.getUuid());
-            task.setExpired(true);
-            fileSystemService.cleanTaskFiles(task);
-        };
-        taskService.forEachNonExpired(deleteAndMark);
-        log.debug("Cleaning complete!");
+        taskService.forEachNonExpired(this::cleanAndFlag);
+        log.debug("Task cleaning complete!");
+    }
+
+    private void cleanAndFlag(Task task) {
+        log.trace("Deleting export file for task: [{}]", task.getUuid());
+        task.setExpired(true);
+        fileSystemService.cleanTaskFiles(task);
     }
 }

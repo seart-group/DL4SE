@@ -107,4 +107,5 @@ VALUES
     ('request_limit', '3', now()),
     ('max_page_size', '100', now()),
     ('task_runner_count', '2', now()),
-    ('task_cleaner_cron', '0 */15 * * * *', now());
+    ('task_cleaner_cron', '0 */15 * * * *', now()),
+    ('repo_maintainer_cron', '0 0 0 * * SUN', now());
