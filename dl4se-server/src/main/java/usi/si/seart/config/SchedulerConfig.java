@@ -19,13 +19,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.scheduling.TaskCleaner;
+import usi.si.seart.scheduling.TaskRunner;
 import usi.si.seart.service.CodeService;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
-import usi.si.seart.task.TaskCleaner;
-import usi.si.seart.task.TaskRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

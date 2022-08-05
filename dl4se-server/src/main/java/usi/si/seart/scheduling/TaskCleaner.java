@@ -1,4 +1,4 @@
-package usi.si.seart.task;
+package usi.si.seart.scheduling;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
