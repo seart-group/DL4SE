@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
@@ -38,6 +39,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "git_repo")
+@DynamicUpdate
 @Getter
 @Setter
 @Builder
