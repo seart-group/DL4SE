@@ -7,7 +7,7 @@
     <b-collapse is-nav id="smart-navbar-collapse">
       <b-navbar-nav>
         <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
-        <b-nav-item>Stats</b-nav-item>
+        <b-nav-item disabled>Stats</b-nav-item>
         <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav v-if="!onPublicPage" class="ml-auto">
@@ -15,7 +15,7 @@
           <template #button-content>
             <b-icon-person-fill />
           </template>
-          <b-dropdown-item>Profile</b-dropdown-item>
+          <b-dropdown-item disabled>Profile</b-dropdown-item>
           <b-dropdown-item :to="{ name: 'dashboard' }">Dashboard</b-dropdown-item>
           <b-dropdown-divider />
           <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
