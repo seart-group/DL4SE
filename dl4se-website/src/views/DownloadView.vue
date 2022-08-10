@@ -24,7 +24,7 @@ export default {
   // Axios can not consume streams on the client-side
   // https://stackoverflow.com/a/58696592/17173324
   async created() {
-    const url = "https://localhost:8080/api/task/download/" + this.uuid
+    const url = `${process.env.VUE_APP_API_BASE_URL}/task/download/${this.uuid}`
     fetch(url, {
       headers: {
         'Content-Type': 'application/gzip',
