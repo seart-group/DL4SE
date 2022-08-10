@@ -1,0 +1,17 @@
+.masking
+  @extend .d-flex
+  @extend .flex-wrap
+  @extend .align-items-center
+
+.masking-pad
+  @extend .h-100
+  padding-left: 3px
+  padding-right: 3px
+
+.masking-counter-input
+  @include fixed-width(100)
+
+.masking-token-input
+  @extend %input
+  @include fixed-width(120)
+  @include fixed-height(40)

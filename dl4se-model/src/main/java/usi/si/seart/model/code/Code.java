@@ -1,6 +1,8 @@
 package usi.si.seart.model.code;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +48,7 @@ public abstract class Code {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name="lang_id")
+    @JsonUnwrapped(prefix = "language_")
     Language language;
 
     @NotNull
@@ -53,17 +56,21 @@ public abstract class Code {
 
     @NotNull
     @Column(name = "content_hash")
+    @JsonProperty(value = "content_hash")
     String contentHash;
 
     String ast;
 
     @Column(name = "ast_hash")
+    @JsonProperty(value = "ast_hash")
     String astHash;
 
     @Column(name = "total_tokens")
+    @JsonProperty(value = "total_tokens")
     Long totalTokens;
 
     @Column(name = "code_tokens")
+    @JsonProperty(value = "code_tokens")
     Long codeTokens;
 
     @PositiveOrZero
@@ -74,10 +81,12 @@ public abstract class Code {
 
     @NotNull
     @Column(name = "is_test")
+    @JsonProperty(value = "is_test")
     @Builder.Default
     Boolean isTest = false;
 
     @NotNull
     @Column(name = "contains_non_ascii")
+    @JsonProperty(value = "contains_non_ascii")
     Boolean containsNonAscii;
 }

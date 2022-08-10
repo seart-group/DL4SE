@@ -1,18 +1,18 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DL4SEApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <module name="dl4se-platform" />
+    <option name="ACTIVE_PROFILES" />
+    <option name="HIDE_BANNER" value="true" />
+    <module name="dl4se-server" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="usi.si.seart.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
-    <option name="HIDE_BANNER" value="true" />
-    <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -1,0 +1,32 @@
+.page-link:focus
+  box-shadow: 0 0 0 0.2rem rgb(108 117 125 / 50%) !important
+
+.page-item .page-link
+  min-width: 40px!important
+  min-height: 40px!important
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .text-center
+  @extend .rounded-0
+
+.page-item .page-link
+  color: $normal-gray
+  background-color: $light-gray
+
+.page-item .page-link:hover
+  color: $white
+  background-color: $normal-gray
+
+.page-item.disabled .page-link
+  color: rgb(108 117 125 / 50%)
+  background-color: rgb(230 230 230 / 50%)
+
+.page-item.active .page-link
+  background-color: $normal-gray
+
+.page-item.active.disabled .page-link
+  color: rgb(255 255 255 / 50%)
+  background-color: rgb(108 117 125 / 50%)

@@ -1,0 +1,81 @@
+$enable-responsive-font-sizes: true
+
+@import 'node_modules/bootstrap/scss/bootstrap'
+@import "variables"
+@import "mixins"
+@import "svg"
+@import "override"
+@import "extension"
+@import "component"
+
+@font-face
+  font-family: 'Trebuchet MS'
+  font-style: normal
+  font-weight: normal
+  src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
+
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+html
+  position: relative
+  min-height: 100vh
+
+body
+  color: black
+  font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+
+@include media-breakpoint-up(xs)
+  main
+    padding-bottom: 160px
+
+@include media-breakpoint-up(md)
+  main
+    padding-bottom: 40px
+
+.bg-light-gray
+  background-color: $light-gray
+
+.action-btn
+  @extend .btn
+  @extend .btn-secondary
+  @extend .border-2
+  @extend .border-dark
+  @extend .text-center
+
+.page-title
+  @extend .text-center
+  @extend .m-lg-5
+  @extend .m-md-4
+  @extend .m-sm-3
+  @extend .m-3
+
+.page-description
+  @extend .m-lg-5
+  @extend .m-md-4
+  @extend .m-sm-3
+  @extend .m-3
+  @extend .px-lg-5
+  @extend .px-md-4
+  @extend .px-sm-3
+  @extend .px-3
+
+.page-section
+  @extend .m-lg-5
+  @extend .m-md-4
+  @extend .m-sm-3
+  @extend .m-3
+
+.router-view
+  @extend .my-lg-5
+  @extend .my-md-4
+  @extend .my-sm-3
+  @extend .my-3
+
+.logo-image
+  @extend .my-md-5
+  @extend .my-sm-3
+  @extend .mb-0
+  @extend .mt-n3

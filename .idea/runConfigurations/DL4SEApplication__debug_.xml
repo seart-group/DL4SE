@@ -1,40 +1,37 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DL4SEApplication [debug]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="dl4se-platform" />
+    <option name="ACTIVE_PROFILES" />
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="logging.level.usi.si.seart" />
+        <option name="value" value="DEBUG" />
+      </param>
+      <param>
+        <option name="name" value="logging.level.org.hibernate.SQL" />
+        <option name="value" value="DEBUG" />
+      </param>
+      <param>
+        <option name="name" value="spring.jpa.properties.hibernate.format_sql" />
+        <option name="value" value="true" />
+      </param>
+      <param>
+        <option name="name" value="logging.level.org.springframework.transaction.interceptor" />
+        <option name="value" value="TRACE" />
+      </param>
+    </additionalParameters>
+    <option name="HIDE_BANNER" value="true" />
+    <module name="dl4se-server" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="usi.si.seart.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="usi.si.seart.DL4SEApplication" />
-    <option name="HIDE_BANNER" value="true" />
-    <option name="ALTERNATIVE_JRE_PATH" />
-    <additionalParameters>
-      <param>
-        <option name="enabled" value="true" />
-        <option name="name" value="spring.jpa.show-sql" />
-        <option name="value" value="true" />
-      </param>
-      <param>
-        <option name="enabled" value="true" />
-        <option name="name" value="spring.jpa.properties.hibernate.format_sql" />
-        <option name="value" value="true" />
-      </param>
-      <param>
-        <option name="enabled" value="true" />
-        <option name="name" value="logging.level.org.hibernate.SQL" />
-        <option name="value" value="DEBUG" />
-      </param>
-      <param>
-        <option name="enabled" value="true" />
-        <option name="name" value="logging.level.org.hibernate.type.descriptor.sql" />
-        <option name="value" value="TRACE" />
-      </param>
-    </additionalParameters>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

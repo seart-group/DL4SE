@@ -1,0 +1,44 @@
+{
+  "name": "dl4se-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@vue/composition-api": "^1.7.0",
+    "@vuelidate/core": "^2.0.0-alpha.42",
+    "@vuelidate/validators": "^2.0.0-alpha.30",
+    "autoprefixer": "10.4.5",
+    "axios": "^0.27.2",
+    "bootstrap": "^4.6.1",
+    "bootstrap-vue": "^2.22.0",
+    "core-js": "^3.8.3",
+    "lodash": "^4.17.21",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
+    "streamsaver": "^2.0.6",
+    "vue": "^2.6.14",
+    "vue-axios": "^3.4.1",
+    "vue-fragment": "^1.6.0",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2",
+    "vuex-persist": "^3.1.3",
+    "web-streams-polyfill": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-lorem-ipsum": "^0.0.1",
+    "vue-template-compiler": "^2.6.14"
+  }
+}
