@@ -79,6 +79,7 @@ services:
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
       KEYSTORE_PASS: ${KEYSTORE_PASS}
       WEBSITE_URL: http://gym.si.usi.ch:${WEBSITE_PORT}
+#      WEBSITE_URL: http://localhost:${WEBSITE_PORT}
     volumes:
       - logs-server:/logs
       - tmp-server:/tmp
@@ -91,6 +92,7 @@ services:
         max_attempts: 3
     healthcheck:
       test: wget --spider --quiet --no-check-certificate https://gym.si.usi.ch:${SERVER_PORT}/api || exit 1
+#      test: wget --spider --quiet --no-check-certificate https://localhost:${SERVER_PORT}/api || exit 1
       start_period: 15s
       interval: 30s
       timeout: 5s
@@ -107,6 +109,7 @@ services:
       args:
         WEBSITE_PORT: ${WEBSITE_PORT}
         SERVER_URL: https://gym.si.usi.ch:${SERVER_PORT}/api
+#        SERVER_URL: https://localhost:${SERVER_PORT}/api
     networks: [ default ]
     restart: always
     depends_on:
