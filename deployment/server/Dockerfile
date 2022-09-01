@@ -19,4 +19,6 @@ FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
 
 COPY --from=build /dl4se-server/target/dl4se-server-*.jar /server.jar
 
+RUN apk update && apk add git
+
 ENTRYPOINT java -jar server.jar
