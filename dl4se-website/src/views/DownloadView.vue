@@ -13,7 +13,9 @@ import routerMixin from "@/mixins/routerMixin"
 import BDialogPage from "@/components/DialogPage"
 // Override the MITM file hosted on GitHub that streamSaver uses with the locally stored one
 // https://github.com/jimmywarting/StreamSaver.js/issues/242
-streamSaver.mitm = "/mitm.html"
+if (process.env.NODE_ENV === 'development') {
+  streamSaver.mitm = "/mitm.html"
+}
 
 export default {
   components: { BDialogPage },
