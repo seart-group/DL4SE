@@ -64,7 +64,7 @@ services:
     build:
       context: ../
       dockerfile: deployment/server/Dockerfile
-    networks: [ default ]
+    networks: [ default, nginx-reverse-proxt-network ]
     environment:
       DATABASE_HOST: dl4se-db
       DATABASE_PORT: ${DATABASE_PORT}
@@ -78,7 +78,7 @@ services:
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
       KEYSTORE_PASS: ${KEYSTORE_PASS}
-      WEBSITE_URL: http://gym.si.usi.ch:${WEBSITE_PORT}
+      WEBSITE_URL: https://seart-dl4se.si.usi.ch
 #      WEBSITE_URL: http://localhost:${WEBSITE_PORT}
     volumes:
       - logs-server:/logs
@@ -108,9 +108,9 @@ services:
       dockerfile: deployment/website/Dockerfile
       args:
         WEBSITE_PORT: ${WEBSITE_PORT}
-        SERVER_URL: https://gym.si.usi.ch:${SERVER_PORT}/api
+        SERVER_URL: https://seart-dl4se.si.usi.ch/api
 #        SERVER_URL: https://localhost:${SERVER_PORT}/api
-    networks: [ default ]
+    networks: [ default, nginx-reverse-proxt-network ]
     restart: always
     depends_on:
       dl4se-server:
@@ -131,3 +131,6 @@ volumes:
 networks:
   default:
     name: dl4se-network
+  nginx-reverse-proxt-network:
+    external: true
+
