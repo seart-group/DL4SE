@@ -24,9 +24,9 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.src2abs.Abstractor;
 import usi.si.seart.src2abs.Parser;
 import usi.si.seart.src2abs.Tokenizer;
-import usi.si.seart.wrapper.code.Abstracted;
-import usi.si.seart.wrapper.code.AbstractedFile;
-import usi.si.seart.wrapper.code.AbstractedFunction;
+import usi.si.seart.wrapper.code.Processed;
+import usi.si.seart.wrapper.code.ProcessedFile;
+import usi.si.seart.wrapper.code.ProcessedFunction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,6 +88,7 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
     private static final Predicate<Comment> IS_BLOCK_COMMENT = Comment::isBlockComment;
     private static final Predicate<Comment> IS_JAVADOC_COMMENT = Comment::isJavadocComment;
 
+    // TODO 06.10.22: Extract each of the added pipeline functions into its own separate class
     private CodeProcessingPipeline convert(
             CodeProcessing codeProcessing, boolean includeAst, java.util.function.Function<String, Node> parser
     ) {
@@ -102,10 +103,30 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
 
         boolean removeDocstring = codeProcessing.getRemoveDocstring();
         boolean removeInnerComments = codeProcessing.getRemoveInnerComments();
+        boolean abstractCode = codeProcessing.getAbstractCode();
+        boolean maskCode = codeProcessing.getMaskPercentage() != null;
+        boolean anyProcessing = removeDocstring || removeInnerComments || abstractCode || maskCode;
+
+        if (anyProcessing) {
+            pipeline.add(code -> {
+                if (code instanceof File) {
+                    return ProcessedFile.from((File) code);
+                } else if (code instanceof Function) {
+                    return ProcessedFunction.from((Function) code);
+                } else {
+                    throw new UnsupportedOperationException(
+                            "Abstraction operation not implemented for granularity: " + code.getClass().getName()
+                    );
+                }
+            });
+        }
+
         if (removeDocstring || removeInnerComments) {
             pipeline.add(code -> {
+                Processed processed = (Processed) code;
                 try {
-                    Node node = parser.apply(code.getContent());
+                    String content = processed.getProcessedContent();
+                    Node node = parser.apply(content);
                     List<Comment> comments = node.getAllContainedComments();
                     node.getComment().ifPresent(comments::add);
                     Predicate<Comment> commentPredicate;
@@ -117,72 +138,57 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
                         commentPredicate = IS_LINE_COMMENT.or(IS_BLOCK_COMMENT);
                     }
                     comments.stream().filter(commentPredicate).forEach(Comment::remove);
-                    code.setContent(node.toString());
+                    processed.setProcessedContent(node.toString());
                     if (includeAst) {
-                        code.setAst(astPrinter.output(node));
+                        processed.setProcessedAst(astPrinter.output(node));
                     }
                 } catch (ParseProblemException | StackOverflowError ignore) {}
-                return code;
+                return (Code) processed;
             });
         }
 
-        boolean abstractCode = codeProcessing.getAbstractCode();
         if (abstractCode) {
             pipeline.add(code -> {
+                Processed processed = (Processed) code;
                 try {
-                    // Perform abstraction
-                    String sourceCode = code.getContent();
+                    String sourceCode = processed.getProcessedContent();
                     String cleanedCode = Abstractor.cleanCode(sourceCode);
                     Set<String> idioms = new TreeSet<>(codeProcessing.getAbstractIdioms());
                     Parser absParser = new Parser();
                     absParser.parse(cleanedCode, parser);
                     Tokenizer tokenizer = new Tokenizer(absParser, idioms);
                     Node node = parser.apply(tokenizer.tokenize(sourceCode));
-                    code.setContent(node.toString());
+                    processed.setProcessedContent(node.toString());
                     if (includeAst) {
-                        code.setAst(astPrinter.output(node));
+                        processed.setProcessedAst(astPrinter.output(node));
                     }
-
-                    // Convert result to wrapper object that includes the mappings
-                    Abstracted abstracted;
-                    if (code instanceof File) {
-                        abstracted = AbstractedFile.from((File) code);
-                    } else if (code instanceof Function) {
-                        abstracted = AbstractedFunction.from((Function) code);
-                    } else {
-                        throw new UnsupportedOperationException(
-                                "Abstraction operation not implemented for granularity: " + code.getClass().getName()
-                        );
-                    }
-                    abstracted.setMappings(tokenizer.export());
-                    code = (Code) abstracted;
                 } catch (ParseProblemException | StackOverflowError ignore) {}
-                return code;
+                return (Code) processed;
             });
         }
 
-        boolean maskCode = codeProcessing.getMaskPercentage() != null;
+        // TODO 29.07.22: Use alternative method that does not remove comments
         if (maskCode) {
             pipeline.add(code -> {
+                Processed processed = (Processed) code;
                 try {
+                    String content = processed.getProcessedContent();
                     int percentage = codeProcessing.getMaskPercentage();
                     boolean contiguous = codeProcessing.getMaskContiguousOnly();
                     String maskToken = codeProcessing.getMaskToken();
-
-                    // TODO 29.07.22: Use alternative method that does not remove comments
-                    List<Token> tokens = Tokenizer.readTokens(code.getContent());
+                    List<Token> tokens = Tokenizer.readTokens(content);
                     UnaryOperator<List<Token>> selector = generateTokenSelector(percentage, contiguous);
                     UnaryOperator<List<Token>> masker = generateTokenMasker(maskToken);
                     List<Token> selected = selector.apply(tokens);
                     List<Token> flattened = flatten(selected);
                     List<Token> masked = masker.apply(flattened);
-
                     String maskedCode = masked.stream()
                             .map(Token::getText)
                             .collect(Collectors.joining(" "));
-                    code.setContent(maskedCode);
-                } catch (ParseProblemException | StackOverflowError ignore) {}
-                return code;
+                    processed.setProcessedContent(maskedCode);
+                    processed.setProcessedAst("");
+                } catch (StackOverflowError ignore) {}
+                return (Code) processed;
             });
         }
 

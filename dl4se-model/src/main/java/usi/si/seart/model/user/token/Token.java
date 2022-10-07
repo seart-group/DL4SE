@@ -23,7 +23,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -55,7 +54,6 @@ public abstract class Token {
     User user;
 
     @NotNull
-    @Future
     LocalDateTime expires;
 
     protected abstract LocalDateTime calculateExpiryDate();

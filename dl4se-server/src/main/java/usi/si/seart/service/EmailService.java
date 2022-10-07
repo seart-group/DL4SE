@@ -24,6 +24,7 @@ public interface EmailService {
 
     void sendTaskNotificationEmail(Task task);
     void sendVerificationEmail(String recipient, String link);
+    void sendPasswordResetEmail(String recipient, String link);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -59,6 +60,14 @@ public interface EmailService {
         public void sendVerificationEmail(String recipient, String link) {
             MimeMessage message = createMessage(
                     "verification", recipient, "Complete your DL4SE registration", Map.of("link", link)
+            );
+            mailSender.send(message);
+        }
+
+        @Override
+        public void sendPasswordResetEmail(String recipient, String link) {
+            MimeMessage message = createMessage(
+                    "password_reset", recipient, "Reset your password", Map.of("link", link)
             );
             mailSender.send(message);
         }

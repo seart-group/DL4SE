@@ -27,15 +27,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import usi.si.seart.dto.LoginDto;
 import usi.si.seart.dto.RegisterDto;
+import usi.si.seart.dto.user.EmailDto;
+import usi.si.seart.dto.user.PasswordDto;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.security.jwt.JwtTokenProvider;
 import usi.si.seart.service.EmailService;
+import usi.si.seart.service.PasswordResetService;
 import usi.si.seart.service.UserService;
 import usi.si.seart.service.VerificationService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.MalformedURLException;
 
 @Slf4j
@@ -51,6 +55,7 @@ public class UserController {
 
     UserService userService;
     VerificationService verificationService;
+    PasswordResetService passwordResetService;
     EmailService emailService;
     ConversionService conversionService;
 
@@ -95,16 +100,33 @@ public class UserController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verify(@RequestParam String token) {
+    public ResponseEntity<?> verify(@RequestParam @NotBlank String token) {
         verificationService.verify(token);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/verify/resend")
-    public ResponseEntity<?> resendVerification(@RequestParam String token) {
+    public ResponseEntity<?> resendVerification(@RequestParam @NotBlank String token) {
         Token refreshed = verificationService.refresh(token);
         String link = getVerificationURL(refreshed);
         emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/password/forgotten")
+    public ResponseEntity<?> forgottenPassword(@Valid @RequestBody EmailDto dto) {
+        User requester = userService.getWithEmail(dto.getEmail());
+        Token token = passwordResetService.generate(requester);
+        String link = getPasswordResetUrl(token);
+        emailService.sendPasswordResetEmail(dto.getEmail(), link);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam @NotBlank String token, @Valid @RequestBody PasswordDto dto
+    ) {
+        passwordResetService.verify(token, dto.getPassword());
         return ResponseEntity.ok().build();
     }
 
@@ -112,6 +134,16 @@ public class UserController {
     private String getVerificationURL(Token token) {
         return UriComponentsBuilder.fromHttpUrl(websiteUrl)
                 .path("/verify/" + token.getValue())
+                .build()
+                .toUri()
+                .toURL()
+                .toString();
+    }
+
+    @SneakyThrows(MalformedURLException.class)
+    private String getPasswordResetUrl(Token token) {
+        return UriComponentsBuilder.fromHttpUrl(websiteUrl)
+                .path("/password/reset/" + token.getValue())
                 .build()
                 .toUri()
                 .toURL()
