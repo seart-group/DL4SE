@@ -11,6 +11,7 @@ import NotFoundView from "@/views/NotFoundView"
 import TaskCreateView from "@/views/TaskCreateView"
 import DownloadView from "@/views/DownloadView"
 import AboutView from "@/views/AboutView"
+import ForgotPasswordView from "@/views/ForgotPasswordView";
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,14 @@ const routes = [
     name: 'verify',
     component: VerifyView,
     props: true,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: '/password/request',
+    name: 'forgot',
+    component: ForgotPasswordView,
     meta: {
       public: true
     }
