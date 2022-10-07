@@ -1,5 +1,6 @@
 <template>
   <b-form @submit.prevent.stop="submit" novalidate class="text-input-form">
+    <slot name="header" />
     <b-form-row v-for="([key, data], idx) in Object.entries(inputs)" :key="key">
       <b-form-group :id="`label-${key}`" class="text-input-group-left"
                     :label-for="`input-${key}`" :state="entryState(key)"
@@ -35,6 +36,7 @@
         </b-button>
       </b-form-group>
     </b-form-row>
+    <slot name="footer" />
     <b-overlay :show="submitted" variant="light" no-wrap :z-index="Number.MAX_SAFE_INTEGER" />
   </b-form>
 </template>
