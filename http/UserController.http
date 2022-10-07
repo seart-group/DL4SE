@@ -24,3 +24,22 @@ Content-Type: application/json
   "email": "dozren@yahoo.com",
   "password": "Lugano2022"
 }
+
+### GET /user/verify
+GET https://localhost:8080/api/user/verify?token={{verify_token}}
+
+### POST /user/password/forgotten
+POST https://localhost:8080/api/user/password/forgotten
+Content-Type: application/json
+
+{
+  "email": "dozren@yahoo.com"
+}
+
+### POST /user/password/reset
+POST https://localhost:8080/api/user/password/reset?token={{pass_reset_token}}
+Content-Type: application/json
+
+{
+  "password": "22022onaguL"
+}
