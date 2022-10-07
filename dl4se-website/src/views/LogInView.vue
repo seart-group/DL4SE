@@ -1,7 +1,15 @@
 <template>
   <div id="login">
     <h1 class="page-title">Log In</h1>
-    <b-text-input-form v-model="inputs" :consumer="login" />
+    <b-text-input-form v-model="inputs" :consumer="login">
+      <template #footer>
+        <b-form-row>
+          <b-form-group class="text-input-group-center">
+            <b-link :to=" { name: 'forgot' } " class="text-secondary">Forgotten password?</b-link>
+          </b-form-group>
+        </b-form-row>
+      </template>
+    </b-text-input-form>
   </div>
 </template>
 
@@ -17,6 +25,7 @@ export default {
     async login() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
+
       const config = { headers : { 'content-type': 'application/json' }}
 
       await this.$http.post("/user/login", payload, config)
