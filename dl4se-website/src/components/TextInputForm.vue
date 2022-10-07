@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.prevent.stop="submit" novalidate class="text-input-form">
     <b-form-row v-for="([key, data], idx) in Object.entries(inputs)" :key="key">
-      <b-form-group :id="`label-${key}`" class="text-input-group"
+      <b-form-group :id="`label-${key}`" class="text-input-group-left"
                     :label-for="`input-${key}`" :state="entryState(key)"
       >
         <template #label>
@@ -21,7 +21,7 @@
       </b-form-group>
     </b-form-row>
     <b-form-row v-if="anyRequired">
-      <b-form-group class="text-input-group">
+      <b-form-group class="text-input-group-left">
         <template #description>
           <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-input-icon" />
           Required fields
