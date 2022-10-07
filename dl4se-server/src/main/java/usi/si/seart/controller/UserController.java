@@ -100,13 +100,13 @@ public class UserController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verify(@RequestParam String token) {
+    public ResponseEntity<?> verify(@RequestParam @NotBlank String token) {
         verificationService.verify(token);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/verify/resend")
-    public ResponseEntity<?> resendVerification(@RequestParam String token) {
+    public ResponseEntity<?> resendVerification(@RequestParam @NotBlank String token) {
         Token refreshed = verificationService.refresh(token);
         String link = getVerificationURL(refreshed);
         emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
