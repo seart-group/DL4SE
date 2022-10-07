@@ -5,7 +5,7 @@
       <b-form-group :id="`label-${key}`" class="text-input-group-left"
                     :label-for="`input-${key}`" :state="entryState(key)"
       >
-        <template #label>
+        <template #label v-if="data.label">
           {{ data.label }}
           <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
         </template>
@@ -21,7 +21,7 @@
         </template>
       </b-form-group>
     </b-form-row>
-    <b-form-row v-if="anyRequired">
+    <b-form-row v-if="displayRequired">
       <b-form-group class="text-input-group-left">
         <template #description>
           <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-input-icon" />
@@ -56,10 +56,12 @@ export default {
     }
   },
   computed: {
-    anyRequired() {
+    displayRequired() {
       return Object.values(this.inputs).map(input => {
         const inputRules = Object.keys(input.rules)
-        return inputRules.includes("required")
+        const isRequired = inputRules.includes("required")
+        const isLabelled = !!input.label
+        return isLabelled && isRequired
       }).reduce((curr, acc) => curr || acc, false)
     },
     submitDisabled() {
