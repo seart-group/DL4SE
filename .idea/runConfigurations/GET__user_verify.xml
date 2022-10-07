@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GET /user/verify" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/user" path="$PROJECT_DIR$/http/UserController.http" index="5" requestIdentifier="GET /user/verify" runType="Run single request">
+    <method v="2" />
+  </configuration>
+</component>
