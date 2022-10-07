@@ -40,16 +40,17 @@ public interface VerificationService {
 
         @Override
         public void verify(String value) {
-            tokenRepository.findByValue(value).map(token -> {
-                User user = token.getUser();
+            tokenRepository.findByValue(value)
+                    .filter(VerificationToken.class::isInstance)
+                    .map(token -> {
+                        if (!token.isValid())
+                            throw new TokenExpiredException(token);
 
-                if (!token.isValid())
-                    throw new TokenExpiredException(token);
-
-                user.setVerified(true);
-                tokenRepository.delete(token);
-                return userRepository.save(user);
-            }).orElseThrow(() -> new TokenNotFoundException("value", value));
+                        User user = token.getUser();
+                        user.setVerified(true);
+                        tokenRepository.delete(token);
+                        return userRepository.save(user);
+                    }).orElseThrow(() -> new TokenNotFoundException("value", value));
         }
 
         @Override
