@@ -143,7 +143,7 @@ public class UserController {
     @SneakyThrows(MalformedURLException.class)
     private String getPasswordResetUrl(Token token) {
         return UriComponentsBuilder.fromHttpUrl(websiteUrl)
-                .path("/password/" + token.getValue())
+                .path("/password/reset/" + token.getValue())
                 .build()
                 .toUri()
                 .toURL()

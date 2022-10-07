@@ -12,6 +12,7 @@ import TaskCreateView from "@/views/TaskCreateView"
 import DownloadView from "@/views/DownloadView"
 import AboutView from "@/views/AboutView"
 import ForgotPasswordView from "@/views/ForgotPasswordView";
+import ResetPasswordView from "@/views/ResetPasswordView";
 
 Vue.use(VueRouter)
 
@@ -60,6 +61,15 @@ const routes = [
     path: '/password/request',
     name: 'forgot',
     component: ForgotPasswordView,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: '/password/reset/:token',
+    name: 'reset',
+    component: ResetPasswordView,
+    props: true,
     meta: {
       public: true
     }
