@@ -7,6 +7,7 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
@@ -26,7 +27,7 @@ import java.util.stream.StreamSupport;
 public class HttpClient {
 
     static HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-    static Gson gson = new Gson();
+    static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
     @SneakyThrows
     public HttpResponse getRequest(GenericUrl url) {
