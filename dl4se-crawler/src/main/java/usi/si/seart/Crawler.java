@@ -93,7 +93,6 @@ public class Crawler {
         Map<String, String> links = client.getNavigationLinks(response);
         items.forEach(Crawler::checkRepoData);
         response.disconnect();
-        saveProgress();
         return links.get("next");
     }
 
@@ -133,6 +132,7 @@ public class Crawler {
         }
 
         operation.accept(repo, repoLanguages);
+        saveProgress();
     }
 
     @SneakyThrows
