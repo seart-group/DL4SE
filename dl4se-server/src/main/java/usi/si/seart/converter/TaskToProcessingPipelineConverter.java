@@ -127,17 +127,10 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
                 try {
                     String content = processed.getProcessedContent();
                     Node node = parser.apply(content);
+                    Predicate<Comment> predicate = generateCommentPredicate(removeDocstring, removeInnerComments);
                     List<Comment> comments = node.getAllContainedComments();
                     node.getComment().ifPresent(comments::add);
-                    Predicate<Comment> commentPredicate;
-                    if (removeDocstring && removeInnerComments) {
-                        commentPredicate = IS_ANY_COMMENT;
-                    } else if (removeDocstring) {
-                        commentPredicate = IS_JAVADOC_COMMENT;
-                    } else {
-                        commentPredicate = IS_LINE_COMMENT.or(IS_BLOCK_COMMENT);
-                    }
-                    comments.stream().filter(commentPredicate).forEach(Comment::remove);
+                    comments.stream().filter(predicate).forEach(Comment::remove);
                     processed.setProcessedContent(node.toString());
                     if (includeAst) {
                         processed.setProcessedAst(astPrinter.output(node));
@@ -193,6 +186,22 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         }
 
         return pipeline;
+    }
+
+    private static final Predicate<Comment> IS_ANY_COMMENT = comment -> true;
+    private static final Predicate<Comment> IS_LINE_COMMENT = Comment::isLineComment;
+    private static final Predicate<Comment> IS_BLOCK_COMMENT = Comment::isBlockComment;
+    private static final Predicate<Comment> IS_JAVADOC_COMMENT = Comment::isJavadocComment;
+    private static Predicate<Comment> generateCommentPredicate(boolean removeDocstring, boolean removeInnerComments) {
+        Predicate<Comment> predicate;
+        if (removeInnerComments && removeDocstring) {
+            predicate = IS_ANY_COMMENT;
+        } else if (removeDocstring) {
+            predicate = IS_JAVADOC_COMMENT;
+        } else {
+            predicate = IS_LINE_COMMENT.or(IS_BLOCK_COMMENT);
+        }
+        return predicate;
     }
 
     private UnaryOperator<List<Token>> generateTokenSelector(int percentage, boolean contiguous) {
