@@ -58,7 +58,7 @@ public class SchedulerConfig {
     @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}")
     Integer fetchSize;
 
-    @Bean
+    @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler() {
         Integer runners = configurationService.get("task_runner_count", Integer.class);
         String cleanerCron = configurationService.get("task_cleaner_cron", String.class);
