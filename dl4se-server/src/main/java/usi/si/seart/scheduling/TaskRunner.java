@@ -148,6 +148,7 @@ public class TaskRunner implements Runnable {
                         task.setCheckpointId(id);
                         task.setProcessedResults(count);
 
+                        code.remove("id");
                         String serialized = jsonMapper.writeValueAsString(code);
                         writer.write(serialized);
                         writer.newLine();
