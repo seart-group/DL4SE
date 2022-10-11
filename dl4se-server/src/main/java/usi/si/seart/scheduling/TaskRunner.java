@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -117,7 +118,7 @@ public class TaskRunner implements Runnable {
         org.jooq.Query resultQuery;
         org.jooq.Query countQuery;
 
-        java.util.function.Function<Code, Code> pipeline;
+        java.util.function.Function<Code, Map<String, Object>> pipeline;
 
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -135,13 +136,15 @@ public class TaskRunner implements Runnable {
                     task.setTotalResults(totalResults);
                     task = taskService.update(task);
 
-                    @Cleanup Stream<Code> stream = codeService.streamAndProcess(resultQuery, pipeline, codeClass);
-                    Iterable<Code> iterable = stream::iterator;
+                    @Cleanup Stream<Map<String, Object>> stream = codeService.streamAndProcess(
+                            resultQuery, pipeline, codeClass
+                    );
+                    Iterable<Map<String, Object>> iterable = stream::iterator;
                     long count = task.getProcessedResults();
-                    for (Code code : iterable) {
+                    for (Map<String, Object> code : iterable) {
                         count += 1;
 
-                        long id = code.getId();
+                        long id = (long) code.get("id");
                         task.setCheckpointId(id);
                         task.setProcessedResults(count);
 

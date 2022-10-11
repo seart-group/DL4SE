@@ -10,9 +10,6 @@ import org.antlr.v4.runtime.Token;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import usi.si.seart.function.CodeProcessingPipeline;
-import usi.si.seart.model.code.Code;
-import usi.si.seart.model.code.File;
-import usi.si.seart.model.code.Function;
 import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
@@ -24,9 +21,6 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.src2abs.Abstractor;
 import usi.si.seart.src2abs.Parser;
 import usi.si.seart.src2abs.Tokenizer;
-import usi.si.seart.wrapper.code.Processed;
-import usi.si.seart.wrapper.code.ProcessedFile;
-import usi.si.seart.wrapper.code.ProcessedFunction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,11 +77,6 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         }
     }
 
-    private static final Predicate<Comment> IS_ANY_COMMENT = comment -> true;
-    private static final Predicate<Comment> IS_LINE_COMMENT = Comment::isLineComment;
-    private static final Predicate<Comment> IS_BLOCK_COMMENT = Comment::isBlockComment;
-    private static final Predicate<Comment> IS_JAVADOC_COMMENT = Comment::isJavadocComment;
-
     // TODO 06.10.22: Extract each of the added pipeline functions into its own separate class
     private CodeProcessingPipeline convert(
             CodeProcessing codeProcessing, boolean includeAst, java.util.function.Function<String, Node> parser
@@ -95,9 +84,9 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         CodeProcessingPipeline pipeline = new CodeProcessingPipeline();
 
         if (!includeAst) {
-            pipeline.add(code -> {
-                code.setAst("");
-                return code;
+            pipeline.add(map -> {
+                map.remove("ast");
+                return map;
             });
         }
 
@@ -105,71 +94,54 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         boolean removeInnerComments = codeProcessing.getRemoveInnerComments();
         boolean abstractCode = codeProcessing.getAbstractCode();
         boolean maskCode = codeProcessing.getMaskPercentage() != null;
-        boolean anyProcessing = removeDocstring || removeInnerComments || abstractCode || maskCode;
-
-        if (anyProcessing) {
-            pipeline.add(code -> {
-                if (code instanceof File) {
-                    return ProcessedFile.from((File) code);
-                } else if (code instanceof Function) {
-                    return ProcessedFunction.from((Function) code);
-                } else {
-                    throw new UnsupportedOperationException(
-                            "Abstraction operation not implemented for granularity: " + code.getClass().getName()
-                    );
-                }
-            });
-        }
 
         if (removeDocstring || removeInnerComments) {
-            pipeline.add(code -> {
-                Processed processed = (Processed) code;
+            pipeline.add(map -> {
                 try {
-                    String content = processed.getProcessedContent();
+                    String content = (String) map.get("content");
                     Node node = parser.apply(content);
                     Predicate<Comment> predicate = generateCommentPredicate(removeDocstring, removeInnerComments);
                     List<Comment> comments = node.getAllContainedComments();
                     node.getComment().ifPresent(comments::add);
                     comments.stream().filter(predicate).forEach(Comment::remove);
-                    processed.setProcessedContent(node.toString());
+                    map.put("content", node.toString());
                     if (includeAst) {
-                        processed.setProcessedAst(astPrinter.output(node));
+                        map.put("ast", astPrinter.output(node));
                     }
                 } catch (ParseProblemException | StackOverflowError ignore) {}
-                return (Code) processed;
+                return map;
             });
         }
 
         if (abstractCode) {
-            pipeline.add(code -> {
-                Processed processed = (Processed) code;
+            pipeline.add(map -> {
                 try {
-                    String sourceCode = processed.getProcessedContent();
+                    String sourceCode = (String) map.get("content");
                     String cleanedCode = Abstractor.cleanCode(sourceCode);
                     Set<String> idioms = new TreeSet<>(codeProcessing.getAbstractIdioms());
                     Parser absParser = new Parser();
                     absParser.parse(cleanedCode, parser);
                     Tokenizer tokenizer = new Tokenizer(absParser, idioms);
                     Node node = parser.apply(tokenizer.tokenize(sourceCode));
-                    processed.setProcessedContent(node.toString());
+                    map.put("content", node.toString());
                     if (includeAst) {
-                        processed.setProcessedAst(astPrinter.output(node));
+                        map.put("ast", astPrinter.output(node));
                     }
+                    map.put("abstractions", tokenizer.export());
                 } catch (ParseProblemException | StackOverflowError ignore) {}
-                return (Code) processed;
+                return map;
             });
         }
 
         // TODO 29.07.22: Use alternative method that does not remove comments
         if (maskCode) {
-            pipeline.add(code -> {
-                Processed processed = (Processed) code;
+            pipeline.add(map -> {
                 try {
-                    String content = processed.getProcessedContent();
+                    String sourceCode = (String) map.get("content");
                     int percentage = codeProcessing.getMaskPercentage();
                     boolean contiguous = codeProcessing.getMaskContiguousOnly();
                     String maskToken = codeProcessing.getMaskToken();
-                    List<Token> tokens = Tokenizer.readTokens(content);
+                    List<Token> tokens = Tokenizer.readTokens(sourceCode);
                     UnaryOperator<List<Token>> selector = generateTokenSelector(percentage, contiguous);
                     UnaryOperator<List<Token>> masker = generateTokenMasker(maskToken);
                     List<Token> selected = selector.apply(tokens);
@@ -178,10 +150,10 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
                     String maskedCode = masked.stream()
                             .map(Token::getText)
                             .collect(Collectors.joining(" "));
-                    processed.setProcessedContent(maskedCode);
-                    processed.setProcessedAst("");
+                    map.put("content", maskedCode);
+                    map.remove("ast");
                 } catch (StackOverflowError ignore) {}
-                return (Code) processed;
+                return map;
             });
         }
 
