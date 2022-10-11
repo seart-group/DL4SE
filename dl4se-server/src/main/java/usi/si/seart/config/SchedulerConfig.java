@@ -65,6 +65,7 @@ public class SchedulerConfig {
         String maintainerCron = configurationService.get("repo_maintainer_cron", String.class);
 
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
         threadPoolTaskScheduler.setPoolSize(2 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
