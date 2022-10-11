@@ -123,35 +123,37 @@ public class TaskRunner implements Runnable {
         protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
                 Path exportPath = fileSystemService.createTaskFile(task);
-                @Cleanup BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(
-                                new FileOutputStream(exportPath.toFile(), true),
-                                StandardCharsets.UTF_8
-                        )
-                );
+                {
+                    @Cleanup BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream(exportPath.toFile(), true),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
 
-                Long totalResults = codeService.countTotalResults(countQuery);
-                task.setTotalResults(totalResults);
-                task = taskService.update(task);
+                    Long totalResults = codeService.countTotalResults(countQuery);
+                    task.setTotalResults(totalResults);
+                    task = taskService.update(task);
 
-                @Cleanup Stream<Code> stream = codeService.streamAndProcess(resultQuery, pipeline, codeClass);
-                Iterable<Code> iterable = stream::iterator;
-                long count = task.getProcessedResults();
-                for (Code code : iterable) {
-                    count += 1;
+                    @Cleanup Stream<Code> stream = codeService.streamAndProcess(resultQuery, pipeline, codeClass);
+                    Iterable<Code> iterable = stream::iterator;
+                    long count = task.getProcessedResults();
+                    for (Code code : iterable) {
+                        count += 1;
 
-                    long id = code.getId();
-                    task.setCheckpointId(id);
-                    task.setProcessedResults(count);
+                        long id = code.getId();
+                        task.setCheckpointId(id);
+                        task.setProcessedResults(count);
 
-                    String serialized = jsonMapper.writeValueAsString(code);
-                    writer.write(serialized);
-                    writer.newLine();
+                        String serialized = jsonMapper.writeValueAsString(code);
+                        writer.write(serialized);
+                        writer.newLine();
 
-                    if (count % fetchSize == 0) {
-                        task = taskService.update(task);
-                        writer.flush();
-                        entityManager.clear();
+                        if (count % fetchSize == 0) {
+                            task = taskService.update(task);
+                            writer.flush();
+                            entityManager.clear();
+                        }
                     }
                 }
 
