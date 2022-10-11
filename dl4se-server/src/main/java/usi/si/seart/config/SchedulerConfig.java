@@ -70,6 +70,7 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setPoolSize(2 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
+        threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
         threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(maintainerCron));
