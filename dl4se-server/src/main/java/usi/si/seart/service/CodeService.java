@@ -20,7 +20,9 @@ import java.util.stream.Stream;
 public interface CodeService {
 
     Long countTotalResults(Query query);
-    <T extends Code> Stream<Code> streamAndProcess(Query query, Function<Code, Code> pipeline, Class<T> codeClass);
+    <T extends Code> Stream<Map<String, Object>> streamAndProcess(
+            Query query, Function<Code, Map<String, Object>> pipeline, Class<T> codeClass
+    );
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -41,8 +43,8 @@ public interface CodeService {
         }
 
         @Override
-        public <T extends Code> Stream<Code> streamAndProcess(
-                Query query, Function<Code, Code> processing, Class<T> codeClass
+        public <T extends Code> Stream<Map<String, Object>> streamAndProcess(
+                Query query, Function<Code, Map<String, Object>> processing, Class<T> codeClass
         ) {
             String sql = dslContext.renderNamedParams(query);
             Map<String, ?> parameters = getQueryParameters(query);
