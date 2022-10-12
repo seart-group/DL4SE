@@ -19,7 +19,7 @@
       using the&nbsp;
     </label>
     <div class="py-2">
-      <b-input :id="id + '-token'" class="masking-token-input" placeholder="<MASK>"
+      <b-input :id="id + '-token'" class="masking-token-input" placeholder="extra_id"
                v-model.trim="local.masking.token" @input="setToken" :state="inputState"
       />
     </div>

@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -117,41 +118,46 @@ public class TaskRunner implements Runnable {
         org.jooq.Query resultQuery;
         org.jooq.Query countQuery;
 
-        java.util.function.Function<Code, Code> pipeline;
+        java.util.function.Function<Code, Map<String, Object>> pipeline;
 
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
                 Path exportPath = fileSystemService.createTaskFile(task);
-                @Cleanup BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(
-                                new FileOutputStream(exportPath.toFile(), true),
-                                StandardCharsets.UTF_8
-                        )
-                );
+                {
+                    @Cleanup BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream(exportPath.toFile(), true),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
 
-                Long totalResults = codeService.countTotalResults(countQuery);
-                task.setTotalResults(totalResults);
-                task = taskService.update(task);
+                    Long totalResults = codeService.countTotalResults(countQuery);
+                    task.setTotalResults(totalResults);
+                    task = taskService.update(task);
 
-                @Cleanup Stream<Code> stream = codeService.streamAndProcess(resultQuery, pipeline, codeClass);
-                Iterable<Code> iterable = stream::iterator;
-                long count = task.getProcessedResults();
-                for (Code code : iterable) {
-                    count += 1;
+                    @Cleanup Stream<Map<String, Object>> stream = codeService.streamAndProcess(
+                            resultQuery, pipeline, codeClass
+                    );
+                    Iterable<Map<String, Object>> iterable = stream::iterator;
+                    long count = task.getProcessedResults();
+                    for (Map<String, Object> code : iterable) {
+                        count += 1;
 
-                    long id = code.getId();
-                    task.setCheckpointId(id);
-                    task.setProcessedResults(count);
+                        long id = (long) code.get("id");
+                        task.setCheckpointId(id);
+                        task.setProcessedResults(count);
 
-                    String serialized = jsonMapper.writeValueAsString(code);
-                    writer.write(serialized);
-                    writer.newLine();
+                        code.remove("id");
+                        String serialized = jsonMapper.writeValueAsString(code);
+                        writer.write(serialized);
+                        writer.newLine();
 
-                    if (count % fetchSize == 0) {
-                        task = taskService.update(task);
-                        writer.flush();
-                        entityManager.clear();
+                        if (count % fetchSize == 0) {
+                            task = taskService.update(task);
+                            writer.flush();
+                            entityManager.clear();
+                        }
                     }
                 }
 
