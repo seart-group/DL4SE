@@ -5,7 +5,12 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.XmlPrinter;
-import org.antlr.v4.runtime.CommonToken;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.antlr.v4.runtime.Token;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
@@ -25,13 +30,13 @@ import usi.si.seart.src2abs.Tokenizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public class TaskToProcessingPipelineConverter implements Converter<Task, CodeProcessingPipeline> {
@@ -138,19 +143,27 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
             pipeline.add(map -> {
                 try {
                     String sourceCode = (String) map.get("content");
+                    // TODO 12.10.22: Use a utility for this instead
+                    sourceCode = sourceCode.replaceAll("\\s+", " ");
                     int percentage = codeProcessing.getMaskPercentage();
                     boolean contiguous = codeProcessing.getMaskContiguousOnly();
                     String maskToken = codeProcessing.getMaskToken();
                     List<Token> tokens = Tokenizer.readTokens(sourceCode);
-                    UnaryOperator<List<Token>> selector = generateTokenSelector(percentage, contiguous);
-                    UnaryOperator<List<Token>> masker = generateTokenMasker(maskToken);
-                    List<Token> selected = selector.apply(tokens);
-                    List<Token> flattened = flatten(selected);
-                    List<Token> masked = masker.apply(flattened);
-                    String maskedCode = masked.stream()
-                            .map(Token::getText)
-                            .collect(Collectors.joining(" "));
-                    map.put("content", maskedCode);
+                    List<TokenWrapper> wrapped = generateSelector(percentage, contiguous).apply(tokens);
+                    LinkedList<LinkedList<TokenWrapper>> groupedWrapped = wrapped.stream().collect(
+                            LinkedList::new,
+                            (lists, wrapper) -> {
+                                if (lists.isEmpty()) {
+                                    withNewList(lists, wrapper);
+                                } else {
+                                    withNewString(lists, wrapper);
+                                }
+                            },
+                            LinkedList::addAll
+                    );
+
+                    map.put("content", mask(groupedWrapped, maskToken));
+                    map.put("oracle", oracle(groupedWrapped, maskToken));
                     map.remove("ast");
                 } catch (StackOverflowError ignore) {}
                 return map;
@@ -176,59 +189,96 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         return predicate;
     }
 
-    private UnaryOperator<List<Token>> generateTokenSelector(int percentage, boolean contiguous) {
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    private static class TokenWrapper {
+
+        Token token;
+        int ordinal;
+        @NonFinal
+        boolean selected = false;
+
+        public void select() {
+            selected = true;
+        }
+    }
+
+    private Function<List<Token>, List<TokenWrapper>> generateSelector(int percentage, boolean contiguous) {
         return tokens -> {
-            tokens = new ArrayList<>(tokens);
-            if (!contiguous) Collections.shuffle(tokens);
-            int startMax = tokens.size() * (100 - percentage) / 100;
+            List<TokenWrapper> wrapped = new ArrayList<>(tokens.size());
+            for (int i = 0; i < tokens.size(); i++) {
+                wrapped.add(new TokenWrapper(tokens.get(i), i));
+            }
+            if (!contiguous) Collections.shuffle(wrapped);
+            int startMax = wrapped.size() * (100 - percentage) / 100;
             for (
                     int i = ThreadLocalRandom.current().nextInt(startMax + 1), selected = 0;
-                    (i < tokens.size()) && (selected < (tokens.size() * percentage / 100));
+                    (i < wrapped.size()) && (selected < (wrapped.size() * percentage / 100));
                     i++, selected++
             ) {
-                Token original = tokens.get(i);
-                CommonToken replacement = new CommonToken(Token.INVALID_TYPE);
-                replacement.setTokenIndex(original.getTokenIndex());
-                replacement.setStartIndex(original.getStartIndex());
-                replacement.setStopIndex(original.getStopIndex());
-                replacement.setLine(original.getLine());
-                replacement.setCharPositionInLine(original.getCharPositionInLine());
-                tokens.set(i, replacement);
+                wrapped.get(i).select();
             }
-            if (!contiguous) tokens.sort(Comparator.comparingInt(Token::getStartIndex));
-            return tokens;
+            if (!contiguous) wrapped.sort(Comparator.comparingInt(TokenWrapper::getOrdinal));
+            return wrapped;
         };
     }
 
-    private List<Token> flatten(List<Token> tokens) {
-        tokens = new ArrayList<>(tokens);
-        Token previous = null;
-        for (Iterator<Token> iterator = tokens.iterator(); iterator.hasNext();) {
-            Token current = iterator.next();
-            if (previous != null
-                    && previous.getType() == Token.INVALID_TYPE
-                    && current.getType() == Token.INVALID_TYPE
-            ) {
-                iterator.remove();
+    private void withNewList(LinkedList<LinkedList<TokenWrapper>> groups, TokenWrapper token) {
+        LinkedList<TokenWrapper> group = new LinkedList<>();
+        group.add(token);
+        groups.add(group);
+    }
+
+    private void withNewString(LinkedList<LinkedList<TokenWrapper>> groups, TokenWrapper token) {
+        LinkedList<TokenWrapper> prevGroup = groups.getLast();
+        if (prevGroup.getLast().isSelected() == token.isSelected()) {
+            prevGroup.add(token);
+        } else {
+            withNewList(groups, token);
+        }
+    }
+
+    private String mask(LinkedList<LinkedList<TokenWrapper>> groups, String maskToken) {
+        return applyMasking(groups, (group) -> group.getFirst().isSelected(), maskToken);
+    }
+
+    private String oracle(LinkedList<LinkedList<TokenWrapper>> groups, String maskToken) {
+        return applyMasking(groups, (group) -> !group.getFirst().isSelected(), maskToken);
+    }
+
+    private String applyMasking(
+            LinkedList<LinkedList<TokenWrapper>> groups, Predicate<LinkedList<TokenWrapper>> predicate, String maskToken
+    ) {
+        StringBuilder stringBuilder = new StringBuilder();
+        int count = 1;
+        for (LinkedList<TokenWrapper> group : groups) {
+            if (predicate.test(group)) {
+                stringBuilder.append("<").append(maskToken).append("_").append(count).append("> ");
+                count += 1;
             } else {
-                previous = current;
+                List<Token> tokens = group.stream()
+                        .map(TokenWrapper::getToken)
+                        .collect(Collectors.toList());
+                String joined = joinTokens(tokens);
+                stringBuilder.append(joined).append(" ");
             }
         }
-        return tokens;
+        return stringBuilder.toString().stripTrailing();
     }
 
-    private UnaryOperator<List<Token>> generateTokenMasker(String mask) {
-        return tokens -> {
-            tokens = new ArrayList<>(tokens);
-            for (int i = 0; i < tokens.size(); i++) {
-                Token token = tokens.get(i);
-                if (token.getType() == Token.INVALID_TYPE && token.getText() == null) {
-                    CommonToken masked = new CommonToken(token);
-                    masked.setText(mask);
-                    tokens.set(i, masked);
-                }
-            }
-            return tokens;
-        };
+    private String joinTokens(List<Token> tokens) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Token prev = tokens.get(0);
+        stringBuilder.append(prev.getText());
+        for (int i = 1; i < tokens.size(); i++) {
+            Token curr = tokens.get(i);
+            if (curr.getStartIndex() - prev.getStopIndex() > 1)
+                stringBuilder.append(" ");
+            stringBuilder.append(curr.getText());
+            prev = curr;
+        }
+        return stringBuilder.toString();
     }
 }
