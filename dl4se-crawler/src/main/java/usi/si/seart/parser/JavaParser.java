@@ -90,9 +90,9 @@ public class JavaParser extends AbstractParser {
         private void copyToBuilder(Node node, Code.CodeBuilder<?, ?> builder) {
             builder.language(language);
 
-            String functionContents = node.toString();
-            String normalized = StringUtils.normalizeSpace(functionContents);
-            builder.content(functionContents);
+            String contents = node.toString();
+            String normalized = StringUtils.normalizeSpace(contents);
+            builder.content(contents);
             builder.contentHash(StringUtils.sha256(normalized));
 
             builder.ast(astPrinter.output(node));
@@ -103,9 +103,9 @@ public class JavaParser extends AbstractParser {
             builder.codeTokens(tokensCount.getRight());
 
             builder.lines(countLines(node));
-            builder.characters(functionContents.chars().count());
+            builder.characters(contents.chars().count());
 
-            builder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
+            builder.containsNonAscii(StringUtils.containsNonAscii(contents));
         }
     }
 
