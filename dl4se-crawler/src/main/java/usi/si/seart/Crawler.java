@@ -228,7 +228,7 @@ public class Crawler {
                 .map(Language::getExtensions)
                 .flatMap(Collection::stream)
                 .toArray(String[]::new);
-        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor(extensions);
+        ExtensionBasedFileVisitor visitor = ExtensionBasedFileVisitor.forExtensions(extensions);
         Files.walkFileTree(dirPath, visitor);
         List<Path> paths = visitor.getVisited();
         for (Path path: paths) {

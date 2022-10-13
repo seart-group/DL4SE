@@ -13,6 +13,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class used to traverse a directory structure, and save references to all files whose extension matches at least one
@@ -39,7 +40,27 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     @Getter
     List<Path> visited;
 
-    public ExtensionBasedFileVisitor(String... extensions) {
+    /**
+     * Static factory used for creating instances of the class. We use it in order to enforce pre-conditions before any
+     * actual class instances are created.
+     *
+     * @param extensions File extension names. Must not be {@code null} or contain any {@code null} values, empty or
+     *                   blank strings.
+     * @return A new instance of the class.
+     */
+    public static ExtensionBasedFileVisitor forExtensions(String... extensions) {
+        Objects.requireNonNull(extensions);
+        validateExtensions(extensions);
+        return new ExtensionBasedFileVisitor(extensions);
+    }
+
+    private static void validateExtensions(String[] extensions) {
+        for (String extension: extensions)
+            if (extension == null || extension.isBlank())
+                throw new IllegalArgumentException("Invalid extension: " + extension);
+    }
+
+    private ExtensionBasedFileVisitor(String... extensions) {
         super();
         this.matcher = compileMatcher(extensions);
         this.visited = new ArrayList<>();
