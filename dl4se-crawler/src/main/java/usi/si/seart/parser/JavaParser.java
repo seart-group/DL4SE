@@ -168,7 +168,7 @@ public class JavaParser extends AbstractParser {
         return node.getTokenRange()
                 .map(range -> {
                     Spliterator<JavaToken> spliterator = range.spliterator();
-                    return StreamSupport.stream(spliterator, true).collect(Collectors.toList());
+                    return StreamSupport.stream(spliterator, false).collect(Collectors.toList());
                 })
                 .orElse(new ArrayList<>());
     }
