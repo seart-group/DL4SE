@@ -103,6 +103,19 @@ class JavaParserTest {
         }
     }
 
+    private static final class RemoveAllCommentsArgumentProvider implements ArgumentsProvider {
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(noComment, 0),
+                    Arguments.of(lineComment, 1),
+                    Arguments.of(blockComment, 1),
+                    Arguments.of(jdocComment, 1)
+            );
+        }
+    }
+
     @ParameterizedTest
     @ArgumentsSource(CountTokensArgumentProvider.class)
     void countTokensTest(Node node, long expectedLeft, long expectedRight) {
@@ -129,6 +142,14 @@ class JavaParserTest {
     @ArgumentsSource(CountLinesArgumentProvider.class)
     void countLinesTest(Node node, long expected) {
         long actual = JavaParser.countLines(node);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(RemoveAllCommentsArgumentProvider.class)
+    void removeAllCommentsTest(Node node, int expected) {
+        Node removed = JavaParser.withoutComments(node);
+        int actual = node.getAllContainedComments().size() - removed.getAllContainedComments().size();
         Assertions.assertEquals(expected, actual);
     }
 }

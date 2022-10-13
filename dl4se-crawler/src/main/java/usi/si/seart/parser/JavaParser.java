@@ -200,4 +200,12 @@ public class JavaParser extends AbstractParser {
             default: return null;
         }
     }
+
+    static Node withoutComments(Node node) {
+        Node clone = node.clone();
+        List<Comment> comments = clone.getAllContainedComments();
+        clone.getComment().ifPresent(comments::add);
+        comments.forEach(Comment::remove);
+        return clone;
+    }
 }
