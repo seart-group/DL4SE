@@ -78,14 +78,16 @@ class JavaParserTest {
 
         MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){ x += 1; }");
         MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5; }");
-        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5L; }");
+        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("/** JDoc */ public void method(){ x += 1; }");
+        MethodDeclaration md4 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5L; }");
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
                     Arguments.of(md1, true),
                     Arguments.of(md2, true),
-                    Arguments.of(md3, false)
+                    Arguments.of(md3, true),
+                    Arguments.of(md4, false)
             );
         }
     }
