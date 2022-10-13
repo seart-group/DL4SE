@@ -30,7 +30,7 @@ class JavaParserTest {
             "public void method(){\n/* This is a\n* multi line comment\n*/\n}"
     );
     private static final Node jdocComment = StaticJavaParser.parseMethodDeclaration(
-            "/** * This is a java documentation comment */ public void method(){}"
+            "/** * This is a java documentation comment */\npublic void method(){}"
     );
 
     private static final class CountTokensArgumentProvider implements ArgumentsProvider {
@@ -151,7 +151,8 @@ class JavaParserTest {
     @ArgumentsSource(RemoveAllCommentsArgumentProvider.class)
     void removeAllCommentsTest(Node node, int expected) {
         Node removed = JavaParser.withoutComments(node);
-        int actual = node.getAllContainedComments().size() - removed.getAllContainedComments().size();
+        int actual = (node.getAllContainedComments().size() + node.getComment().map(comment -> 1).orElse(0))
+                - (removed.getAllContainedComments().size() + removed.getComment().map(comment -> 1).orElse(0));
         Assertions.assertEquals(expected, actual);
     }
 }
