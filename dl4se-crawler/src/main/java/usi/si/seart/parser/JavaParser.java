@@ -88,15 +88,18 @@ public class JavaParser extends AbstractParser {
         }
 
         private void copyToBuilder(Node node, Code.CodeBuilder<?, ?> builder) {
+            Node nodeWithoutComments = withoutComments(node);
+
             builder.language(language);
 
             String contents = node.toString();
-            String normalized = StringUtils.normalizeSpace(contents);
             builder.content(contents);
+
+            String normalized = StringUtils.normalizeSpace(nodeWithoutComments.toString());
             builder.contentHash(StringUtils.sha256(normalized));
 
             builder.ast(astPrinter.output(node));
-            builder.astHash(getAstHash(node));
+            builder.astHash(getAstHash(nodeWithoutComments));
 
             Tuple<Long, Long> tokensCount = countTokens(node);
             builder.totalTokens(tokensCount.getLeft());
