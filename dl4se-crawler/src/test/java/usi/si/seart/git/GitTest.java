@@ -7,6 +7,9 @@ import lombok.experimental.NonFinal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import usi.si.seart.model.Language;
 
 import java.io.File;
@@ -218,13 +221,16 @@ class GitTest {
         Assertions.assertEquals(0, diff.getEdited().size());
     }
 
-    @Test
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource(strings = {
+            "0000000",
+            "0000000000000000000000000000000000000000"
+    })
     @SneakyThrows({GitException.class})
-    void gitDiffBadSHATest() {
+    void gitDiffBadSHATest(String sha) {
         Git git = new Git(testRepoName, tmp);
-        Assertions.assertThrows(GitException.class, () -> git.getDiff(""));
-        Assertions.assertThrows(GitException.class, () -> git.getDiff("0000000"));
-        Assertions.assertThrows(GitException.class, () -> git.getDiff("0000000000000000000000000000000000000000"));
+        Assertions.assertThrows(GitException.class, () -> git.getDiff(sha));
     }
 
     @Test
