@@ -1,60 +1,54 @@
 package usi.si.seart.parser;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.model.code.Boilerplate;
 
+import java.util.stream.Stream;
+
 class JavaParserTest {
 
-    private final CompilationUnit compilationUnit = StaticJavaParser.parse("class X { java.util.Y y; }");
+    private static final Node noComment = StaticJavaParser.parseMethodDeclaration(
+            "public void method(){\nint x = 1;\n}"
+    );
+    private static final Node lineComment = StaticJavaParser.parseMethodDeclaration(
+            "public void method(){\n// This is a single line comment\n}"
+    );
+    private static final Node blockComment = StaticJavaParser.parseMethodDeclaration(
+            "public void method(){\n/* This is a\n* multi line comment\n*/\n}"
+    );
+    private static final Node jdocComment = StaticJavaParser.parseMethodDeclaration(
+            "/** * This is a java documentation comment */ public void method(){}"
+    );
 
-    @Test
-    void countTokens() {
-        Tuple<Long, Long> tokens = JavaParser.countTokens(compilationUnit);
-        Assertions.assertEquals(17, tokens.getLeft());
-        Assertions.assertEquals(11, tokens.getRight());
+    private static final class CountTokensArgumentProvider implements ArgumentsProvider {
 
-        MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration(
-                "public void method(){\n// This is a single line comment\n}"
-        );
-        tokens = JavaParser.countTokens(md1);
-        Assertions.assertEquals(24, tokens.getLeft());
-        Assertions.assertEquals(7, tokens.getRight());
-
-        MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration(
-                "public void method(){\n/* This is a\n* multi line comment\n*/\n}"
-        );
-        tokens = JavaParser.countTokens(md2);
-        Assertions.assertEquals(28, tokens.getLeft());
-        Assertions.assertEquals(7, tokens.getRight());
-
-        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration(
-                "/** * This is a java documentation comment */\npublic void method(){}"
-        );
-        tokens = JavaParser.countTokens(md3);
-        Assertions.assertEquals(26, tokens.getLeft());
-        Assertions.assertEquals(7, tokens.getRight());
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(noComment, 19, 12),
+                    Arguments.of(lineComment, 24, 7),
+                    Arguments.of(blockComment, 28, 7),
+                    Arguments.of(jdocComment, 26, 7)
+            );
+        }
     }
 
-    @Test
-    void getAstHash() {
-        MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){ x += 1; }");
-        MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5; }");
-        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5L; }");
-        String hash1 = JavaParser.getAstHash(md1);
-        String hash2 = JavaParser.getAstHash(md2);
-        String hash3 = JavaParser.getAstHash(md3);
-        Assertions.assertEquals(hash1, hash2);
-        Assertions.assertNotEquals(hash2, hash3);
-    }
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    private static final class BoilerplateTypeArgumentProvider implements ArgumentsProvider {
 
-    @Test
-    void getBoilerplateTypeTest() {
         MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){}");
         MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void setX(){}");
         MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void getX(){}");
@@ -63,19 +57,78 @@ class JavaParserTest {
         MethodDeclaration md6 = StaticJavaParser.parseMethodDeclaration("public void equals(){}");
         MethodDeclaration md7 = StaticJavaParser.parseMethodDeclaration("public void hashCode(){}");
         ConstructorDeclaration cd = new ConstructorDeclaration();
-        Assertions.assertNull(JavaParser.getBoilerplateType(md1));
-        Assertions.assertEquals(Boilerplate.SETTER, JavaParser.getBoilerplateType(md2));
-        Assertions.assertEquals(Boilerplate.GETTER, JavaParser.getBoilerplateType(md3));
-        Assertions.assertEquals(Boilerplate.BUILDER, JavaParser.getBoilerplateType(md4));
-        Assertions.assertEquals(Boilerplate.TO_STRING, JavaParser.getBoilerplateType(md5));
-        Assertions.assertEquals(Boilerplate.EQUALS,JavaParser.getBoilerplateType(md6));
-        Assertions.assertEquals(Boilerplate.HASH_CODE, JavaParser.getBoilerplateType(md7));
-        Assertions.assertEquals(Boilerplate.CONSTRUCTOR, JavaParser.getBoilerplateType(cd));
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(md1, null),
+                    Arguments.of(md2, Boilerplate.SETTER),
+                    Arguments.of(md3, Boilerplate.GETTER),
+                    Arguments.of(md4, Boilerplate.BUILDER),
+                    Arguments.of(md5, Boilerplate.TO_STRING),
+                    Arguments.of(md6, Boilerplate.EQUALS),
+                    Arguments.of(md7, Boilerplate.HASH_CODE),
+                    Arguments.of(cd, Boilerplate.CONSTRUCTOR)
+            );
+        }
     }
 
-    @Test
-    void countLinesTest() {
-        long lines = JavaParser.countLines(compilationUnit);
-        Assertions.assertEquals(1, lines);
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    private static final class GetAstHashArgumentProvider implements ArgumentsProvider {
+
+        MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){ x += 1; }");
+        MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5; }");
+        MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void method(){ a += 5L; }");
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(md1, true),
+                    Arguments.of(md2, true),
+                    Arguments.of(md3, false)
+            );
+        }
+    }
+
+    private static final class CountLinesArgumentProvider implements ArgumentsProvider {
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(noComment, 3),
+                    Arguments.of(lineComment, 3),
+                    Arguments.of(blockComment, 5),
+                    Arguments.of(jdocComment, 1)
+            );
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(CountTokensArgumentProvider.class)
+    void countTokensTest(Node node, long expectedLeft, long expectedRight) {
+        Tuple<Long, Long> tokens = JavaParser.countTokens(node);
+        Assertions.assertEquals(expectedLeft, tokens.getLeft());
+        Assertions.assertEquals(expectedRight, tokens.getRight());
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(BoilerplateTypeArgumentProvider.class)
+    void boilerplateTypeTest(CallableDeclaration<?> declaration, Boilerplate expected) {
+        Assertions.assertEquals(expected, JavaParser.getBoilerplateType(declaration));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(GetAstHashArgumentProvider.class)
+    void getAstHashTest(MethodDeclaration declaration, boolean expected) {
+        String baseline = "6abae81a5835bb1bbf4a8b2ce105271327e397ec6d453227cf8fd6043a1f2621"; // manually calculated
+        String result = JavaParser.getAstHash(declaration);
+        Assertions.assertEquals(expected, baseline.equals(result));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(CountLinesArgumentProvider.class)
+    void countLinesTest(Node node, long expected) {
+        long actual = JavaParser.countLines(node);
+        Assertions.assertEquals(expected, actual);
     }
 }
