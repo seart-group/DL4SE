@@ -1,9 +1,16 @@
 package usi.si.seart.config;
 
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -20,19 +27,25 @@ import usi.si.seart.security.CustomUserDetailsService;
 import usi.si.seart.security.jwt.JwtAuthenticationEntryPoint;
 import usi.si.seart.security.jwt.JwtRequestFilter;
 
+import java.security.Key;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@AllArgsConstructor(onConstructor_ = @Autowired)
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     CustomUserDetailsService userDetailsService;
 
     JwtAuthenticationEntryPoint entryPoint;
+
+    @NonFinal
+    @Value("${jwt.secret}")
+    String secret;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -77,6 +90,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtRequestFilter jwtAuthenticationFilter() {
         return new JwtRequestFilter();
+    }
+
+    @Bean
+    public Key secretKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    @Bean
+    public JwtBuilder jwtBuilder() {
+        return Jwts.builder()
+                .signWith(secretKey(), SignatureAlgorithm.HS512);
+    }
+
+    @Bean
+    public JwtParser jwtParser() {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey())
+                .build();
     }
 
     @Override
