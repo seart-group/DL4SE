@@ -1,9 +1,12 @@
 package usi.si.seart.security.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtParser;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import usi.si.seart.security.UserPrincipal;
@@ -14,38 +17,34 @@ import java.util.Date;
 
 
 @Component
+@AllArgsConstructor(onConstructor_ = @Autowired)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    String secret;
+    JwtBuilder jwtBuilder;
+    JwtParser jwtParser;
 
     public String generateToken(Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-
+        Long id = principal.getId();
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         Date issue = Date.from(now.toInstant());
         Date expiry = Date.from(now.plusDays(7).toInstant());
-
-        return Jwts.builder()
-                .setSubject(Long.toString(principal.getId()))
+        return jwtBuilder
+                .setSubject(Long.toString(id))
                 .setIssuedAt(issue)
                 .setExpiration(expiry)
-                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
     public Long getUserIdFromJWT(String value) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(value)
-                .getBody();
-
+        Claims claims = jwtParser.parseClaimsJws(value).getBody();
         return Long.valueOf(claims.getSubject());
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            jwtParser.parseClaimsJws(token);
             return true;
         } catch (RuntimeException ignored) {
             return false;
