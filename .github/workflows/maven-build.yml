@@ -19,5 +19,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Install Included Libraries
+        run: mvn install:install-file -Dfile="./dl4se-src2abs/lib/javalexer.jar" -DgroupId="edu.wm.cs" -DartifactId="javalexer" -Dversion="1" -Dpackaging="jar"
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots --no-transfer-progress package
