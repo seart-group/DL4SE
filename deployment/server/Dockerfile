@@ -6,14 +6,14 @@ COPY ./dl4se-model /dl4se-model
 COPY ./dl4se-server /dl4se-server
 COPY ./dl4se-src2abs /dl4se-src2abs
 
-RUN mvn install:install-file \
+RUN mvn -e --no-transfer-progress install:install-file \
     -Dfile="./dl4se-src2abs/lib/javalexer.jar" \
     -DgroupId="edu.wm.cs" \
     -DartifactId="javalexer" \
     -Dversion="1" \
     -Dpackaging="jar"
 
-RUN mvn -e -f pom.xml clean package -pl dl4se-server -am -DskipTests
+RUN mvn -e --no-transfer-progress clean package -pl dl4se-server -am -DskipTests
 
 FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
 
