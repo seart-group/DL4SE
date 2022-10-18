@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <!-- Connection Settings -->
+    <property name="connection.driver_class">org.postgresql.Driver</property>
+    <property name="connection.url">jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}</property>
+    <property name="connection.username">${DATABASE_USER}</property>
+    <property name="connection.password">${DATABASE_PASS}</property>
+
+    <property name="hibernate.current_session_context_class">thread</property>
+
+    <!-- JDBC Connection Pool -->
+    <property name="connection.pool_size">10</property>
+
+    <!-- SQL Dialect -->
+    <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
+
+    <!-- Second Level Cache  -->
+    <property name="cache.provider_class">org.hibernate.cache.internal.DisabledCaching</property>
+
+    <!-- Logging -->
+    <property name="show_sql">false</property>
+    <property name="format_sql">false</property>
+    <property name="use_sql_comments">false</property>
+
+    <!-- Schema Creation -->
+    <property name="hbm2ddl.auto">none</property>
+
+    <!-- Entity Mappings -->
+    <mapping class="usi.si.seart.model.GitRepo"/>
+    <mapping class="usi.si.seart.model.Language"/>
+    <mapping class="usi.si.seart.model.code.Code"/>
+    <mapping class="usi.si.seart.model.code.File"/>
+    <mapping class="usi.si.seart.model.code.Function"/>
+    <mapping class="usi.si.seart.model.job.CrawlJob"/>
+  </session-factory>
+</hibernate-configuration>

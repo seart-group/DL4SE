@@ -33,6 +33,25 @@ services:
       dl4se-db:
         condition: service_healthy
 
+  dl4se-patches:
+    container_name: dl4se-patches
+    image: dl4se/dl4se-patches:latest
+    build:
+      context: ../
+      dockerfile: deployment/patches/Dockerfile
+    networks: [ default ]
+    environment:
+      DATABASE_HOST: dl4se-db
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+    volumes:
+      - logs-patches:/logs
+    depends_on:
+      dl4se-liquibase:
+        condition: service_completed_successfully
+
   dl4se-crawler:
     container_name: dl4se-crawler
     image: dl4se/dl4se-crawler:latest
@@ -121,6 +140,8 @@ services:
 volumes:
   data:
     name: dl4se-data
+  logs-patches:
+    name: dl4se-logs-patches
   logs-crawler:
     name: dl4se-logs-crawler
   logs-server:

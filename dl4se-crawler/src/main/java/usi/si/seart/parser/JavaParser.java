@@ -90,22 +90,25 @@ public class JavaParser extends AbstractParser {
         private void copyToBuilder(Node node, Code.CodeBuilder<?, ?> builder) {
             builder.language(language);
 
-            String functionContents = node.toString();
-            String normalized = StringUtils.normalizeSpace(functionContents);
-            builder.content(functionContents);
-            builder.contentHash(StringUtils.sha256(normalized));
+            String contents = node.toString();
+            builder.content(contents);
 
             builder.ast(astPrinter.output(node));
-            builder.astHash(getAstHash(node));
+
+            builder.characters(contents.chars().count());
 
             Tuple<Long, Long> tokensCount = countTokens(node);
             builder.totalTokens(tokensCount.getLeft());
             builder.codeTokens(tokensCount.getRight());
 
             builder.lines(countLines(node));
-            builder.characters(functionContents.chars().count());
 
-            builder.containsNonAscii(StringUtils.containsNonAscii(functionContents));
+            builder.containsNonAscii(StringUtils.containsNonAscii(contents));
+
+            removeComments(node);
+            String normalized = StringUtils.normalizeSpace(node.toString());
+            builder.contentHash(StringUtils.sha256(normalized));
+            builder.astHash(getAstHash(node));
         }
     }
 
@@ -168,7 +171,7 @@ public class JavaParser extends AbstractParser {
         return node.getTokenRange()
                 .map(range -> {
                     Spliterator<JavaToken> spliterator = range.spliterator();
-                    return StreamSupport.stream(spliterator, true).collect(Collectors.toList());
+                    return StreamSupport.stream(spliterator, false).collect(Collectors.toList());
                 })
                 .orElse(new ArrayList<>());
     }
@@ -199,5 +202,11 @@ public class JavaParser extends AbstractParser {
             case "toString": return Boilerplate.TO_STRING;
             default: return null;
         }
+    }
+
+    static void removeComments(Node node) {
+        List<Comment> comments = node.getAllContainedComments();
+        node.getComment().ifPresent(comments::add);
+        comments.forEach(Comment::remove);
     }
 }
