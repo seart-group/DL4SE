@@ -3,52 +3,74 @@ package usi.si.seart.io;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 @SuppressWarnings("ConstantConditions")
 class ExtensionBasedFileVisitorTest {
 
     private final Path resources = Path.of(this.getClass().getResource("/code").getPath());
 
-    /*
-     * code:
-     * - java: 8
-     * - python: 4
-     * - other: 4
-     */
+    private static final class ExtensionsAndCountArgumentProvider implements ArgumentsProvider {
 
-    @Test
-    @SneakyThrows
-    void noExtensionTest() {
-        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor();
+        /*
+         * code:
+         * - java: 8
+         * - python: 4
+         * - other: 4
+         */
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(new String[]{}, 16),
+                    Arguments.of(new String[]{ "java", "py" }, 12),
+                    Arguments.of(new String[]{ "java" }, 8)
+            );
+        }
+    }
+
+    private static final class InvalidExtensionsArgumentProvider implements ArgumentsProvider {
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of((Object) new String[]{ "java", "py", null }),
+                    Arguments.of((Object) new String[]{ "java", "py", "" }),
+                    Arguments.of((Object) new String[]{ "java", "py", " " })
+            );
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(ExtensionsAndCountArgumentProvider.class)
+    @SneakyThrows(IOException.class)
+    void visitorTest(String[] extensions, int expected) {
+        ExtensionBasedFileVisitor visitor = ExtensionBasedFileVisitor.forExtensions(extensions);
         Files.walkFileTree(resources, visitor);
         List<Path> files = visitor.getVisited();
-        Assertions.assertEquals(16, files.size());
+        Assertions.assertEquals(expected, files.size());
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(InvalidExtensionsArgumentProvider.class)
+    void invalidExtensionsTest(String[] extensions) {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> ExtensionBasedFileVisitor.forExtensions(extensions)
+        );
     }
 
     @Test
-    @SneakyThrows
-    void oneExtensionTest() {
-        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java");
-        Files.walkFileTree(resources, visitor);
-        List<Path> files = visitor.getVisited();
-        Assertions.assertEquals(8, files.size());
-    }
-
-    @Test
-    @SneakyThrows
-    void twoExtensionTest() {
-        ExtensionBasedFileVisitor visitor = new ExtensionBasedFileVisitor("java", "py");
-        Files.walkFileTree(resources, visitor);
-        List<Path> files = visitor.getVisited();
-        Assertions.assertEquals(12, files.size());
-    }
-
-    @Test
-    void nullExtensionTest() {
-        Assertions.assertThrows(NullPointerException.class, () -> new ExtensionBasedFileVisitor(null));
+    void nullExtensionsTest() {
+        Assertions.assertThrows(NullPointerException.class, () -> ExtensionBasedFileVisitor.forExtensions(null));
     }
 }
