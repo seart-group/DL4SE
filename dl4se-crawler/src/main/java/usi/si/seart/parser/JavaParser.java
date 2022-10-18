@@ -88,27 +88,27 @@ public class JavaParser extends AbstractParser {
         }
 
         private void copyToBuilder(Node node, Code.CodeBuilder<?, ?> builder) {
-            Node nodeWithoutComments = withoutComments(node);
-
             builder.language(language);
 
             String contents = node.toString();
             builder.content(contents);
 
-            String normalized = StringUtils.normalizeSpace(nodeWithoutComments.toString());
-            builder.contentHash(StringUtils.sha256(normalized));
-
             builder.ast(astPrinter.output(node));
-            builder.astHash(getAstHash(nodeWithoutComments));
+
+            builder.characters(contents.chars().count());
 
             Tuple<Long, Long> tokensCount = countTokens(node);
             builder.totalTokens(tokensCount.getLeft());
             builder.codeTokens(tokensCount.getRight());
 
             builder.lines(countLines(node));
-            builder.characters(contents.chars().count());
 
             builder.containsNonAscii(StringUtils.containsNonAscii(contents));
+
+            removeComments(node);
+            String normalized = StringUtils.normalizeSpace(node.toString());
+            builder.contentHash(StringUtils.sha256(normalized));
+            builder.astHash(getAstHash(node));
         }
     }
 
@@ -204,11 +204,9 @@ public class JavaParser extends AbstractParser {
         }
     }
 
-    static Node withoutComments(Node node) {
-        Node clone = node.clone();
-        List<Comment> comments = clone.getAllContainedComments();
-        clone.getComment().ifPresent(comments::add);
+    static void removeComments(Node node) {
+        List<Comment> comments = node.getAllContainedComments();
+        node.getComment().ifPresent(comments::add);
         comments.forEach(Comment::remove);
-        return clone;
     }
 }

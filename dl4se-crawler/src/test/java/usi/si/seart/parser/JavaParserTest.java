@@ -110,10 +110,10 @@ class JavaParserTest {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                    Arguments.of(noComment, 0),
-                    Arguments.of(lineComment, 1),
-                    Arguments.of(blockComment, 1),
-                    Arguments.of(jdocComment, 1)
+                    Arguments.of(noComment.clone(), 0),
+                    Arguments.of(lineComment.clone(), 1),
+                    Arguments.of(blockComment.clone(), 1),
+                    Arguments.of(jdocComment.clone(), 1)
             );
         }
     }
@@ -150,9 +150,10 @@ class JavaParserTest {
     @ParameterizedTest
     @ArgumentsSource(RemoveAllCommentsArgumentProvider.class)
     void removeAllCommentsTest(Node node, int expected) {
-        Node removed = JavaParser.withoutComments(node);
-        int actual = (node.getAllContainedComments().size() + node.getComment().map(comment -> 1).orElse(0))
-                - (removed.getAllContainedComments().size() + removed.getComment().map(comment -> 1).orElse(0));
+        Node original = node.clone();
+        JavaParser.removeComments(node);
+        int actual = (original.getAllContainedComments().size() + original.getComment().map(comment -> 1).orElse(0))
+                - (node.getAllContainedComments().size() + node.getComment().map(comment -> 1).orElse(0));
         Assertions.assertEquals(expected, actual);
     }
 }
