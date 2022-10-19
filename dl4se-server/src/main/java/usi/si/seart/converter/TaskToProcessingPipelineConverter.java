@@ -15,6 +15,10 @@ import org.antlr.v4.runtime.Token;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import usi.si.seart.function.CodeProcessingPipeline;
+import usi.si.seart.model.code.Boilerplate;
+import usi.si.seart.model.code.Code;
+import usi.si.seart.model.code.File;
+import usi.si.seart.model.code.Function;
 import usi.si.seart.model.task.CodeTask;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.processing.CodeProcessing;
@@ -35,7 +39,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -72,9 +75,9 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
     private CodeProcessingPipeline convert(CodeQuery codeQuery, CodeProcessing codeProcessing) {
         boolean includeAst = codeQuery.getIncludeAst();
         if (codeQuery instanceof FileQuery) {
-            return convert(codeProcessing, includeAst, StaticJavaParser::parse);
+            return convert(codeProcessing, includeAst, File.class);
         } else if (codeQuery instanceof FunctionQuery) {
-            return convert(codeProcessing, includeAst, StaticJavaParser::parseMethodDeclaration);
+            return convert(codeProcessing, includeAst, Function.class);
         } else {
             throw new UnsupportedOperationException(
                     "Converter not implemented for code granularity: " + codeProcessing.getClass().getName()
@@ -84,7 +87,7 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
 
     // TODO 06.10.22: Extract each of the added pipeline functions into its own separate class
     private CodeProcessingPipeline convert(
-            CodeProcessing codeProcessing, boolean includeAst, java.util.function.Function<String, Node> parser
+            CodeProcessing codeProcessing, boolean includeAst, Class<? extends Code> granularity
     ) {
         CodeProcessingPipeline pipeline = new CodeProcessingPipeline();
 
@@ -104,6 +107,8 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
             pipeline.add(map -> {
                 try {
                     String content = (String) map.get("content");
+                    Boilerplate boilerplate = Boilerplate.valueOfNullable(map.get("boilerplate_type"));
+                    java.util.function.Function<String, Node> parser = getParser(granularity, boilerplate);
                     Node node = parser.apply(content);
                     Predicate<Comment> predicate = generateCommentPredicate(removeDocstring, removeInnerComments);
                     List<Comment> comments = node.getAllContainedComments();
@@ -122,6 +127,8 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
             pipeline.add(map -> {
                 try {
                     String sourceCode = (String) map.get("content");
+                    Boilerplate boilerplate = Boilerplate.valueOfNullable(map.get("boilerplate_type"));
+                    java.util.function.Function<String, Node> parser = getParser(granularity, boilerplate);
                     String cleanedCode = Abstractor.cleanCode(sourceCode);
                     Set<String> idioms = new TreeSet<>(codeProcessing.getAbstractIdioms());
                     Parser absParser = new Parser();
@@ -171,6 +178,28 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         }
 
         return pipeline;
+    }
+
+    // TODO 19.10.22: Move this to the `Code` class hierarchy
+    private static final java.util.function.Function<String, Node> fileParser = StaticJavaParser::parse;
+    private static final java.util.function.Function<String, Node> functionParser = StaticJavaParser::parseMethodDeclaration;
+    private static final java.util.function.Function<String, Node> constructorParser = StaticJavaParser::parseBodyDeclaration;
+    private static java.util.function.Function<String, Node> getParser(
+            Class<? extends Code> granularity, Boilerplate boilerplate
+    ) {
+        if (granularity == File.class) {
+            return fileParser;
+        } else if (granularity == Function.class) {
+            if (Boilerplate.CONSTRUCTOR == boilerplate) {
+                return constructorParser;
+            } else {
+                return functionParser;
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "Parser not mapped for code granularity: " + granularity.getName()
+            );
+        }
     }
 
     private static final Predicate<Comment> IS_ANY_COMMENT = comment -> true;
