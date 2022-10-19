@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicUpdate;
@@ -103,15 +102,15 @@ public class GitRepo {
     Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Singular
     @ToString.Exclude
     @JsonIgnore
+    @Builder.Default
     List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Singular
     @ToString.Exclude
     @JsonIgnore
+    @Builder.Default
     List<Function> functions = new ArrayList<>();
 
     @ManyToMany
@@ -120,9 +119,9 @@ public class GitRepo {
             joinColumns = @JoinColumn(name = "repo_id"),
             inverseJoinColumns = @JoinColumn(name = "lang_id")
     )
-    @Singular
     @ToString.Exclude
     @JsonIgnore
+    @Builder.Default
     Set<Language> languages = new HashSet<>();
 
     @Override
