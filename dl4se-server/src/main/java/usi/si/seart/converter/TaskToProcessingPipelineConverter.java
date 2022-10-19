@@ -234,7 +234,9 @@ public class TaskToProcessingPipelineConverter implements Converter<Task, CodePr
         }
     }
 
-    private Function<List<Token>, List<TokenWrapper>> generateSelector(int percentage, boolean contiguous) {
+    private java.util.function.Function<List<Token>, List<TokenWrapper>> generateSelector(
+            int percentage, boolean contiguous
+    ) {
         return tokens -> {
             List<TokenWrapper> wrapped = new ArrayList<>(tokens.size());
             for (int i = 0; i < tokens.size(); i++) {
