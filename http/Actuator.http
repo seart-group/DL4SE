@@ -17,6 +17,11 @@ GET https://localhost:8080/api/actuator/metrics
 Accept: application/vnd.spring-boot.actuator.v3+json
 Authorization: Bearer {{token}}
 
+### GET /actuator/metrics/{metric}
+GET https://localhost:8080/api/actuator/metrics/{{metric_name}}
+Accept: application/vnd.spring-boot.actuator.v3+json
+Authorization: Bearer {{token}}
+
 ### POST /actuator/shutdown
 POST https://localhost:8080/api/actuator/shutdown
 Accept: application/vnd.spring-boot.actuator.v3+json
