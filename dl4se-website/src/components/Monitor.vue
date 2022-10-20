@@ -9,7 +9,7 @@
     <b-container>
       <b-row no-gutters align-h="center">
         <b-col cols="auto">
-          <b-button-group class="text-right">
+          <b-button-group>
             <b-button @click="this.download"
                       :disabled="busy"
                       class="monitor-btn"
