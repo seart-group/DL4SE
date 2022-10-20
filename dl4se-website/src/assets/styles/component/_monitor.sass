@@ -1,0 +1,32 @@
+.monitor-textarea
+  white-space: pre
+  overflow: scroll
+  color: black
+  font-family: 'Inconsolata', Helvetica, Arial, sans-serif
+  @extend .mb-3
+  @extend .bg-light-gray
+  @extend .border-secondary
+  @extend .border-top-0
+  @extend .border-left-0
+  @extend .border-right-0
+  @extend .rounded-0
+  min-height: 260px
+  max-height: 545px
+
+.monitor-textarea[readonly]
+  @extend .bg-light-gray
+
+.monitor-textarea::-webkit-resizer
+  @extend .bg-light-gray
+
+.monitor-btn
+  @include fixed-height(40)
+  @extend .mb-3
+  @extend .btn
+  @extend .btn-outline-secondary
+  @extend .bg-light-gray
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
