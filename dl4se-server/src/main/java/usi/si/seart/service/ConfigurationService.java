@@ -41,8 +41,7 @@ public interface ConfigurationService {
         @Override
         public PropertySource<?> getPropertySource() {
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .map(configuration -> Map.entry(configuration.getKey(), configuration.getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
             return new MapPropertySource(environmentName, configurationMap);
         }
 
@@ -62,8 +61,7 @@ public interface ConfigurationService {
                 writeLock.lock();
                 configuration = configurationRepository.save(configuration);
                 Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                        .map(conf -> Map.entry(conf.getKey(), conf.getValue()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
                 PropertySource<?> propertySource = new MapPropertySource(environmentName, configurationMap);
                 configurableEnvironment.getPropertySources().replace(environmentName, propertySource);
                 return configuration;
