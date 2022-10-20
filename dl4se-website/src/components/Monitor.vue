@@ -53,7 +53,7 @@ export default {
       this.busy = true
       await this.supplier()
           .then(res => this.value = res)
-          .catch(() => "")
+          .catch(() => this.value = "")
       this.busy = false
     }
   },
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       busy: undefined,
-      value: ""
+      value: undefined
     }
   }
 }
