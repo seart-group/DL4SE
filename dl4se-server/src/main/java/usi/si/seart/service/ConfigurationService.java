@@ -12,8 +12,8 @@ import usi.si.seart.model.Configuration;
 import usi.si.seart.repository.ConfigurationRepository;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 public interface ConfigurationService {
 
     PropertySource<?> getPropertySource();
-    Map<String, String> get();
     <T> T get(String key, Class<T> type);
+    Map<String, String> get();
     Map<String, String> update(Collection<Configuration> configurations);
     boolean exists(Configuration configuration);
 
@@ -49,6 +49,16 @@ public interface ConfigurationService {
         }
 
         @Override
+        public <T> T get(String key, Class<T> type) {
+            try {
+                readLock.lock();
+                return configurableEnvironment.getRequiredProperty(key, type);
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
         public Map<String, String> get() {
             try {
                 readLock.lock();
@@ -57,18 +67,8 @@ public interface ConfigurationService {
                                 Configuration::getKey,
                                 Configuration::getValue,
                                 (value1, value2) -> value2,
-                                LinkedHashMap::new
+                                TreeMap::new
                         ));
-            } finally {
-                readLock.unlock();
-            }
-        }
-
-        @Override
-        public <T> T get(String key, Class<T> type) {
-            try {
-                readLock.lock();
-                return configurableEnvironment.getRequiredProperty(key, type);
             } finally {
                 readLock.unlock();
             }
@@ -88,7 +88,7 @@ public interface ConfigurationService {
                                 Map.Entry::getKey,
                                 entry -> entry.getValue().toString(),
                                 (value1, value2) -> value2,
-                                LinkedHashMap::new
+                                TreeMap::new
                         ));
             } finally {
                 writeLock.unlock();
