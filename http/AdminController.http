@@ -34,6 +34,11 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/admin/task/stats
 Authorization: Bearer {{token}}
 
+### GET /admin/configuration
+GET https://localhost:8080/api/admin/configuration
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 ### POST /admin/configuration
 POST https://localhost:8080/api/admin/configuration
 Authorization: Bearer {{token}}
