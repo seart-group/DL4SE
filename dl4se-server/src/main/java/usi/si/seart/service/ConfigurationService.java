@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.repository.ConfigurationRepository;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public interface ConfigurationService {
 
     PropertySource<?> getPropertySource();
+    Map<String, String> get();
     <T> T get(String key, Class<T> type);
     Configuration modify(Configuration configuration);
     boolean exists(Configuration configuration);
@@ -43,6 +45,22 @@ public interface ConfigurationService {
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
                     .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
             return new MapPropertySource(environmentName, configurationMap);
+        }
+
+        @Override
+        public Map<String, String> get() {
+            try {
+                readLock.lock();
+                return configurationRepository.findAll().stream()
+                        .collect(Collectors.toMap(
+                                Configuration::getKey,
+                                Configuration::getValue,
+                                (value1, value2) -> value2,
+                                LinkedHashMap::new
+                        ));
+            } finally {
+                readLock.unlock();
+            }
         }
 
         @Override

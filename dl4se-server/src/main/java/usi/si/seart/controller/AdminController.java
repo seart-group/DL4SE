@@ -103,6 +103,11 @@ public class AdminController {
         return ResponseEntity.ok(taskService.getSummary());
     }
 
+    @GetMapping("/configuration")
+    public ResponseEntity<?> getConfiguration() {
+        return ResponseEntity.ok(configurationService.get());
+    }
+
     @PostMapping("/configuration")
     public ResponseEntity<?> updateConfiguration(@Valid @RequestBody ConfigurationDto configurationDto) {
         Configuration configuration = conversionService.convert(configurationDto, Configuration.class);
