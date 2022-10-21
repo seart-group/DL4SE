@@ -21,7 +21,7 @@
       </b-tabs>
     </b-card>
     <template #modal-footer>
-      <b-button :id="`${id}-btn`" class="action-btn" @click="copy">
+      <b-button :id="`${id}-btn`" class="btn-secondary-border-2" @click="copy">
         <b-icon-clipboard />
       </b-button>
       <b-tooltip title="Copied!"

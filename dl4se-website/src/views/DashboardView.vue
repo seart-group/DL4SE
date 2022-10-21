@@ -68,19 +68,19 @@
             </template>
             <template #cell(details)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show User Details'"
                           @click="display('Submitter', row.item.user, $event.target)"
                 >
                   <b-icon-person-lines-fill />
                 </b-button>
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show Query Details'"
                           @click="display('Query', row.item.query, $event.target)"
                 >
                   <b-icon-search />
                 </b-button>
-                <b-button class="action-btn" size="sm"
+                <b-button class="btn-secondary-border-2" size="sm"
                           v-b-tooltip="'Show Processing Details'"
                           @click="display('Processing', row.item.processing, $event.target)"
                 >
@@ -92,20 +92,20 @@
               <div class="d-lg-table-cell d-inline-flex">
                 <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
                   <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
-                    <b-button class="action-btn" size="sm" disabled>
+                    <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-trash />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
-                  <b-button class="action-btn mr-1" size="sm"
+                  <b-button class="btn-secondary-border-2 mr-1" size="sm"
                             v-b-tooltip="'Cancel Task'"
                             @click="taskCancel(row.item.uuid)"
                   >
                     <b-icon-trash />
                   </b-button>
                 </template>
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           :to="{ name: 'task', params: { uuid: row.item.uuid } }"
                           v-b-tooltip="'Edit Task'"
                 >
@@ -113,13 +113,13 @@
                 </b-button>
                 <template v-if="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0">
                   <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
-                    <b-button class="action-btn" size="sm" disabled>
+                    <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-download />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
-                  <b-button class="action-btn d-inline-block" size="sm"
+                  <b-button class="btn-secondary-border-2 d-inline-block" size="sm"
                             :to="{ name: 'download', params: { uuid: row.item.uuid } }"
                             v-b-tooltip="'Download Results'"
                   >
@@ -160,13 +160,13 @@
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
                           @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
                 >
                   <b-icon :icon="`person-${row.item.enabled ? 'x' : 'check'}-fill`" />
                 </b-button>
-                <b-button class="action-btn" size="sm"
+                <b-button class="btn-secondary-border-2" size="sm"
                           v-b-tooltip="(row.item.role === 'ADMIN') ? 'Demote' : 'Promote'"
                           @click="userAction(row.item.uid, (row.item.role === 'ADMIN') ? 'demote' : 'promote')"
                 >
@@ -177,6 +177,29 @@
           </b-paginated-table>
         </b-col>
       </b-row>
+    </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Log</h3>
+      <b-monitor :supplier="getLog" />
+    </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Environment</h3>
+      <b-config-table :supplier="getConfiguration"
+                     :consumer="updateConfiguration"
+      />
+    </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Controls</h3>
+      <b-content-area class="d-flex justify-content-md-start justify-content-around">
+        <b-button @click="shutdownServer" class="btn-danger-border-2 mr-md-2">
+          <b-icon-power />
+          Shutdown
+        </b-button>
+        <b-button @click="restartServer" class="btn-secondary-border-2 ml-md-2">
+          <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+          Restart
+        </b-button>
+      </b-content-area>
     </b-container>
     <b-details-modal :id="detailsModal.id"
                      :title="detailsModal.title"
@@ -191,19 +214,25 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BConfigTable from "@/components/ConfigTable";
+import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
+import BMonitor from "@/components/Monitor"
 import BPaginatedTable from "@/components/PaginatedTable"
 
 export default {
   components: {
     BAbbreviation,
+    BConfigTable,
+    BContentArea,
     BDetailsModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
+    BMonitor,
     BPaginatedTable
   },
   mixins: [ bootstrapMixin, routerMixin ],
@@ -386,6 +415,89 @@ export default {
           })
       this.$root.$emit("bv::refresh::table", this.userTable.id)
     },
+    // TODO 21.10.22: Not what I would call "full-proof" but it will work for now
+    cleanLog(str) {
+      const lines = this.$_.split(str, /[\n\r]/)
+      const regex = /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/
+      if (!regex.test(lines[0])) lines.shift()
+      return lines.join("\n")
+    },
+    async getLog() {
+      const endpoint = "/actuator/logfile"
+      const config = { headers: { "Range": "bytes=-1048576" }}
+      return this.$http.get(endpoint, config)
+          .then((res) => res.data)
+          .then(this.cleanLog)
+    },
+    async getConfiguration() {
+      const endpoint = "/admin/configuration"
+      return this.$http.get(endpoint).then((res) => res.data)
+    },
+    async updateConfiguration(configuration) {
+      const endpoint = "/admin/configuration"
+      return this.$http.post(endpoint, configuration).then((res) => res.data)
+    },
+    async shutdownServer() {
+      this.showConfirmModal(
+          "Shut Down Server",
+          "You are about to shut down the server. " +
+          "Doing so will cause any currently executing tasks to be suspended, " +
+          "and the API unavailable until it is brought back up. " +
+          "Are you sure you want to continue?"
+      ).then((confirmed) => {
+        if (confirmed) {
+          return this.$http.post("/actuator/shutdown")
+        } else {
+          return Promise.reject()
+        }
+      }).then(() => {
+        this.redirectHomeAndToast(
+            "Shutting Down Server",
+            "The server has been successfully shut down.",
+            "secondary"
+        )
+      }).catch(() => {})
+      // TODO 20.10.22: Display failure toast
+    },
+    async restartServer() {
+      const restarted = await this.showConfirmModal(
+          "Restart Server",
+          "You are about to restart the server. " +
+          "Doing so will cause any currently executing tasks to be temporarily suspended. " +
+          "During this time the API will also be unavailable. " +
+          "Are you sure you want to continue?"
+      ).then((confirmed) => {
+        if (confirmed) {
+          return this.$http.post("/actuator/restart")
+        } else {
+          return Promise.reject(false)
+        }
+      }).then(() => {
+        this.appendToast(
+            "Restarting Server",
+            "Server restart has been initiated. It may take a moment before it becomes available again.",
+            "secondary"
+        )
+        return true
+      }).catch(() => {
+        return false
+      })
+
+      if (!restarted) return
+      const that = this
+      const check = setInterval(async function() {
+        await that.$http.get("/")
+            .then(() => {
+              clearInterval(check)
+              that.appendToast(
+                  "Server Connection Restored",
+                  "The DL4SE server is back online.",
+                  "secondary"
+              )
+            })
+            .catch(() => {})
+      }, 500)
+    },
     display(title, item, button) {
       this.detailsModal.title = title
       this.detailsModal.content = item
@@ -393,9 +505,9 @@ export default {
     }
   },
   async beforeMount() {
-    await this.$http.get("/admin")
-        .then(() => this.isAdmin = true)
-        .catch(() => this.isAdmin = false)
+    this.isAdmin = await this.$http.get("/admin")
+        .then(() => true)
+        .catch(() => false)
     this.show = true
   },
   data() {

@@ -1,0 +1,56 @@
+.input-table-body
+  @extend .bg-light-gray
+
+.input-table-body .b-table-empty-row
+  color: $black
+  background-color: $light-gray
+
+.input-table .input-table-header-row
+  height: 50px!important
+
+.input-table .input-table-row
+  height: 64px!important
+
+.input-table .input-table-header-row th,
+.input-table .input-table-row td
+  vertical-align: middle!important
+
+.input-table-label
+  @extend .m-0
+
+.input-table-border
+  @extend .border-secondary
+  @extend .border-bottom
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+
+.input-table-input
+  min-width: 150px!important
+  max-width: 500px!important
+  padding-right: calc(1.5em + 0.75rem)!important
+  @extend .border-secondary
+  @extend .border-bottom
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
+
+.input-table-btn
+  @include fixed-height(40)
+  @extend .mb-3
+  @extend .btn
+  @extend .btn-secondary
+  @extend .btn-outline-secondary
+  @extend .bg-light-gray
+  @extend .border-secondary
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
+
+.input-table-btn:disabled,
+.input-table-btn.disabled
+  opacity: 1
+  color: rgb(108 117 125 / 50%)
+  background-color: rgb(230 230 230 / 50%)

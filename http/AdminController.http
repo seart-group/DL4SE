@@ -34,12 +34,18 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/admin/task/stats
 Authorization: Bearer {{token}}
 
+### GET /admin/configuration
+GET https://localhost:8080/api/admin/configuration
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 ### POST /admin/configuration
 POST https://localhost:8080/api/admin/configuration
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "key" : "request_limit",
-  "value" : "5"
+  "request_limit" : 3,
+  "task_runner_count": 1,
+  "repo_maintainer_cron": "0 0 0 * * SUN"
 }

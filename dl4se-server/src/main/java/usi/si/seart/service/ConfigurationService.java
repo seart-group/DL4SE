@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.repository.ConfigurationRepository;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -21,7 +23,8 @@ public interface ConfigurationService {
 
     PropertySource<?> getPropertySource();
     <T> T get(String key, Class<T> type);
-    Configuration modify(Configuration configuration);
+    Map<String, String> get();
+    Map<String, String> update(Collection<Configuration> configurations);
     boolean exists(Configuration configuration);
 
     @Service
@@ -41,8 +44,7 @@ public interface ConfigurationService {
         @Override
         public PropertySource<?> getPropertySource() {
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .map(configuration -> Map.entry(configuration.getKey(), configuration.getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
             return new MapPropertySource(environmentName, configurationMap);
         }
 
@@ -57,16 +59,37 @@ public interface ConfigurationService {
         }
 
         @Override
-        public Configuration modify(Configuration configuration) {
+        public Map<String, String> get() {
+            try {
+                readLock.lock();
+                return configurationRepository.findAll().stream()
+                        .collect(Collectors.toMap(
+                                Configuration::getKey,
+                                Configuration::getValue,
+                                (value1, value2) -> value2,
+                                TreeMap::new
+                        ));
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        @Override
+        public Map<String, String> update(Collection<Configuration> configurations) {
             try {
                 writeLock.lock();
-                configuration = configurationRepository.save(configuration);
+                configurationRepository.saveAll(configurations);
                 Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                        .map(conf -> Map.entry(conf.getKey(), conf.getValue()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
                 PropertySource<?> propertySource = new MapPropertySource(environmentName, configurationMap);
                 configurableEnvironment.getPropertySources().replace(environmentName, propertySource);
-                return configuration;
+                return configurationMap.entrySet().stream()
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().toString(),
+                                (value1, value2) -> value2,
+                                TreeMap::new
+                        ));
             } finally {
                 writeLock.unlock();
             }
