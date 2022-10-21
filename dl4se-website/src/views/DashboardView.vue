@@ -188,6 +188,19 @@
                      :consumer="updateConfiguration"
       />
     </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Controls</h3>
+      <b-content-area class="d-flex justify-content-md-start justify-content-around">
+        <b-button @click="shutdownServer" class="btn-danger-border-2 mr-md-2">
+          <b-icon-power />
+          Shutdown
+        </b-button>
+        <b-button @click="restartServer" class="btn-secondary-border-2 ml-md-2">
+          <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+          Restart
+        </b-button>
+      </b-content-area>
+    </b-container>
     <b-details-modal :id="detailsModal.id"
                      :title="detailsModal.title"
                      :content="detailsModal.content"
@@ -202,6 +215,7 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
 import BConfigTable from "@/components/ConfigTable";
+import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
@@ -213,6 +227,7 @@ export default {
   components: {
     BAbbreviation,
     BConfigTable,
+    BContentArea,
     BDetailsModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
@@ -421,6 +436,67 @@ export default {
     async updateConfiguration(configuration) {
       const endpoint = "/admin/configuration"
       return this.$http.post(endpoint, configuration).then((res) => res.data)
+    },
+    async shutdownServer() {
+      this.showConfirmModal(
+          "Shut Down Server",
+          "You are about to shut down the server. " +
+          "Doing so will cause any currently executing tasks to be suspended, " +
+          "and the API unavailable until it is brought back up. " +
+          "Are you sure you want to continue?"
+      ).then((confirmed) => {
+        if (confirmed) {
+          return this.$http.post("/actuator/shutdown")
+        } else {
+          return Promise.reject()
+        }
+      }).then(() => {
+        this.redirectHomeAndToast(
+            "Shutting Down Server",
+            "The server has been successfully shut down.",
+            "secondary"
+        )
+      }).catch(() => {})
+      // TODO 20.10.22: Display failure toast
+    },
+    async restartServer() {
+      const restarted = await this.showConfirmModal(
+          "Restart Server",
+          "You are about to restart the server. " +
+          "Doing so will cause any currently executing tasks to be temporarily suspended. " +
+          "During this time the API will also be unavailable. " +
+          "Are you sure you want to continue?"
+      ).then((confirmed) => {
+        if (confirmed) {
+          return this.$http.post("/actuator/restart")
+        } else {
+          return Promise.reject(false)
+        }
+      }).then(() => {
+        this.appendToast(
+            "Restarting Server",
+            "Server restart has been initiated. It may take a moment before it becomes available again.",
+            "secondary"
+        )
+        return true
+      }).catch(() => {
+        return false
+      })
+
+      if (!restarted) return
+      const that = this
+      const check = setInterval(async function() {
+        await that.$http.get("/")
+            .then(() => {
+              clearInterval(check)
+              that.appendToast(
+                  "Server Connection Restored",
+                  "The DL4SE server is back online.",
+                  "secondary"
+              )
+            })
+            .catch(() => {})
+      }, 500)
     },
     display(title, item, button) {
       this.detailsModal.title = title
