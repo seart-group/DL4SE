@@ -178,6 +178,16 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Log</h3>
+      <b-monitor :supplier="getLog" />
+    </b-container>
+    <b-container v-if="isAdmin">
+      <h3>Server Environment</h3>
+      <b-config-table :supplier="getConfiguration"
+                     :consumer="updateConfiguration"
+      />
+    </b-container>
     <b-details-modal :id="detailsModal.id"
                      :title="detailsModal.title"
                      :content="detailsModal.content"
@@ -191,19 +201,23 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BConfigTable from "@/components/ConfigTable";
 import BDetailsModal from "@/components/DetailsModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
+import BMonitor from "@/components/Monitor"
 import BPaginatedTable from "@/components/PaginatedTable"
 
 export default {
   components: {
     BAbbreviation,
+    BConfigTable,
     BDetailsModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
+    BMonitor,
     BPaginatedTable
   },
   mixins: [ bootstrapMixin, routerMixin ],
@@ -385,6 +399,28 @@ export default {
             }
           })
       this.$root.$emit("bv::refresh::table", this.userTable.id)
+    },
+    // TODO 21.10.22: Not what I would call "full-proof" but it will work for now
+    cleanLog(str) {
+      const lines = this.$_.split(str, /[\n\r]/)
+      const regex = /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/
+      if (!regex.test(lines[0])) lines.shift()
+      return lines.join("\n")
+    },
+    async getLog() {
+      const endpoint = "/actuator/logfile"
+      const config = { headers: { "Range": "bytes=-1048576" }}
+      return this.$http.get(endpoint, config)
+          .then((res) => res.data)
+          .then(this.cleanLog)
+    },
+    async getConfiguration() {
+      const endpoint = "/admin/configuration"
+      return this.$http.get(endpoint).then((res) => res.data)
+    },
+    async updateConfiguration(configuration) {
+      const endpoint = "/admin/configuration"
+      return this.$http.post(endpoint, configuration).then((res) => res.data)
     },
     display(title, item, button) {
       this.detailsModal.title = title
