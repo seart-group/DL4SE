@@ -393,9 +393,9 @@ export default {
     }
   },
   async beforeMount() {
-    await this.$http.get("/admin")
-        .then(() => this.isAdmin = true)
-        .catch(() => this.isAdmin = false)
+    this.isAdmin = await this.$http.get("/admin")
+        .then(() => true)
+        .catch(() => false)
     this.show = true
   },
   data() {
