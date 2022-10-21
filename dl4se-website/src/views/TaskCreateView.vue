@@ -67,7 +67,7 @@
       <b-container class="py-4 task-form-section-bottom">
         <b-row align-h="center">
           <b-col cols="auto">
-            <b-button :disabled="v$.$invalid" @click="submit" class="action-btn">Generate Dataset</b-button>
+            <b-button :disabled="v$.$invalid" @click="submit" class="btn-secondary-border-2">Generate Dataset</b-button>
           </b-col>
         </b-row>
       </b-container>

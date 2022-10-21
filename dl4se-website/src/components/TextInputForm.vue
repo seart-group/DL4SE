@@ -31,7 +31,7 @@
     </b-form-row>
     <b-form-row>
       <b-form-group class="text-input-group-center">
-        <b-button type="submit" :disabled="submitDisabled" class="action-btn">
+        <b-button type="submit" :disabled="submitDisabled" class="btn-secondary-border-2">
           Submit
         </b-button>
       </b-form-group>

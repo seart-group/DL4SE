@@ -9,7 +9,7 @@
         <b-col xl="2" lg="2" md="3" sm="12" cols="12" class="dialog-column"
                v-for="({text, icon, action}, idx) in actions" :key="idx"
         >
-          <b-button class="action-btn" :disabled="disabled" @click="disabled = true; action();">
+          <b-button class="btn-secondary-border-2" :disabled="disabled" @click="disabled = true; action();">
             <b-icon :icon="icon" />
             {{ text }}
           </b-button>

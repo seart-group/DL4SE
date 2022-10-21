@@ -44,12 +44,19 @@ body
 .bg-light-gray
   background-color: $light-gray
 
-.action-btn
+.btn-secondary-border-2
   @extend .btn
   @extend .btn-secondary
-  @extend .border-2
-  @extend .border-dark
   @extend .text-center
+  @extend .border-2
+  border-color: $dark-gray!important
+
+.btn-danger-border-2
+  @extend .btn
+  @extend .btn-danger
+  @extend .text-center
+  @extend .border-2
+  border-color: $dark-red!important
 
 .page-title
   @extend .text-center

@@ -68,19 +68,19 @@
             </template>
             <template #cell(details)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show User Details'"
                           @click="display('Submitter', row.item.user, $event.target)"
                 >
                   <b-icon-person-lines-fill />
                 </b-button>
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show Query Details'"
                           @click="display('Query', row.item.query, $event.target)"
                 >
                   <b-icon-search />
                 </b-button>
-                <b-button class="action-btn" size="sm"
+                <b-button class="btn-secondary-border-2" size="sm"
                           v-b-tooltip="'Show Processing Details'"
                           @click="display('Processing', row.item.processing, $event.target)"
                 >
@@ -92,20 +92,20 @@
               <div class="d-lg-table-cell d-inline-flex">
                 <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
                   <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
-                    <b-button class="action-btn" size="sm" disabled>
+                    <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-trash />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
-                  <b-button class="action-btn mr-1" size="sm"
+                  <b-button class="btn-secondary-border-2 mr-1" size="sm"
                             v-b-tooltip="'Cancel Task'"
                             @click="taskCancel(row.item.uuid)"
                   >
                     <b-icon-trash />
                   </b-button>
                 </template>
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           :to="{ name: 'task', params: { uuid: row.item.uuid } }"
                           v-b-tooltip="'Edit Task'"
                 >
@@ -113,13 +113,13 @@
                 </b-button>
                 <template v-if="(row.item.status !== 'FINISHED') || row.item.expired || row.item.total_results === 0">
                   <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
-                    <b-button class="action-btn" size="sm" disabled>
+                    <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-download />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
-                  <b-button class="action-btn d-inline-block" size="sm"
+                  <b-button class="btn-secondary-border-2 d-inline-block" size="sm"
                             :to="{ name: 'download', params: { uuid: row.item.uuid } }"
                             v-b-tooltip="'Download Results'"
                   >
@@ -160,13 +160,13 @@
             </template>
             <template #cell(actions)="row">
               <div class="d-lg-table-cell d-inline-flex">
-                <b-button class="action-btn mr-1" size="sm"
+                <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
                           @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
                 >
                   <b-icon :icon="`person-${row.item.enabled ? 'x' : 'check'}-fill`" />
                 </b-button>
-                <b-button class="action-btn" size="sm"
+                <b-button class="btn-secondary-border-2" size="sm"
                           v-b-tooltip="(row.item.role === 'ADMIN') ? 'Demote' : 'Promote'"
                           @click="userAction(row.item.uid, (row.item.role === 'ADMIN') ? 'demote' : 'promote')"
                 >
