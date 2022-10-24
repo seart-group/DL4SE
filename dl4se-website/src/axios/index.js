@@ -11,13 +11,15 @@ const noAuth = [
     "/user/login",
     "/user/register",
     "/user/verify",
-    "/user/verify/resend"
+    "/user/verify/resend",
+    "/user/password/forgotten",
+    "/user/password/reset"
 ]
 
 instance.interceptors.request.use(
     request => {
         if (!noAuth.includes(request.url))
-            request.headers["authorization"] = store.getters.getToken
+            request.headers["Authorization"] = store.getters.getToken
         return request
     },
     error => Promise.reject(error)
