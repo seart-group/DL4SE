@@ -25,10 +25,7 @@ export default {
     async login() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
-      const config = { headers : { 'content-type': 'application/json' }}
-
-      await this.$http.post("/user/login", payload, config)
+      await this.$http.post("/user/login", payload)
           .then((response) => {
             const token = response.data
             this.$store.commit("setToken", token)

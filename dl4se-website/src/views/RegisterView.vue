@@ -18,10 +18,7 @@ export default {
     async register() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
-      const config = { headers : { 'content-type': 'application/json' }}
-
-      await this.$http.post("/user/register", payload, config)
+      await this.$http.post("/user/register", payload)
           .then(() => {
             this.redirectHomeAndToast(
                 "Account Created",

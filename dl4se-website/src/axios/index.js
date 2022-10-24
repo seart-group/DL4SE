@@ -20,6 +20,8 @@ instance.interceptors.request.use(
     request => {
         if (!noAuth.includes(request.url))
             request.headers["Authorization"] = store.getters.getToken
+        if (request.method === 'POST')
+            request.headers["Content-Type"] = "application/json"
         return request
     },
     error => Promise.reject(error)
