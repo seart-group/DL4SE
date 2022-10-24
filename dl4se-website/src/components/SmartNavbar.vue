@@ -9,6 +9,7 @@
         <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
         <b-nav-item disabled>Stats</b-nav-item>
         <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
+        <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Docs</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav v-if="!onPublicPage" class="ml-auto">
         <b-nav-item-dropdown right>

@@ -11,6 +11,7 @@ import NotFoundView from "@/views/NotFoundView"
 import TaskCreateView from "@/views/TaskCreateView"
 import DownloadView from "@/views/DownloadView"
 import AboutView from "@/views/AboutView"
+import DocsView from "@/views/DocsView"
 import ForgotPasswordView from "@/views/ForgotPasswordView";
 import ResetPasswordView from "@/views/ResetPasswordView";
 
@@ -104,6 +105,14 @@ const routes = [
     path: '/about',
     name: 'about',
     component: AboutView,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: '/docs',
+    name: 'docs',
+    component: DocsView,
     meta: {
       public: true
     }
