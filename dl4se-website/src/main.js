@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
-import {Plugin as VueFragment} from 'vue-fragment'
+import {Fragment} from 'vue-frag'
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
@@ -16,7 +16,6 @@ import '@/assets/styles/style.sass'
 Vue.config.productionTip = false
 
 Vue.use(VueCompositionAPI)
-Vue.use(VueFragment)
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
@@ -24,6 +23,7 @@ Vue.use(BootstrapVueIcons)
 Vue.prototype.$_ = _
 
 Vue.component('lorem-ipsum', VueLoremIpsum)
+Vue.component('fragment', Fragment)
 
 new Vue({
   router,
