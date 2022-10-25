@@ -23,7 +23,9 @@
       <router-view class="router-view" />
     </main>
     <footer>
-      <b-footer />
+      <b-footer :authors="authors"
+                :organisation="organisation"
+      />
     </footer>
   </fragment>
 </template>
@@ -55,6 +57,28 @@ export default {
       ).then((confirmed) => {
         if (confirmed) this.$store.dispatch("logOut")
       })
+    }
+  },
+  data() {
+    return {
+      authors: [
+        {
+          name: "Ozren Dabić",
+          url: "https://dabico.github.io/"
+        },
+        {
+          name: "Emad Aghajani",
+          url: "https://emadpres.github.io/"
+        },
+        {
+          name: "Gabriele Bavota",
+          url: "https://inf.usi.ch/faculty/bavota/"
+        }
+      ],
+      organisation: {
+        name: "SEART",
+        url: "https://seart.si.usi.ch/"
+      }
     }
   }
 }
