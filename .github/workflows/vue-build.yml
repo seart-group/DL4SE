@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./dl4se-website
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v2
@@ -19,7 +22,7 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-      - run: npm ci
-        working-directory: ./dl4se-website
-      - run: npm run build --if-present
-        working-directory: ./dl4se-website
+      - name: Node Clean Install
+        run: npm clean-install
+      - name: Vue Build
+        run: npm run build --if-present
