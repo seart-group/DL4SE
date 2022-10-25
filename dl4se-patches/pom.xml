@@ -4,11 +4,11 @@
   <parent>
     <artifactId>dl4se</artifactId>
     <groupId>usi.si.seart</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <version>${revision}</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>dl4se-patches</artifactId>
-  <version>0.1-SNAPSHOT</version>
 
   <name>dl4se-patches</name>
 
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>usi.si.seart</groupId>
       <artifactId>dl4se-model</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

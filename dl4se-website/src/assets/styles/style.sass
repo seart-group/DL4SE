@@ -14,6 +14,12 @@ $enable-responsive-font-sizes: true
   font-weight: normal
   src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
 
+@font-face
+  font-family: 'Inconsolata'
+  font-style: normal
+  font-weight: normal
+  src: local('Inconsolata'), url('@/assets/fonts/inconsolata.woff') format('woff')
+
 *
   margin: 0
   padding: 0
@@ -25,7 +31,7 @@ html
 
 body
   color: black
-  font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+  @extend .text-regular
 
 @include media-breakpoint-up(xs)
   main
@@ -38,12 +44,19 @@ body
 .bg-light-gray
   background-color: $light-gray
 
-.action-btn
+.btn-secondary-border-2
   @extend .btn
   @extend .btn-secondary
-  @extend .border-2
-  @extend .border-dark
   @extend .text-center
+  @extend .border-2
+  border-color: $dark-gray!important
+
+.btn-danger-border-2
+  @extend .btn
+  @extend .btn-danger
+  @extend .text-center
+  @extend .border-2
+  border-color: $dark-red!important
 
 .page-title
   @extend .text-center
@@ -76,6 +89,11 @@ body
   margin-left: 25px!important
   @extend .mb-2
 
+.text-regular
+  font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+
+.text-monospace
+  font-family: 'Inconsolata', Helvetica, Arial, sans-serif
 
 .router-view
   @extend .my-lg-5

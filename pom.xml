@@ -4,7 +4,7 @@
     
   <groupId>usi.si.seart</groupId>
   <artifactId>dl4se</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
     
   <name>DL4SE Dataset Hub</name>
@@ -32,8 +32,10 @@
   </modules>
 
   <properties>
+    <revision>1.0.0</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.8.2</junit.version>
+    <javaparser.version>3.24.4</javaparser.version>
   </properties>
 
   <dependencyManagement>
@@ -41,7 +43,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.8.2</version>
+        <version>${junit.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

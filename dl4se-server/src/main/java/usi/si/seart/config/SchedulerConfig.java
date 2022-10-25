@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -32,6 +33,9 @@ import usi.si.seart.service.TaskService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.Clock;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @DependsOn({"TaskRunnerRecoveryBean", "DirectoryInitializationBean"})
@@ -58,17 +62,41 @@ public class SchedulerConfig {
     @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}")
     Integer fetchSize;
 
-    @Bean
+    @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler() {
         Integer runners = configurationService.get("task_runner_count", Integer.class);
         String cleanerCron = configurationService.get("task_cleaner_cron", String.class);
         String maintainerCron = configurationService.get("repo_maintainer_cron", String.class);
 
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler() {
+            private final Set<ScheduledFuture<?>> futures = new HashSet<>();
+
+            @Override
+            public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long delay) {
+                ScheduledFuture<?> future = super.scheduleWithFixedDelay(task, delay);
+                futures.add(future);
+                return future;
+            }
+
+            @Override
+            public ScheduledFuture<?> schedule(Runnable task, Trigger trigger) {
+                ScheduledFuture<?> future =  super.schedule(task, trigger);
+                futures.add(future);
+                return future;
+            }
+
+            @Override
+            public void shutdown() {
+                futures.forEach(future -> future.cancel(true));
+                super.shutdown();
+            }
+        };
+        threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
         threadPoolTaskScheduler.setPoolSize(2 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
+        threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
         threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(maintainerCron));
