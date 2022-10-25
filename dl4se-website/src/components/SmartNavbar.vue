@@ -30,41 +30,39 @@ export default {
       type: String,
       default: "App"
     },
-    dropdownShow: {
+    showDropdown: {
       type: Boolean,
       default: true
     }
   },
-  render(createElement, context) {
-    const dropdownItems = context.data.scopedSlots["dropdown-items"]()
-    const navItems = context.data.scopedSlots["nav-items"]()
+  render(createElement, { props, data }) {
     return createElement(
         BNavbar,
         {
           props: {
-            ...context.props,
+            ...props,
             toggleable: "sm",
             sticky: true
           },
-          attrs: context.data.attrs,
-          class: `${context.data.staticClass} smart-navbar`,
-          on: context.data.listeners,
-          directives: context.data.directives
+          attrs: data.attrs,
+          class: `${data.staticClass} smart-navbar`,
+          on: data.listeners,
+          directives: data.directives
         },
         [
-            createElement(BNavbarBrand, {}, context.props.brand),
-            createElement(BNavbarToggle, { props: { target: `${context.props.id}-collapse` } }, []),
+            createElement(BNavbarBrand, {}, props.brand),
+            createElement(BNavbarToggle, { props: { target: `${props.id}-collapse` } }, []),
             createElement(
                 BCollapse,
                 {
                   props: {
-                    id: `${context.props.id}-collapse`,
+                    id: `${props.id}-collapse`,
                     isNav: true
                   }
                 },
                 [
-                    createElement(BNavbarNav, {}, navItems),
-                    ... (context.props.dropdownShow)
+                    createElement(BNavbarNav, {}, data.scopedSlots["nav-items"]()),
+                    ... (props.showDropdown)
                         ? [
                             createElement(
                                 BNavbarNav,
@@ -89,7 +87,7 @@ export default {
                                                 createElement(BIconPersonFill)
                                             ]
                                         ),
-                                        ...dropdownItems
+                                        ...data.scopedSlots["dropdown-items"]()
                                       ]
                                   )
                                 ]

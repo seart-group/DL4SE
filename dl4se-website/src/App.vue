@@ -3,7 +3,7 @@
     <header>
       <b-smart-navbar brand="DL4SE"
                       v-show="!isHomePage"
-                      :dropdown-show="isPrivatePage"
+                      :show-dropdown="isPrivatePage"
       >
         <template #nav-items>
           <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
