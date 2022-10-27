@@ -251,6 +251,14 @@ export default {
           )
       )
     },
+    fileSizeFormatter(bytes) {
+      if (!bytes) return '0.00 B';
+      const k = 1024;
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      const f = (bytes / Math.pow(k, i))
+      const unit = "\u200bKMGTP".charAt(i) + "B"
+      return `${parseFloat(f.toFixed(2))} ${unit}`
+    },
     plaintextFormatter(item) {
       return Object.entries(item)
           .filter(([, value]) => {
@@ -579,6 +587,12 @@ export default {
                 total: item.total_results
               }
             }
+          },
+          {
+            key: "size",
+            sortable: true,
+            formatter: this.fileSizeFormatter,
+            tdClass: [ "text-right", "text-nowrap" ]
           },
           {
             key: "details",
