@@ -23,6 +23,7 @@ public interface FileSystemService {
     Path createTaskFile(Task task) throws IOException;
     void compressTaskFile(Task task);
     void cleanTaskFiles(Task task);
+    Long getFileSize(Task task);
 
     @Slf4j
     @Service
@@ -66,6 +67,12 @@ public interface FileSystemService {
             Path archiveFilePath = getArchiveFilePath(task);
             if (Files.exists(regularFilePath)) Files.delete(regularFilePath);
             if (Files.exists(archiveFilePath)) Files.delete(archiveFilePath);
+        }
+
+        @Override
+        public Long getFileSize(Task task) {
+            Path tmpFilePath = getRegularFilePath(task);
+            return tmpFilePath.toFile().length();
         }
 
         private Path getRegularFilePath(Task task) {
