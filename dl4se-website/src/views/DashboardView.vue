@@ -17,6 +17,15 @@
                 <span class="align-middle">New Task</span>
               </b-button>
             </template>
+            <template #cell(uuid)="row">
+              <span v-html="row.value"
+                    class="d-md-inline d-none"
+              />
+              <b-abbreviation :value="row.value"
+                              :transformer="val => val.split('-')[0]"
+                              class="d-md-none d-inline"
+              />
+            </template>
             <template #cell(status)="row">
               <div class="d-flex justify-content-center">
                 <b-icon :icon="statusToSquareIcon(row.value)"
