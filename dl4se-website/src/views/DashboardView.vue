@@ -24,10 +24,9 @@
                         font-scale="1.25" class="align-middle"
                 />
               </div>
-
             </template>
             <template #cell(submitted)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
                                         font-scale="1.35" class="align-middle"
@@ -64,7 +63,7 @@
               </div>
             </template>
             <template #cell(details)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show User Details'"
                           @click="display('Submitter', row.item.user, $event.target)"
@@ -86,7 +85,7 @@
               </div>
             </template>
             <template #cell(actions)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
                   <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
                     <b-button class="btn-secondary-border-2" size="sm" disabled>
