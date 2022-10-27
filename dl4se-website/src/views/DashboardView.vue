@@ -22,7 +22,7 @@
                     class="d-md-inline d-none"
               />
               <b-abbreviation :value="row.value"
-                              :transformer="val => val.split('-')[0]"
+                              :formatter="val => val.split('-')[0]"
                               class="d-md-none d-inline"
               />
             </template>
@@ -148,7 +148,7 @@
                              :provider="userProvider"
           >
             <template #cell(registered)="row">
-              <b-abbreviation :value="row.value.toISOString()" :transformer="(iso) => iso.split('T')[0]" />
+              <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
               <b-icon :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
