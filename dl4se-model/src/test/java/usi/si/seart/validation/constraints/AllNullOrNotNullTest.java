@@ -2,6 +2,7 @@ package usi.si.seart.validation.constraints;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,7 @@ class AllNullOrNotNullTest {
 
     @BeforeAll
     static void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        @Cleanup ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
