@@ -1,0 +1,1 @@
+ALTER TABLE task ADD size bigint;
