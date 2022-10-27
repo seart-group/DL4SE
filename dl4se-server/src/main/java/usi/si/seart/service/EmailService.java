@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,24 @@ public interface EmailService {
     void sendPasswordResetEmail(String recipient, String link);
 
     @Service
+    @ConditionalOnProperty(value = "spring.mail.enabled", havingValue = "false")
+    class VoidEmailService implements EmailService {
+
+        @Override
+        public void sendTaskNotificationEmail(Task task) {
+        }
+
+        @Override
+        public void sendVerificationEmail(String recipient, String link) {
+        }
+
+        @Override
+        public void sendPasswordResetEmail(String recipient, String link) {
+        }
+    }
+
+    @Service
+    @ConditionalOnProperty(value = "spring.mail.enabled", havingValue = "true")
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @RequiredArgsConstructor(onConstructor_ = @Autowired)
     class EmailServiceImpl implements EmailService {

@@ -1,6 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DL4SEApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <option name="ACTIVE_PROFILES" />
+    <additionalParameters>
+      <param>
+        <option name="name" value="spring.mail.enabled" />
+        <option name="value" value="false" />
+      </param>
+    </additionalParameters>
     <option name="HIDE_BANNER" value="true" />
     <module name="dl4se-server" />
     <selectedOptions>
