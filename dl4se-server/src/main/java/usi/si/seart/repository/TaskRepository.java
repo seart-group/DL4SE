@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
+    Long countAllByUser(User user);
+
     List<Task> findAllByStatus(Status status);
 
     Page<Task> findAllByUser(User user, Pageable pageable);
