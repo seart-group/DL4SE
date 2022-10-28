@@ -54,4 +54,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("SELECT status, COUNT(status) AS COUNT FROM Task WHERE user = :user GROUP BY status")
     List<Tuple> countAllByUserGroupByStatus(@Param("user") User user);
+
+    @Query("SELECT SUM(t.size) AS total FROM Task t")
+    Long sumSize();
+
+    @Query("SELECT SUM(t.size) AS total FROM Task t WHERE t.user = :user")
+    Long sumSizeByUser(@Param("user") User user);
 }
