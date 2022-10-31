@@ -37,16 +37,16 @@ public class RepoMaintainer implements Runnable {
         Process process = pb.start();
         long pid = process.pid();
 
-        boolean isDeleted = gitRepo.getIsDeleted();
+        boolean isUnavailable = gitRepo.getIsUnavailable();
         boolean exited = process.waitFor(60, TimeUnit.SECONDS);
         if (exited) {
-            isDeleted = process.exitValue() != 0;
+            isUnavailable = process.exitValue() != 0;
         } else {
-            log.warn("Attempting to terminate timed-out process: [{}]", pid);
+            log.trace("Attempting to terminate timed-out process: [{}]", pid);
             while (process.isAlive()) process.destroyForcibly();
-            log.info("Terminated timed-out process: [{}]", pid);
+            log.trace("Terminated timed-out process: [{}]", pid);
         }
 
-        gitRepo.setIsDeleted(isDeleted);
+        gitRepo.setIsUnavailable(isUnavailable);
     }
 }
