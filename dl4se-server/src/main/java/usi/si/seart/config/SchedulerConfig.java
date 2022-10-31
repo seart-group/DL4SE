@@ -23,6 +23,7 @@ import usi.si.seart.model.task.Task;
 import usi.si.seart.scheduling.RepoMaintainer;
 import usi.si.seart.scheduling.TaskCleaner;
 import usi.si.seart.scheduling.TaskRunner;
+import usi.si.seart.scheduling.ViewMaintainer;
 import usi.si.seart.service.CodeService;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
@@ -65,8 +66,9 @@ public class SchedulerConfig {
     @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler() {
         Integer runners = configurationService.get("task_runner_count", Integer.class);
-        String cleanerCron = configurationService.get("task_cleaner_cron", String.class);
-        String maintainerCron = configurationService.get("repo_maintainer_cron", String.class);
+        String taskCleanerCron = configurationService.get("task_cleaner_cron", String.class);
+        String repoMaintainerCron = configurationService.get("repo_maintainer_cron", String.class);
+        String viewMaintainerCron = configurationService.get("view_maintainer_cron", String.class);
 
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler() {
             private final Set<ScheduledFuture<?>> futures = new HashSet<>();
@@ -93,14 +95,15 @@ public class SchedulerConfig {
         };
         threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
-        threadPoolTaskScheduler.setPoolSize(2 + runners);
+        threadPoolTaskScheduler.setPoolSize(3 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
-        threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(maintainerCron));
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(cleanerCron));
+        threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(repoMaintainerCron));
+        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(taskCleanerCron));
+        threadPoolTaskScheduler.schedule(getViewMaintainer(), new CronTrigger(viewMaintainerCron));
         for (int i = 0; i < runners; i++)
             threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
 
@@ -113,6 +116,10 @@ public class SchedulerConfig {
 
     private Runnable getTaskCleaner() {
         return new TaskCleaner(taskService, fileSystemService);
+    }
+
+    private Runnable getViewMaintainer() {
+        return new ViewMaintainer(entityManager, transactionManager);
     }
 
     private Runnable getTaskRunner() {

@@ -29,3 +29,5 @@ CREATE UNIQUE INDEX ON table_counts("table");
 CREATE UNIQUE INDEX ON git_repos_by_language(lang_id);
 CREATE UNIQUE INDEX ON files_by_language(lang_id);
 CREATE UNIQUE INDEX ON functions_by_language(lang_id);
+
+INSERT INTO configuration(key, value, last_update) VALUES ('view_maintainer_cron', '0 0 0 * * *', now());
