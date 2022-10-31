@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.user.User;
-import usi.si.seart.repository.FileRepository;
-import usi.si.seart.repository.FunctionRepository;
-import usi.si.seart.repository.GitRepoRepository;
+import usi.si.seart.repository.FileLanguageCountRepository;
+import usi.si.seart.repository.FunctionLanguageCountRepository;
+import usi.si.seart.repository.GitRepoLanguageCountRepository;
+import usi.si.seart.repository.LanguageRepository;
+import usi.si.seart.repository.TableCountsRepository;
 import usi.si.seart.repository.TaskRepository;
-import usi.si.seart.repository.UserRepository;
+import usi.si.seart.views.TableCount;
+import usi.si.seart.views.language.LanguageCount;
 
 import javax.persistence.Tuple;
 import java.util.List;
@@ -43,51 +46,66 @@ public interface StatisticsService {
     @AllArgsConstructor(onConstructor_ = @Autowired)
     class StatisticsServiceImpl implements StatisticsService {
 
-        UserRepository userRepository;
-        GitRepoRepository gitRepoRepository;
-        FileRepository fileRepository;
-        FunctionRepository functionRepository;
+        TableCountsRepository tableCountsRepository;
+
+        GitRepoLanguageCountRepository gitRepoLanguageCountRepository;
+        FileLanguageCountRepository fileLanguageCountRepository;
+        FunctionLanguageCountRepository functionLanguageCountRepository;
+
+        LanguageRepository languageRepository;
         TaskRepository taskRepository;
 
         @Override
         public Long countUsers() {
-            return userRepository.count();
+            return tableCountsRepository.findById("user")
+                    .map(TableCount::getCount)
+                    .orElse(0L);
         }
 
         @Override
         public Long countGitRepos() {
-            return gitRepoRepository.count();
+            return tableCountsRepository.findById("git_repo")
+                    .map(TableCount::getCount)
+                    .orElse(0L);
         }
 
         @Override
         public Long countFiles() {
-            return fileRepository.count();
+            return tableCountsRepository.findById("file")
+                    .map(TableCount::getCount)
+                    .orElse(0L);
         }
 
         @Override
         public Long countFunctions() {
-            return functionRepository.count();
+            return tableCountsRepository.findById("function")
+                    .map(TableCount::getCount)
+                    .orElse(0L);
         }
 
         @Override
         public Map<Language, Long> countGitReposByLanguage() {
-            return gitRepoRepository.countAllGroupByLanguage().stream()
-                    .map(tuple -> Map.entry(tuple.get(0, Language.class), tuple.get(1, Long.class)))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return getLanguageCount(gitRepoLanguageCountRepository::findAll);
         }
 
         @Override
         public Map<Language, Long> countFilesByLanguage() {
-            return fileRepository.countAllGroupByLanguage().stream()
-                    .map(tuple -> Map.entry(tuple.get(0, Language.class), tuple.get(1, Long.class)))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return getLanguageCount(fileLanguageCountRepository::findAll);
         }
 
         @Override
         public Map<Language, Long> countFunctionsByLanguage() {
-            return functionRepository.countAllGroupByLanguage().stream()
-                    .map(tuple -> Map.entry(tuple.get(0, Language.class), tuple.get(1, Long.class)))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return getLanguageCount(functionLanguageCountRepository::findAll);
+        }
+
+        private Map<Language, Long> getLanguageCount(Supplier<List<? extends LanguageCount>> supplier) {
+            Stream<Map.Entry<Language, Long>> languagesEmpty = languageRepository.findAll().stream()
+                    .map(language -> Map.entry(language, 0L));
+            Stream<Map.Entry<Language, Long>> languagesData = supplier.get().stream()
+                    .map(entity -> Map.entry(entity.getLanguage(), entity.getCount()));
+            return Stream.concat(languagesEmpty, languagesData).collect(
+                    Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2)
+            );
         }
 
         @Override
