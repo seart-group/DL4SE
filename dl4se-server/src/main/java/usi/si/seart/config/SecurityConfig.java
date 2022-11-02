@@ -74,7 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/verify",
                         "/user/verify/resend",
                         "/user/password/forgotten",
-                        "/user/password/reset")
+                        "/user/password/reset",
+                        "/statistics/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
