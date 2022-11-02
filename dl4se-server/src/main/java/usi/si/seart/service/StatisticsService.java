@@ -20,7 +20,6 @@ import usi.si.seart.views.language.LanguageCount;
 import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,7 +143,7 @@ public interface StatisticsService {
             Stream<Map.Entry<Status, Long>> queryResultStream = tupleResultQuery.get().stream()
                     .map(tuple -> Map.entry(tuple.get(0, Status.class), tuple.get(1, Long.class)));
             return Stream.concat(noResultStream, queryResultStream).collect(
-                    Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, TreeMap::new)
+                    Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2)
             );
         }
     }

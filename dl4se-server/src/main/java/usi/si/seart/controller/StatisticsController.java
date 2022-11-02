@@ -71,14 +71,10 @@ public class StatisticsController {
     }
 
     private Map<String, Long> extractCounts(Supplier<Map<Language, Long>> supplier) {
-        return supplier.get().entrySet().stream().collect(
-                Collectors.toMap(
-                        entry -> entry.getKey().getName(),
-                        Map.Entry::getValue,
-                        (v1, v2) -> v2,
-                        TreeMap::new
-                )
-        );
+        return supplier.get().entrySet().stream()
+                .map(entry -> Map.entry(entry.getKey().getName(), entry.getValue()))
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, TreeMap::new));
     }
 
     @GetMapping("/tasks")
