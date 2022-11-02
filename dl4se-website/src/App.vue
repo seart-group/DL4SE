@@ -7,7 +7,7 @@
       >
         <template #nav-items>
           <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
-          <b-nav-item disabled>Stats</b-nav-item>
+          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Stats</b-nav-item>
           <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
           <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Docs</b-nav-item>
         </template>
