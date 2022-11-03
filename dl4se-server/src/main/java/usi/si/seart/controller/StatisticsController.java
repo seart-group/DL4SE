@@ -29,6 +29,11 @@ public class StatisticsController {
     UserService userService;
     StatisticsService statisticsService;
 
+    @GetMapping("/code")
+    public ResponseEntity<?> codeSize() {
+        return ResponseEntity.ok(statisticsService.codeSize());
+    }
+
     @GetMapping("/users")
     public ResponseEntity<?> users() {
         return ResponseEntity.ok(statisticsService.countUsers());

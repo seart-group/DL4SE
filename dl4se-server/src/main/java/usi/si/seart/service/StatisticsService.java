@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.user.User;
+import usi.si.seart.repository.CodeRepository;
 import usi.si.seart.repository.FileLanguageCountRepository;
 import usi.si.seart.repository.FunctionLanguageCountRepository;
 import usi.si.seart.repository.GitRepoLanguageCountRepository;
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 
 public interface StatisticsService {
 
+    Long codeSize();
     Long countUsers();
     Long countGitRepos();
     Long countFiles();
@@ -51,8 +53,14 @@ public interface StatisticsService {
         FileLanguageCountRepository fileLanguageCountRepository;
         FunctionLanguageCountRepository functionLanguageCountRepository;
 
+        CodeRepository codeRepository;
         LanguageRepository languageRepository;
         TaskRepository taskRepository;
+
+        @Override
+        public Long codeSize() {
+            return codeRepository.size();
+        }
 
         @Override
         public Long countUsers() {

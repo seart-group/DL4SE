@@ -1,3 +1,7 @@
+### GET /statistics/code
+GET https://localhost:8080/api/statistics/code
+Authorization: Bearer {{token}}
+
 ### GET /statistics/users
 GET https://localhost:8080/api/statistics/users
 Authorization: Bearer {{token}}
