@@ -19,10 +19,7 @@ export default {
     async request() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
-      const config = { headers : { 'content-type': 'application/json' }}
-
-      await this.$http.post("/user/password/forgotten", payload, config)
+      await this.$http.post("/user/password/forgotten", payload)
           .then(() => {
             this.redirectHomeAndToast(
                 "Password Reset Requested",
@@ -31,7 +28,6 @@ export default {
             )
           })
           .catch((err) => {
-            console.log(err)
             const status = err.response.status
             const handler = this.errorHandlers[status]
             handler()

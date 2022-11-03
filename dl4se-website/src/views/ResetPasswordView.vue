@@ -22,13 +22,7 @@ export default {
     async reset() {
       const payload = {}
       Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-
-      const config = {
-        params: { token: this.token },
-        headers : { 'content-type': 'application/json' }
-      }
-
-      await this.$http.post("/user/password/reset", payload, config)
+      await this.$http.post("/user/password/reset", payload, { params: { token: this.token } })
           .then(() => {
             this.redirectHomeAndToast(
                 "Password Reset Successful",
@@ -37,7 +31,6 @@ export default {
             )
           })
           .catch((err) => {
-            console.log(err)
             const status = err.response.status
             const handler = this.errorHandlers[status]
             handler()

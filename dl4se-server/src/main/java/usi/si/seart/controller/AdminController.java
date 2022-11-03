@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +38,6 @@ public class AdminController {
 
     UserService userService;
     TaskService taskService;
-    ConversionService conversionService;
     ConfigurationService configurationService;
 
     @GetMapping
@@ -99,11 +97,6 @@ public class AdminController {
     ) {
         Page<Task> tasks = taskService.getAll(pageable);
         return ResponseEntity.ok(tasks);
-    }
-
-    @GetMapping("/task/stats")
-    public ResponseEntity<?> statsTasks() {
-        return ResponseEntity.ok(taskService.getSummary());
     }
 
     @GetMapping("/configuration")

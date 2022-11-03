@@ -23,7 +23,7 @@
             <b-form-group label-class="font-weight-bold" class="m-0 pb-2 pb-md-0">
               <template #label>
                 Granularity
-                <b-link :to="{ name: 'about', hash: '#granularity' }" target="_blank" class="text-dark" tabindex="-1">
+                <b-link :to="{ name: 'docs', hash: '#granularity' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
@@ -37,7 +37,7 @@
             <b-form-group label-class="font-weight-bold" class="m-0">
               <template #label>
                 AST
-                <b-link :to="{ name: 'about', hash: '#ast' }" target="_blank" class="text-dark" tabindex="-1">
+                <b-link :to="{ name: 'docs', hash: '#ast' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
@@ -205,7 +205,9 @@ export default {
     submitSuccess() {
       this.redirectDashboardAndToast(
           "Task Created",
-          "Your task has been accepted. Please note that it may take some time until it begins executing.",
+          "Your dataset creation request has been accepted. " +
+          "Please note that it may take some time until it begins executing. " +
+          "You will receive an email notification once the dataset is compiled.",
           "secondary"
       )
     },

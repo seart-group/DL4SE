@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="POST /task/cancel" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/task" path="$PROJECT_DIR$/http/TaskController.http" index="3" requestIdentifier="POST /task/cancel" runType="Run single request">
+  <configuration default="false" name="POST /task/cancel" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/task" path="$PROJECT_DIR$/http/TaskController.http" index="2" requestIdentifier="POST /task/cancel" runType="Run single request">
     <method v="2" />
   </configuration>
 </component>

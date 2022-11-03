@@ -4,6 +4,11 @@
     <additionalParameters>
       <param>
         <option name="enabled" value="true" />
+        <option name="name" value="spring.mail.enabled" />
+        <option name="value" value="false" />
+      </param>
+      <param>
+        <option name="enabled" value="true" />
         <option name="name" value="logging.level.usi.si.seart" />
         <option name="value" value="DEBUG" />
       </param>

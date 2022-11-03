@@ -4,16 +4,16 @@ import {BJumbotron} from 'bootstrap-vue'
 export default {
   name: "b-content-area",
   functional: true,
-  render(createElement, context) {
+  render(createElement, { props, data, children }) {
     return createElement(
         BJumbotron,
         {
-          props: context.props,
-          attrs: context.data.attrs,
-          class: `${context.data.staticClass} content-area`,
-          on: context.data.listeners
+          props: props,
+          attrs: data.attrs,
+          class: `${data.staticClass} content-area`,
+          on: data.listeners
         },
-        context.children
+        children
     )
   }
 }

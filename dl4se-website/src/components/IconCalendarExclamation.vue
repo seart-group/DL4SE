@@ -9,15 +9,15 @@ export default {
     BIconExclamation,
     BIconstack
   },
-  render(createElement, context) {
+  render(createElement, { props, data }) {
     return createElement(
         BIconstack,
         {
-          props: context.props,
-          attrs: context.data.attrs,
-          class: context.data.staticClass,
-          on: context.data.listeners,
-          directives: context.data.directives
+          props: props,
+          attrs: data.attrs,
+          class: data.staticClass,
+          on: data.listeners,
+          directives: data.directives
         },
         [
           createElement(BIconExclamation, { props: { scale: 0.75, shiftV: -1, stacked: true } }),

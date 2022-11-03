@@ -18,7 +18,13 @@
               </b-button>
             </template>
             <template #cell(uuid)="row">
-              <span v-html="row.value" class="text-nowrap" />
+              <span v-html="row.value"
+                    class="d-md-inline d-none"
+              />
+              <b-abbreviation :value="row.value"
+                              :formatter="val => val.split('-')[0]"
+                              class="d-md-none d-inline"
+              />
             </template>
             <template #cell(status)="row">
               <div class="d-flex justify-content-center">
@@ -27,10 +33,9 @@
                         font-scale="1.25" class="align-middle"
                 />
               </div>
-
             </template>
             <template #cell(submitted)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
                                         font-scale="1.35" class="align-middle"
@@ -67,7 +72,7 @@
               </div>
             </template>
             <template #cell(details)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <b-button class="btn-secondary-border-2 mr-1" size="sm"
                           v-b-tooltip="'Show User Details'"
                           @click="display('Submitter', row.item.user, $event.target)"
@@ -89,7 +94,7 @@
               </div>
             </template>
             <template #cell(actions)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex">
                 <template v-if="[ 'FINISHED', 'CANCELLED', 'ERROR' ].includes(row.item.status)">
                   <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
                     <b-button class="btn-secondary-border-2" size="sm" disabled>
@@ -143,7 +148,7 @@
                              :provider="userProvider"
           >
             <template #cell(registered)="row">
-              <b-abbreviation :value="row.value.toISOString()" :transformer="(iso) => iso.split('T')[0]" />
+              <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
               <b-icon :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
@@ -212,6 +217,7 @@
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin"
+import formatterMixin from "@/mixins/formatterMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
 import BConfigTable from "@/components/ConfigTable";
@@ -235,7 +241,7 @@ export default {
     BMonitor,
     BPaginatedTable
   },
-  mixins: [ bootstrapMixin, routerMixin ],
+  mixins: [ bootstrapMixin, formatterMixin, routerMixin ],
   methods: {
     toTitle(value) {
       return this.$_.startCase(
@@ -535,7 +541,8 @@ export default {
           {
             key: "uuid",
             label: "UUID",
-            sortable: true
+            sortable: true,
+            tdClass: [ "text-nowrap", "text-monospace" ]
           },
           {
             key: "status",
@@ -575,6 +582,12 @@ export default {
             }
           },
           {
+            key: "size",
+            sortable: true,
+            formatter: this.formatBytes,
+            tdClass: [ "text-right", "text-nowrap" ]
+          },
+          {
             key: "details",
             sortable: false
           },
@@ -591,7 +604,8 @@ export default {
           {
             key: "uid",
             label: "UID",
-            sortable: true
+            sortable: true,
+            tdClass: [ "text-monospace" ]
           },
           {
             key: "email",

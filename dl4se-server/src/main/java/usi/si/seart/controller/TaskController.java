@@ -76,12 +76,6 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @GetMapping("/stats")
-    public ResponseEntity<?> statsTasks(@AuthenticationPrincipal UserPrincipal principal) {
-        User requester = userService.getWithId(principal.getId());
-        return ResponseEntity.ok(taskService.getSummary(requester));
-    }
-
     @SuppressWarnings("ConstantConditions")
     @PostMapping("/create")
     public ResponseEntity<?> create(

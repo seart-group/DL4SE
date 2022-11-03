@@ -74,7 +74,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/verify",
                         "/user/verify/resend",
                         "/user/password/forgotten",
-                        "/user/password/reset")
+                        "/user/password/reset",
+                        "/statistics/code",
+                        "/statistics/users",
+                        "/statistics/repos",
+                        "/statistics/files",
+                        "/statistics/functions",
+                        "/statistics/languages/repos",
+                        "/statistics/languages/files",
+                        "/statistics/languages/functions",
+                        "/statistics/tasks",
+                        "/statistics/tasks/status",
+                        "/statistics/tasks/size")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
@@ -99,8 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtBuilder jwtBuilder() {
-        return Jwts.builder()
-                .signWith(secretKey(), SignatureAlgorithm.HS512);
+        return Jwts.builder().signWith(secretKey(), SignatureAlgorithm.HS512);
     }
 
     @Bean
