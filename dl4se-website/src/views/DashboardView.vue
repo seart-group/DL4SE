@@ -217,6 +217,7 @@
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin"
+import formatterMixin from "@/mixins/formatterMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
 import BConfigTable from "@/components/ConfigTable";
@@ -240,7 +241,7 @@ export default {
     BMonitor,
     BPaginatedTable
   },
-  mixins: [ bootstrapMixin, routerMixin ],
+  mixins: [ bootstrapMixin, formatterMixin, routerMixin ],
   methods: {
     toTitle(value) {
       return this.$_.startCase(
@@ -250,14 +251,6 @@ export default {
               )
           )
       )
-    },
-    fileSizeFormatter(bytes) {
-      if (!bytes) return '0.00 B';
-      const k = 1024;
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      const f = (bytes / Math.pow(k, i))
-      const unit = "\u200bKMGTP".charAt(i) + "B"
-      return `${parseFloat(f.toFixed(2))} ${unit}`
     },
     plaintextFormatter(item) {
       return Object.entries(item)
@@ -591,7 +584,7 @@ export default {
           {
             key: "size",
             sortable: true,
-            formatter: this.fileSizeFormatter,
+            formatter: (value) => this.format(value, 2, 1024, ['B', 'KB', 'MB', 'GB', 'TB', 'PB']),
             tdClass: [ "text-right", "text-nowrap" ]
           },
           {
