@@ -584,7 +584,7 @@ export default {
           {
             key: "size",
             sortable: true,
-            formatter: (value) => this.format(value, 2, 1024, ['B', 'KB', 'MB', 'GB', 'TB', 'PB']),
+            formatter: this.formatBytes,
             tdClass: [ "text-right", "text-nowrap" ]
           },
           {
