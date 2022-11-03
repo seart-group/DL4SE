@@ -23,22 +23,16 @@ import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
-import javax.persistence.Tuple;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface TaskService {
@@ -55,8 +49,6 @@ public interface TaskService {
     Page<Task> getAll(Pageable pageable);
     Page<Task> getAll(User user, Pageable pageable);
     Task getWithUUID(UUID uuid);
-    Map<Status, Long> getSummary();
-    Map<Status, Long> getSummary(User user);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -188,26 +180,6 @@ public interface TaskService {
         public Task getWithUUID(UUID uuid) {
             return taskRepository.findByUuid(uuid)
                     .orElseThrow(() -> new TaskNotFoundException("uuid", uuid));
-        }
-
-        @Override
-        public Map<Status, Long> getSummary() {
-            return supplyToMap(taskRepository::countAllGroupByStatus);
-        }
-
-        @Override
-        public Map<Status, Long> getSummary(User user) {
-            return supplyToMap(() -> taskRepository.countAllByUserGroupByStatus(user));
-        }
-
-        private Map<Status, Long> supplyToMap(Supplier<List<Tuple>> tupleResultQuery) {
-            Stream<Map.Entry<Status, Long>> noResultStream = Stream.of(Status.values())
-                    .map(status -> Map.entry(status, 0L));
-            Stream<Map.Entry<Status, Long>> queryResultStream = tupleResultQuery.get().stream()
-                    .map(tuple -> Map.entry(tuple.get(0, Status.class), tuple.get(1, Long.class)));
-            return Stream.concat(noResultStream, queryResultStream).collect(
-                    Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, TreeMap::new)
-            );
         }
     }
 }

@@ -63,6 +63,12 @@ export default {
           needsConnection: true
         },
         {
+          title: "Stats",
+          description: "View statistics related to the size of our database, language coverage, etc.",
+          linksTo: "stats",
+          needsConnection: true
+        },
+        {
           title: "About",
           description: "Want to learn more about the project?",
           linksTo: "about",

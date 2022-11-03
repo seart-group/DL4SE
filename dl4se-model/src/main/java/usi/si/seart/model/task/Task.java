@@ -17,6 +17,7 @@ import usi.si.seart.model.task.processing.Processing;
 import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.type.StringEnumType;
 import usi.si.seart.model.user.User;
+import usi.si.seart.validation.constraints.PositiveOrZeroOrNull;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -116,6 +117,9 @@ public abstract class Task {
     @Column(name = "error_stack_trace")
     @JsonProperty(value = "error_stack_trace")
     String errorStackTrace;
+
+    @PositiveOrZeroOrNull
+    Long size;
 
     @Override
     public boolean equals(Object o) {

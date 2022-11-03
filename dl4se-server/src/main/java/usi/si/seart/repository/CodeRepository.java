@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 public interface CodeRepository {
 
+    Long size();
     Long count(String queryString, Map<String, ?> parameters);
     <T extends Code> Stream<T> stream(String queryString, Map<String, ?> parameters, Class<T> codeClass);
 
@@ -19,6 +20,12 @@ public interface CodeRepository {
 
         @PersistenceContext
         EntityManager entityManager;
+
+        @Override
+        public Long size() {
+            Query query = entityManager.createNativeQuery("SELECT size FROM code_size_in_bytes");
+            return ((Number) query.getSingleResult()).longValue();
+        }
 
         @Override
         public Long count(String queryString, Map<String, ?> parameters) {

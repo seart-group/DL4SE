@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import {Fragment} from 'vue-frag'
+import {Chart} from "chart.js"
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
@@ -13,6 +14,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/styles/style.sass'
 
 Vue.config.productionTip = false
+
+Chart.defaults.font.family = "'Trebuchet MS', Helvetica, Arial, sans-serif"
 
 Vue.use(VueCompositionAPI)
 Vue.use(VueAxios, axios)

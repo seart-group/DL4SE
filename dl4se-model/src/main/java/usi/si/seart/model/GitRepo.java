@@ -96,10 +96,10 @@ public class GitRepo {
     String lastCommitSHA = "0000000000000000000000000000000000000000";
 
     @NotNull
-    @Column(name = "is_deleted")
-    @JsonProperty(value = "is_deleted")
+    @Column(name = "is_unavailable")
+    @JsonProperty(value = "is_unavailable")
     @Builder.Default
-    Boolean isDeleted = false;
+    Boolean isUnavailable = false;
 
     @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

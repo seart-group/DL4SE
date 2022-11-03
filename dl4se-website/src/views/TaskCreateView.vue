@@ -205,7 +205,9 @@ export default {
     submitSuccess() {
       this.redirectDashboardAndToast(
           "Task Created",
-          "Your task has been accepted. Please note that it may take some time until it begins executing.",
+          "Your dataset creation request has been accepted. " +
+          "Please note that it may take some time until it begins executing. " +
+          "You will receive an email notification once the dataset is compiled.",
           "secondary"
       )
     },

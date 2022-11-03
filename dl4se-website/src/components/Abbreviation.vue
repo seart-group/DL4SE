@@ -7,7 +7,7 @@ export default {
       type: undefined,
       required: true
     },
-    transformer: {
+    formatter: {
       type: Function,
       default(value) {
         return value
@@ -32,7 +32,7 @@ export default {
             }
           ]
         },
-        props.transformer(props.value)
+        props.formatter(props.value)
     )
   }
 }

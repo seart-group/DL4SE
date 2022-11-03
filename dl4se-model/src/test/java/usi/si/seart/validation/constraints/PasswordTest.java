@@ -1,6 +1,7 @@
 package usi.si.seart.validation.constraints;
 
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,7 +20,7 @@ class PasswordTest {
 
     @BeforeAll
     static void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        @Cleanup ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 

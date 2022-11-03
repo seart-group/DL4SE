@@ -154,6 +154,8 @@ public class TaskRunner implements Runnable {
                         writer.newLine();
 
                         if (count % fetchSize == 0) {
+                            Long fileSize = fileSystemService.getFileSize(task);
+                            task.setSize(fileSize);
                             task = taskService.update(task);
                             writer.flush();
                             entityManager.clear();
@@ -161,6 +163,8 @@ public class TaskRunner implements Runnable {
                     }
                 }
 
+                Long fileSize = fileSystemService.getFileSize(task);
+                task.setSize(fileSize);
                 task = taskService.update(task);
 
                 fileSystemService.compressTaskFile(task);
@@ -184,5 +188,6 @@ public class TaskRunner implements Runnable {
                 throw new TaskFailedException(task, thr);
             }
         }
+
     }
 }

@@ -13,7 +13,17 @@ const noAuth = [
     "/user/verify",
     "/user/verify/resend",
     "/user/password/forgotten",
-    "/user/password/reset"
+    "/user/password/reset",
+    "/statistics/users",
+    "/statistics/repos",
+    "/statistics/files",
+    "/statistics/functions",
+    "/statistics/tasks",
+    "/statistics/code",
+    "/statistics/tasks/size",
+    "/statistics/languages/repos",
+    "/statistics/languages/files",
+    "/statistics/languages/functions"
 ]
 
 instance.interceptors.request.use(
