@@ -85,7 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/statistics/languages/functions",
                         "/statistics/tasks",
                         "/statistics/tasks/status",
-                        "/statistics/tasks/size")
+                        "/statistics/tasks/size",
+                        "/task/download/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
