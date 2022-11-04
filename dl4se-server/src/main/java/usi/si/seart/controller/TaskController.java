@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.task.CodeTaskDto;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
@@ -33,15 +34,19 @@ import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
+import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.ConfigurationService;
+import usi.si.seart.service.DownloadService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -56,6 +61,7 @@ public class TaskController {
     TaskService taskService;
     UserService userService;
     LanguageService languageService;
+    DownloadService downloadService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
     ConfigurationService configurationService;
@@ -124,19 +130,28 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
-    @SneakyThrows
-    @GetMapping(value = "/download/{uuid}")
-    public ResponseEntity<?> downloadResults(
-            @PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal
-    ) {
+    @GetMapping(value = "/token/{uuid}")
+    public ResponseEntity<?> requestAccess(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
-        if (task.getExpired()) return ResponseEntity.status(HttpStatus.GONE).build();
 
         User owner = task.getUser();
+        boolean isOwner = requester.equals(owner);
+        boolean isAdmin = Role.ADMIN == owner.getRole();
         Status status = task.getStatus();
-        boolean canDownload = requester.equals(owner) && status == Status.FINISHED;
+        boolean isFinished = status == Status.FINISHED;
+        boolean canDownload = isFinished && (isOwner || isAdmin);
         if (!canDownload) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        Token token = downloadService.generate(requester);
+        return ResponseEntity.ok(token.getValue());
+    }
+
+    @SneakyThrows({FileNotFoundException.class})
+    @GetMapping(value = "/download/{uuid}")
+    public ResponseEntity<?> download(@PathVariable UUID uuid, @RequestParam @NotBlank String token) {
+        downloadService.consume(token);
+        Task task = taskService.getWithUUID(uuid);
 
         Path exportFilePath = fileSystemService.getTaskArchive(task);
         String exportFileName = exportFilePath.getFileName().toString();
