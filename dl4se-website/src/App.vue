@@ -1,22 +1,27 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar v-show="!isHomePage" :show-dropdown="isPrivatePage">
+      <b-smart-navbar v-show="!isHomePage">
         <template #brand>
           <span class="brand brand-negative">DL</span>
           <span class="brand brand-positive">4SE</span>
         </template>
-        <template #nav-items>
+        <template #nav-items-left>
           <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
           <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Stats</b-nav-item>
           <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
           <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Docs</b-nav-item>
         </template>
-        <template #dropdown-items>
-          <b-dropdown-item disabled>Profile</b-dropdown-item>
-          <b-dropdown-item :to="{ name: 'dashboard' }">Dashboard</b-dropdown-item>
-          <b-dropdown-divider />
-          <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
+        <template #nav-items-right>
+          <b-nav-item-dropdown right v-if="isPrivatePage">
+            <template #button-content>
+              <b-icon-person-fill />
+            </template>
+            <b-dropdown-item disabled>Profile</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'dashboard' }">Dashboard</b-dropdown-item>
+            <b-dropdown-divider />
+            <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
+          </b-nav-item-dropdown>
         </template>
       </b-smart-navbar>
     </header>

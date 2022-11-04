@@ -1,23 +1,13 @@
 <script>
-import {
-  BCollapse,
-  BIconPersonFill,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavbarToggle,
-  BNavItemDropdown
-} from "bootstrap-vue"
+import {BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle,} from "bootstrap-vue"
 
 export default {
   name: "b-smart-navbar",
   functional: true,
   components: {
     BCollapse,
-    BIconPersonFill,
     BNavbar,
     BNavbarBrand,
-    BNavItemDropdown,
     BNavbarNav,
     BNavbarToggle
   },
@@ -25,10 +15,6 @@ export default {
     id: {
       type: [String, Number],
       default: "smart-navbar"
-    },
-    showDropdown: {
-      type: Boolean,
-      default: true
     }
   },
   render(createElement, { props, data }) {
@@ -57,39 +43,8 @@ export default {
                   }
                 },
                 [
-                    createElement(BNavbarNav, {}, data.scopedSlots["nav-items"]()),
-                    ... (props.showDropdown)
-                        ? [
-                            createElement(
-                                BNavbarNav,
-                                {
-                                  class: "ml-auto"
-                                },
-                                [
-                                  createElement(
-                                      BNavItemDropdown,
-                                      {
-                                        props: {
-                                          right: true
-                                        }
-                                      },
-                                      [
-                                        createElement(
-                                            "template",
-                                            {
-                                              slot: "button-content"
-                                            },
-                                            [
-                                                createElement(BIconPersonFill)
-                                            ]
-                                        ),
-                                        ...data.scopedSlots["dropdown-items"]()
-                                      ]
-                                  )
-                                ]
-                            )
-                        ]
-                        : []
+                    createElement(BNavbarNav, {}, data.scopedSlots["nav-items-left"]()),
+                    createElement(BNavbarNav, { class: "ml-auto" }, data.scopedSlots["nav-items-right"]())
                 ]
             )
         ]
