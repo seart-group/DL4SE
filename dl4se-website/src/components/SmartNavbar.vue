@@ -26,10 +26,6 @@ export default {
       type: [String, Number],
       default: "smart-navbar"
     },
-    brand: {
-      type: String,
-      default: "App"
-    },
     showDropdown: {
       type: Boolean,
       default: true
@@ -50,7 +46,7 @@ export default {
           directives: data.directives
         },
         [
-            createElement(BNavbarBrand, {}, props.brand),
+            createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),
             createElement(BNavbarToggle, { props: { target: `${props.id}-collapse` } }, []),
             createElement(
                 BCollapse,

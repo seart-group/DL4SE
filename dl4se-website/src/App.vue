@@ -1,10 +1,11 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar brand="DL4SE"
-                      v-show="!isHomePage"
-                      :show-dropdown="isPrivatePage"
-      >
+      <b-smart-navbar v-show="!isHomePage" :show-dropdown="isPrivatePage">
+        <template #brand>
+          <span class="brand brand-negative">DL</span>
+          <span class="brand brand-positive">4SE</span>
+        </template>
         <template #nav-items>
           <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
           <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Stats</b-nav-item>
