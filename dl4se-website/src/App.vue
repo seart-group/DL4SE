@@ -13,7 +13,7 @@
           <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Docs</b-nav-item>
         </template>
         <template #nav-items-right>
-          <b-nav-item-dropdown right v-if="isPrivatePage">
+          <b-nav-item-dropdown right v-if="$store.getters.getToken">
             <template #button-content>
               <b-icon-person-fill />
             </template>
@@ -22,6 +22,10 @@
             <b-dropdown-divider />
             <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
           </b-nav-item-dropdown>
+          <template v-else>
+            <b-nav-item :to="{ name: 'login' }" :active="isOnPage('login')">Log In</b-nav-item>
+            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')">Register</b-nav-item>
+          </template>
         </template>
       </b-smart-navbar>
     </header>
@@ -29,9 +33,7 @@
       <router-view class="router-view" />
     </main>
     <footer>
-      <b-footer :authors="authors"
-                :organisation="organisation"
-      />
+      <b-footer :authors="authors" :organisation="organisation" />
     </footer>
   </fragment>
 </template>
@@ -47,9 +49,6 @@ export default {
   computed: {
     isHomePage() {
       return this.isOnPage('home')
-    },
-    isPrivatePage() {
-      return !this.$route.meta.public
     }
   },
   methods: {
