@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "@/store"
 import axios from "@/axios"
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
@@ -18,12 +17,6 @@ import ResetPasswordView from "@/views/ResetPasswordView"
 
 Vue.use(VueRouter)
 
-const sessionRestore = (_to, _from, next) => {
-  const token = store.getters.getToken
-  if (token) next({ name: 'dashboard' })
-  else next()
-}
-
 const routes = [
   {
     path: '/',
@@ -37,7 +30,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogInView,
-    beforeEnter: sessionRestore,
     meta: {
       public: true
     }

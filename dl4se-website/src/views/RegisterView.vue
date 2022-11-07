@@ -33,6 +33,12 @@ export default {
           })
     }
   },
+  beforeRouteEnter(_to, _from, next) {
+    next(vm => {
+      const token = vm.$store.getters.getToken
+      if (token) vm.$router.replace({ name: 'home' })
+    })
+  },
   data () {
     return {
       errorHandlers: {
