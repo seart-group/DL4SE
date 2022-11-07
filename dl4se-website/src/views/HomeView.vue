@@ -1,6 +1,5 @@
 <template>
   <div id="home">
-    <b-img :src="image" alt="DL4SE" class="logo-image" center fluid />
     <div class="card-stack">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
               :key="idx" :class="cardClasses(idx)" no-body
@@ -48,7 +47,6 @@ export default {
   data() {
     return {
       connected: true,
-      image: require('@/assets/img/logo.png'),
       cards: [
         {
           title: "Log In",
