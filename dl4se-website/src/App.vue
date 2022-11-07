@@ -3,8 +3,10 @@
     <header>
       <b-smart-navbar v-show="!isHomePage">
         <template #brand>
-          <span class="brand brand-negative">DL</span>
-          <span class="brand brand-positive">4SE</span>
+          <b-link :to="{ name: 'home' }" class="brand">
+            <span class="brand-negative">DL</span>
+            <span class="brand-positive">4SE</span>
+          </b-link>
         </template>
         <template #nav-items-left>
           <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
