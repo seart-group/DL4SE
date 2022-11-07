@@ -9,30 +9,21 @@ export default {
     authors: {
       type: Array,
       default() {
-        return [
-          {
-            name: "Giulio Ferrari",
-            url: "https://example.com"
-          }
-        ]
+        return []
       }
     },
     organisation: {
       type: Object,
       default() {
-        return {
-          name: "The Example Organization",
-          url: "https://example.com"
-        }
+        return {}
       }
     }
   },
   render(createElement, { props, data }) {
-
     const showAuthors = props.authors?.length
     const showOrganisation =
-        props.organisation.name !== undefined &&
-        props.organisation.url !== undefined
+        props.organisation?.name !== undefined &&
+        props.organisation?.url !== undefined
     return createElement(
         BContainer,
         {
