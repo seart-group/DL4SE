@@ -49,28 +49,10 @@ export default {
       connected: true,
       cards: [
         {
-          title: "Log In",
-          description: "Start generating datasets for your models in just a few clicks!",
-          linksTo: "login",
+          title: "Code Completion",
+          description: "Generate a dataset for Deep Learning models specializing in code completion.",
+          linksTo: { name: "task" },
           needsConnection: true
-        },
-        {
-          title: "Register",
-          description: "Don't have an account? Register for free today!",
-          linksTo: "register",
-          needsConnection: true
-        },
-        {
-          title: "Stats",
-          description: "View statistics related to the size of our database, language coverage, etc.",
-          linksTo: "stats",
-          needsConnection: true
-        },
-        {
-          title: "About",
-          description: "Want to learn more about the project?",
-          linksTo: "about",
-          needsConnection: false
         }
       ]
     }
