@@ -24,8 +24,12 @@
             <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
           </b-nav-item-dropdown>
           <template v-else>
-            <b-nav-item :to="{ name: 'login' }" :active="isOnPage('login')">Log In</b-nav-item>
-            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')">Register</b-nav-item>
+            <b-nav-item :to="{ name: 'login', query: { target: loginTarget } }" :active="isOnPage('login')">
+              Log In
+            </b-nav-item>
+            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')">
+              Register
+            </b-nav-item>
           </template>
         </template>
       </b-smart-navbar>
@@ -50,6 +54,12 @@ export default {
   computed: {
     currentPage() {
       return this.$route.name
+    },
+    loginTarget() {
+      const isHome = this.isOnPage('home')
+      const isLogin = this.isOnPage('login')
+      const isRegister = this.isOnPage('register')
+      return (isHome || isLogin || isRegister) ? undefined : this.currentPage
     }
   },
   methods: {

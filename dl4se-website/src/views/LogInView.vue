@@ -34,7 +34,7 @@ export default {
           .then((response) => {
             const token = response.data
             this.$store.commit("setToken", token)
-            this.$router.push({ name: "dashboard" })
+            this.$router.replace({ name: this.target })
           })
           .catch((err) => {
             const status = err.response.status

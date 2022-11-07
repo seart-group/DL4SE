@@ -27,9 +27,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async logOut(context) {
+    async logOut(context, target) {
       context.commit("clearToken")
-      await router.replace({ name: "login" })
+      const isPrivate = !router.currentRoute.meta.public
+      if (isPrivate) {
+        await router.replace({name: "login", query: {target: target}})
+      } else {
+        await router.go(0)
+      }
     }
   },
   modules: {
