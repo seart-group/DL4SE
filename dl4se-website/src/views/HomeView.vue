@@ -23,6 +23,9 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 
 export default {
   mixins: [ bootstrapMixin ],
+  props: {
+    connected: Boolean
+  },
   methods: {
     cardClasses(idx) {
       return {
@@ -34,19 +37,8 @@ export default {
       }
     }
   },
-  async beforeMount() {
-    await this.$http.get("/").catch(() => {
-      this.connected = false
-      this.appendToast(
-          "Server Connection Refused",
-          "The DL4SE server is currently unavailable. Please try accessing the site later.",
-          "danger"
-      )
-    })
-  },
   data() {
     return {
-      connected: true,
       cards: [
         {
           title: "Code Completion",

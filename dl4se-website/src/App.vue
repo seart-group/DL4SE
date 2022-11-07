@@ -9,9 +9,22 @@
           </b-link>
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Statistics</b-nav-item>
-          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
-          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Tutorial</b-nav-item>
+          <b-nav-item :to="{ name: 'stats' }"
+                      :active="isOnPage('stats')"
+                      :disabled="!connected"
+          >
+            Statistics
+          </b-nav-item>
+          <b-nav-item :to="{ name: 'about' }"
+                      :active="isOnPage('about')"
+          >
+            About
+          </b-nav-item>
+          <b-nav-item :to="{ name: 'docs' }"
+                      :active="isOnPage('docs')"
+          >
+            Tutorial
+          </b-nav-item>
         </template>
         <template #nav-items-right>
           <b-nav-item-dropdown right v-if="$store.getters.getToken">
@@ -19,15 +32,21 @@
               <b-icon-person-fill />
             </template>
             <b-dropdown-item disabled>Profile</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'dashboard' }">Dashboard</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'dashboard' }" :disabled="!connected">Dashboard</b-dropdown-item>
             <b-dropdown-divider />
             <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
           </b-nav-item-dropdown>
           <template v-else>
-            <b-nav-item :to="{ name: 'login', query: { target: loginTarget } }" :active="isOnPage('login')">
+            <b-nav-item :to="{ name: 'login', query: { target: loginTarget } }"
+                        :active="isOnPage('login')"
+                        :disabled="!connected"
+            >
               Log In
             </b-nav-item>
-            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')">
+            <b-nav-item :to="{ name: 'register' }"
+                        :active="isOnPage('register')"
+                        :disabled="!connected"
+            >
               Register
             </b-nav-item>
           </template>
@@ -35,7 +54,7 @@
       </b-smart-navbar>
     </header>
     <main>
-      <router-view class="router-view" />
+      <router-view :connected="connected" class="router-view" />
     </main>
     <footer>
       <b-footer :authors="authors" :organisation="organisation" />
@@ -75,8 +94,20 @@ export default {
       })
     }
   },
+  async beforeMount() {
+    await this.$http.get("/").catch(() => {
+      this.connected = false
+      this.appendToast(
+          "Server Connection Refused",
+          "The DL4SE server is currently unavailable. Please try accessing the site later.",
+          "danger"
+      )
+    })
+  },
   data() {
     return {
+      interval: undefined,
+      connected: true,
       authors: [
         {
           name: "Ozren Dabić",
