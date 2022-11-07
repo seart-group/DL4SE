@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar v-show="!isHomePage">
+      <b-smart-navbar>
         <template #brand>
           <b-link :to="{ name: 'home' }" :active="isOnPage('home')" class="brand">
             <span class="brand-negative">DL</span>
@@ -9,10 +9,9 @@
           </b-link>
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
-          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Stats</b-nav-item>
+          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')">Statistics</b-nav-item>
           <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
-          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Docs</b-nav-item>
+          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Tutorial</b-nav-item>
         </template>
         <template #nav-items-right>
           <b-nav-item-dropdown right v-if="$store.getters.getToken">
@@ -49,13 +48,13 @@ export default {
   components: { BFooter, BSmartNavbar },
   mixins: [ bootstrapMixin ],
   computed: {
-    isHomePage() {
-      return this.isOnPage('home')
+    currentPage() {
+      return this.$route.name
     }
   },
   methods: {
     isOnPage(name) {
-      return this.$route.name === name
+      return this.currentPage === name
     },
     showLogOutModal() {
       this.showConfirmModal(
