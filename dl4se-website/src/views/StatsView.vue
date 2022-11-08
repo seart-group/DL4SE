@@ -20,13 +20,13 @@
             </template>
             <template #default>
               <p class="text-justify">
-                DL4SE is host to <strong>{{ count.funcs }}</strong> functions,
-                sourced from <strong>{{ count.files }}</strong> files,
-                originating from <strong>{{ count.repos }}</strong> repositories.
-                In total, we have mined <strong>{{ size.code }}</strong> of source code.
-                The platform currently has <strong>{{ count.users }}</strong> registered users,
-                and since its inception <strong>{{ count.tasks }}</strong> datasets have been constructed.
-                This amounts to roughly <strong>{{ size.tasks }}</strong> in file size.
+                DL4SE is host to <strong>{{ count.funcs.toLocaleString() }}</strong> functions,
+                sourced from <strong>{{ count.files.toLocaleString() }}</strong> files,
+                originating from <strong>{{ count.repos.toLocaleString() }}</strong> repositories.
+                In total, we have mined <strong>{{ formatBytes(size.code) }}</strong> of source code.
+                The platform currently has <strong>{{ count.users.toLocaleString() }}</strong> registered users,
+                and since its inception <strong>{{ count.tasks.toLocaleString() }}</strong> datasets have been constructed.
+                This amounts to roughly <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
               </p>
             </template>
           </b-skeleton-wrapper>
@@ -114,8 +114,8 @@ export default {
       this.count.funcs = totalFunctions
       this.count.tasks = totalTasks
 
-      this.size.code = this.formatBytes(totalCodeSize)
-      this.size.tasks = this.formatBytes(totalTaskSize)
+      this.size.code = totalCodeSize
+      this.size.tasks = totalTaskSize
 
       this.loading = false
     }).catch(() => {
