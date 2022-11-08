@@ -5,7 +5,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
-                             title="Tasks"
+                             title="Requested Datasets"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
@@ -141,7 +141,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
-                             title="Users"
+                             title="Platform Users"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
