@@ -14,7 +14,7 @@
             <template #controls>
               <b-button to="task" class="paginated-table-btn" block>
                 <b-icon-plus class="align-middle" font-scale="1.5" />
-                <span class="align-middle">New Task</span>
+                <span class="align-middle">Create New Dataset</span>
               </b-button>
             </template>
             <template #cell(uuid)="row">
