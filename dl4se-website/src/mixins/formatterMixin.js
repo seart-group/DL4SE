@@ -2,10 +2,11 @@ export default {
     methods: {
         format(value, decimals = 2, k = 1000, units = ["", "K", "M", "B", "T"]) {
             if (!value) return `0${decimals ? '.' : ''}${Array(decimals).fill(0).join('')} ${units[0]}`
-            const formatter = new Intl.NumberFormat("en-GB", {
+            const formatter = new Intl.NumberFormat("en-US", {
                 minimumFractionDigits: decimals,
                 maximumFractionDigits: decimals,
-                roundingIncrement: 1
+                roundingIncrement: 1,
+                useGrouping: false
             })
             const i = Math.floor(Math.log(value) / Math.log(k))
             const f = formatter.format(value / Math.pow(k, i))
