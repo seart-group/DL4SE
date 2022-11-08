@@ -1,7 +1,19 @@
-@mixin fixed-width($pixels)
+@mixin min-width($pixels)
   min-width: $pixels+px!important
+
+@mixin max-width($pixels)
   max-width: $pixels+px!important
 
-@mixin fixed-height($pixels)
+@mixin fixed-width($pixels)
+  @include min-width($pixels)
+  @include max-width($pixels)
+
+@mixin min-height($pixels)
   min-height: $pixels+px!important
+
+@mixin max-height($pixels)
   max-height: $pixels+px!important
+
+@mixin fixed-height($pixels)
+  @include min-height($pixels)
+  @include max-height($pixels)

@@ -5,16 +5,16 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
-                             title="Tasks"
+                             title="Requested Datasets"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
           >
             <template #controls>
-              <b-button to="task" class="paginated-table-btn" block>
+              <b-button :to="{ name: 'task' }" block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
-                <span class="align-middle">New Task</span>
+                <span class="align-middle">Create New Dataset</span>
               </b-button>
             </template>
             <template #cell(uuid)="row">
@@ -141,7 +141,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
-                             title="Users"
+                             title="Platform Users"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
