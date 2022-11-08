@@ -42,7 +42,7 @@
             <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
           </b-button>
         </b-col>
-        <b-col md="auto" cols="12">
+        <b-col md="auto" cols="12" v-if="showControls">
           <slot name="controls" />
         </b-col>
       </b-row>
@@ -83,6 +83,11 @@ export default {
     refreshRate: {
       type: Number,
       default: -1
+    }
+  },
+  computed: {
+    showControls() {
+      return !!this.$slots.controls?.[0]
     }
   },
   methods: {
