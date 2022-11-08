@@ -42,7 +42,7 @@
             <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
           </b-button>
         </b-col>
-        <b-col md="auto" cols="12" v-if="showControls">
+        <b-col md="auto" cols="12" class="ml-md-3" v-if="showControls">
           <slot name="controls" />
         </b-col>
       </b-row>

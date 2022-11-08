@@ -12,7 +12,7 @@
                              :provider="taskProvider"
           >
             <template #controls>
-              <b-button to="task" class="paginated-table-btn" block>
+              <b-button :to="{ name: 'task' }" block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
