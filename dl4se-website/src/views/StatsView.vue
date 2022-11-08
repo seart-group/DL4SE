@@ -10,22 +10,23 @@
                 <b-skeleton width="100%" />
                 <b-skeleton width="100%" />
                 <b-skeleton width="100%" class="d-lg-none" />
-                <b-skeleton width="100%" class="d-lg-none d-md-none" />
-                <b-skeleton width="100%" class="d-lg-none d-md-none" />
+                <b-skeleton width="100%" class="d-md-none d-lg-none" />
+                <b-skeleton width="100%" class="d-md-none d-lg-none" />
+                <b-skeleton width="100%" class="d-md-none d-lg-none" />
 
-                <b-skeleton width="80%" class="d-md-none" />
-                <b-skeleton width="25%" class="d-lg-none d-md-block d-none" />
-                <b-skeleton width="33%" class="d-xl-none d-lg-block d-none" />
+                <b-skeleton width="33%" class="d-lg-none d-md-block d-none" />
+                <b-skeleton width="45%" class="d-xl-none d-lg-block d-none" />
+                <b-skeleton width="05%" class="d-xl-block d-md-none" />
               </div>
             </template>
             <template #default>
               <p class="text-justify">
-                DL4SE is host to <strong>{{ count.funcs.toLocaleString() }}</strong> functions,
-                sourced from <strong>{{ count.files.toLocaleString() }}</strong> files,
-                originating from <strong>{{ count.repos.toLocaleString() }}</strong> repositories.
+                DL4SE is host to <strong v-b-tooltip="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</strong> functions,
+                sourced from <strong v-b-tooltip="count.files.toLocaleString()">{{ formatNatural(count.files) }}</strong> files,
+                originating from <strong v-b-tooltip="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</strong> repositories.
                 In total, we have mined <strong>{{ formatBytes(size.code) }}</strong> of source code.
-                The platform currently has <strong>{{ count.users.toLocaleString() }}</strong> registered users,
-                and since its inception <strong>{{ count.tasks.toLocaleString() }}</strong> datasets have been constructed.
+                The platform currently has <strong>{{ count.users }}</strong> registered users,
+                and since its inception <strong>{{ count.tasks }}</strong> datasets have been constructed.
                 This amounts to roughly <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
               </p>
             </template>

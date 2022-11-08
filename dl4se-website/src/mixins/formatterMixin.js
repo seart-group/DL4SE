@@ -14,6 +14,9 @@ export default {
         formatNumber(value) {
             return this.format(value, 0)
         },
+        formatNatural(value) {
+            return this.format(value, 1, 1000, ["", "thousand", "million", "billion", "trillion"])
+        },
         formatBytes(value) {
             return this.format(value, 2, 1024, ['B', 'KB', 'MB', 'GB', 'TB', 'PB'])
         }
