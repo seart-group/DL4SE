@@ -34,7 +34,7 @@
         <b-col md="auto" col>
           <b-dropdown-select header="Choose Page Size" placeholder="Page Size"
                              v-model="perPage" :options="perPageOptions"
-                             class="mb-3"
+                             class="paginated-table-dropdown"
           />
         </b-col>
         <b-col cols="auto">
