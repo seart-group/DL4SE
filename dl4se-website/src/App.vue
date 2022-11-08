@@ -20,22 +20,21 @@
           >
             About
           </b-nav-item>
-          <b-nav-item :to="{ name: 'docs' }"
-                      :active="isOnPage('docs')"
-          >
-            Tutorial
-          </b-nav-item>
         </template>
         <template #nav-items-right>
-          <b-nav-item-dropdown right v-if="$store.getters.getToken">
-            <template #button-content>
-              <b-icon-person-fill />
-            </template>
-            <b-dropdown-item disabled>Profile</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'dashboard' }" :disabled="!connected">Dashboard</b-dropdown-item>
-            <b-dropdown-divider />
-            <b-dropdown-item @click="showLogOutModal">Log Out</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <template v-if="$store.getters.getToken">
+            <b-nav-item :to="{ name: 'dashboard' }"
+                        :active="isOnPage('dashboard')"
+                        :disabled="!connected"
+            >
+              Dashboard
+            </b-nav-item>
+            <b-nav-item @click="showLogOutModal"
+                        :disabled="!connected"
+            >
+              Log Out
+            </b-nav-item>
+          </template>
           <template v-else>
             <b-nav-item :to="{ name: 'login', query: { target: loginTarget } }"
                         :active="isOnPage('login')"
