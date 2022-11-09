@@ -27,19 +27,25 @@ $enable-responsive-font-sizes: true
 
 html
   position: relative
-  min-height: 100vh
 
 body
   color: black
+  min-height: 100vh
+  @extend .m-0
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-between
   @extend .text-regular
 
-@include media-breakpoint-up(xs)
-  main
-    padding-bottom: 160px
+body > header
+  @extend .d-block
 
-@include media-breakpoint-up(md)
-  main
-    padding-bottom: 40px
+body > main
+  @extend .d-block
+  @extend .mb-auto
+
+body > footer
+  @extend .d-block
 
 .bg-light-gray
   background-color: $light-gray
@@ -121,9 +127,3 @@ body
 
 .text-monospace
   font-family: 'Inconsolata', Helvetica, Arial, sans-serif
-
-.router-view
-  @extend .my-lg-5
-  @extend .my-md-4
-  @extend .my-sm-3
-  @extend .my-3
