@@ -2,7 +2,7 @@
   <b-dialog-page
       id="download" v-if="show"
       title="Download will commence shortly"
-      description="You will be redirected back to the dashboard shortly..."
+      :description="`You will be redirected back to the dashboard in ${timer}...`"
   />
 </template>
 
@@ -22,7 +22,6 @@ export default {
           const token = res.data
           window.location.href = `${process.env.VUE_APP_API_BASE_URL}/task/download/${this.uuid}?token=${token}`
           this.show = true
-          setTimeout(() => { this.$router.push({ name: 'dashboard' }) }, 5000)
         })
         .catch(err => {
           const status = err.response.status
@@ -69,8 +68,23 @@ export default {
           }
         })
   },
+  watch: {
+    timer: {
+      handler(value) {
+        if (value > 0) {
+          setTimeout(() => {
+            this.timer -= 1
+          }, 1000)
+        } else {
+          this.$router.push({ name: 'dashboard' })
+        }
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
+      timer: 5,
       show: false
     }
   }
