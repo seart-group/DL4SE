@@ -1,5 +1,6 @@
 <template functional>
   <div id="documentation">
+    <h1 class="page-title">Documentation</h1>
     <h3 id="granularity" class="page-section">Granularity</h3>
     <div class="page-section">
       <p class="page-text">
