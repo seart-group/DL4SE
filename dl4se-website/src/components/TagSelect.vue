@@ -24,7 +24,7 @@
         <b-form-text v-if="isDuplicate" class="m-0 pb-2">
           {{ duplicateTagText }}
         </b-form-text>
-        <div :class="{ 'tag-select-tags-container': Boolean(tags.length), 'd-none': !Boolean(tags.length) }">
+        <div :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'">
           <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="mr-1" @remove="removeTag(tag)">
             {{ tag }}
           </b-form-tag>

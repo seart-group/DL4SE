@@ -23,12 +23,18 @@
   @extend .border-top-0
   @extend .border-right-0
 
-.tag-select-tags-container
+%tag-select-tags-container
   @include fixed-height(75)
-  @extend .w-100
   @extend .d-inline-block
+  @extend .w-100
+
+.tag-select-tags-container
+  @extend %tag-select-tags-container
   @extend .overflow-auto
   @extend .p-2
   @extend .bg-light-gray
   @extend .border-secondary
   @extend .border-bottom
+
+.tag-select-tags-container-hidden
+  @extend %tag-select-tags-container
