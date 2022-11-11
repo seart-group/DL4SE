@@ -41,11 +41,11 @@
 
 %tag-select-tags-container
   @include fixed-height(75)
-  @extend .d-inline-block
   @extend .w-100
 
 .tag-select-tags-container
   @extend %tag-select-tags-container
+  @extend .d-inline-block
   @extend .overflow-auto
   @extend .p-2
   @extend .bg-light-gray
@@ -54,3 +54,5 @@
 
 .tag-select-tags-container-hidden
   @extend %tag-select-tags-container
+  @extend .d-none
+  @extend .d-md-inline-block
