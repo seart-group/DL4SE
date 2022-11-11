@@ -1,6 +1,7 @@
 $enable-responsive-font-sizes: true
 
-@import 'node_modules/bootstrap/scss/bootstrap'
+@import "node_modules/bootstrap/scss/bootstrap"
+@import "node_modules/bootstrap-vue/src/index"
 @import "variables"
 @import "mixins"
 @import "svg"
@@ -121,6 +122,35 @@ body > footer
 .page-list-item
   margin-left: 25px!important
   @extend .mb-2
+
+.task-create-form
+  @extend .my-lg-5
+  @extend .my-md-4
+  @extend .my-sm-3
+  @extend .my-3
+
+%task-create-form-section
+  background-color: #f2f2f2ee!important
+  @extend .border-left
+  @extend .border-right
+
+.task-create-form-section-top
+  @extend %task-create-form-section
+  @extend .border-top
+
+.task-create-form-section-middle
+  @extend %task-create-form-section
+
+.task-create-form-section-bottom
+  @extend %task-create-form-section
+  @extend .border-bottom
+
+.task-create-form-section-title
+  @extend .my-2
+  @extend .border-2
+  @extend .border-bottom
+  @extend .border-dark
+  @extend .font-weight-bold
 
 .text-regular
   font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif

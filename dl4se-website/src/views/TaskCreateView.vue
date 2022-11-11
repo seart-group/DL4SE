@@ -1,11 +1,11 @@
 <template>
   <div id="task" v-if="show">
     <h1 class="page-title">Specify your dataset</h1>
-    <div class="task-form">
-      <b-container class="task-form-section-top">
+    <div class="task-create-form">
+      <b-container class="task-create-form-section-top">
         <b-row>
           <b-col>
-            <h5 class="task-form-section-title">Repository Sample Characteristics</h5>
+            <h5 class="task-create-form-section-title">Repository Sample Characteristics</h5>
           </b-col>
         </b-row>
         <b-row class="justify-content-md-between align-items-xl-center">
@@ -55,10 +55,10 @@
           </b-col>
         </b-row>
       </b-container>
-      <b-container class="py-4 task-form-section-middle">
+      <b-container class="py-4 task-create-form-section-middle">
         <b-row>
           <b-col>
-            <h5 class="task-form-section-title">Dataset Characteristics</h5>
+            <h5 class="task-create-form-section-title">Dataset Characteristics</h5>
           </b-col>
         </b-row>
         <b-row>
@@ -96,10 +96,10 @@
           </b-col>
         </b-row>
       </b-container>
-      <b-container class="pb-4 task-form-section-middle">
+      <b-container class="pb-4 task-create-form-section-middle">
         <b-row>
           <b-col>
-            <h5 class="task-form-section-title">Instance Filters</h5>
+            <h5 class="task-create-form-section-title">Instance Filters</h5>
           </b-col>
         </b-row>
         <b-row align-h="center">
@@ -154,10 +154,10 @@
           </b-col>
         </b-row>
       </b-container>
-      <b-container class="task-form-section-middle">
+      <b-container class="task-create-form-section-middle">
         <b-row>
           <b-col>
-            <h5 class="task-form-section-title">Instance Processing</h5>
+            <h5 class="task-create-form-section-title">Instance Processing</h5>
           </b-col>
         </b-row>
         <b-row align-h="between">
@@ -208,7 +208,7 @@
           </b-col>
         </b-row>
       </b-container>
-      <b-container class="py-4 task-form-section-bottom">
+      <b-container class="py-4 task-create-form-section-bottom">
         <b-row align-h="center">
           <b-col cols="auto">
             <b-button :disabled="v$.$invalid" @click="submit" class="btn-secondary-border-2">Generate Dataset</b-button>
