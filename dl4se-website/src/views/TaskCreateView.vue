@@ -203,7 +203,11 @@
               <b-form-checkbox id="abstract-enabled" v-model="task.processing.abstract_code">
                 Abstract instances using the following idioms:
               </b-form-checkbox>
-              <b-tag-select id="abstract-idioms" v-model="task.processing.abstract_idioms" placeholder="Idiom..." />
+              <b-tag-select id="abstract-idioms"
+                            placeholder="Idiom..."
+                            v-model="task.processing.abstract_idioms"
+                            :disabled="!task.processing.abstract_code"
+              />
             </b-form-group>
           </b-col>
         </b-row>

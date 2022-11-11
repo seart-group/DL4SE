@@ -11,11 +11,16 @@
         isInvalid, invalidTagText, isDuplicate, duplicateTagText
       }">
         <b-input-group class="tag-select-input-group">
-          <b-form-input v-bind="inputAttrs" v-on="inputHandlers" :placeholder="placeholder" class="tag-select-input" />
+          <b-form-input v-bind="inputAttrs"
+                        v-on="inputHandlers"
+                        :disabled="disabled"
+                        :placeholder="placeholder"
+                        class="tag-select-input"
+          />
           <b-input-group-append>
-            <b-button class="tag-select-btn" @click="addTag()">Add</b-button>
-            <b-button class="tag-select-btn" @click="upload">Upload</b-button>
-            <b-button class="tag-select-btn" @click="reset">Reset</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="addTag()">Add</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="upload">Upload</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="reset">Reset</b-button>
           </b-input-group-append>
         </b-input-group>
         <b-form-invalid-feedback :state="!isInvalid" class="tag-select-feedback-invalid">
@@ -43,6 +48,7 @@ export default {
       type: Array,
       required: true
     },
+    disabled: Boolean,
     separator: {
       type: String,
       default: "\n"
@@ -78,6 +84,11 @@ export default {
     }
   },
   watch: {
+    disabled: {
+      handler() {
+        this.reset()
+      }
+    },
     tags: {
       handler() {
         this.$emit("input", this.tags)

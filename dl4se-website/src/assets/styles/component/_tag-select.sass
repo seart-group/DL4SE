@@ -17,6 +17,15 @@
   @extend .border-top-0
   @extend .border-right-0
 
+.tag-select-input:disabled,
+.tag-select-input.disabled
+  color: $normal-gray-muted
+  background-color: $light-gray-muted
+
+.tag-select-input:disabled::placeholder,
+.tag-select-input.disabled::placeholder
+  color: $normal-gray-muted
+
 .tag-select-btn
   @extend .bg-light-gray
   @extend .btn-outline-secondary
@@ -25,6 +34,12 @@
   @extend .border-left-0
   @extend .border-top-0
   @extend .border-right-0
+
+.tag-select-btn:disabled,
+.tag-select-btn.disabled
+  color: $normal-gray-muted
+  background-color: $light-gray-muted
+  opacity: 1
 
 %tag-select-feedback
   @extend .m-0
