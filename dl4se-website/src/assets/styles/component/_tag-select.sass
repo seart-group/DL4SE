@@ -6,6 +6,9 @@
   @extend .bg-transparent
   @extend .border-0
 
+.tag-select-input-group
+  @extend .py-2
+
 .tag-select-input
   @extend .bg-light-gray
   @extend .rounded-0
@@ -22,6 +25,19 @@
   @extend .border-left-0
   @extend .border-top-0
   @extend .border-right-0
+
+%tag-select-feedback
+  @extend .m-0
+  @extend .pb-2
+
+.tag-select-feedback-text
+  @extend %tag-select-feedback
+
+.tag-select-feedback-invalid
+  @extend %tag-select-feedback
+
+.tag-select-tag
+  @extend .mr-1
 
 %tag-select-tags-container
   @include fixed-height(75)
