@@ -5,13 +5,17 @@
               :key="idx" :class="cardClasses(idx)" no-body
       >
         <b-card-body>
-          <b-link :disabled="needsConnection && !connected"
-                  class="card-link text-secondary"
-                  :to="linksTo"
-          >
-            <h4 class="card-title">{{ title }}</h4>
-          </b-link>
-          <p class="card-text">{{ description }}</p>
+          <b-card-title>
+            <b-link :to="linksTo"
+                    :disabled="needsConnection && !connected"
+                    class="card-link text-secondary"
+            >
+              {{ title }}
+            </b-link>
+          </b-card-title>
+          <b-card-text>
+            {{ description }}
+          </b-card-text>
         </b-card-body>
       </b-card>
     </div>
