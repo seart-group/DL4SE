@@ -30,15 +30,15 @@ export default {
   props: {
     connected: Boolean
   },
-  data() {
-    return {
-      cards: [
-        {
-          title: "Code Completion",
-          description: "Generate a dataset for Deep Learning models specializing in code completion.",
-          linksTo: { name: "task" },
-          needsConnection: true
-        }
+  computed: {
+    cards() {
+      return [
+          {
+            title: "Code Completion",
+            description: "Generate a dataset for Deep Learning models specializing in code completion.",
+            linksTo: { name: "task" },
+            needsConnection: true
+          }
       ]
     }
   }
