@@ -1,13 +1,18 @@
 <template>
   <div id="home">
-      <div class="logo">
+    <div class="logo">
+      <transition name="fade" appear>
         <div class="logo-image">
           <span class="logo-image-negative">DL</span>
           <span class="logo-image-positive">4SE</span>
         </div>
+      </transition>
+      <transition name="fade" appear>
         <div class="logo-tagline">
           <span> Deep Learning For Software Engineering</span>
         </div>
+      </transition>
+      <transition name="fade" appear>
         <div class="logo-jump">
           <b-link v-scroll-to="'#datasets'" class="logo-jump-link">
             <b-icon-chevron-double-down />
@@ -15,7 +20,8 @@
             <b-icon-chevron-double-down />
           </b-link>
         </div>
-      </div>
+      </transition>
+    </div>
     <div id="datasets" class="card-stack">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
               :key="idx" class="border rounded-0 card-background my-4" no-body

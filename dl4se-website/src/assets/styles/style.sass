@@ -6,6 +6,7 @@ $enable-responsive-font-sizes: true
 @import "mixins"
 @import "svg"
 @import "typography"
+@import "transition"
 @import "override"
 @import "extension"
 @import "component"
@@ -64,6 +65,12 @@ body > footer
 .logo-image
   font-size: 16vw!important
   @extend .text-center
+
+.logo-tagline
+  transition-delay: 1s
+
+.logo-jump
+  transition-delay: 1.5s
 
 .logo-image-negative
   color: $white!important
