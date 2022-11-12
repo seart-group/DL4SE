@@ -1,6 +1,22 @@
 <template>
   <div id="home">
-    <div class="card-stack">
+      <div class="logo">
+        <div class="logo-image">
+          <span class="logo-image-negative">DL</span>
+          <span class="logo-image-positive">4SE</span>
+        </div>
+        <div class="logo-tagline">
+          <span> Deep Learning For Software Engineering</span>
+        </div>
+        <div class="logo-jump">
+          <b-link href="#options" class="logo-jump-link">
+            <b-icon-chevron-double-down />
+            Choose Your Dataset
+            <b-icon-chevron-double-down />
+          </b-link>
+        </div>
+      </div>
+    <div id="options" class="card-stack">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
               :key="idx" class="border rounded-0 card-background my-4" no-body
       >
