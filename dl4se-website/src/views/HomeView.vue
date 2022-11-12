@@ -2,7 +2,7 @@
   <div id="home">
     <div class="card-stack">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
-              :key="idx" :class="cardClasses(idx)" no-body
+              :key="idx" class="border rounded-0 card-background my-4" no-body
       >
         <b-card-body>
           <b-card-title>
@@ -29,17 +29,6 @@ export default {
   mixins: [ bootstrapMixin ],
   props: {
     connected: Boolean
-  },
-  methods: {
-    cardClasses(idx) {
-      return {
-        'mt-4': idx > 0,
-        'mb-4': idx < this.cards.length - 1,
-        'border': true,
-        'rounded-0': true,
-        'card-background': true
-      }
-    }
   },
   data() {
     return {
