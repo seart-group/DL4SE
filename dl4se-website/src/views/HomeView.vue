@@ -8,12 +8,12 @@
         </div>
       </transition>
       <transition name="fade" appear>
-        <div class="logo-tagline">
+        <div class="logo-tagline transition-delay-1000">
           <span> Deep Learning For Software Engineering</span>
         </div>
       </transition>
       <transition name="fade" appear>
-        <div class="logo-jump">
+        <div class="logo-jump transition-delay-1500">
           <b-link v-scroll-to="'#datasets'" class="logo-jump-link">
             <b-icon-chevron-double-down />
             Choose Your Dataset
