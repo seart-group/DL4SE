@@ -23,8 +23,15 @@
       </transition>
     </div>
     <div id="datasets" class="datasets fullscreen">
-      <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
-              :key="idx" class="border rounded-0 card-background my-4" no-body
+      <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards" :key="idx" no-body
+              :class="{
+                'border': true,
+                'rounded-0': true,
+                'card-background': true,
+                'mb-3': idx === 0,
+                'my-3': 0 < idx && idx < cards.length - 1,
+                'mt-3': idx === cards.length - 1
+              }"
       >
         <b-card-body>
           <b-card-title>
