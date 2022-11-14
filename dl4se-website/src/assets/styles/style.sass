@@ -56,16 +56,16 @@ body > footer
   border-color: $dark-red!important
 
 .fullscreen
-  min-height: 80vh!important
-  margin: 3rem !important
+  min-height: 95vh!important
 
-@include media-breakpoint-up(lg)
-  .fullscreen
-    margin: 4rem !important
+.home
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-between
 
-@include media-breakpoint-up(xl)
-  .fullscreen
-    margin: 10rem !important
+.home-scroll-link
+  @extend .text-secondary
+  @extend .text-decoration-none
 
 .logo
   @extend .d-flex
@@ -73,31 +73,26 @@ body > footer
   @extend .justify-content-center
 
 .logo-image
-  font-size: 16vw!important
-  @extend .text-center
+  font-size: clamp(6rem, 24vw, 8rem)!important
 
 .logo-image-negative
   color: $white!important
   background-color: $black!important
-  padding-left: 8vw!important
-  padding-right: 2vw!important
+  padding-left: clamp(2rem, 8vw, 4rem)!important
+  padding-right: clamp(0.5rem, 2vw, 1rem)!important
 
 .logo-image-positive
   color: $black!important
-  padding-left: 1vw!important
+  padding-left: clamp(0.25rem, 1vw, 0.5rem)!important
   font-weight: 200!important
 
 .logo-tagline
-  font-size: 3vw!important
-  @extend .text-center
+  font-size: clamp(1rem, 4.25vw, 1.5rem)!important
 
-.logo-jump
-  font-size: 2vw!important
-  @extend .text-center
-
-.logo-jump-link
-  @extend .text-secondary
-  @extend .text-decoration-none
+.summary
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-center
 
 .datasets
   @extend .d-flex
