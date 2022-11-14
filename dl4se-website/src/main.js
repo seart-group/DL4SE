@@ -36,6 +36,22 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
+Vue.directive("aos", (el, binding) => {
+  const config = binding.value
+  const modifiers = binding.modifiers
+
+  el.setAttribute("data-aos", config.animation)
+
+  el.setAttribute("data-aos-offset", config.offset || "120")
+  el.setAttribute("data-aos-delay", config.delay || "0")
+  el.setAttribute("data-aos-duration", config.duration || "400")
+  el.setAttribute("data-aos-easing", config.easing || "ease")
+  el.setAttribute("data-aos-anchor-placement", config.easing || "top-bottom")
+
+  el.setAttribute("data-aos-once", `${!!modifiers.once}`)
+  el.setAttribute("data-aos-mirror", `${!!modifiers.mirror}`)
+})
+
 new Vue({
   router,
   store,
