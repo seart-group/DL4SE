@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import {Fragment} from 'vue-frag'
 import {Chart} from "chart.js"
+import AOS from 'aos'
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
@@ -12,6 +13,7 @@ import _ from 'lodash'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'aos/dist/aos.css'
 import '@/assets/styles/style.sass'
 
 Vue.config.productionTip = false
@@ -37,5 +39,8 @@ if (process.env.NODE_ENV === 'development') {
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  mounted() {
+    AOS.init()
+  }
 }).$mount('#app')

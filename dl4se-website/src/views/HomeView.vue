@@ -4,34 +4,28 @@
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
-            <transition name="fade" appear>
-              <div class="logo-image">
-                <span class="logo-image-negative">DL</span>
-                <span class="logo-image-positive">4SE</span>
-              </div>
-            </transition>
+            <div class="logo-image" data-aos="fade" data-aos-duration="1000" data-aos-once="true">
+              <span class="logo-image-negative">DL</span>
+              <span class="logo-image-positive">4SE</span>
+            </div>
           </b-col>
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <transition name="fade" appear>
-              <div class="logo-tagline transition-delay-1000">
-                Deep Learning For Software Engineering
-              </div>
-            </transition>
+            <div class="logo-tagline" data-aos="fade" data-aos-duration="1000" data-aos-delay="1000" data-aos-once="true">
+              Deep Learning For Software Engineering
+            </div>
           </b-col>
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <transition name="fade" appear>
-              <div class="transition-delay-3000">
-                <b-link v-scroll-to="'#summary'" class="home-scroll-link">
-                  <b-icon-chevron-double-down />
-                  Scroll For More Info
-                  <b-icon-chevron-double-down />
-                </b-link>
-              </div>
-            </transition>
+            <b-link v-scroll-to="'#summary'" class="home-scroll-link"
+                    data-aos="fade" data-aos-duration="1000" data-aos-delay="2500" data-aos-once="true"
+            >
+              <b-icon-chevron-double-down />
+              Scroll For More Info
+              <b-icon-chevron-double-down />
+            </b-link>
           </b-col>
         </b-row>
       </b-container>
@@ -40,7 +34,7 @@
       <b-container>
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
-            <p class="text-justify">
+            <p class="text-justify" data-aos="fade" data-aos-duration="1000" data-aos-once="true">
               The DL4SE tool allows to easily create large-scale datasets that can be used to either run MSR studies or to
               train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you would like
               to build.
@@ -49,7 +43,9 @@
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <b-link v-scroll-to="'#datasets'" class="home-scroll-link">
+            <b-link v-scroll-to="'#datasets'" class="home-scroll-link"
+                    data-aos="fade" data-aos-duration="1000" data-aos-delay="2500" data-aos-once="true"
+            >
               <b-icon-chevron-double-down />
               Create A Dataset
               <b-icon-chevron-double-down />
@@ -60,6 +56,7 @@
     </div>
     <div id="datasets" class="datasets fullscreen">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards" :key="idx" no-body
+              data-aos="fade" data-aos-duration="1000" :data-aos-delay="(idx + 1) * 250" data-aos-once="true"
               :class="{
                 'border': true,
                 'rounded-0': true,
