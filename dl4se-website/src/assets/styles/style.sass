@@ -55,9 +55,19 @@ body > footer
   @extend .border-2
   border-color: $dark-red!important
 
-.logo
+.fullscreen
   min-height: 80vh!important
-  @extend .m-5
+  margin: 3rem !important
+
+@include media-breakpoint-up(lg)
+  .fullscreen
+    margin: 4rem !important
+
+@include media-breakpoint-up(xl)
+  .fullscreen
+    margin: 10rem !important
+
+.logo
   @extend .d-flex
   @extend .flex-column
   @extend .justify-content-center
@@ -89,9 +99,7 @@ body > footer
   @extend .text-secondary
   @extend .text-decoration-none
 
-.card-stack
-  min-height: 80vh!important
-  @extend .m-5
+.datasets
   @extend .d-flex
   @extend .flex-wrap
   @extend .flex-column

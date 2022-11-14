@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <div class="logo">
+    <div id="logo" class="logo fullscreen">
       <transition name="fade" appear>
         <div class="logo-image">
           <span class="logo-image-negative">DL</span>
@@ -22,7 +22,7 @@
         </div>
       </transition>
     </div>
-    <div id="datasets" class="card-stack">
+    <div id="datasets" class="datasets fullscreen">
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
               :key="idx" class="border rounded-0 card-background my-4" no-body
       >
