@@ -74,7 +74,7 @@ import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 
 export default {
-  name: 'b-config-table',
+  name: "b-config-table",
   props: {
     id: String,
     supplier: {
