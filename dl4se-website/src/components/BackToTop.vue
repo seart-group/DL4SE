@@ -1,14 +1,9 @@
-<template>
-  <div class="back-to-top">
-    <b-button v-scroll-to="target" class="back-to-top-btn">
-      <b-icon-chevron-double-up />
-    </b-button>
-  </div>
-</template>
-
 <script>
+import {BButton, BIconChevronDoubleUp} from "bootstrap-vue"
+
 export default {
   name: "BackToTop",
+  functional: true,
   props: {
     target: {
       type: String,
@@ -17,6 +12,36 @@ export default {
         return /#\S+/.test(value)
       }
     }
+  },
+  render(createElement, { props, data }) {
+    return createElement(
+        "div",
+        {
+          props: props,
+          attrs: data.attrs,
+          class: `${data.staticClass} back-to-top`,
+          on: data.listeners,
+          directives: data.directives
+        },
+        [
+            createElement(
+                BButton,
+                {
+                  class: "back-to-top-btn",
+                  directives: [
+                    {
+                      name: "scroll-to",
+                      rawName: "v-scroll-to",
+                      value: props.target
+                    }
+                  ]
+                },
+                [
+                    createElement(BIconChevronDoubleUp)
+                ]
+            )
+        ]
+    )
   }
 }
 </script>
