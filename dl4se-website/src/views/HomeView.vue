@@ -83,16 +83,27 @@
         </b-card-body>
       </b-card>
     </div>
+    <transition name="fade">
+      <b-back-to-top target="#home" v-show="showBackToTop" />
+    </transition>
   </div>
 </template>
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin"
+import scrollMixin from "@/mixins/scrollMixin"
+import BBackToTop from "@/components/BackToTop"
 
 export default {
-  mixins: [ bootstrapMixin ],
+  components: { BBackToTop },
+  mixins: [ bootstrapMixin, scrollMixin ],
   props: {
     connected: Boolean
+  },
+  computed: {
+    showBackToTop() {
+      return this.scroll.y > 400
+    }
   },
   data() {
     return {
