@@ -60,9 +60,12 @@
       <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards" :key="idx" no-body
               v-aos.once="{ animation: 'fade', duration: 1000, delay: (idx + 1) * 250 }"
               :class="{
-                'border': true,
+                'bg-light-gray': true,
+                'border-secondary': true,
+                'border-left-0': true,
+                'border-top-0': true,
+                'border-right-0': true,
                 'rounded-0': true,
-                'card-background': true,
                 'mb-3': idx === 0,
                 'my-3': 0 < idx && idx < cards.length - 1,
                 'mt-3': idx === cards.length - 1
