@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     showBackToTop() {
-      return this.scroll.y > 400
+      return this.scroll.y > 100
     }
   },
   data() {
