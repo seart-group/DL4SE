@@ -12,7 +12,7 @@
                              :provider="taskProvider"
           >
             <template #controls>
-              <b-button :to="{ name: 'task' }" block class="paginated-table-btn">
+              <b-button :to="{ name: 'code-regular' }" block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
@@ -111,7 +111,7 @@
                   </b-button>
                 </template>
                 <b-button class="btn-secondary-border-2 mr-1" size="sm"
-                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                          :to="{ name: 'code-regular', params: { uuid: row.item.uuid } }"
                           v-b-tooltip="'Edit Task'"
                 >
                   <b-icon-pencil-square />

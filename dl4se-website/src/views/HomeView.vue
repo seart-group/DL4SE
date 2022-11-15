@@ -114,7 +114,7 @@ export default {
         {
           title: "Code Completion",
           description: "Generate a dataset for Deep Learning models specializing in code completion.",
-          linksTo: { name: "task" },
+          linksTo: { name: "code-regular" },
           needsConnection: true
         }
       ]
