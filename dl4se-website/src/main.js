@@ -42,9 +42,9 @@ Vue.directive("aos", (el, binding) => {
 
   el.setAttribute("data-aos", config.animation)
 
-  el.setAttribute("data-aos-offset", config.offset || "120")
-  el.setAttribute("data-aos-delay", config.delay || "0")
-  el.setAttribute("data-aos-duration", config.duration || "400")
+  el.setAttribute("data-aos-offset", `${config.offset ?? 120}`)
+  el.setAttribute("data-aos-delay", `${config.delay ?? 0}`)
+  el.setAttribute("data-aos-duration", `${config.duration ?? 400}`)
   el.setAttribute("data-aos-easing", config.easing || "ease")
   el.setAttribute("data-aos-anchor-placement", config.easing || "top-bottom")
 
