@@ -31,9 +31,8 @@ Vue.prototype.$_ = _
 Vue.component('fragment', Fragment)
 
 if (process.env.NODE_ENV === 'development') {
-  import('vue-lorem-ipsum').then(({ LoremIpsum }) => {
-    Vue.component('lorem-ipsum', LoremIpsum)
-  })
+  const { LoremIpsum } = require('vue-lorem-ipsum')
+  Vue.component('lorem-ipsum', LoremIpsum)
 }
 
 Vue.prototype.$AOS = AOS
