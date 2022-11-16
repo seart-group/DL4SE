@@ -1,12 +1,12 @@
 <template>
-  <div class="dialog">
-    <h1 class="page-title">{{ title }}</h1>
-    <h3 class="page-description" v-if="description">
+  <div class="dialog-page">
+    <h1 class="dialog-page-title">{{ title }}</h1>
+    <h3 class="dialog-page-description" v-if="description">
       {{ description }}
     </h3>
-    <b-container class="dialog-container">
+    <b-container class="dialog-page-container">
       <b-row align-h="center">
-        <b-col xl="2" lg="2" md="3" sm="12" cols="12" class="dialog-column"
+        <b-col xl="2" lg="2" md="3" sm="12" cols="12" class="dialog-page-column"
                v-for="({text, icon, action}, idx) in actions" :key="idx"
         >
           <b-button class="btn-secondary-border-2" :disabled="disabled" @click="disabled = true; action();">
