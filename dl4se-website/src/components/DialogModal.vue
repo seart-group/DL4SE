@@ -1,20 +1,9 @@
-<template>
-  <b-modal :id="id" :title="title"
-           content-class="dialog-modal-content"
-           header-class="dialog-modal-header"
-           body-class="dialog-modal-body"
-           footer-class="dialog-modal-footer"
-           scrollable centered
-  >
-    <template #modal-footer>
-      <slot />
-    </template>
-  </b-modal>
-</template>
-
 <script>
+import {BModal} from "bootstrap-vue"
+
 export default {
   name: "b-dialog-modal",
+  functional: true,
   props: {
     id: {
       type: String,
@@ -24,6 +13,29 @@ export default {
       type: String,
       required: true
     }
+  },
+  render(createElement, { props, data, children }) {
+    return createElement(
+        BModal,
+        {
+          props: {
+            id: props.id,
+            title: props.title,
+            contentClass: "dialog-modal-content",
+            headerClass: "dialog-modal-header",
+            bodyClass: "dialog-modal-body",
+            footerClass: "dialog-modal-footer",
+            scrollable: true,
+            centered: true
+          },
+          attrs: data.attrs,
+          on: data.listeners,
+          scopedSlots: {
+            "modal-footer": () => children
+          }
+        },
+        []
+    )
   }
 }
 </script>
