@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
+Vue.prototype.$AOS = AOS
 Vue.directive("aos", (el, binding) => {
   const config = binding.value
   const modifiers = binding.modifiers
@@ -57,6 +58,6 @@ new Vue({
   store,
   render: h => h(App),
   mounted() {
-    AOS.init()
+    this.$AOS.init()
   }
 }).$mount('#app')
