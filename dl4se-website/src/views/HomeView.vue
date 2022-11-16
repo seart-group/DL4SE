@@ -35,11 +35,7 @@
       <b-container>
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
-            <p class="text-justify" v-aos.once="{ animation: 'fade', duration: 1000 }">
-              The DL4SE tool allows to easily create large-scale datasets that can be used to either run MSR studies or to
-              train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you would like
-              to build.
-            </p>
+            <b-text-carousel :slides="slides" v-aos.once="{ animation: 'fade', duration: 1000 }" />
           </b-col>
         </b-row>
         <b-row align-h="center">
@@ -96,9 +92,10 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import scrollMixin from "@/mixins/scrollMixin"
 import BBackToTop from "@/components/BackToTop"
+import BTextCarousel from "@/components/TextCarousel"
 
 export default {
-  components: { BBackToTop },
+  components: { BBackToTop, BTextCarousel },
   mixins: [ bootstrapMixin, scrollMixin ],
   props: {
     connected: Boolean,
@@ -111,6 +108,12 @@ export default {
   },
   data() {
     return {
+      slides: {
+        "Simple Dataset Construction":
+            `<em>DL4SE</em> allows you to easily create large-scale datasets that can be used to either run MSR studies
+             or to train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you
+             would like to build.`
+      },
       cards: [
         {
           title: "Generic Code Dataset",
