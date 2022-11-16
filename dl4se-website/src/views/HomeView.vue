@@ -1,6 +1,6 @@
 <template>
   <div id="home" class="home">
-    <div id="logo" class="logo fullscreen">
+    <div id="logo" class="logo fullscreen" v-if="!loggedIn">
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
@@ -31,7 +31,7 @@
         </b-row>
       </b-container>
     </div>
-    <div id="summary" class="summary fullscreen">
+    <div id="summary" class="summary fullscreen" v-if="!loggedIn">
       <b-container>
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
@@ -101,7 +101,8 @@ export default {
   components: { BBackToTop },
   mixins: [ bootstrapMixin, scrollMixin ],
   props: {
-    connected: Boolean
+    connected: Boolean,
+    loggedIn: Boolean
   },
   computed: {
     showBackToTop() {

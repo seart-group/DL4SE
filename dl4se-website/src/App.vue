@@ -53,7 +53,10 @@
       </b-smart-navbar>
     </header>
     <main>
-      <router-view :connected="connected" class="router-view" />
+      <router-view :connected="connected"
+                   :logged-in="loggedIn"
+                   class="router-view"
+      />
     </main>
     <footer>
       <b-footer :authors="authors" :organisation="organisation" />
@@ -63,7 +66,7 @@
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin"
-import BFooter from '@/components/Footer'
+import BFooter from "@/components/Footer"
 import BSmartNavbar from "@/components/SmartNavbar"
 
 export default {
@@ -72,6 +75,9 @@ export default {
   computed: {
     currentPage() {
       return this.$route.name
+    },
+    loggedIn() {
+      return !!this.$store.getters.getToken
     },
     loginTarget() {
       const isHome = this.isOnPage('home')
