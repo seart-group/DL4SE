@@ -30,11 +30,11 @@ export default new Vuex.Store({
     async logOut(context, target) {
       context.commit("clearToken")
       const isPrivate = !router.currentRoute.meta.public
-      if (isPrivate) {
+      if (isPrivate)
         await router.replace({name: "login", query: {target: target}})
-      } else {
-        await router.go(0)
-      }
+      // else
+      //   router.go(0)
+      // Uncomment previous lines to enable refresh on public page logout
     }
   },
   modules: {
