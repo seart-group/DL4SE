@@ -1,6 +1,6 @@
 <template>
   <div id="task" v-if="show">
-    <h1 class="page-title">Specify your dataset</h1>
+    <h1 class="page-title">Specify your code dataset</h1>
     <div class="task-create-form">
       <b-container class="task-create-form-section-top">
         <b-row>
@@ -180,7 +180,7 @@
                 </b-form-group>
               </b-col>
               <b-col xl="6" lg="7" md="12" sm="12" cols="12" offset-lg="1" offset-xl="2">
-                <b-form-group label-class="font-weight-bold">
+                <b-form-group label-class="font-weight-bold" v-if="!generic">
                   <template #label>
                     Mask
                     <b-link :to="{ name: 'docs', hash: '#masking' }" target="_blank" class="text-dark" tabindex="-1">
@@ -193,7 +193,7 @@
             </b-row>
           </b-col>
           <b-col xl="5" lg="5" md="6" sm="6" cols="12">
-            <b-form-group label-class="font-weight-bold">
+            <b-form-group label-class="font-weight-bold" v-if="!generic">
               <template #label>
                 Abstract
                 <b-link :to="{ name: 'docs', hash: '#abstraction' }" target="_blank" class="text-dark" tabindex="-1">
@@ -241,7 +241,8 @@ export default {
   },
   mixins: [ routerMixin, bootstrapMixin ],
   props: {
-    uuid: String
+    uuid: String,
+    generic: Boolean
   },
   computed: {
     dropdownState() {

@@ -112,7 +112,13 @@ export default {
     return {
       cards: [
         {
-          title: "Code Completion",
+          title: "Generic Code Dataset",
+          description: "Generate a dataset comprised of raw source code instances.",
+          linksTo: { name: "code-generic" },
+          needsConnection: true
+        },
+        {
+          title: "Code Completion Dataset",
           description: "Generate a dataset for Deep Learning models specializing in code completion.",
           linksTo: { name: "code-regular" },
           needsConnection: true
