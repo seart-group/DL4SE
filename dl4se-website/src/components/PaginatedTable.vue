@@ -57,7 +57,10 @@ export default {
   name: "b-paginated-table",
   components: { BDropdownSelect },
   props: {
-    id: String,
+    id: {
+      type: String,
+      required: true
+    },
     title: String,
     fields: {
       type: Array,
@@ -65,10 +68,7 @@ export default {
         return []
       }
     },
-    primaryKey: {
-      type: String,
-      required: false
-    },
+    primaryKey: String,
     totalItems: {
       type: Number,
       required: true,
