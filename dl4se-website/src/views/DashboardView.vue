@@ -12,10 +12,14 @@
                              :provider="taskProvider"
           >
             <template #controls>
-              <b-button :to="{ name: 'code-regular' }" block class="paginated-table-btn">
+              <b-button v-b-modal.dataset-select block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
+              <b-dialog-modal id="dataset-select" title="Select Dataset">
+                <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
+                <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
+              </b-dialog-modal>
             </template>
             <template #cell(uuid)="row">
               <span v-html="row.value"
@@ -223,6 +227,7 @@ import BAbbreviation from "@/components/Abbreviation"
 import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
+import BDialogModal from "@/components/DialogModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
@@ -235,6 +240,7 @@ export default {
     BConfigTable,
     BContentArea,
     BDetailsModal,
+    BDialogModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
