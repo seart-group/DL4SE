@@ -27,7 +27,13 @@ export default {
             sticky: true
           },
           attrs: data.attrs,
-          class: ["smart-navbar", data.staticClass].filter(Boolean).join(" "),
+          class: {
+            "smart-navbar": true,
+            ...data.class || {},
+            ...Object.fromEntries(
+                data.staticClass?.split(" ").map(sc => [sc, true]) || []
+            )
+          },
           on: data.listeners,
           directives: data.directives
         },

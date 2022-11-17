@@ -19,7 +19,13 @@ export default {
         {
           props: props,
           attrs: data.attrs,
-          class: ["back-to-top", data.staticClass].filter(Boolean).join(" "),
+          class: {
+            "back-to-top": true,
+            ...data.class || {},
+            ...Object.fromEntries(
+                data.staticClass?.split(" ").map(sc => [sc, true]) || []
+            )
+          },
           on: data.listeners,
           directives: data.directives
         },

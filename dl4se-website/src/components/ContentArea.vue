@@ -10,7 +10,13 @@ export default {
         {
           props: props,
           attrs: data.attrs,
-          class: ["content-area", data.staticClass].filter(Boolean).join(" "),
+          class: {
+            "content-area": true,
+            ...data.class || {},
+            ...Object.fromEntries(
+                data.staticClass?.split(" ").map(sc => [sc, true]) || []
+            )
+          },
           on: data.listeners
         },
         children
