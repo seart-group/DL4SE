@@ -3,7 +3,7 @@
     <h3 id="granularity" class="page-section">Granularity</h3>
     <div class="page-section">
       <p class="page-text">
-        We currently support instance selection at two granularity levels:
+        You can build your dataset by considering as a single instance either an entire file or a function:
       </p>
       <b-table-simple stacked="md" borderless>
         <b-tbody>
@@ -16,20 +16,20 @@
           <b-tr>
             <b-td><em>Function</em></b-td>
             <b-td>
-              Corresponds to individual code snippets of source functions present in the aforementioned files.
+              Corresponds to individual code functions present in the aforementioned files and extracted via parsing.
             </b-td>
           </b-tr>
         </b-tbody>
       </b-table-simple>
       <p class="page-text">
-        Regardless of granularity, we offer the following data for each instance:
+        Regardless of granularity, we provide the following data for each instance:
       </p>
       <b-table-simple stacked="md" borderless>
         <b-tbody>
           <b-tr>
             <b-td><code>content</code></b-td>
             <b-td>
-              The raw or processed source code of a matching instance.
+              The raw or processed source code of an instance.
             </b-td>
           </b-tr>
           <b-tr>
@@ -41,49 +41,49 @@
           <b-tr>
             <b-td><code>characters</code></b-td>
             <b-td>
-              The total number of characters in the instance source code string.
+              The total number of characters composing the instance source code.
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>lines</code></b-td>
             <b-td>
-              The total number of lines in the instance source code string.
+              The total number of lines composing the instance source code.
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>code_tokens</code></b-td>
             <b-td>
-              The total number of code-only tokens present in the source code. These types of tokens constitute keywords,
-              identifiers, literals and non-space separators. Does not include white spaces or comment tokens.
+              The total number of code-only tokens present in the instance source code. These tokens constitute keywords,
+              identifiers, literals and non-space separators. Does not include white spaces and comment tokens.
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>total_tokens</code></b-td>
             <b-td>
-              The total number of all tokens present in the source code.
+              The total number of all tokens present in the instance source code.
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>is_test</code></b-td>
             <b-td>
-              Whether the file instance is a test file, or whether a function instance is from a test file. These types of
-              file house special code aimed at evaluating and verifying other parts of the software system. Currently, we
-              only distinguish test files by examining their <code>path</code>.
+              Whether the instance is a test file or a test case (depending on the granularity of the dataset). We
+              identify test files looking at their <code>path</code> within the project's repository.
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>is_parsed</code></b-td>
             <b-td>
-              Whether the <code>file</code> instance was successfully parsed. Unparsable instances usually have certain
-              information omitted (e.g., the token counts).
+              Whether the <code>file</code> instance was successfully parsed. If a <code>file</code> is not parsable, this means that we did not 
+              manage to extract the <code>functions</code> from it. Thus, we cannot have unparsable instances in the function-level dataset. 
+              For unparsable instances we do not compute specific information (e.g., the token counts).
             </b-td>
           </b-tr>
           <b-tr>
             <b-td><code>boilerplate_type</code></b-td>
             <b-td>
               Whether the <code>function</code> instance is one of following boilerplate types: constructor, getter,
-              setter, builder, printer (i.e. <code>toString</code>), equality comparator (i.e. <code>equals</code>) and
-              hash value computer (i.e. <code>hashCode</code>).
+              setter, builder, printer (i.e., <code>toString</code>), equality comparator (i.e., <code>equals</code>) and
+              hash value computer (i.e., <code>hashCode</code>). The identification of these functions is done by analyzing their name.
             </b-td>
           </b-tr>
         </b-tbody>
@@ -92,25 +92,21 @@
     <h3 id="ast" class="page-section">AST-based Representation</h3>
     <div class="page-section">
       <p class="page-text">
-        Certain models may benefit from information such as the structure of source code, which is why we chose to offer
-        the option of including an Abstract Syntax Tree (<code>ast</code>) representation of each exported instance, in
-        Extensible Markup Language (XML) format. However, the inclusion of this information within the dataset will
-        without a doubt increase its size drastically. Furthermore, since the AST is pre-computed for each instance at
-        mining time, any processing applied to the source code implies that the syntax tree will be recomputed to match.
-        For this reason, the inclusion of ASTs in the dataset will drastically increase the size of the dataset file,
-        and may increase the amount of time needed to export individual instances if processing is applied. Since not
-        all models require the AST, we chose to not include it by default, and leave that decision to our users.
+        Certain studies/models may benefit from information such as the AST-representation of source code, which is why we chose to offer
+        the option of including an Abstract Syntax Tree (<code>AST</code>) representation of each exported instance in
+        Extensible Markup Language (XML) format. The inclusion of this information within the dataset will increase its size drastically. 
+        Furthermore, since the AST is pre-computed for each instance at mining time, any processing applied to the source code implies that the syntax tree will be recomputed to be consistent with the code representation.
+        For this reason, the inclusion of ASTs in the dataset may also increase the time needed to create the dataset. 
       </p>
     </div>
     <h3 id="filtering" class="page-section">Filtering</h3>
     <div class="page-section">
       <h4>Repository Filters</h4>
       <p class="page-text">
-        Using these parameters, we filter the projects (repositories) from which we will source our data. The first and
-        only required criteria present in the form is the <code>language</code>. Note that specifying a value of this
+        Using these parameters, you can filter the projects (repositories) from which we will extract data. The first and
+        only required criteria present in the form is the <code>language</code>. Specifying a value for this
         filter will not match projects whose main language matches the one specified, but rather all projects that have
-        files written in that language. That being said, the lower bound filters for statistical repository
-        characteristics include those for:
+        files written in that language. You can also filter repositories by specifying a lower bound for specific characteristics:
       </p>
       <b-list-group class="mb-3">
         <b-list-group-item v-for="filter in ['commits', 'contributors', 'issues', 'stars']" :key="filter" class="border-0">
@@ -144,7 +140,7 @@
         Note that in the case of <code>tokens</code>, the column queried against depends on whether processing operations
         are applied during export. For example, removing comments from exported instances means that filtering will be
         performed according to the <code>code_tokens</code>, otherwise <code>total_tokens</code> is used. Apart from these
-        numeric attributes, we can also exclude all instances of:
+        numeric attributes, you can also exclude all instances of:
       </p>
       <b-list-group class="mb-3">
         <b-list-group-item class="border-0">
@@ -164,8 +160,7 @@
     <div class="page-section">
       <h4 id="duplicates-and-clones">Duplicates and Near-clones</h4>
       <p class="page-text">
-        One of the most frequently employed types of filters in studies involves the act of removing similar entries
-        from the dataset. We define two types of identical code instances, namely:
+        You can remove duplicated/similar entries from the dataset. This can be done by filtering out:
       </p>
       <b-table-simple stacked="md" borderless>
         <b-tbody>
@@ -178,7 +173,7 @@
           <b-tr>
             <b-td><em>Near-Clones</em></b-td>
             <b-td>
-              Those that in spite of small differences in <code>content</code>, posses the same overall <code>ast</code>
+              Those that in spite of small differences in <code>content</code>, posses the same <code>ast</code>
               structure.
             </b-td>
           </b-tr>
@@ -186,18 +181,14 @@
       </b-table-simple>
       <p class="page-text">
         By definition, duplicates are a subset of near-clones, as identical contents imply identical AST structure.
-        Note that since the act of filtering both the former and latter categories of instances involves performing a
-        special type of query that distinctly selects code based on the <code>content_hash</code> and <code>ast_hash</code>
-        respectively, the amount of time needed to export a dataset comprised of unique instances will take longer than
-        its non-unique counterpart.
+        These filters have a substantial computational cost.
       </p>
     </div>
     <h3 id="processing" class="page-section">Processing</h3>
     <div class="page-section">
       <h4 id="comment-removal">Comment Removal</h4>
       <p class="page-text">
-        For certain models, removing comment strings from source code might be beneficial. We provide comment removal
-        instance processing for two types of comments:
+        You can automatically remove two types of comments from each instance:
       </p>
       <b-table-simple stacked="md" borderless>
         <b-tbody>
@@ -210,7 +201,7 @@
           <b-tr>
             <b-td><em>Docstrings</em></b-td>
             <b-td>
-              Language-specific comments used for documentation purposes (i.e. JavaDoc for Java).
+              Language-specific comments used for documentation purposes (e.g., JavaDoc for Java).
             </b-td>
           </b-tr>
         </b-tbody>
@@ -219,7 +210,7 @@
     <div class="page-section">
       <h4 id="masking">Instance Masking</h4>
       <p class="page-text">
-        This type of instance processing replaces a certain fraction of the source code with a user-specified token.
+        This type of instance processing replaces a specified percentage of tokens with a user-specified token.
         It works as follows:
       </p>
       <ol>
@@ -227,30 +218,25 @@
           The source code of each processed instance is split into tokens;
         </li>
         <li class="page-list-item">
-          A subset of the tokens is randomly selected for masking, its size equal to the percentage specified in the
+          A subset of the tokens is randomly selected for masking accordingly to the percentage specified by the user in the
           form. Although the selection is completely random by default, checking the contiguity flag will ensure that
-          the tokens selected are all in sequence;
+          the tokens selected are contiguous;
         </li>
         <li class="page-list-item">
-          The selected tokens are replaced with the specified mask token string, where neighboring selections are
-          replaced with only a single masking token;
+          The selected tokens are replaced with the user-specified token (masking token), with contiguous tokens replaced by only a single masking token;
         </li>
         <li class="page-list-item">
           All the tokens, replaced or otherwise, are joined back together to form the new masked version of the original
           <code>content</code>. Given that there are no guarantees as to the parsability of the masked code, we do not
-          attempt to synchronize the <code>ast</code> to match.
+          attempt to synchronize the <code>AST</code> to match.
         </li>
       </ol>
     </div>
     <div class="page-section">
       <h4 id="abstraction">Instance Abstraction</h4>
       <p class="page-text">
-        Abstraction refers to the transformation of raw source code into its abstract textual counterpart, which
-        consists of keywords, separators and ID tokens in place of identifiers and literals. When subjecting
-        instances to abstraction, users have the ability to also specify idioms: identifiers and literals that occur so
-        often in source code that they can almost be considered as keywords of the language. Although they can be added
-        manually, we also support specifying them in a <code>.txt</code> format, each line of the file containing a
-        single idiom.
+        Applies to each instance the abstraction process defined by Tufano et al. in their work <a target="_blank" href="https://arxiv.org/abs/1812.08693">An Empirical Study on Learning Bug-Fixing Patches in the Wild via Neural Machine Translation</a>.
+        The user can specify the set of idioms to consider (i.e., tokens that should not be abstracted). 
       </p>
     </div>
   </div>
