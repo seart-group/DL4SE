@@ -10,7 +10,7 @@ export default {
         {
           props: props,
           attrs: data.attrs,
-          class: `${data.staticClass} content-area`,
+          class: ["content-area", data.staticClass].filter(Boolean).join(" "),
           on: data.listeners
         },
         children

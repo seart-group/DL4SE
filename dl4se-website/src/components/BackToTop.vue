@@ -19,7 +19,7 @@ export default {
         {
           props: props,
           attrs: data.attrs,
-          class: `${data.staticClass} back-to-top`,
+          class: ["back-to-top", data.staticClass].filter(Boolean).join(" "),
           on: data.listeners,
           directives: data.directives
         },

@@ -32,7 +32,7 @@ export default {
             fluid: true
           },
           attrs: data.attrs,
-          class: `${data.staticClass} footer-container`,
+          class: ["footer-container", data.staticClass].filter(Boolean).join(" "),
           on: data.listeners
         },
         [

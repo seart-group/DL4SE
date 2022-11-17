@@ -27,7 +27,7 @@ export default {
             sticky: true
           },
           attrs: data.attrs,
-          class: `${data.staticClass} smart-navbar`,
+          class: ["smart-navbar", data.staticClass].filter(Boolean).join(" "),
           on: data.listeners,
           directives: data.directives
         },
