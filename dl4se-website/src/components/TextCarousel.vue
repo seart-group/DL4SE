@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    intersectionObserverCallback(entries){
+    intersectionObserverCallback(entries) {
       entries.forEach(entry => {
         this.visible = entry.isIntersecting;
       })
@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     if (IntersectionObserver !== undefined) {
-      const observer = new IntersectionObserver(
+      this.observer = new IntersectionObserver(
           this.intersectionObserverCallback,
           {
             root: null,
@@ -48,12 +48,16 @@ export default {
             threshold: 0
           }
       )
-      observer.observe(this.$el)
+      this.observer.observe(this.$el)
     }
+  },
+  beforeDestroy() {
+    this.observer.disconnect()
   },
   data() {
     return {
-      visible: undefined
+      visible: undefined,
+      observer: undefined
     }
   }
 }
