@@ -116,7 +116,11 @@ export default {
         "Continuously Up-To-Date":
             `Our crawlers work around the clock to ensure that you are served data that is in line with the source. At
              the moment, we only mine Java source code from open source repositories hosted on GitHub. We are working on
-             integrating additional languages and features.`
+             integrating additional languages and features.`,
+        "Free & Open-Source":
+            `Register for free today and get instant access to all the dataset construction features of our platform.
+             The entire project is also open-source. You can view the source code or suggest improvements on the project
+             <a href="https://github.com/seart-group/DL4SE" target="_blank" class="text-secondary">GitHub page</a>.`
       },
       cards: [
         {
