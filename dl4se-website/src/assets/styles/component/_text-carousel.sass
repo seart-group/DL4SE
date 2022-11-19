@@ -3,7 +3,19 @@
   @extend .rounded-0
 
 .text-carousel-slide
-  @include fixed-height(300)
+  @include min-height(300)
+
+@media (min-width: 375px)
+  .text-carousel-slide
+    @include fixed-height(250)
+
+@media (min-width: 425px)
+  .text-carousel-slide
+    @include fixed-height(225)
+
+@media (min-width: 768px)
+  .text-carousel-slide
+    @include fixed-height(200)
 
 .text-carousel-slide > .carousel-caption
   color: $black!important
