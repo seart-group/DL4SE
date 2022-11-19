@@ -22,10 +22,10 @@ export default {
                     cancelTitle: "No",
                     centered: true,
                     noStacking: true,
-                    bodyClass: "confirm-dialog-body",
-                    contentClass: "confirm-dialog-content",
-                    headerClass: "confirm-dialog-header",
-                    footerClass: "confirm-dialog-footer"
+                    contentClass: "confirm-modal-content",
+                    headerClass: "confirm-modal-header",
+                    bodyClass: "confirm-modal-body",
+                    footerClass: "confirm-modal-footer"
                 }
             )
         }

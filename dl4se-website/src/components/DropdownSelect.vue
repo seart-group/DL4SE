@@ -28,6 +28,7 @@ export default {
     id: String,
     value: [String, Number],
     required: Boolean,
+    disabled: Boolean,
     placeholder: {
       type: String,
       default: "Value"
@@ -44,9 +45,6 @@ export default {
     }
   },
   computed: {
-    disabled() {
-      return !this.options.length
-    },
     toggleContent() {
       return (this.selected) ? this.selected : this.placeholder
     }

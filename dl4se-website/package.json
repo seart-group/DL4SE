@@ -17,6 +17,7 @@
     "@vue/composition-api": "^1.7.0",
     "@vuelidate/core": "^2.0.0-alpha.42",
     "@vuelidate/validators": "^2.0.0-alpha.30",
+    "aos": "^2.3.4",
     "autoprefixer": "10.4.5",
     "axios": "^0.27.2",
     "bootstrap": "^4.6.1",
@@ -31,6 +32,7 @@
     "vue-chartjs": "^4.1.2",
     "vue-frag": "^1.4.1",
     "vue-router": "^3.5.1",
+    "vue-scrollto": "^2.20.0",
     "vuex": "^3.6.2",
     "vuex-persist": "^3.1.3"
   },

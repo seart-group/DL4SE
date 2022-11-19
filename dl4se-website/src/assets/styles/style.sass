@@ -1,24 +1,15 @@
 $enable-responsive-font-sizes: true
 
-@import 'node_modules/bootstrap/scss/bootstrap'
+@import "node_modules/bootstrap/scss/bootstrap"
+@import "node_modules/bootstrap-vue/src/index"
 @import "variables"
 @import "mixins"
 @import "svg"
+@import "typography"
+@import "transition"
 @import "override"
 @import "extension"
 @import "component"
-
-@font-face
-  font-family: 'Trebuchet MS'
-  font-style: normal
-  font-weight: normal
-  src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
-
-@font-face
-  font-family: 'Inconsolata'
-  font-style: normal
-  font-weight: normal
-  src: local('Inconsolata'), url('@/assets/fonts/inconsolata.woff') format('woff')
 
 *
   margin: 0
@@ -27,19 +18,25 @@ $enable-responsive-font-sizes: true
 
 html
   position: relative
-  min-height: 100vh
 
 body
   color: black
+  min-height: 100vh
+  @extend .m-0
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-between
   @extend .text-regular
 
-@include media-breakpoint-up(xs)
-  main
-    padding-bottom: 160px
+body > header
+  @extend .d-block
 
-@include media-breakpoint-up(md)
-  main
-    padding-bottom: 40px
+body > main
+  @extend .d-block
+  @extend .mb-auto
+
+body > footer
+  @extend .d-block
 
 .bg-light-gray
   background-color: $light-gray
@@ -58,51 +55,109 @@ body
   @extend .border-2
   border-color: $dark-red!important
 
-.page-title
-  @extend .text-center
-  @extend .m-lg-5
-  @extend .m-md-4
-  @extend .m-sm-3
-  @extend .m-3
+.fullscreen
+  &.logo
+    min-height: 95vh!important
+  &.summary
+    min-height: 100vh!important
+  &.datasets
+    min-height: 88vh!important
 
-.page-description
-  @extend .text-center
-  @extend .m-lg-5
-  @extend .m-md-4
-  @extend .m-sm-3
-  @extend .m-3
-  @extend .px-lg-5
-  @extend .px-md-4
-  @extend .px-sm-3
-  @extend .px-3
+.home
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-between
 
-.page-section
-  @extend .m-lg-5
-  @extend .m-md-4
-  @extend .m-sm-3
-  @extend .m-3
+.home-scroll-link
+  @extend .text-secondary
+  @extend .text-decoration-none
 
-.page-text
-  @extend .text-justify
+.logo
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-center
 
-.page-list-item
-  margin-left: 25px!important
-  @extend .mb-2
+.logo-image
+  font-size: clamp(6rem, 24vw, 8rem)!important
 
-.text-regular
-  font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif
+.logo-image-negative
+  color: $white!important
+  background-color: $black!important
+  padding-left: clamp(2rem, 8vw, 4rem)!important
+  padding-right: clamp(0.5rem, 2vw, 1rem)!important
 
-.text-monospace
-  font-family: 'Inconsolata', Helvetica, Arial, sans-serif
+.logo-image-positive
+  color: $black!important
+  padding-left: clamp(0.25rem, 1vw, 0.5rem)!important
+  font-weight: 200!important
 
-.router-view
+.logo-tagline
+  font-size: clamp(1rem, 4.25vw, 1.5rem)!important
+
+.summary
+  @extend .d-flex
+  @extend .flex-column
+  @extend .justify-content-center
+
+.datasets
+  @extend .d-flex
+  @extend .flex-wrap
+  @extend .flex-column
+  @extend .align-content-center
+  @extend .justify-content-center
+
+.brand
+  font-size: 1.65rem!important
+  text-decoration: none!important
+
+.brand-negative
+  color: $light-gray!important
+  background-color: $dark-gray!important
+  padding-left: 1rem!important
+  padding-right: 0.25rem!important
+
+.brand-positive
+  color: $dark-gray!important
+  padding-left: 2px!important
+  font-weight: 200!important
+
+.brand:hover > .brand-negative,
+.brand:focus > .brand-negative,
+.brand:active > .brand-negative,
+.brand.active > .brand-negative
+  background-color: $black!important
+
+.brand:hover > .brand-positive,
+.brand:focus > .brand-positive,
+.brand:active > .brand-positive,
+.brand.active > .brand-positive
+  color: $black!important
+
+.task-create-form
   @extend .my-lg-5
   @extend .my-md-4
   @extend .my-sm-3
   @extend .my-3
 
-.logo-image
-  @extend .my-md-5
-  @extend .my-sm-3
-  @extend .mb-0
-  @extend .mt-n3
+%task-create-form-section
+  background-color: #f2f2f2ee!important
+  @extend .border-left
+  @extend .border-right
+
+.task-create-form-section-top
+  @extend %task-create-form-section
+  @extend .border-top
+
+.task-create-form-section-middle
+  @extend %task-create-form-section
+
+.task-create-form-section-bottom
+  @extend %task-create-form-section
+  @extend .border-bottom
+
+.task-create-form-section-title
+  @extend .my-2
+  @extend .border-2
+  @extend .border-bottom
+  @extend .border-dark
+  @extend .font-weight-bold

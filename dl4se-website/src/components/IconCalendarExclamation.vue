@@ -1,5 +1,5 @@
 <script>
-import {BIconCalendar, BIconExclamation, BIconstack} from 'bootstrap-vue'
+import {BIconCalendar, BIconExclamation, BIconstack} from "bootstrap-vue"
 
 export default {
   name: "b-icon-calendar-exclamation",

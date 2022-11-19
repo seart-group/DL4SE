@@ -1,23 +1,23 @@
 <template>
-  <div class="input-table-container">
+  <div class="config-table-container">
     <b-overlay :show="busy" variant="light">
       <b-table-simple responsive borderless :hover="hasMappings" sticky-header="370px"
-                      class="input-table-border" table-class="input-table"
+                      class="config-table-border" table-class="config-table"
       >
-        <b-thead head-variant="dark" class="input-table-header-row">
+        <b-thead head-variant="dark" class="config-table-header-row">
           <b-tr>
             <b-th>Property</b-th>
             <b-th>Setting</b-th>
           </b-tr>
         </b-thead>
-        <b-tbody class="input-table-body">
+        <b-tbody class="config-table-body">
           <template v-if="hasMappings">
             <b-tr v-for="key in Object.keys(mappings)" :key="key"
-                  class="input-table-row"
+                  class="config-table-row"
             >
               <b-td class="text-monospace">
                 <label :for="`${key}_input`"
-                       class="input-table-label"
+                       class="config-table-label"
                 >
                   {{ key }}
                 </label>
@@ -27,13 +27,13 @@
                          :state="configState(key)"
                          :disabled="busy"
                          v-model.trim="mappings[key]"
-                         class="input-table-input"
+                         class="config-table-input"
                 />
               </b-td>
             </b-tr>
           </template>
           <template v-else>
-            <b-tr class="b-table-empty-row input-table-row">
+            <b-tr class="b-table-empty-row config-table-row">
               <b-td colspan="2">
                 <div role="alert" aria-live="polite">
                   <div class="text-center my-2">
@@ -52,13 +52,13 @@
           <b-button-group>
             <b-button @click="consume"
                       :disabled="consumeDisabled"
-                      class="input-table-btn"
+                      class="config-table-btn"
             >
               <b-icon-cloud-upload /> Synchronize
             </b-button>
             <b-button @click="refresh"
                       :disabled="busy"
-                      class="input-table-btn"
+                      class="config-table-btn"
             >
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>
@@ -74,7 +74,7 @@ import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 
 export default {
-  name: 'b-config-table',
+  name: "b-config-table",
   props: {
     id: String,
     supplier: {

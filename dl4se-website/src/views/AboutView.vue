@@ -1,5 +1,6 @@
 <template functional>
   <div id="about">
+    <h1 class="page-title">About</h1>
     <h3 class="page-section">DL4SE (Deep Learning 4 Software Engineering)</h3>
     <div class="page-section">
       <p class="page-text">

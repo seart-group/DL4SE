@@ -1,78 +1,139 @@
 <template>
-  <div id="home">
-    <b-img :src="image" alt="DL4SE" class="logo-image" center fluid />
-    <div class="card-stack">
-      <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards"
-              :key="idx" :class="cardClasses(idx)" no-body
+  <div id="home" class="home">
+    <div id="logo" class="logo fullscreen" v-if="!loggedIn">
+      <b-container>
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="logo-image">
+              <span class="logo-image-negative">DL</span>
+              <span class="logo-image-positive">4SE</span>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="logo-tagline">
+              Deep Learning For Software Engineering
+            </div>
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <b-link v-scroll-to="'#summary'"
+                    v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }"
+                    class="home-scroll-link"
+            >
+              <b-icon-chevron-double-down />
+              Scroll For More Info
+              <b-icon-chevron-double-down />
+            </b-link>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+    <div id="summary" class="summary fullscreen" v-if="!loggedIn">
+      <b-container>
+        <b-row align-h="center">
+          <b-col lg="6" md="9" cols="12">
+            <b-text-carousel :slides="slides" v-aos.once="{ animation: 'fade', duration: 1000 }" />
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <b-link v-scroll-to="'#datasets'"
+                    v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }"
+                    class="home-scroll-link"
+            >
+              <b-icon-chevron-double-down />
+              Create A Dataset
+              <b-icon-chevron-double-down />
+            </b-link>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+    <div id="datasets" class="datasets fullscreen">
+      <b-card v-for="({title, description, linksTo, needsConnection}, idx) in cards" :key="idx" no-body
+              v-aos.once="{ animation: 'fade', duration: 1000, delay: (idx + 1) * 250 }"
+              :class="{
+                'bg-light-gray': true,
+                'border-secondary': true,
+                'border-left-0': true,
+                'border-top-0': true,
+                'border-right-0': true,
+                'rounded-0': true,
+                'mb-3': idx === 0,
+                'my-3': 0 < idx && idx < cards.length - 1,
+                'mt-3': idx === cards.length - 1
+              }"
       >
         <b-card-body>
-          <b-link :disabled="needsConnection && !connected"
-                  class="card-link text-secondary"
-                  :to="linksTo"
-          >
-            <h4 class="card-title">{{ title }}</h4>
-          </b-link>
-          <p class="card-text">{{ description }}</p>
+          <b-card-title>
+            <b-link :to="linksTo"
+                    :disabled="needsConnection && !connected"
+                    class="card-link text-secondary"
+            >
+              {{ title }}
+            </b-link>
+          </b-card-title>
+          <b-card-text>
+            {{ description }}
+          </b-card-text>
         </b-card-body>
       </b-card>
     </div>
+    <transition name="fade">
+      <b-back-to-top target="#home" v-show="showBackToTop" />
+    </transition>
   </div>
 </template>
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin"
+import scrollMixin from "@/mixins/scrollMixin"
+import BBackToTop from "@/components/BackToTop"
+import BTextCarousel from "@/components/TextCarousel"
 
 export default {
-  mixins: [ bootstrapMixin ],
-  methods: {
-    cardClasses(idx) {
-      return {
-        'mt-4': idx > 0,
-        'mb-4': idx < this.cards.length - 1,
-        'border': true,
-        'rounded-0': true,
-        'card-background': true
-      }
-    }
+  components: { BBackToTop, BTextCarousel },
+  mixins: [ bootstrapMixin, scrollMixin ],
+  props: {
+    connected: Boolean,
+    loggedIn: Boolean
   },
-  async beforeMount() {
-    await this.$http.get("/").catch(() => {
-      this.connected = false
-      this.appendToast(
-          "Server Connection Refused",
-          "The DL4SE server is currently unavailable. Please try accessing the site later.",
-          "danger"
-      )
-    })
+  computed: {
+    showBackToTop() {
+      return this.scroll.y > 100
+    }
   },
   data() {
     return {
-      connected: true,
-      image: require('@/assets/img/logo.png'),
+      slides: {
+        "Simple Dataset Construction":
+            `<em>DL4SE</em> allows you to easily create large-scale datasets that can be used to either run MSR studies
+             or to train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you
+             would like to build.`,
+        "Continuously Up-To-Date":
+            `Our crawlers work around the clock to ensure that you are served data that is in line with the source. At
+             the moment, we only mine Java source code from open source repositories hosted on GitHub. We are working on
+             integrating additional languages and features.`,
+        "Free & Open-Source":
+            `Register for free today and get instant access to all the dataset construction features of our platform.
+             The entire project is also open-source. You can view the source code or suggest improvements on the project
+             <a href="https://github.com/seart-group/DL4SE" target="_blank" class="text-secondary">GitHub page</a>.`
+      },
       cards: [
         {
-          title: "Log In",
-          description: "Start generating datasets for your models in just a few clicks!",
-          linksTo: "login",
+          title: "Generic Code Dataset",
+          description: "Generate a dataset comprised of raw source code instances.",
+          linksTo: { name: "code-generic" },
           needsConnection: true
         },
         {
-          title: "Register",
-          description: "Don't have an account? Register for free today!",
-          linksTo: "register",
+          title: "Code Completion Dataset",
+          description: "Generate a dataset for Deep Learning models specializing in code completion.",
+          linksTo: { name: "code-regular" },
           needsConnection: true
-        },
-        {
-          title: "Stats",
-          description: "View statistics related to the size of our database, language coverage, etc.",
-          linksTo: "stats",
-          needsConnection: true
-        },
-        {
-          title: "About",
-          description: "Want to learn more about the project?",
-          linksTo: "about",
-          needsConnection: false
         }
       ]
     }
