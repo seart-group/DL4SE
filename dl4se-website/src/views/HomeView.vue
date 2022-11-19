@@ -112,7 +112,11 @@ export default {
         "Simple Dataset Construction":
             `<em>DL4SE</em> allows you to easily create large-scale datasets that can be used to either run MSR studies
              or to train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you
-             would like to build.`
+             would like to build.`,
+        "Continuously Up-To-Date":
+            `Our crawlers work around the clock to ensure that you are served data that is in line with the source. At
+             the moment, we only mine Java source code from open source repositories hosted on GitHub. We are working on
+             integrating additional languages and features.`
       },
       cards: [
         {
