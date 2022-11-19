@@ -57,7 +57,10 @@ Authorization: Bearer {{token}}
 GET https://localhost:8080/api/task/stats
 Authorization: Bearer {{token}}
 
-### GET /task/download
-GET https://localhost:8080/api/task/download/{{uuid}}
+### GET /task/token
+GET https://localhost:8080/api/task/token/{{uuid}}
 Authorization: Bearer {{token}}
+
+### GET /task/download
+GET https://localhost:8080/api/task/download/{{uuid}}?token={{task_token}}
 Content-Type: application/gzip

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "@/store"
 import axios from "@/axios"
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
@@ -18,12 +17,6 @@ import ResetPasswordView from "@/views/ResetPasswordView"
 
 Vue.use(VueRouter)
 
-const sessionRestore = (_to, _from, next) => {
-  const token = store.getters.getToken
-  if (token) next({ name: 'dashboard' })
-  else next()
-}
-
 const routes = [
   {
     path: '/',
@@ -37,7 +30,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogInView,
-    beforeEnter: sessionRestore,
     meta: {
       public: true
     }
@@ -85,10 +77,22 @@ const routes = [
     }
   },
   {
-    path: '/task/:uuid?',
-    name: 'task',
+    path: '/code/:uuid?',
+    name: 'code-regular',
     component: TaskCreateView,
     props: true,
+    meta: {
+      public: false
+    }
+  },
+  {
+    path: '/generic/code/:uuid?',
+    name: 'code-generic',
+    component: TaskCreateView,
+    props: (route) => ({
+      generic: true,
+      ...route.params
+    }),
     meta: {
       public: false
     }
@@ -156,8 +160,8 @@ router.beforeEach(async (to, _from, next) => {
           const code = err.response.status
           if (code === 401) {
             const wasLoggedIn = !!router.app.$store.getters.getToken
-            router.app.$store.dispatch("logOut").then(() => {
-              if (wasLoggedIn) {
+            if (wasLoggedIn) {
+              router.app.$store.dispatch("logOut", to.name).then(() => {
                 router.app.$bvToast.toast(
                     "Your session has expired, please log in again.",
                     {
@@ -169,8 +173,10 @@ router.beforeEach(async (to, _from, next) => {
                       solid: true
                     }
                 )
-              }
-            })
+              })
+            } else {
+              next({ name: "login", query: { target: to.name } })
+            }
           } else {
             next({ name: "home" })
           }

@@ -10,22 +10,27 @@
         inputAttrs, inputHandlers, placeholder, tags, addTag, removeTag,
         isInvalid, invalidTagText, isDuplicate, duplicateTagText
       }">
-        <b-input-group class="py-2">
-          <b-form-input v-bind="inputAttrs" v-on="inputHandlers" :placeholder="placeholder" class="tag-select-input" />
+        <b-input-group class="tag-select-input-group">
+          <b-form-input v-bind="inputAttrs"
+                        v-on="inputHandlers"
+                        :disabled="disabled"
+                        :placeholder="placeholder"
+                        class="tag-select-input"
+          />
           <b-input-group-append>
-            <b-button class="tag-select-btn" @click="addTag()">Add</b-button>
-            <b-button class="tag-select-btn" @click="upload">Upload</b-button>
-            <b-button class="tag-select-btn" @click="reset">Reset</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="addTag()">Add</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="upload">Upload</b-button>
+            <b-button class="tag-select-btn" :disabled="disabled" @click="reset">Reset</b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-form-invalid-feedback :state="!isInvalid" class="m-0 pb-2">
+        <b-form-invalid-feedback :state="!isInvalid" class="tag-select-feedback-invalid">
           {{ invalidTagText }}
         </b-form-invalid-feedback>
-        <b-form-text v-if="isDuplicate" class="m-0 pb-2">
+        <b-form-text v-if="isDuplicate" class="tag-select-feedback-text">
           {{ duplicateTagText }}
         </b-form-text>
-        <div :class="{ 'tag-select-tags-container': Boolean(tags.length), 'd-none': !Boolean(tags.length) }">
-          <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="mr-1" @remove="removeTag(tag)">
+        <div :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'">
+          <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="tag-select-tag" @remove="removeTag(tag)">
             {{ tag }}
           </b-form-tag>
         </div>
@@ -43,6 +48,7 @@ export default {
       type: Array,
       required: true
     },
+    disabled: Boolean,
     separator: {
       type: String,
       default: "\n"
@@ -78,6 +84,11 @@ export default {
     }
   },
   watch: {
+    disabled: {
+      handler() {
+        this.reset()
+      }
+    },
     tags: {
       handler() {
         this.$emit("input", this.tags)

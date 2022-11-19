@@ -5,17 +5,21 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="taskTable.id"
-                             title="Tasks"
+                             title="Requested Datasets"
                              :fields="taskTable.fields"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
           >
             <template #controls>
-              <b-button to="task" class="paginated-table-btn" block>
+              <b-button v-b-modal.dataset-select block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
-                <span class="align-middle">New Task</span>
+                <span class="align-middle">Create New Dataset</span>
               </b-button>
+              <b-dialog-modal id="dataset-select" title="Select Dataset">
+                <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
+                <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
+              </b-dialog-modal>
             </template>
             <template #cell(uuid)="row">
               <span v-html="row.value"
@@ -111,7 +115,7 @@
                   </b-button>
                 </template>
                 <b-button class="btn-secondary-border-2 mr-1" size="sm"
-                          :to="{ name: 'task', params: { uuid: row.item.uuid } }"
+                          :to="{ name: 'code-regular', params: { uuid: row.item.uuid } }"
                           v-b-tooltip="'Edit Task'"
                 >
                   <b-icon-pencil-square />
@@ -141,7 +145,7 @@
       <b-row align-h="center">
         <b-col>
           <b-paginated-table :id="userTable.id"
-                             title="Users"
+                             title="Platform Users"
                              :fields="userTable.fields"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
@@ -223,6 +227,7 @@ import BAbbreviation from "@/components/Abbreviation"
 import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
+import BDialogModal from "@/components/DialogModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
@@ -235,6 +240,7 @@ export default {
     BConfigTable,
     BContentArea,
     BDetailsModal,
+    BDialogModal,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,

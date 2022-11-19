@@ -96,6 +96,11 @@ export default {
         this.resetValidation()
         this.$emit("input", this.local.masking)
       }
+    },
+    "local.masking.contiguousOnly": {
+      handler() {
+        this.$emit("input", this.local.masking)
+      }
     }
   },
   setup(props) {

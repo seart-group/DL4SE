@@ -34,7 +34,7 @@
         <b-col md="auto" col>
           <b-dropdown-select header="Choose Page Size" placeholder="Page Size"
                              v-model="perPage" :options="perPageOptions"
-                             class="mb-3"
+                             class="paginated-table-dropdown"
           />
         </b-col>
         <b-col cols="auto">
@@ -42,7 +42,7 @@
             <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
           </b-button>
         </b-col>
-        <b-col md="auto" cols="12">
+        <b-col md="auto" cols="12" class="ml-md-3" v-if="showControls">
           <slot name="controls" />
         </b-col>
       </b-row>
@@ -57,7 +57,10 @@ export default {
   name: "b-paginated-table",
   components: { BDropdownSelect },
   props: {
-    id: String,
+    id: {
+      type: String,
+      required: true
+    },
     title: String,
     fields: {
       type: Array,
@@ -65,10 +68,7 @@ export default {
         return []
       }
     },
-    primaryKey: {
-      type: String,
-      required: false
-    },
+    primaryKey: String,
     totalItems: {
       type: Number,
       required: true,
@@ -83,6 +83,11 @@ export default {
     refreshRate: {
       type: Number,
       default: -1
+    }
+  },
+  computed: {
+    showControls() {
+      return !!this.$slots.controls?.[0]
     }
   },
   methods: {

@@ -21,6 +21,11 @@ import BTextInputForm from '@/components/TextInputForm'
 export default {
   components: { BTextInputForm },
   mixins: [ bootstrapMixin ],
+  computed: {
+    target() {
+      return this.$route.query.target || "home"
+    }
+  },
   methods: {
     async login() {
       const payload = {}
@@ -29,7 +34,7 @@ export default {
           .then((response) => {
             const token = response.data
             this.$store.commit("setToken", token)
-            this.$router.push({ name: "dashboard" })
+            this.$router.replace({ name: this.target })
           })
           .catch((err) => {
             const status = err.response.status
@@ -37,6 +42,12 @@ export default {
             handler()
           })
     }
+  },
+  beforeRouteEnter(_to, _from, next) {
+    next(vm => {
+      const token = vm.$store.getters.getToken
+      if (token) vm.$router.replace({ name: vm.target })
+    })
   },
   data () {
     return {
