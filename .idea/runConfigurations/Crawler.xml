@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Crawler" type="JarApplication">
-    <option name="JAR_PATH" value="$PROJECT_DIR$/dl4se-crawler/target/dl4se-crawler-0.1-SNAPSHOT.jar" />
+    <option name="JAR_PATH" value="$PROJECT_DIR$/dl4se-crawler/target/dl4se-crawler-1.0.0.jar" />
     <option name="VM_PARAMETERS" value="-DDATABASE_HOST=${DATABASE_HOST} -DDATABASE_NAME=${DATABASE_NAME} -DDATABASE_PASS=${DATABASE_PASS} -DDATABASE_PORT=${DATABASE_PORT} -DDATABASE_USER=${DATABASE_USER}" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />
