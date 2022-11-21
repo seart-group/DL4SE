@@ -13,7 +13,7 @@ export default {
   },
   props: {
     id: {
-      type: [String, Number],
+      type: String,
       default: "smart-navbar"
     }
   },
@@ -26,7 +26,10 @@ export default {
             toggleable: "sm",
             sticky: true
           },
-          attrs: data.attrs,
+          attrs: {
+            id: props.id,
+            ...data.attrs
+          },
           class: {
             "smart-navbar": true,
             ...data.class || {},
