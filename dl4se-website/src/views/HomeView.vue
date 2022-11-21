@@ -83,7 +83,7 @@
       </b-card>
     </div>
     <transition name="fade">
-      <b-back-to-top target="#home" v-show="showBackToTop" />
+      <b-back-to-top target="#home" :offset="-225" v-show="showBackToTop" />
     </transition>
   </div>
 </template>
