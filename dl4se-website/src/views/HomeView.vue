@@ -125,13 +125,13 @@ export default {
       cards: [
         {
           title: "Generic Code Dataset",
-          description: "Generate a dataset comprised of raw source code instances.",
+          description: "Use this form to create large-scale code datasets to be used for any sort of MSR study or to train DL models.",
           linksTo: { name: "code-generic" },
           needsConnection: true
         },
         {
           title: "Code Completion Dataset",
-          description: "Generate a dataset for Deep Learning models specializing in code completion.",
+          description: "Use this form to build a dataset aimed at training code completion models.",
           linksTo: { name: "code-regular" },
           needsConnection: true
         }
