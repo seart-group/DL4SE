@@ -11,6 +11,10 @@ export default {
       validator(value) {
         return /#\S+/.test(value)
       }
+    },
+    offset: {
+      type: Number,
+      default: 0
     }
   },
   render(createElement, { props, data }) {
@@ -38,7 +42,10 @@ export default {
                     {
                       name: "scroll-to",
                       rawName: "v-scroll-to",
-                      value: props.target
+                      value: {
+                        el: props.target,
+                        offset: props.offset
+                      }
                     }
                   ]
                 },
