@@ -1,6 +1,5 @@
 <template>
   <div id="task" v-if="show">
-    <h1 class="page-title">Specify your code dataset</h1>
     <div class="task-create-form">
       <b-container class="task-create-form-section-top">
         <b-row>
