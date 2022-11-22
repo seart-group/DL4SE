@@ -151,6 +151,9 @@
                              :total-items="userTable.totalItems"
                              :provider="userProvider"
           >
+            <template #cell(uid)="row">
+              <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
+            </template>
             <template #cell(registered)="row">
               <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
@@ -231,6 +234,7 @@ import BDialogModal from "@/components/DialogModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
+import BIconIdenticon from "@/components/IconIdenticon"
 import BMonitor from "@/components/Monitor"
 import BPaginatedTable from "@/components/PaginatedTable"
 
@@ -244,6 +248,7 @@ export default {
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
+    BIconIdenticon,
     BMonitor,
     BPaginatedTable
   },
