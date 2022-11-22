@@ -12,7 +12,6 @@ import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 
 export default {
-  name: "NewPasswordView",
   components: { BTextInputForm },
   mixins: [ routerMixin, bootstrapMixin ],
   methods: {

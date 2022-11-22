@@ -61,7 +61,6 @@ import formatterMixin from "@/mixins/formatterMixin"
 import BBarChart from "@/components/BarChart"
 
 export default {
-  name: "StatsView",
   components: { BBarChart },
   mixins: [ formatterMixin ],
   methods: {

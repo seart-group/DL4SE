@@ -12,7 +12,6 @@ import bootstrapMixin from "@/mixins/bootstrapMixin";
 import {helpers, required} from "@vuelidate/validators";
 
 export default {
-  name: "PasswordResetView",
   components: { BTextInputForm },
   mixins: [ routerMixin, bootstrapMixin ],
   props: {
