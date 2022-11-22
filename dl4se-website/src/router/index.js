@@ -4,6 +4,7 @@ import axios from "@/axios"
 import HomeView from '@/views/HomeView'
 import LogInView from '@/views/LogInView'
 import DashboardView from '@/views/DashboardView'
+import ProfileView from "@/views/ProfileView"
 import RegisterView from "@/views/RegisterView"
 import VerifyView from "@/views/VerifyView"
 import NotFoundView from "@/views/NotFoundView"
@@ -72,6 +73,14 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
+    meta: {
+      public: false
+    }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView,
     meta: {
       public: false
     }

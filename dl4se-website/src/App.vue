@@ -23,6 +23,12 @@
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
+            <b-nav-item :to="{ name: 'profile' }"
+                        :active="isOnPage('profile')"
+                        :disabled="!connected"
+            >
+              Profile
+            </b-nav-item>
             <b-nav-item :to="{ name: 'dashboard' }"
                         :active="isOnPage('dashboard')"
                         :disabled="!connected"
