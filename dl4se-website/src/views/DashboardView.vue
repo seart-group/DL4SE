@@ -37,6 +37,7 @@
               </div>
             </template>
             <template #cell(submitted)="row">
+              <!-- TODO 22.11.22: Align to middle -->
               <div class="d-inline-flex">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
@@ -614,7 +615,7 @@ export default {
             key: "uid",
             label: "UID",
             sortable: true,
-            tdClass: [ "text-monospace" ]
+            tdClass: [ "text-monospace", "text-nowrap" ]
           },
           {
             key: "email",
