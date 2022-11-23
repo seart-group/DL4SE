@@ -32,20 +32,20 @@
             <template #cell(status)="row">
               <b-icon :icon="statusToSquareIcon(row.value)"
                       v-b-tooltip="toTitle(row.value)"
-                      font-scale="1.25" class="align-middle"
+                      font-scale="1.25"
               />
             </template>
             <template #cell(submitted)="row">
-              <div class="d-inline-flex">
+              <div class="d-inline-flex align-items-center">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
                 <template v-if="row.value.started">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
                 <template v-else>
@@ -53,11 +53,10 @@
                   <b-icon-blank font-scale="1.35" />
                 </template>
                 <template v-if="row.value.finished">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <component :is="statusToCalendarIcon(row.item.status)"
-                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />
-                                                ${row.value.finished.toISOString()}`"
-                             font-scale="1.35" class="align-middle"
+                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
+                             font-scale="1.35"
                   />
                 </template>
                 <template v-else>
