@@ -22,13 +22,11 @@
               </b-dialog-modal>
             </template>
             <template #cell(uuid)="row">
-              <span v-html="row.value"
-                    class="d-md-inline d-none"
-              />
-              <b-abbreviation :value="row.value"
+              <b-abbreviation v-if="!$screen.md"
+                              :value="row.value"
                               :formatter="val => val.split('-')[0]"
-                              class="d-md-none d-inline"
               />
+              <span v-html="row.value" v-else />
             </template>
             <template #cell(status)="row">
               <div class="d-flex justify-content-center">
