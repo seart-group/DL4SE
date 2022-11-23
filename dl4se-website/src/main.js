@@ -8,6 +8,7 @@ import router from '@/router'
 import store from '@/store'
 import axios from '@/axios'
 import VueAxios from 'vue-axios'
+import VueScreen from 'vue-screen'
 import VueScrollTo from 'vue-scrollto'
 import _ from 'lodash'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
@@ -22,6 +23,7 @@ Chart.defaults.font.family = "'Trebuchet MS', Helvetica, Arial, sans-serif"
 
 Vue.use(VueCompositionAPI)
 Vue.use(VueAxios, axios)
+Vue.use(VueScreen, "bootstrap")
 Vue.use(VueScrollTo)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
