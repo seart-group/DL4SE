@@ -30,12 +30,10 @@
               <span v-html="row.value" v-else />
             </template>
             <template #cell(status)="row">
-              <div class="d-flex justify-content-center">
-                <b-icon :icon="statusToSquareIcon(row.value)"
-                        v-b-tooltip="toTitle(row.value)"
-                        font-scale="1.25" class="align-middle"
-                />
-              </div>
+              <b-icon :icon="statusToSquareIcon(row.value)"
+                      v-b-tooltip="toTitle(row.value)"
+                      font-scale="1.25" class="align-middle"
+              />
             </template>
             <template #cell(submitted)="row">
               <template v-if="row.value.submitted">
@@ -567,7 +565,8 @@ export default {
           },
           {
             key: "status",
-            sortable: true
+            sortable: true,
+            tdClass: [ "text-center" ]
           },
           {
             key: "submitted",
