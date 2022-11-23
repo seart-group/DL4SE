@@ -7,11 +7,12 @@
           <b-paginated-table :id="taskTable.id"
                              title="Requested Datasets"
                              :fields="taskTable.fields"
+                             :controls="[ 'modal' ]"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
           >
-            <template #controls>
+            <template #controls(modal)>
               <b-button v-b-modal.dataset-select block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
