@@ -10,6 +10,7 @@
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
+                             :sticky-header="tableHeight"
           >
             <template #controls>
               <b-button v-b-modal.dataset-select block class="paginated-table-btn">
@@ -149,6 +150,7 @@
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
                              :provider="userProvider"
+                             :sticky-header="tableHeight"
           >
             <template #cell(uid)="row">
               <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
@@ -252,6 +254,11 @@ export default {
     BPaginatedTable
   },
   mixins: [ bootstrapMixin, formatterMixin, routerMixin ],
+  computed: {
+    tableHeight() {
+      return `${this.$screen.xl ? 370 : 380}px`
+    }
+  },
   methods: {
     toTitle(value) {
       return this.$_.startCase(
