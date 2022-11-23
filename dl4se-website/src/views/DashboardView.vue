@@ -16,10 +16,6 @@
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
-              <b-dialog-modal id="dataset-select" title="Select Dataset">
-                <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
-                <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
-              </b-dialog-modal>
             </template>
             <template #cell(uuid)="row">
               <span v-html="row.value"
@@ -216,6 +212,10 @@
                      :formatters="detailsModal.formatters"
                      @reset="detailsModal.title = ''; detailsModal.content = {}"
     />
+    <b-dialog-modal id="dataset-select" title="Select Dataset">
+      <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
+      <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
+    </b-dialog-modal>
   </div>
 </template>
 
