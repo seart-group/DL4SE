@@ -30,6 +30,7 @@ import usi.si.seart.dto.task.query.CodeQueryDto;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.model.task.Task_;
 import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.user.Role;
@@ -74,7 +75,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<?> tasks(
-            @SortDefault(sort = "submitted", direction = Sort.Direction.DESC) Pageable pageable,
+            @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithId(principal.getId());

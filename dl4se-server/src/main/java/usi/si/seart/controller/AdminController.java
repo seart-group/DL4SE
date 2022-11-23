@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import usi.si.seart.exception.ConfigurationNotFoundException;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.model.task.Task_;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
+import usi.si.seart.model.user.User_;
 import usi.si.seart.security.annotation.AdminRestController;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.TaskService;
@@ -47,7 +49,7 @@ public class AdminController {
 
     @GetMapping("/user")
     public ResponseEntity<?> listUsers(
-            @SortDefault(sort = "registered", direction = Sort.Direction.DESC) Pageable pageable
+            @SortDefault(sort = User_.REGISTERED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<User> users = userService.getAll(pageable);
         return ResponseEntity.ok(users);
@@ -93,7 +95,7 @@ public class AdminController {
 
     @GetMapping("/task")
     public ResponseEntity<?> listTasks(
-            @SortDefault(sort = "submitted", direction = Sort.Direction.DESC) Pageable pageable
+            @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<Task> tasks = taskService.getAll(pageable);
         return ResponseEntity.ok(tasks);
