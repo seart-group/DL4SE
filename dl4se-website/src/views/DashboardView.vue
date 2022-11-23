@@ -49,12 +49,20 @@
                                       font-scale="1.35"
                 />
               </template>
+              <template v-else>
+                <b-icon-blank />
+                <b-icon-blank font-scale="1.35" />
+              </template>
               <template v-if="row.value.finished">
                 <b-icon-dash-lg />
                 <component :is="statusToCalendarIcon(row.item.status)"
                            v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
                            font-scale="1.35"
                 />
+              </template>
+              <template v-else>
+                <b-icon-blank />
+                <b-icon-blank font-scale="1.35" />
               </template>
             </template>
             <template #cell(progress)="row">
