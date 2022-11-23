@@ -36,32 +36,35 @@
               />
             </template>
             <template #cell(submitted)="row">
-              <template v-if="row.value.submitted">
-                <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
-                                      font-scale="1.35"
-                />
-              </template>
-              <template v-if="row.value.started">
-                <b-icon-dash-lg />
-                <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
-                                      font-scale="1.35"
-                />
-              </template>
-              <template v-else>
-                <b-icon-blank />
-                <b-icon-blank font-scale="1.35" />
-              </template>
-              <template v-if="row.value.finished">
-                <b-icon-dash-lg />
-                <component :is="statusToCalendarIcon(row.item.status)"
-                           v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
-                           font-scale="1.35"
-                />
-              </template>
-              <template v-else>
-                <b-icon-blank />
-                <b-icon-blank font-scale="1.35" />
-              </template>
+              <div class="d-inline-flex">
+                <template v-if="row.value.submitted">
+                  <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
+                                        font-scale="1.35" class="align-middle"
+                  />
+                </template>
+                <template v-if="row.value.started">
+                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
+                                        font-scale="1.35" class="align-middle"
+                  />
+                </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
+                </template>
+                <template v-if="row.value.finished">
+                  <b-icon-dash-lg shift-v="-3" />
+                  <component :is="statusToCalendarIcon(row.item.status)"
+                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />
+                                                ${row.value.finished.toISOString()}`"
+                             font-scale="1.35" class="align-middle"
+                  />
+                </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
+                </template>
+              </div>
             </template>
             <template #cell(progress)="row">
               <div class="d-flex flex-column text-center">
