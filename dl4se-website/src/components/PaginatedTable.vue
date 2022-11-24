@@ -42,8 +42,10 @@
             <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
           </b-button>
         </b-col>
-        <b-col md="auto" cols="12" class="ml-md-3" v-if="showControls">
-          <slot name="controls" />
+        <b-col v-for="control in controls" :key="control"
+               md="auto" cols="12" class="ml-md-3"
+        >
+          <slot :name="`controls(${control})`" />
         </b-col>
       </b-row>
     </b-container>
@@ -68,6 +70,15 @@ export default {
         return []
       }
     },
+    controls: {
+      type: Array,
+      default() {
+        return []
+      },
+      validator(value) {
+        return value.every(control => typeof control === "string")
+      }
+    },
     primaryKey: String,
     totalItems: {
       type: Number,
@@ -83,11 +94,6 @@ export default {
     refreshRate: {
       type: Number,
       default: -1
-    }
-  },
-  computed: {
-    showControls() {
-      return !!this.$slots.controls?.[0]
     }
   },
   methods: {
