@@ -29,7 +29,7 @@ export default {
             centered: true
           },
           attrs: data.attrs,
-          on: data.listeners,
+          on: data.on,
           scopedSlots: {
             "modal-footer": () => children
           }
