@@ -16,7 +16,7 @@ export default {
           props: props,
           attrs: data.attrs,
           class: data.staticClass,
-          directives: data.directives,
+          directives: data.directives ?? [],
           on: data.on
         },
         [
