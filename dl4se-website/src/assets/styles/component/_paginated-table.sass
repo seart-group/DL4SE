@@ -3,10 +3,6 @@
 .paginated-table-header tr th
   position: sticky!important
 
-.paginated-table-body .b-table-empty-row
-  color: $black
-  background-color: $light-gray
-
 .paginated-table-controls
   @extend .p-0
 
@@ -15,6 +11,11 @@
 
 .paginated-table .paginated-table-row
   height: 64px!important
+
+.paginated-table .paginated-table-row.b-table-empty-row
+  color: $black
+  background-color: $light-gray
+  height: 320px!important
 
 .paginated-table .paginated-table-header-row th,
 .paginated-table .paginated-table-row td
