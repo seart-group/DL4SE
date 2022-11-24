@@ -39,6 +39,7 @@ export default {
                 data.staticClass?.split(" ").map(sc => [sc, true]) || []
             )
           },
+          directives: data.directives ?? [],
           on: data.on
         },
         [

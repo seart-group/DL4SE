@@ -29,7 +29,8 @@ export default {
               modifiers: {
                 html: true
               }
-            }
+            },
+            ...data.directives ?? []
           ]
         },
         props.formatter(props.value)
