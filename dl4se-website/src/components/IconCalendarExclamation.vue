@@ -16,8 +16,8 @@ export default {
           props: props,
           attrs: data.attrs,
           class: data.staticClass,
-          on: data.listeners,
-          directives: data.directives
+          directives: data.directives ?? [],
+          on: data.on
         },
         [
           createElement(BIconExclamation, { props: { scale: 0.75, shiftV: -1, stacked: true } }),

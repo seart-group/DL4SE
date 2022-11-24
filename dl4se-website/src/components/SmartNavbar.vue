@@ -38,7 +38,7 @@ export default {
             )
           },
           on: data.listeners,
-          directives: data.directives
+          directives: data.directives ?? []
         },
         [
             createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),

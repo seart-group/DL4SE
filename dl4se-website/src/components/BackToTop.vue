@@ -30,8 +30,8 @@ export default {
                 data.staticClass?.split(" ").map(sc => [sc, true]) || []
             )
           },
-          on: data.listeners,
-          directives: data.directives
+          directives: data.directives ?? [],
+          on: data.on,
         },
         [
             createElement(

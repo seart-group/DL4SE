@@ -16,8 +16,8 @@ export default {
           props: props,
           attrs: data.attrs,
           class: data.staticClass,
-          on: data.listeners,
-          directives: data.directives
+          directives: data.directives ?? [],
+          on: data.on
         },
         [
           createElement(BIconPlayFill, { props: { scale: 0.5, shiftV: -1, stacked: true } }),

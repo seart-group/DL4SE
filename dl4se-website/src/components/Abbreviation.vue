@@ -20,7 +20,7 @@ export default {
         {
           attrs: data.attrs,
           class: data.staticClass,
-          on: data.listeners,
+          on: data.on,
           directives: [
             {
               name: "b-tooltip",
@@ -29,7 +29,8 @@ export default {
               modifiers: {
                 html: true
               }
-            }
+            },
+            ...data.directives ?? []
           ]
         },
         props.formatter(props.value)

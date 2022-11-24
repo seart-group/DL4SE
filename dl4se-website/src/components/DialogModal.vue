@@ -18,6 +18,7 @@ export default {
     return createElement(
         BModal,
         {
+          attrs: data.attrs,
           props: {
             id: props.id,
             title: props.title,
@@ -28,7 +29,7 @@ export default {
             scrollable: true,
             centered: true
           },
-          attrs: data.attrs,
+          directives: data.directives ?? [],
           on: data.on,
           scopedSlots: {
             "modal-footer": () => children
