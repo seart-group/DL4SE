@@ -10,6 +10,7 @@
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
+                             :sticky-header="tableHeight"
           >
             <template #controls>
               <b-button v-b-modal.dataset-select block class="paginated-table-btn">
@@ -22,42 +23,45 @@
               </b-dialog-modal>
             </template>
             <template #cell(uuid)="row">
-              <span v-html="row.value"
-                    class="d-md-inline d-none"
-              />
-              <b-abbreviation :value="row.value"
+              <b-abbreviation v-if="!$screen.md"
+                              :value="row.value"
                               :formatter="val => val.split('-')[0]"
-                              class="d-md-none d-inline"
               />
+              <span v-html="row.value" v-else />
             </template>
             <template #cell(status)="row">
-              <div class="d-flex justify-content-center">
-                <b-icon :icon="statusToSquareIcon(row.value)"
-                        v-b-tooltip="toTitle(row.value)"
-                        font-scale="1.25" class="align-middle"
-                />
-              </div>
+              <b-icon :icon="statusToSquareIcon(row.value)"
+                      v-b-tooltip="toTitle(row.value)"
+                      font-scale="1.25"
+              />
             </template>
             <template #cell(submitted)="row">
-              <div class="d-inline-flex">
+              <div class="d-inline-flex align-items-center">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
                 <template v-if="row.value.started">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
+                </template>
                 <template v-if="row.value.finished">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <component :is="statusToCalendarIcon(row.item.status)"
-                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />
-                                                ${row.value.finished.toISOString()}`"
-                             font-scale="1.35" class="align-middle"
+                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
+                             font-scale="1.35"
                   />
+                </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
                 </template>
               </div>
             </template>
@@ -150,7 +154,11 @@
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
                              :provider="userProvider"
+                             :sticky-header="tableHeight"
           >
+            <template #cell(uid)="row">
+              <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
+            </template>
             <template #cell(registered)="row">
               <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
@@ -231,6 +239,7 @@ import BDialogModal from "@/components/DialogModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
+import BIconIdenticon from "@/components/IconIdenticon"
 import BMonitor from "@/components/Monitor"
 import BPaginatedTable from "@/components/PaginatedTable"
 
@@ -244,10 +253,16 @@ export default {
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
+    BIconIdenticon,
     BMonitor,
     BPaginatedTable
   },
   mixins: [ bootstrapMixin, formatterMixin, routerMixin ],
+  computed: {
+    tableHeight() {
+      return `${this.$screen.xl ? 370 : 380}px`
+    }
+  },
   methods: {
     toTitle(value) {
       return this.$_.startCase(
@@ -552,7 +567,8 @@ export default {
           },
           {
             key: "status",
-            sortable: true
+            sortable: true,
+            tdClass: [ "text-center" ]
           },
           {
             key: "submitted",
@@ -564,7 +580,8 @@ export default {
                 started: (item.started) ? new Date(Date.parse(item.started + 'Z')) : null,
                 finished: (item.finished) ? new Date(Date.parse(item.finished + 'Z')) : null
               }
-            }
+            },
+            tdClass: [ "text-center" ]
           },
           {
             key: "progress",
@@ -611,7 +628,7 @@ export default {
             key: "uid",
             label: "UID",
             sortable: true,
-            tdClass: [ "text-monospace" ]
+            tdClass: [ "text-monospace", "text-nowrap" ]
           },
           {
             key: "email",
