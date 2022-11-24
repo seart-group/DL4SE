@@ -7,7 +7,7 @@
           <b-paginated-table :id="taskTable.id"
                              title="Requested Datasets"
                              :fields="taskTable.fields"
-                             :controls="[ 'modal' ]"
+                             :controls="[ 'modal', 'filters' ]"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
@@ -16,6 +16,12 @@
               <b-button v-b-modal.dataset-select block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
+              </b-button>
+            </template>
+            <template #controls(filters)>
+              <b-button v-b-modal.task-filter-select block class="paginated-table-btn">
+                <b-icon-filter class="align-middle" font-scale="1.5" />
+                <span class="align-middle">Filter Settings</span>
               </b-button>
             </template>
             <template #cell(uuid)="row">
@@ -144,10 +150,17 @@
           <b-paginated-table :id="userTable.id"
                              title="Platform Users"
                              :fields="userTable.fields"
+                             :controls="[ 'filters' ]"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
                              :provider="userProvider"
           >
+            <template #controls(filters)>
+              <b-button v-b-modal.user-filter-select block class="paginated-table-btn">
+                <b-icon-filter class="align-middle" font-scale="1.5" />
+                <span class="align-middle">Filter Settings</span>
+              </b-button>
+            </template>
             <template #cell(registered)="row">
               <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
@@ -191,7 +204,7 @@
     <b-container v-if="isAdmin">
       <h3>Server Environment</h3>
       <b-config-table :supplier="getConfiguration"
-                     :consumer="updateConfiguration"
+                      :consumer="updateConfiguration"
       />
     </b-container>
     <b-container v-if="isAdmin">
@@ -217,6 +230,46 @@
       <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
       <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
     </b-dialog-modal>
+    <b-dialog-modal id="task-filter-select"
+                    title="Specify Task Filters"
+                    @hide="$root.$emit('bv::refresh::table', taskTable.id)"
+    >
+      <label for="task-filter-uuid">
+        Filter by UUID:
+      </label>
+      <b-clearable-input id="task-filter-uuid"
+                         placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+                         v-model="taskTable.filters.uuid"
+      />
+    </b-dialog-modal>
+    <b-dialog-modal id="user-filter-select"
+                    title="Specify User Filters"
+                    @hide="$root.$emit('bv::refresh::table', userTable.id)"
+    >
+      <label for="user-filter-uid">
+        Filter by UID:
+      </label>
+      <b-clearable-input id="user-filter-uid"
+                         placeholder="XXXXXXXXXXX"
+                         v-model="userTable.filters.uid"
+                         class="mb-3"
+      />
+      <label for="user-filter-email">
+        Filter by Email:
+      </label>
+      <b-clearable-input id="user-filter-email"
+                         placeholder="example@email.com"
+                         v-model="userTable.filters.email"
+                         class="mb-3"
+      />
+      <label for="user-filter-organisation">
+        Filter by Organisation:
+      </label>
+      <b-clearable-input id="user-filter-organisation"
+                         placeholder=""
+                         v-model="userTable.filters.organisation"
+      />
+    </b-dialog-modal>
   </div>
 </template>
 
@@ -225,6 +278,7 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 import formatterMixin from "@/mixins/formatterMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BClearableInput from "@/components/ClearableInput"
 import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
@@ -238,6 +292,7 @@ import BPaginatedTable from "@/components/PaginatedTable"
 export default {
   components: {
     BAbbreviation,
+    BClearableInput,
     BConfigTable,
     BContentArea,
     BDetailsModal,
@@ -320,13 +375,10 @@ export default {
     },
     async taskProvider(ctx) {
       const url = this.isAdmin ? "/admin/task" : "/task"
-      const params = {
-        page: ctx.currentPage,
-        size: ctx.perPage
-      }
-      if (ctx.sortBy) {
-        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
-      }
+      const params = { page: ctx.currentPage, size: ctx.perPage }
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
+      const filters = this.taskTable.filters
+      if (filters.uuid) params.uuid = filters.uuid
       return this.$http.get(url, { params: params })
           .then((res) => {
             this.taskTable.totalItems = res.data.total_items
@@ -340,13 +392,12 @@ export default {
           })
     },
     async userProvider(ctx) {
-      const params = {
-        page: ctx.currentPage,
-        size: ctx.perPage
-      }
-      if (ctx.sortBy) {
-        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
-      }
+      const params = { page: ctx.currentPage, size: ctx.perPage }
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
+      const filters = this.userTable.filters
+      if (filters.uid) params.uid = filters.uid
+      if (filters.email) params.email = filters.email
+      if (filters.organisation) params.organisation = filters.organisation
       return this.$http.get("/admin/user", { params: params })
           .then((res) => {
             this.userTable.totalItems = res.data.total_items
@@ -544,6 +595,9 @@ export default {
       },
       taskTable: {
         id: "task-table",
+        filters: {
+          uuid: null,
+        },
         fields: [
           {
             key: "uuid",
@@ -607,6 +661,11 @@ export default {
       },
       userTable: {
         id: "user-table",
+        filters: {
+          uid: null,
+          email: null,
+          organisation: null
+        },
         fields: [
           {
             key: "uid",
