@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import usi.si.seart.exception.UserNotFoundException;
@@ -17,7 +18,7 @@ public interface UserService {
 
     User create(User user);
     void update(User user);
-    Page<User> getAll(Pageable pageable);
+    Page<User> getAll(Specification<User> specification, Pageable pageable);
     User getWithId(Long id);
     User getWithUid(String uid);
     User getWithEmail(String email);
@@ -43,8 +44,8 @@ public interface UserService {
         }
 
         @Override
-        public Page<User> getAll(Pageable pageable) {
-            return userRepository.findAll(pageable);
+        public Page<User> getAll(Specification<User> specification, Pageable pageable) {
+            return userRepository.findAll(specification, pageable);
         }
 
         @Override

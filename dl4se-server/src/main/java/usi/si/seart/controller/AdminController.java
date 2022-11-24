@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import usi.si.seart.dto.task.TaskSearchDto;
+import usi.si.seart.dto.user.UserSearchDto;
 import usi.si.seart.exception.ConfigurationNotFoundException;
 import usi.si.seart.model.Configuration;
 import usi.si.seart.model.task.Task;
@@ -41,17 +45,21 @@ public class AdminController {
     UserService userService;
     TaskService taskService;
     ConfigurationService configurationService;
+    ConversionService conversionService;
 
     @GetMapping
     public ResponseEntity<?> isAdmin() {
         return ResponseEntity.ok().build();
     }
 
+    @SuppressWarnings("unchecked")
     @GetMapping("/user")
     public ResponseEntity<?> listUsers(
+            UserSearchDto userSearchDto,
             @SortDefault(sort = User_.REGISTERED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<User> users = userService.getAll(pageable);
+        Specification<User> specification = (Specification<User>) conversionService.convert(userSearchDto, Specification.class);
+        Page<User> users = userService.getAll(specification, pageable);
         return ResponseEntity.ok(users);
     }
 
@@ -93,11 +101,14 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @SuppressWarnings("unchecked")
     @GetMapping("/task")
     public ResponseEntity<?> listTasks(
+            TaskSearchDto taskSearchDto,
             @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<Task> tasks = taskService.getAll(pageable);
+        Specification<Task> specification = (Specification<Task>) conversionService.convert(taskSearchDto, Specification.class);
+        Page<Task> tasks = taskService.getAll(specification, pageable);
         return ResponseEntity.ok(tasks);
     }
 

@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +47,7 @@ public interface TaskService {
     void forEachNonExpired(Consumer<Task> consumer);
     void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
-    Page<Task> getAll(Pageable pageable);
-    Page<Task> getAll(User user, Pageable pageable);
+    Page<Task> getAll(Specification<Task> specification, Pageable pageable);
     Task getWithUUID(UUID uuid);
 
     @Service
@@ -166,14 +166,8 @@ public interface TaskService {
                     });
         }
 
-        @Override
-        public Page<Task> getAll(Pageable pageable) {
-            return taskRepository.findAll(pageable);
-        }
-
-        @Override
-        public Page<Task> getAll(User user, Pageable pageable) {
-            return taskRepository.findAllByUser(user, pageable);
+        public Page<Task> getAll(Specification<Task> specification, Pageable pageable) {
+            return taskRepository.findAll(specification, pageable);
         }
 
         @Override

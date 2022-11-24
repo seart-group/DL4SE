@@ -10,6 +10,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import usi.si.seart.dto.task.CodeTaskDto;
+import usi.si.seart.dto.task.TaskSearchDto;
 import usi.si.seart.dto.task.processing.CodeProcessingDto;
 import usi.si.seart.dto.task.query.CodeQueryDto;
 import usi.si.seart.model.Language;
@@ -35,6 +37,7 @@ import usi.si.seart.model.task.processing.CodeProcessing;
 import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
+import usi.si.seart.model.user.User_;
 import usi.si.seart.model.user.token.Token;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.ConfigurationService;
@@ -73,13 +76,18 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     @GetMapping
     public ResponseEntity<?> tasks(
+            TaskSearchDto taskSearchDto,
             @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
-        User requester = userService.getWithId(principal.getId());
-        Page<Task> tasks = taskService.getAll(requester, pageable);
+        Specification<Task> specification = (Specification<Task>) conversionService.convert(taskSearchDto, Specification.class);
+        specification = specification.and(
+                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(Task_.USER).get(User_.ID), principal.getId())
+        );
+        Page<Task> tasks = taskService.getAll(specification, pageable);
         return ResponseEntity.ok(tasks);
     }
 
