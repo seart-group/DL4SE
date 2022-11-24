@@ -7,57 +7,64 @@
           <b-paginated-table :id="taskTable.id"
                              title="Requested Datasets"
                              :fields="taskTable.fields"
+                             :controls="[ 'modal', 'filters' ]"
                              :primary-key="taskTable.fields[0].key"
                              :total-items="taskTable.totalItems"
                              :provider="taskProvider"
+                             :sticky-header="tableHeight"
           >
-            <template #controls>
+            <template #controls(modal)>
               <b-button v-b-modal.dataset-select block class="paginated-table-btn">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
-              <b-dialog-modal id="dataset-select" title="Select Dataset">
-                <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
-                <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
-              </b-dialog-modal>
+            </template>
+            <template #controls(filters)>
+              <b-button v-b-modal.task-filter-select block class="paginated-table-btn">
+                <b-icon-filter class="align-middle" font-scale="1.5" />
+                <span class="align-middle">Filter Settings</span>
+              </b-button>
             </template>
             <template #cell(uuid)="row">
-              <span v-html="row.value"
-                    class="d-md-inline d-none"
-              />
-              <b-abbreviation :value="row.value"
+              <b-abbreviation v-if="!$screen.md"
+                              :value="row.value"
                               :formatter="val => val.split('-')[0]"
-                              class="d-md-none d-inline"
               />
+              <span v-html="row.value" v-else />
             </template>
             <template #cell(status)="row">
-              <div class="d-flex justify-content-center">
-                <b-icon :icon="statusToSquareIcon(row.value)"
-                        v-b-tooltip="toTitle(row.value)"
-                        font-scale="1.25" class="align-middle"
-                />
-              </div>
+              <b-icon :icon="statusToSquareIcon(row.value)"
+                      v-b-tooltip="toTitle(row.value)"
+                      font-scale="1.25"
+              />
             </template>
             <template #cell(submitted)="row">
-              <div class="d-inline-flex">
+              <div class="d-inline-flex align-items-center">
                 <template v-if="row.value.submitted">
                   <b-icon-calendar-plus v-b-tooltip.html="`Submitted at:<br />${row.value.submitted.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
                 <template v-if="row.value.started">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <b-icon-calendar-play v-b-tooltip.html="`Started at:<br />${row.value.started.toISOString()}`"
-                                        font-scale="1.35" class="align-middle"
+                                        font-scale="1.35"
                   />
                 </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
+                </template>
                 <template v-if="row.value.finished">
-                  <b-icon-dash-lg shift-v="-3" />
+                  <b-icon-dash-lg shift-v="-1" />
                   <component :is="statusToCalendarIcon(row.item.status)"
-                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />
-                                                ${row.value.finished.toISOString()}`"
-                             font-scale="1.35" class="align-middle"
+                             v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
+                             font-scale="1.35"
                   />
+                </template>
+                <template v-else>
+                  <b-icon-blank />
+                  <b-icon-blank font-scale="1.35" />
                 </template>
               </div>
             </template>
@@ -147,10 +154,21 @@
           <b-paginated-table :id="userTable.id"
                              title="Platform Users"
                              :fields="userTable.fields"
+                             :controls="[ 'filters' ]"
                              :primary-key="userTable.fields[0].key"
                              :total-items="userTable.totalItems"
                              :provider="userProvider"
+                             :sticky-header="tableHeight"
           >
+            <template #controls(filters)>
+              <b-button v-b-modal.user-filter-select block class="paginated-table-btn">
+                <b-icon-filter class="align-middle" font-scale="1.5" />
+                <span class="align-middle">Filter Settings</span>
+              </b-button>
+            </template>
+            <template #cell(uid)="row">
+              <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
+            </template>
             <template #cell(registered)="row">
               <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
@@ -194,7 +212,7 @@
     <b-container v-if="isAdmin">
       <h3>Server Environment</h3>
       <b-config-table :supplier="getConfiguration"
-                     :consumer="updateConfiguration"
+                      :consumer="updateConfiguration"
       />
     </b-container>
     <b-container v-if="isAdmin">
@@ -216,6 +234,50 @@
                      :formatters="detailsModal.formatters"
                      @reset="detailsModal.title = ''; detailsModal.content = {}"
     />
+    <b-dialog-modal id="dataset-select" title="Select Dataset">
+      <b-button block :to="{ name: 'code-generic' }" class="dialog-modal-btn">Generic Code Dataset</b-button>
+      <b-button block :to="{ name: 'code-regular' }" class="dialog-modal-btn">Code Completion Dataset</b-button>
+    </b-dialog-modal>
+    <b-dialog-modal id="task-filter-select"
+                    title="Specify Task Filters"
+                    @hide="$root.$emit('bv::refresh::table', taskTable.id)"
+    >
+      <label for="task-filter-uuid">
+        Filter by UUID:
+      </label>
+      <b-clearable-input id="task-filter-uuid"
+                         placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+                         v-model="taskTable.filters.uuid"
+      />
+    </b-dialog-modal>
+    <b-dialog-modal id="user-filter-select"
+                    title="Specify User Filters"
+                    @hide="$root.$emit('bv::refresh::table', userTable.id)"
+    >
+      <label for="user-filter-uid">
+        Filter by UID:
+      </label>
+      <b-clearable-input id="user-filter-uid"
+                         placeholder="XXXXXXXXXXX"
+                         v-model="userTable.filters.uid"
+                         class="mb-3"
+      />
+      <label for="user-filter-email">
+        Filter by Email:
+      </label>
+      <b-clearable-input id="user-filter-email"
+                         placeholder="example@email.com"
+                         v-model="userTable.filters.email"
+                         class="mb-3"
+      />
+      <label for="user-filter-organisation">
+        Filter by Organisation:
+      </label>
+      <b-clearable-input id="user-filter-organisation"
+                         placeholder=""
+                         v-model="userTable.filters.organisation"
+      />
+    </b-dialog-modal>
   </div>
 </template>
 
@@ -224,6 +286,7 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 import formatterMixin from "@/mixins/formatterMixin"
 import routerMixin from "@/mixins/routerMixin"
 import BAbbreviation from "@/components/Abbreviation"
+import BClearableInput from "@/components/ClearableInput"
 import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea"
 import BDetailsModal from "@/components/DetailsModal"
@@ -231,12 +294,14 @@ import BDialogModal from "@/components/DialogModal"
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
 import BIconCalendarPlay from "@/components/IconCalendarPlay"
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
+import BIconIdenticon from "@/components/IconIdenticon"
 import BMonitor from "@/components/Monitor"
 import BPaginatedTable from "@/components/PaginatedTable"
 
 export default {
   components: {
     BAbbreviation,
+    BClearableInput,
     BConfigTable,
     BContentArea,
     BDetailsModal,
@@ -244,10 +309,16 @@ export default {
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
+    BIconIdenticon,
     BMonitor,
     BPaginatedTable
   },
   mixins: [ bootstrapMixin, formatterMixin, routerMixin ],
+  computed: {
+    tableHeight() {
+      return `${this.$screen.xl ? 370 : 380}px`
+    }
+  },
   methods: {
     toTitle(value) {
       return this.$_.startCase(
@@ -319,13 +390,10 @@ export default {
     },
     async taskProvider(ctx) {
       const url = this.isAdmin ? "/admin/task" : "/task"
-      const params = {
-        page: ctx.currentPage,
-        size: ctx.perPage
-      }
-      if (ctx.sortBy) {
-        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
-      }
+      const params = { page: ctx.currentPage, size: ctx.perPage }
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
+      const filters = this.taskTable.filters
+      if (filters.uuid) params.uuid = filters.uuid
       return this.$http.get(url, { params: params })
           .then((res) => {
             this.taskTable.totalItems = res.data.total_items
@@ -339,13 +407,12 @@ export default {
           })
     },
     async userProvider(ctx) {
-      const params = {
-        page: ctx.currentPage,
-        size: ctx.perPage
-      }
-      if (ctx.sortBy) {
-        params.sort = `${ctx.sortBy},${(ctx.sortDesc) ? "desc" : "asc"}`
-      }
+      const params = { page: ctx.currentPage, size: ctx.perPage }
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
+      const filters = this.userTable.filters
+      if (filters.uid) params.uid = filters.uid
+      if (filters.email) params.email = filters.email
+      if (filters.organisation) params.organisation = filters.organisation
       return this.$http.get("/admin/user", { params: params })
           .then((res) => {
             this.userTable.totalItems = res.data.total_items
@@ -543,6 +610,9 @@ export default {
       },
       taskTable: {
         id: "task-table",
+        filters: {
+          uuid: null,
+        },
         fields: [
           {
             key: "uuid",
@@ -552,7 +622,8 @@ export default {
           },
           {
             key: "status",
-            sortable: true
+            sortable: true,
+            tdClass: [ "text-center" ]
           },
           {
             key: "submitted",
@@ -564,7 +635,8 @@ export default {
                 started: (item.started) ? new Date(Date.parse(item.started + 'Z')) : null,
                 finished: (item.finished) ? new Date(Date.parse(item.finished + 'Z')) : null
               }
-            }
+            },
+            tdClass: [ "text-center" ]
           },
           {
             key: "progress",
@@ -606,12 +678,17 @@ export default {
       },
       userTable: {
         id: "user-table",
+        filters: {
+          uid: null,
+          email: null,
+          organisation: null
+        },
         fields: [
           {
             key: "uid",
             label: "UID",
             sortable: true,
-            tdClass: [ "text-monospace" ]
+            tdClass: [ "text-monospace", "text-nowrap" ]
           },
           {
             key: "email",

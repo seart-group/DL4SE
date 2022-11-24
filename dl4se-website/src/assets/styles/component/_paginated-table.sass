@@ -3,10 +3,6 @@
 .paginated-table-header tr th
   position: sticky!important
 
-.paginated-table-body .b-table-empty-row
-  color: $black
-  background-color: $light-gray
-
 .paginated-table-controls
   @extend .p-0
 
@@ -15,6 +11,11 @@
 
 .paginated-table .paginated-table-row
   height: 64px!important
+
+.paginated-table .paginated-table-row.b-table-empty-row
+  color: $black
+  background-color: $light-gray
+  height: 320px!important
 
 .paginated-table .paginated-table-header-row th,
 .paginated-table .paginated-table-row td
@@ -38,6 +39,19 @@
 
 .paginated-table-dropdown
   @include min-width(80)
+  @extend .mb-3
+
+.paginated-table-input
+  padding-right: calc(1.5em + 0.75rem)!important
+  @include fixed-height(40)
+  @extend .form-control
+  @extend .bg-light-gray
+  @extend .border-secondary
+  @extend .border-bottom
+  @extend .border-left-0
+  @extend .border-top-0
+  @extend .border-right-0
+  @extend .rounded-0
   @extend .mb-3
 
 .paginated-table-border
