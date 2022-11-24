@@ -39,7 +39,7 @@ export default {
                 data.staticClass?.split(" ").map(sc => [sc, true]) || []
             )
           },
-          on: data.listeners
+          on: data.on
         },
         [
           createElement(
