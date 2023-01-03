@@ -21,26 +21,16 @@ public class TreePrinter {
     public String printParseTree() {
         StringBuilder stringBuilder = new StringBuilder();
         Node root = this.tree.getRootNode();
-        @Cleanup TreeCursor cursor = root.walk();
+        @Cleanup TreeCursor cursor = new TreePrinterCursor(root);
         for (;;) {
             TreeCursorNode treeCursorNode = cursor.getCurrentTreeCursorNode();
             if (treeCursorNode.isNamed()) {
                 String treeNode = printTreeNode(treeCursorNode);
                 stringBuilder.append(treeNode);
             }
-            if (cursor.gotoFirstChild()) {
-                indentLevel++;
-                continue;
-            }
-            if (cursor.gotoNextSibling()) {
-                continue;
-            }
+            if (cursor.gotoFirstChild() || cursor.gotoNextSibling()) continue;
             do {
-                if (cursor.gotoParent()) {
-                    indentLevel--;
-                } else {
-                    return stringBuilder.toString();
-                }
+                if (!cursor.gotoParent()) return stringBuilder.toString();
             } while (!cursor.gotoNextSibling());
         }
     }
@@ -55,5 +45,26 @@ public class TreePrinter {
                 (name != null) ? name + ": " : "",
                 type, startPoint, endPoint
         );
+    }
+
+    private final class TreePrinterCursor extends TreeCursor {
+
+        private TreePrinterCursor(Node node) {
+            super(TreeSitter.treeCursorNew(node));
+        }
+
+        @Override
+        public boolean gotoFirstChild() {
+            boolean success = super.gotoFirstChild();
+            if (success) indentLevel++;
+            return success;
+        }
+
+        @Override
+        public boolean gotoParent() {
+            boolean success = super.gotoParent();
+            if (success) indentLevel--;
+            return success;
+        }
     }
 }
