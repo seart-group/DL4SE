@@ -9,5 +9,11 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter-c" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter-cpp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter-java" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter-javascript" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dl4se-tree-sitter/tree-sitter-python" vcs="Git" />
   </component>
 </project>
