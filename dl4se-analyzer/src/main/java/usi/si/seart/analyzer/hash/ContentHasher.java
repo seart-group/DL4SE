@@ -8,7 +8,7 @@ import usi.si.seart.treesitter.TreeCursor;
 import java.util.Arrays;
 
 @Getter
-public class ContentHasher extends SHA256Hasher {
+public class ContentHasher extends SHA256Hasher implements ByteArrayBacked {
 
     private byte[] bytes;
     private boolean ready;
@@ -25,6 +25,7 @@ public class ContentHasher extends SHA256Hasher {
         this.ready = true;
     }
 
+    @Override
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
         this.ready = bytes.length > 0;
