@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-analyzer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-analyzer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-crawler/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-crawler/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-model/src/main/java" charset="UTF-8" />

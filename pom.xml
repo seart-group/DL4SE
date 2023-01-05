@@ -29,6 +29,7 @@
     <module>dl4se-server</module>
     <module>dl4se-src2abs</module>
     <module>dl4se-tree-sitter</module>
+    <module>dl4se-analyzer</module>
   </modules>
 
   <properties>
