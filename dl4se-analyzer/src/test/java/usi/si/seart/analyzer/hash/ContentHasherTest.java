@@ -64,7 +64,7 @@ class ContentHasherTest extends HasherTest {
     @Test
     void hashTest() {
         Hasher hasher = new ContentHasher(bytes);
-        String actual = hasher.hash(tree);
+        String actual = hasher.hash(tree.getRootNode());
         String expected = sha256(inputFlat);
         Assertions.assertEquals(expected, actual, "Incrementally digested tree hash should be equal to the flat code manual digest!");
     }
@@ -72,8 +72,8 @@ class ContentHasherTest extends HasherTest {
     @Test
     void idempotencyTest() {
         Hasher hasher = new ContentHasher(bytes);
-        String first = hasher.hash(tree);
-        String second = hasher.hash(tree);
+        String first = hasher.hash(tree.getRootNode());
+        String second = hasher.hash(tree.getRootNode());
         Assertions.assertEquals(first, second, "Same instance should be reusable for multiple invocations!");
     }
 
@@ -83,9 +83,9 @@ class ContentHasherTest extends HasherTest {
         Tree other = parser.parseString(otherInput);
         ContentHasher hasher = new ContentHasher();
         hasher.setBytes(bytes);
-        String first = hasher.hash(tree);
+        String first = hasher.hash(tree.getRootNode());
         hasher.setBytes(otherBytes);
-        String second = hasher.hash(other);
+        String second = hasher.hash(other.getRootNode());
         Assertions.assertEquals(first, second, "Comments should not impact the hashing result!");
     }
 

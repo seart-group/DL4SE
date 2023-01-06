@@ -60,7 +60,7 @@ class SyntaxTreeHasherTest extends HasherTest {
     @Test
     void hashTest() {
         Hasher hasher = new SyntaxTreeHasher();
-        String actual = hasher.hash(tree);
+        String actual = hasher.hash(tree.getRootNode());
         String expected = sha256(abs);
         Assertions.assertEquals(expected, actual, "Incrementally digested hash of leaf node names should be equal to the manual digest of the flattened, abstract, typed code!");
     }
@@ -68,8 +68,8 @@ class SyntaxTreeHasherTest extends HasherTest {
     @Test
     void idempotencyTest() {
         Hasher hasher = new SyntaxTreeHasher();
-        String first = hasher.hash(tree);
-        String second = hasher.hash(tree);
+        String first = hasher.hash(tree.getRootNode());
+        String second = hasher.hash(tree.getRootNode());
         Assertions.assertEquals(first, second, "Same instance should be reusable for multiple invocations!");
     }
 
@@ -78,8 +78,8 @@ class SyntaxTreeHasherTest extends HasherTest {
     void noCommentImpactTest() {
         Tree other = parser.parseString(otherInput);
         Hasher hasher = new SyntaxTreeHasher();
-        String first = hasher.hash(tree);
-        String second = hasher.hash(other);
+        String first = hasher.hash(tree.getRootNode());
+        String second = hasher.hash(other.getRootNode());
         Assertions.assertEquals(first, second, "Comments should not impact the hashing result!");
     }
 

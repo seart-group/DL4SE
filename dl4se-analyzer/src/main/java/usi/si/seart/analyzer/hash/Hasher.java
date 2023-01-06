@@ -1,7 +1,7 @@
 package usi.si.seart.analyzer.hash;
 
-import usi.si.seart.treesitter.Tree;
+import usi.si.seart.treesitter.Node;
 
 public interface Hasher {
-    String hash(Tree tree);
+    String hash(Node node);
 }

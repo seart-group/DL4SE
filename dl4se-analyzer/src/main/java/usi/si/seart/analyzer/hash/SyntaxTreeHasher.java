@@ -11,7 +11,7 @@ public class SyntaxTreeHasher extends SHA256Hasher {
     }
 
     @Override
-    protected String sha256(Node node) {
+    public String hash(Node node) {
         @Cleanup TreeCursor cursor = node.walk();
         cursor.preorderTraversal(current -> {
             boolean leafNode = current.getChildCount() == 0;

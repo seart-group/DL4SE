@@ -31,7 +31,7 @@ public class ContentHasher extends SHA256Hasher {
     }
 
     @Override
-    protected String sha256(Node node) {
+    public String hash(Node node) {
         if (!ready) return null;
         @Cleanup TreeCursor cursor = node.walk();
         cursor.preorderTraversal(current -> {
