@@ -19,32 +19,6 @@ class SyntaxTreeHasherTest extends HasherTest {
 
     private Tree tree;
 
-    private static final String input =
-            "package ch.usi.si;\n" +
-            "\n" +
-            "public class Main {\n" +
-            "\tpublic static void main(String[] args) {\n" +
-            "\t\t//line comment\n" +
-            "\t\tSystem.out.println(\"Hello, World!\");\n" +
-            "\t}\n" +
-            "}";
-
-    private static final String otherInput =
-            "package ch.usi.si;\n" +
-            "\n" +
-            "public class Main {\n" +
-            "\tpublic static void main(String[] args) {\n" +
-            "\t\t/*\n" +
-            "\t\t * Block comment\n" +
-            "\t\t * on multiple lines\n" +
-            "\t\t */\n" +
-            "\t\tSystem.out.println(\"Hello, World!\");\n" +
-            "\t}\n" +
-            "}";
-
-    private static final String abs =
-            "packageidentifier.identifier.identifier;publicclassidentifier{publicstaticvoid_typeidentifier(type_identifier[]identifier){identifier.identifier.identifier(string_literal);}}";
-
     @BeforeAll
     static void beforeAll() {
         parser = new Parser();
@@ -54,14 +28,14 @@ class SyntaxTreeHasherTest extends HasherTest {
     @BeforeEach
     @SneakyThrows(UnsupportedEncodingException.class)
     void setUp() {
-        tree = parser.parseString(input);
+        tree = parser.parseString(input_1);
     }
 
     @Test
     void hashTest() {
         Hasher hasher = new SyntaxTreeHasher();
         String actual = hasher.hash(tree.getRootNode());
-        String expected = sha256(abs);
+        String expected = sha256(nodes_joined_1);
         Assertions.assertEquals(expected, actual, "Incrementally digested hash of leaf node names should be equal to the manual digest of the flattened, abstract, typed code!");
     }
 
@@ -76,7 +50,7 @@ class SyntaxTreeHasherTest extends HasherTest {
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
     void noCommentImpactTest() {
-        Tree other = parser.parseString(otherInput);
+        Tree other = parser.parseString(input_2);
         Hasher hasher = new SyntaxTreeHasher();
         String first = hasher.hash(tree.getRootNode());
         String second = hasher.hash(other.getRootNode());
