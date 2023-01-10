@@ -2,12 +2,16 @@ package usi.si.seart.treesitter;
 
 import lombok.NoArgsConstructor;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+
 /**
  * A Node represents a single node in the syntax tree. It tracks its start and end positions in the source code,
  * as well as its relation to other nodes like its parent, siblings and children.
  */
 @NoArgsConstructor
-public class Node {
+public class Node implements Iterable<Node> {
   private int context0;
   private int context1;
   private int context2;
@@ -214,5 +218,32 @@ public class Node {
   @Override
   public int hashCode() {
     return Long.hashCode(id);
+  }
+
+  /**
+   * @return An iterator over the node subtree, starting from the current node.
+   */
+  @Override
+  public Iterator<Node> iterator() {
+    return new Iterator<>() {
+
+      private final Stack<Node> stack = new Stack<>() {{ push(Node.this); }};
+
+      @Override
+      public boolean hasNext() {
+        return !stack.isEmpty();
+      }
+
+      @Override
+      public Node next() {
+        if (!hasNext()) throw new NoSuchElementException();
+        Node node = stack.pop();
+        int children = node.getChildCount();
+        for (int child = children - 1; child >= 0; child--) {
+          stack.push(node.getChild(child));
+        }
+        return node;
+      }
+    };
   }
 }
