@@ -1,5 +1,6 @@
 package usi.si.seart.analyzer.printer;
 
+import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Range;
 
@@ -8,19 +9,14 @@ import java.util.stream.Collectors;
 
 public class NodePrinter extends AbstractPrinter {
 
-    public NodePrinter() {
-        super();
-    }
-
-    public NodePrinter(byte[] bytes) {
-        super(bytes);
+    public NodePrinter(NodeMapper mapper) {
+        super(mapper);
     }
 
     @Override
     public String print(Node node) {
-        if (!isReady()) return null;
         Range range = node.getRange();
-        String content = getContentForRange(range);
+        String content = mapper.getContentForRange(range);
         int offset = node.getStartPoint().getColumn();
         List<String> lines = content.lines().collect(Collectors.toList());
         for (int i = 1; i < lines.size(); i++) {

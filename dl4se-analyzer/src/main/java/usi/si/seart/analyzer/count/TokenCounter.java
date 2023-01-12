@@ -1,26 +1,22 @@
 package usi.si.seart.analyzer.count;
 
+import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Range;
 
 public class TokenCounter extends ContentTraverseCounter {
 
-    public TokenCounter() {
-        super();
-    }
-
-    public TokenCounter(byte[] bytes) {
-        super(bytes);
+    public TokenCounter(NodeMapper mapper) {
+        super(mapper);
     }
 
     @Override
     protected void nodeCallback(Node node) {
-        if (!isReady()) return;
         boolean leafNode = node.getChildCount() == 0;
         if (leafNode) {
             String[] tokens;
             Range range = node.getRange();
-            String content = getContentForRange(range);
+            String content = mapper.getContentForRange(range);
             String type = node.getType();
             switch (type) {
                 case "block_comment":
