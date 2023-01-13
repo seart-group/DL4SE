@@ -10,8 +10,7 @@ class TreeTest extends TestBase {
 
     @Test
     void testTreeEdit() throws UnsupportedEncodingException {
-        @Cleanup Parser parser = new Parser();
-        parser.setLanguage(Language.JAVA);
+        @Cleanup Parser parser = new Parser(Language.JAVA);
 
         Tree tree = parser.parseString("class Main {\n    // This is a line comment\n}");
 

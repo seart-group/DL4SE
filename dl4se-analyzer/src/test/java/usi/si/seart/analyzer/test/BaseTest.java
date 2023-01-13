@@ -24,8 +24,7 @@ public abstract class BaseTest {
 
     @BeforeAll
     static void beforeAll() {
-        parser = new Parser();
-        parser.setLanguage(Language.JAVA);
+        parser = new Parser(Language.JAVA);
     }
 
     @AfterAll

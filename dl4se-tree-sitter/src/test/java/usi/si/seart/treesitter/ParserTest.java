@@ -29,16 +29,14 @@ class ParserTest extends TestBase {
 
     @Test
     void testParseString() throws UnsupportedEncodingException {
-        @Cleanup Parser parser = new Parser();
-        parser.setLanguage(Language.PYTHON);
+        @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
         Assertions.assertEquals(nodeString, tree.getRootNode().getNodeString());
     }
 
     @Test
     void testParseFile() throws IOException {
-        @Cleanup Parser parser = new Parser();
-        parser.setLanguage(Language.PYTHON);
+        @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseFile(tmpFile);
         Assertions.assertEquals(nodeString, tree.getRootNode().getNodeString());
     }

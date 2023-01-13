@@ -10,8 +10,7 @@ class QueryCursorTest extends TestBase {
 
     @Test
     void testExecSimpleQuery() throws UnsupportedEncodingException {
-        @Cleanup Parser parser = new Parser();
-        parser.setLanguage(Language.JAVA);
+        @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parseString("class Hello {}");
         @Cleanup Query query = new Query(Language.JAVA, "(class_body) @test");
         @Cleanup QueryCursor cursor = new QueryCursor();
@@ -23,8 +22,7 @@ class QueryCursorTest extends TestBase {
 
     @Test
     void testExecNoResultQuery() throws UnsupportedEncodingException {
-        @Cleanup Parser parser = new Parser();
-        parser.setLanguage(Language.JAVA);
+        @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parseString("class Hello {}");
         @Cleanup Query query = new Query(Language.JAVA, "(method_declaration) @method");
         @Cleanup QueryCursor cursor = new QueryCursor();

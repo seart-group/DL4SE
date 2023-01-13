@@ -1,26 +1,25 @@
 package usi.si.seart.treesitter;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Parsers are stateful objects that can be assigned a language and used to produce a
  * {@link Tree Tree} based on some source code.
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Parser implements AutoCloseable {
 
   private final long pointer;
 
-  public Parser() {
-    this(TreeSitter.parserNew());
+  public Parser(Language language) {
+    Objects.requireNonNull(language, "Language must not be null!");
+    this.pointer = TreeSitter.parserNew();
+    this.setLanguage(language);
   }
 
   /**
@@ -29,6 +28,7 @@ public class Parser implements AutoCloseable {
    * @param language The language used for parsing.
    */
   public void setLanguage(Language language) {
+    Objects.requireNonNull(language, "Language must not be null!");
     TreeSitter.parserSetLanguage(pointer, language.getId());
   }
 

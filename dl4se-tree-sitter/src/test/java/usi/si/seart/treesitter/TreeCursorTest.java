@@ -10,8 +10,7 @@ class TreeCursorTest extends TestBase {
 
   @Test
   void testWalk() throws UnsupportedEncodingException {
-    @Cleanup Parser parser = new Parser();
-    parser.setLanguage(Language.PYTHON);
+    @Cleanup Parser parser = new Parser(Language.PYTHON);
     @Cleanup Tree tree = parser.parseString("def foo(bar, baz):\n  print(bar)\n  print(baz)");
     @Cleanup TreeCursor cursor = tree.getRootNode().walk();
     Assertions.assertEquals("module", cursor.getCurrentTreeCursorNode().getType());
