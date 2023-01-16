@@ -7,7 +7,7 @@ import usi.si.seart.treesitter.Range;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class NodePrinter extends AbstractPrinter {
+public class NodePrinter extends ContentPrinter {
 
     public NodePrinter(NodeMapper mapper) {
         super(mapper);
