@@ -11,7 +11,7 @@ public class ContainsNonAscii extends ContentPredicate {
     }
 
     @Override
-    public Boolean test(Node node) {
+    public boolean test(Node node) {
         Range range = node.getRange();
         byte[] bytes = mapper.getBytesForRange(range);
         for (int i = 0; i < bytes.length; i += 2) {
