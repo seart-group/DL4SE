@@ -10,10 +10,10 @@ public abstract class PredicateTest extends BaseTest {
             "package ch.usi.si;\n" +
             "\n" +
             "public class Main {\n" +
-            "\tpublic static void main(String[] args) {\n" +
-            "\t\t// 软件工程的深度学习\n" +
-            "\t\tSystem.out.println(\"Hello, World!\");\n" +
-            "\t}\n" +
+            "    public static void main(String[] args) {\n" +
+            "        // 软件工程的深度学习\n" +
+            "        System.out.println(\"Hello, World!\");\n" +
+            "    }\n" +
             "}";
 
     protected final byte[] bytes_1 = input_1.getBytes(StandardCharsets.UTF_16LE);

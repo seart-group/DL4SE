@@ -50,10 +50,10 @@ public abstract class BaseTest {
             "package ch.usi.si;\n" +
             "\n" +
             "public class Main {\n" +
-            "\tpublic static void main(String[] args) {\n" +
-            "\t\t//line comment\n" +
-            "\t\tSystem.out.println(\"Hello, World!\");\n" +
-            "\t}\n" +
+            "    public static void main(String[] args) {\n" +
+            "        //line comment\n" +
+            "        System.out.println(\"Hello, World!\");\n" +
+            "    }\n" +
             "}";
     
     protected final List<String> tokens_1 = List.of(
@@ -140,13 +140,13 @@ public abstract class BaseTest {
             "package ch.usi.si;\n" +
             "\n" +
             "public class Main {\n" +
-            "\tpublic static void main(String[] args) {\n" +
-            "\t\t/*\n" +
-            "\t\t * Block comment\n" +
-            "\t\t * on multiple lines\n" +
-            "\t\t */\n" +
-            "\t\tSystem.out.println(\"Hello, World!\");\n" +
-            "\t}\n" +
+            "    public static void main(String[] args) {\n" +
+            "        /*\n" +
+            "         * Block comment\n" +
+            "         * on multiple lines\n" +
+            "         */\n" +
+            "        System.out.println(\"Hello, World!\");\n" +
+            "    }\n" +
             "}";
 
     protected final byte[] bytes_2 = input_2.getBytes(StandardCharsets.UTF_16LE);

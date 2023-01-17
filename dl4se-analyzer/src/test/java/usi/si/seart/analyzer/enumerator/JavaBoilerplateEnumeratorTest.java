@@ -23,18 +23,18 @@ class JavaBoilerplateEnumeratorTest extends BaseTest {
             "package ch.usi.si;\n" +
             "\n" +
             "public class Main {\n" +
-            "\tpublic Main() {}\n" +
-            "\tpublic Main(int i) {}\n" +
-            "\tpublic void getI() {}\n" +
-            "\tpublic void getI(int i) {}\n" +
-            "\tpublic void setI() {}\n" +
-            "\tpublic void setI(int i) {}\n" +
-            "\tpublic void builder() {}\n" +
-            "\tpublic void equals() {}\n" +
-            "\tpublic void hashCode() {}\n" +
-            "\tpublic void toString() {}\n" +
-            "\tpublic void run() {}\n" +
-            "\tpublic static void main(String[] args) {}\n" +
+            "    public Main() {}\n" +
+            "    public Main(int i) {}\n" +
+            "    public void getI() {}\n" +
+            "    public void getI(int i) {}\n" +
+            "    public void setI() {}\n" +
+            "    public void setI(int i) {}\n" +
+            "    public void builder() {}\n" +
+            "    public void equals() {}\n" +
+            "    public void hashCode() {}\n" +
+            "    public void toString() {}\n" +
+            "    public void run() {}\n" +
+            "    public static void main(String[] args) {}\n" +
             "}";
 
     protected final String input_1 = input_static;

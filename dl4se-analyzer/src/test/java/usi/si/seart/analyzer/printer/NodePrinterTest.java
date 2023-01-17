@@ -22,8 +22,8 @@ class NodePrinterTest extends BaseTest {
         actual = printer.print(method);
         expected =
                 "public static void main(String[] args) {\n" +
-                "\t//line comment\n" +
-                "\tSystem.out.println(\"Hello, World!\");\n" +
+                "    //line comment\n" +
+                "    System.out.println(\"Hello, World!\");\n" +
                 "}";
         Assertions.assertEquals(expected, actual);
     }
