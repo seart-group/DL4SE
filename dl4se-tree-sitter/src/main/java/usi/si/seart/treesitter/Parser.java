@@ -33,16 +33,24 @@ public class Parser implements AutoCloseable {
   }
 
   /**
-   * Use the parser to parse some source code stored in one contiguous buffer.
+   * Use the parser to parse some source code and create a syntax tree.
    *
    * @param source The source code string to be parsed.
-   * @return A tree-sitter Tree matching the provided source.
+   * @return A syntax tree matching the provided source.
    */
   public Tree parseString(String source) throws UnsupportedEncodingException {
     byte[] bytes = source.getBytes(StandardCharsets.UTF_16LE);
     return new Tree(TreeSitter.parserParseBytes(pointer, bytes, bytes.length));
   }
 
+  /**
+   * Use the parser to incrementally parse a changed source code string,
+   * reusing unchanged parts of the tree to speed up the process.
+   *
+   * @param oldTree The syntax tree before changes were made.
+   * @param source The source code string to be parsed.
+   * @return A syntax tree matching the provided source.
+   */
   public Tree parseString(Tree oldTree, String source) throws UnsupportedEncodingException {
     byte[] bytes = source.getBytes(StandardCharsets.UTF_16LE);
     return new Tree(TreeSitter.parserIncrementalParseBytes(pointer, oldTree.getPointer(), bytes, bytes.length));
