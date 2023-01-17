@@ -18,7 +18,7 @@ class ContainsErrorPredicateTest extends PredicateTest {
     @SneakyThrows(UnsupportedEncodingException.class)
     void containsErrorTest() {
         @Cleanup Parser parser = new Parser(Language.C);
-        Tree error = parser.parseString(input_1);
+        Tree error = parser.parseString(getInput());
         Node root = error.getRootNode();
         Predicate<Node> predicate = new ContainsErrorPredicate();
         boolean result = predicate.test(root);

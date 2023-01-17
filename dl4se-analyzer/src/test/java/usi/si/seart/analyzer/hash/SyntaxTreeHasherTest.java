@@ -13,7 +13,7 @@ class SyntaxTreeHasherTest extends HasherTest {
     void hashTest() {
         Hasher hasher = new SyntaxTreeHasher();
         String actual = hasher.hash(tree.getRootNode());
-        String expected = sha256(nodes_joined_1);
+        String expected = sha256(getJoinedNodes());
         Assertions.assertEquals(expected, actual, "Incrementally digested hash of leaf node names should be equal to the manual digest of the flattened, abstract, typed code!");
     }
 
@@ -28,6 +28,18 @@ class SyntaxTreeHasherTest extends HasherTest {
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
     void noCommentImpactTest() {
+        String input_2 =
+                "package ch.usi.si;\n" +
+                "\n" +
+                "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        /*\n" +
+                "         * Block comment\n" +
+                "         * on multiple lines\n" +
+                "         */\n" +
+                "        System.out.println(\"Hello, World!\");\n" +
+                "    }\n" +
+                "}";
         Tree other = parser.parseString(input_2);
         Hasher hasher = new SyntaxTreeHasher();
         String first = hasher.hash(tree.getRootNode());

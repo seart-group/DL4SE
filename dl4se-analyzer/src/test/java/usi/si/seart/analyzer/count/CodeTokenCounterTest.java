@@ -12,7 +12,7 @@ class CodeTokenCounterTest extends BaseTest {
         Long actual = counter.count(tree.getRootNode());
         // Remove 1 for the comment node
         Assertions.assertEquals(
-                nodes_1.size() - 1, actual,
+                getNodes().size() - 1, actual,
                 "Total number of code tokens should be equal to the number of input tokens without the comments!"
         );
     }

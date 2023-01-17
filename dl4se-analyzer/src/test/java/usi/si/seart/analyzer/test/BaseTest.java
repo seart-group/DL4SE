@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Language;
 import usi.si.seart.treesitter.LibraryLoader;
 import usi.si.seart.treesitter.Parser;
@@ -37,7 +38,7 @@ public abstract class BaseTest {
     @BeforeEach
     @SneakyThrows(UnsupportedEncodingException.class)
     void setUp() {
-        tree = parser.parseString(input_1);
+        tree = parser.parseString(getInput());
     }
 
     @AfterEach
@@ -46,7 +47,8 @@ public abstract class BaseTest {
         tree = null;
     }
 
-    protected final String input_1 =
+    protected String getInput() {
+        return
             "package ch.usi.si;\n" +
             "\n" +
             "public class Main {\n" +
@@ -55,8 +57,18 @@ public abstract class BaseTest {
             "        System.out.println(\"Hello, World!\");\n" +
             "    }\n" +
             "}";
-    
-    protected final List<String> tokens_1 = List.of(
+    }
+
+    protected byte[] getBytes() {
+        return getInput().getBytes(StandardCharsets.UTF_16LE);
+    }
+
+    protected NodeMapper getNodeMapper() {
+        return this::getBytes;
+    }
+
+    protected List<String> getTokens() {
+        return List.of(
             "package",
             "ch",
             ".",
@@ -91,11 +103,15 @@ public abstract class BaseTest {
             ";",
             "}",
             "}"
-    );
+        );
+    }
 
-    protected final String tokens_joined_1 = String.join("", tokens_1);
+    protected String getJoinedTokens() {
+        return String.join("", getTokens());
+    }
 
-    protected final List<String> nodes_1 = List.of(
+    protected List <String> getNodes() {
+        return List.of(
             "package",
             "identifier",
             ".",
@@ -130,24 +146,10 @@ public abstract class BaseTest {
             ";",
             "}",
             "}"
-    );
+        );
+    }
 
-    protected final String nodes_joined_1 = String.join("", nodes_1);
-
-    protected final byte[] bytes_1 = input_1.getBytes(StandardCharsets.UTF_16LE);
-
-    protected final String input_2 =
-            "package ch.usi.si;\n" +
-            "\n" +
-            "public class Main {\n" +
-            "    public static void main(String[] args) {\n" +
-            "        /*\n" +
-            "         * Block comment\n" +
-            "         * on multiple lines\n" +
-            "         */\n" +
-            "        System.out.println(\"Hello, World!\");\n" +
-            "    }\n" +
-            "}";
-
-    protected final byte[] bytes_2 = input_2.getBytes(StandardCharsets.UTF_16LE);
+    protected String getJoinedNodes() {
+        return String.join("", getNodes());
+    }
 }

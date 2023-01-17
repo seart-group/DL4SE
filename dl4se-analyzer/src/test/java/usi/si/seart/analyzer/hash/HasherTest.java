@@ -9,7 +9,9 @@ import java.util.List;
 
 public abstract class HasherTest extends BaseTest {
 
-    protected final List<String> tokens_1 = List.of(
+    @Override
+    protected List<String> getTokens() {
+        return List.of(
             "package",
             "ch",
             ".",
@@ -42,11 +44,12 @@ public abstract class HasherTest extends BaseTest {
             ";",
             "}",
             "}"
-    );
+        );
+    }
 
-    protected final String tokens_joined_1 = String.join("", tokens_1);
-
-    protected final List<String> nodes_1 = List.of(
+    @Override
+    protected List<String> getNodes() {
+        return List.of(
             "package",
             "identifier",
             ".",
@@ -79,9 +82,8 @@ public abstract class HasherTest extends BaseTest {
             ";",
             "}",
             "}"
-    );
-
-    protected final String nodes_joined_1 = String.join("", nodes_1);
+        );
+    }
 
     @SneakyThrows({NoSuchAlgorithmException.class})
     protected String sha256(String input) {

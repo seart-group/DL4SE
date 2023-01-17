@@ -2,20 +2,17 @@ package usi.si.seart.analyzer.printer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.treesitter.Node;
 
 class NodePrinterTest extends BaseTest {
 
-    private final NodeMapper mapper = () -> bytes_1;
-
     @Test
     void printTest() {
-        Printer printer = new NodePrinter(mapper);
+        Printer printer = new NodePrinter(getNodeMapper());
         Node root = tree.getRootNode();
         String actual = printer.print(root);
-        String expected = input_1;
+        String expected = getInput();
         Assertions.assertEquals(expected, actual);
 
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);

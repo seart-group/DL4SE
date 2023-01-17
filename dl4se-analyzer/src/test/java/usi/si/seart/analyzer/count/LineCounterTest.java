@@ -11,7 +11,7 @@ class LineCounterTest extends BaseTest {
         Counter counter = new LineCounter();
         Long actual = counter.count(tree.getRootNode());
         Assertions.assertEquals(
-                input_1.lines().count(), actual,
+                getInput().lines().count(), actual,
                 "Total number of lines should be equal to the number of lines reported by String method"
         );
     }
