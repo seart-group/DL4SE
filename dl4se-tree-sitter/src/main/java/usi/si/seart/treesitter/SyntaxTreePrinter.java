@@ -6,22 +6,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 /**
- * Utility used for pretty-printing parse trees.
+ * Utility used for pretty-printing entire syntax trees, as well as their subtrees.
  */
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TreePrinter {
+public class SyntaxTreePrinter {
 
     int indentLevel = 0;
-    final Tree tree;
+    final Node node;
 
     /**
-     * @return A string representation of the parse tree. Consists only of named nodes.
+     * @return A string representation of the subtree. Consists only of named nodes.
+     * @see <a href="https://tree-sitter.github.io/tree-sitter/playground">Syntax Tree Playground</a>
      */
-    public String printParseTree() {
+    public String printSubtree() {
         StringBuilder stringBuilder = new StringBuilder();
-        Node root = this.tree.getRootNode();
-        @Cleanup TreeCursor cursor = new TreePrinterCursor(root);
+        @Cleanup TreeCursor cursor = new TreePrinterCursor(node);
         for (;;) {
             TreeCursorNode treeCursorNode = cursor.getCurrentTreeCursorNode();
             if (treeCursorNode.isNamed()) {
