@@ -45,27 +45,4 @@ public abstract class SingleCaptureQueries implements Queries<List<Node>>, Valid
     public boolean isPastThreshold(int count) {
         return count >= 1;
     }
-
-    public static SingleCaptureQueries forLanguage(Language language) {
-        switch (language) {
-            case JAVA: return new JavaSingleCaptureQueries();
-            default: return new SingleCaptureQueries(null) {
-
-                @Override
-                public List<Node> getNodes(Node node) {
-                    return List.of();
-                }
-
-                @Override
-                public List<Node> getComments(Node node) {
-                    return List.of();
-                }
-
-                @Override
-                public List<Node> getCallableDeclarations(Node node) {
-                    return List.of();
-                }
-            };
-        }
-    }
 }

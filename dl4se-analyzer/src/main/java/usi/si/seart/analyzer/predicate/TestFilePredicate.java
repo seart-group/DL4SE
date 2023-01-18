@@ -1,7 +1,5 @@
 package usi.si.seart.analyzer.predicate;
 
-import usi.si.seart.treesitter.Language;
-
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -15,12 +13,4 @@ public abstract class TestFilePredicate implements Predicate<Path> {
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher(glob);
         return matcher.matches(path);
     }
-
-    public static TestFilePredicate forLanguage(Language language) {
-        switch (language) {
-            case JAVA: return new JavaTestFilePredicate();
-            default: return new TestFilePredicate() {};
-        }
-    }
-
 }
