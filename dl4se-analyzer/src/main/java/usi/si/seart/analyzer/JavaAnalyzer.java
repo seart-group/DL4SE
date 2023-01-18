@@ -4,6 +4,7 @@ import usi.si.seart.analyzer.enumerator.JavaBoilerplateEnumerator;
 import usi.si.seart.analyzer.predicate.JavaTestFilePredicate;
 import usi.si.seart.analyzer.query.JavaSingleCaptureQueries;
 import usi.si.seart.analyzer.traverser.PreviousCommentTraverser;
+import usi.si.seart.analyzer.traverser.Traverser;
 import usi.si.seart.analyzer.util.stream.DelimiterSuffixedStringCollector;
 import usi.si.seart.model.code.Function;
 import usi.si.seart.treesitter.Language;
@@ -13,6 +14,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class JavaAnalyzer extends AbstractAnalyzer {
+
+    protected Traverser<List<Node>> previousCommentTraverser;
 
     public JavaAnalyzer(LocalClone localClone, Path path) {
         super(localClone, path, Language.JAVA);

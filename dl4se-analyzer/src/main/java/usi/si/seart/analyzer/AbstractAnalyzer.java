@@ -20,7 +20,6 @@ import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
 import usi.si.seart.analyzer.query.Queries;
-import usi.si.seart.analyzer.traverser.Traverser;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
@@ -82,8 +81,6 @@ public abstract class AbstractAnalyzer implements Analyzer {
     };
 
     Enumerator<Boilerplate> boilerplateEnumerator = node -> null;
-
-    Traverser<List<Node>> previousCommentTraverser = node -> List.of();
 
     @SneakyThrows({IOException.class})
     protected AbstractAnalyzer(LocalClone localClone, Path path, Language language) {
