@@ -34,9 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class AbstractAnalyzer implements Analyzer {
@@ -120,58 +118,55 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return new Analyzer.Result(file, functions);
     }
 
-    private File extractFileEntity() {
-        Node fileNode = tree.getRootNode();
+    protected File extractFileEntity() {
+        Node node = tree.getRootNode();
         return File.builder()
                 .repo(localClone.getGitRepo())
                 .path(localClone.relativePathOf(path).toString())
-                .content(nodePrinter.print(fileNode))
-                .contentHash(contentHasher.hash(fileNode))
-                .ast(syntaxTreePrinter.print(fileNode))
-                .astHash(syntaxTreeHasher.hash(fileNode))
-                .sExpression(sExpressionPrinter.print(fileNode))
-                .totalTokens(totalTokenCounter.count(fileNode))
-                .codeTokens(codeTokenCounter.count(fileNode))
-                .lines(lineCounter.count(fileNode))
-                .characters(characterCounter.count(fileNode))
-                .containsNonAscii(containsNonAscii.test(fileNode))
-                .containsError(containsError.test(fileNode))
+                .content(nodePrinter.print(node))
+                .contentHash(contentHasher.hash(node))
+                .ast(syntaxTreePrinter.print(node))
+                .astHash(syntaxTreeHasher.hash(node))
+                .sExpression("(sexp " + sExpressionPrinter.print(node) + ")")
+                .totalTokens(totalTokenCounter.count(node))
+                .codeTokens(codeTokenCounter.count(node))
+                .lines(lineCounter.count(node))
+                .characters(characterCounter.count(node))
+                .containsNonAscii(containsNonAscii.test(node))
+                .containsError(containsError.test(node))
                 .isTest(testFilePredicate.test(path))
                 .build();
     }
 
-    private List<Function> extractFunctionEntities(File file) {
+    protected List<Function> extractFunctionEntities(File file) {
         List<Node> targets = queries.getCallableDeclarations(tree.getRootNode());
         List<Function> functions = new ArrayList<>(targets.size());
-        for (Node fnNode: targets) {
-            List<Node> comments = previousCommentTraverser.getNodes(fnNode);
-            String prefixDoc = comments.stream()
-                    .map(node -> nodePrinter.print(node))
-                    .collect(Collector.of(
-                            () -> new StringJoiner("\n", "", "\n").setEmptyValue(""),
-                            StringJoiner::add,
-                            StringJoiner::merge,
-                            StringJoiner::toString
-                    ));
-            Function function = Function.builder()
-                    .file(file)
-                    .repo(localClone.getGitRepo())
-                    .content(prefixDoc + nodePrinter.print(fnNode))
-                    .contentHash(contentHasher.hash(fnNode))
-                    .ast(syntaxTreePrinter.print(fnNode))
-                    .astHash(syntaxTreeHasher.hash(fnNode))
-                    .sExpression(sExpressionPrinter.print(fnNode))
-                    .totalTokens(totalTokenCounter.count(fnNode))
-                    .codeTokens(codeTokenCounter.count(fnNode))
-                    .lines(lineCounter.count(fnNode))
-                    .characters(characterCounter.count(fnNode))
-                    .containsNonAscii(containsNonAscii.test(fnNode))
-                    .containsError(containsError.test(fnNode))
-                    .boilerplateType(boilerplateEnumerator.asEnum(fnNode))
-                    .isTest(file.getIsTest())
-                    .build();
+        for (Node node: targets) {
+            Function function = extractFunctionEntity(node);
+            // These operations are invariant by
+            // nature and should not be overridden
+            function.setFile(file);
+            function.setIsTest(file.getIsTest());
             functions.add(function);
         }
         return functions;
+    }
+
+    protected Function extractFunctionEntity(Node node) {
+        return Function.builder()
+                .repo(localClone.getGitRepo())
+                .content(nodePrinter.print(node))
+                .contentHash(contentHasher.hash(node))
+                .ast(syntaxTreePrinter.print(node))
+                .astHash(syntaxTreeHasher.hash(node))
+                .sExpression("(sexp " + sExpressionPrinter.print(node) + ")")
+                .totalTokens(totalTokenCounter.count(node))
+                .codeTokens(codeTokenCounter.count(node))
+                .lines(lineCounter.count(node))
+                .characters(characterCounter.count(node))
+                .containsNonAscii(containsNonAscii.test(node))
+                .containsError(containsError.test(node))
+                .boilerplateType(boilerplateEnumerator.asEnum(node))
+                .build();
     }
 }
