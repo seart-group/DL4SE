@@ -33,6 +33,8 @@ class TreeSitter {
 
   static native boolean nodeIsNamed(Node node);
 
+  static native boolean nodeIsNull(Node node);
+
   static native Node nodeParent(Node node);
 
   static native Node nodePrevNamedSibling(Node node);

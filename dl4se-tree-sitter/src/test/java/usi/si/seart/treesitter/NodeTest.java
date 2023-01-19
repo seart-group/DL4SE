@@ -221,4 +221,17 @@ class NodeTest extends TestBase {
         Assertions.assertFalse(def.isNamed());
         Assertions.assertTrue(identifier.isNamed());
     }
+
+    @Test
+    @SneakyThrows(UnsupportedEncodingException.class)
+    void testIsNull() {
+        @Cleanup Parser parser = new Parser(Language.PYTHON);
+        @Cleanup Tree tree = parser.parseString(source);
+        Node root = tree.getRootNode();
+        Assertions.assertFalse(root.isNull());
+        Node function = root.getChild(0);
+        Node nullNode = root.getChild(1);
+        Assertions.assertFalse(function.isNull());
+        Assertions.assertTrue(nullNode.isNull());
+    }
 }

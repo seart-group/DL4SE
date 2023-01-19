@@ -121,6 +121,14 @@ JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNamed
 
 /*
  * Class:     usi_si_seart_treesitter_TreeSitter
+ * Method:    nodeIsNull
+ * Signature: (Lusi/si/seart/treesitter/Node;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNull
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     usi_si_seart_treesitter_TreeSitter
  * Method:    nodeParent
  * Signature: (Lusi/si/seart/treesitter/Node;)Lusi/si/seart/treesitter/Node;
  */

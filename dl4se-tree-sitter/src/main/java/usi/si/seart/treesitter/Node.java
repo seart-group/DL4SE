@@ -201,6 +201,17 @@ public class Node implements Iterable<Node> {
   }
 
   /**
+   * Check if the node is <em>null</em>. Methods such as {@link #getChild(int) getChild} and
+   * {@link #getNextSibling() getNextSibling} will return a null node to indicate that no such node
+   * was found.
+   *
+   * @return true if the current node is a null node, false otherwise
+   */
+  public boolean isNull() {
+    return TreeSitter.nodeIsNull(this);
+  }
+
+  /**
    * A tree cursor allows you to walk a syntax tree more efficiently than is possible using the TSNode functions.
    * It is a mutable object that is always on a certain syntax node, and can be moved imperatively to different nodes.
    *

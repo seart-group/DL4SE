@@ -309,6 +309,11 @@ JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNamed(
   return (jboolean) ts_node_is_named(_unmarshalNode(env, node));
 }
 
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNull(
+    JNIEnv* env, jclass self, jobject node) {
+  return (jboolean) ts_node_is_null(_unmarshalNode(env, node));
+}
+
 JNIEXPORT jobject JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeParent(
     JNIEnv* env, jclass self, jobject node) {
   TSNode parent = ts_node_parent(_unmarshalNode(env, node));
