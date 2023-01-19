@@ -1,19 +1,16 @@
 package usi.si.seart.treesitter;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.Iterator;
 
 /**
  * A Tree represents the syntax tree of an entire source code file. It contains {@link Node Node}
  * instances that indicate the structure of the source code.
  */
-@Getter
-@AllArgsConstructor
-public class Tree implements AutoCloseable, Iterable<Node> {
+public class Tree extends External implements Iterable<Node> {
 
-  private final long pointer;
+  Tree(long pointer) {
+    super(pointer);
+  }
 
   /**
    * Delete the syntax tree, freeing all the memory that it used.
@@ -45,9 +42,5 @@ public class Tree implements AutoCloseable, Iterable<Node> {
   @Override
   public Iterator<Node> iterator() {
     return getRootNode().iterator();
-  }
-
-  public boolean isNull() {
-    return pointer == 0;
   }
 }

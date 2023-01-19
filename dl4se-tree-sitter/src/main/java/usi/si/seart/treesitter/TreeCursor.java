@@ -1,20 +1,20 @@
 package usi.si.seart.treesitter;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.function.Consumer;
 
 /**
  *  A tree cursor is a stateful object that allows you to walk a syntax tree with maximum efficiency.
  */
-@RequiredArgsConstructor
-public class TreeCursor implements AutoCloseable {
+public class TreeCursor extends External {
 
-  private final long pointer;
   private int context0;
   private int context1;
   private long id;
   private long tree;
+
+  TreeCursor(long pointer) {
+    super(pointer);
+  }
 
   /**
    * Delete the tree cursor, freeing all the memory that it used.
@@ -72,10 +72,6 @@ public class TreeCursor implements AutoCloseable {
    */
   public boolean gotoParent() {
     return TreeSitter.treeCursorGotoParent(pointer);
-  }
-
-  public boolean isNull() {
-    return pointer == 0;
   }
 
   /**

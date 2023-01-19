@@ -1,8 +1,6 @@
 package usi.si.seart.treesitter;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import java.util.Objects;
 
 /**
  * A query consists of one or more patterns, where each pattern is an S-expression that matches a certain set of nodes
@@ -24,14 +22,16 @@ import lombok.Getter;
  *
  * @apiNote The underlying query value is immutable and can be safely shared between threads.
  */
-@Getter(value = AccessLevel.PACKAGE)
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class Query implements AutoCloseable {
-
-    private final long pointer;
+public class Query extends External {
 
     public Query(Language language, String source) {
-        this(TreeSitter.queryNew(language.getId(), source));
+        super(createIfValid(language, source));
+    }
+
+    private static long createIfValid(Language language, String source) {
+        Objects.requireNonNull(language, "Language must not be null!");
+        Objects.requireNonNull(source, "Source must not be null!");
+        return TreeSitter.queryNew(language.getId(), source);
     }
 
     /**
@@ -40,9 +40,5 @@ public class Query implements AutoCloseable {
     @Override
     public void close() {
         TreeSitter.queryDelete(pointer);
-    }
-
-    public boolean isNull() {
-        return pointer == 0;
     }
 }

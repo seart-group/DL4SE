@@ -12,18 +12,16 @@ import java.util.Objects;
  * Parsers are stateful objects that can be assigned a language and used to produce a
  * {@link Tree Tree} based on some source code.
  */
-public class Parser implements AutoCloseable {
-
-  private final long pointer;
+public class Parser extends External {
 
   public Parser(Language language) {
-    Objects.requireNonNull(language, "Language must not be null!");
-    this.pointer = TreeSitter.parserNew();
+    super(createIfValid(language));
     this.setLanguage(language);
   }
 
-  public boolean isNull() {
-    return pointer == 0;
+  private static long createIfValid(Language language) {
+    Objects.requireNonNull(language, "Language must not be null!");
+    return TreeSitter.parserNew();
   }
 
   /**

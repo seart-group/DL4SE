@@ -1,20 +1,14 @@
 package usi.si.seart.treesitter;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-
 /**
  * Cursor used for executing queries, carrying the state needed to process them.
  *
  * @apiNote The query cursor should not be shared between threads, but can be reused for many query executions.
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class QueryCursor implements AutoCloseable {
-
-    private final long pointer;
+public class QueryCursor extends External {
 
     public QueryCursor() {
-        this(TreeSitter.queryCursorNew());
+        super(TreeSitter.queryCursorNew());
     }
 
     /**
@@ -25,10 +19,6 @@ public class QueryCursor implements AutoCloseable {
      */
     public void execQuery(Query query, Node node) {
         TreeSitter.queryCursorExec(pointer, query.getPointer(), node);
-    }
-
-    public boolean isNull() {
-        return pointer == 0;
     }
 
     /**
