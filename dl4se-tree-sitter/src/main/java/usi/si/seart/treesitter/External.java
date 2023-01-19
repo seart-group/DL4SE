@@ -13,4 +13,17 @@ abstract class External implements AutoCloseable {
     public final boolean isNull() {
         return pointer == 0;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        External other = (External) obj;
+        return pointer == other.pointer;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(pointer);
+    }
 }
