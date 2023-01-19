@@ -22,6 +22,10 @@ public class Parser implements AutoCloseable {
     this.setLanguage(language);
   }
 
+  public boolean isNull() {
+    return pointer == 0;
+  }
+
   /**
    * Set the language that the parser should use for parsing.
    *

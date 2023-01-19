@@ -74,6 +74,10 @@ public class TreeCursor implements AutoCloseable {
     return TreeSitter.treeCursorGotoParent(pointer);
   }
 
+  public boolean isNull() {
+    return pointer == 0;
+  }
+
   /**
    * Iteratively traverse over the parse tree, applying a callback to the nodes before they are visited.
    *

@@ -27,6 +27,10 @@ public class QueryCursor implements AutoCloseable {
         TreeSitter.queryCursorExec(pointer, query.getPointer(), node);
     }
 
+    public boolean isNull() {
+        return pointer == 0;
+    }
+
     /**
      * Advance to the next match of the currently running query.
      *

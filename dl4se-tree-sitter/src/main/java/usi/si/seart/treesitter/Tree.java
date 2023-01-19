@@ -46,4 +46,8 @@ public class Tree implements AutoCloseable, Iterable<Node> {
   public Iterator<Node> iterator() {
     return getRootNode().iterator();
   }
+
+  public boolean isNull() {
+    return pointer == 0;
+  }
 }
