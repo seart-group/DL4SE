@@ -291,27 +291,27 @@ JNIEXPORT jobject JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeEndPoint(
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeHasError(
     JNIEnv* env, jclass self, jobject node) {
-  return (jboolean) ts_node_has_error(_unmarshalNode(env, node));
+  return ts_node_has_error(_unmarshalNode(env, node)) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsExtra(
     JNIEnv* env, jclass self, jobject node) {
-  return (jboolean) ts_node_is_extra(_unmarshalNode(env, node));
+  return ts_node_is_extra(_unmarshalNode(env, node)) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsMissing(
     JNIEnv* env, jclass self, jobject node) {
-  return (jboolean) ts_node_is_missing(_unmarshalNode(env, node));
+  return ts_node_is_missing(_unmarshalNode(env, node)) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNamed(
     JNIEnv* env, jclass self, jobject node) {
-  return (jboolean) ts_node_is_named(_unmarshalNode(env, node));
+  return ts_node_is_named(_unmarshalNode(env, node)) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeIsNull(
     JNIEnv* env, jclass self, jobject node) {
-  return (jboolean) ts_node_is_null(_unmarshalNode(env, node));
+  return ts_node_is_null(_unmarshalNode(env, node)) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jobject JNICALL Java_usi_si_seart_treesitter_TreeSitter_nodeParent(
@@ -437,22 +437,19 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorNew(
   return (jlong)cursor;
 }
 
-JNIEXPORT jstring JNICALL
-Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentFieldName(
+JNIEXPORT jstring JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentFieldName(
     JNIEnv* env, jclass self, jlong cursor) {
   const char* name = ts_tree_cursor_current_field_name((TSTreeCursor*)cursor);
   jstring result = env->NewStringUTF(name);
   return result;
 }
 
-JNIEXPORT jobject JNICALL
-Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentNode(
+JNIEXPORT jobject JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentNode(
     JNIEnv* env, jclass self, jlong cursor) {
   return _marshalNode(env, ts_tree_cursor_current_node((TSTreeCursor*)cursor));
 }
 
-JNIEXPORT jobject JNICALL
-Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentTreeCursorNode(
+JNIEXPORT jobject JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorCurrentTreeCursorNode(
     JNIEnv* env, jclass self, jlong cursor) {
   TSNode node = ts_tree_cursor_current_node((TSTreeCursor*)cursor);
   return _marshalTreeCursorNode(
@@ -474,21 +471,19 @@ JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorDelete(
   delete (TSTreeCursor*)cursor;
 }
 
-JNIEXPORT jboolean JNICALL
-Java_usi_si_seart_treesitter_TreeSitter_treeCursorGotoFirstChild(
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorGotoFirstChild(
     JNIEnv* env, jclass self, jlong cursor) {
-  return (jboolean)ts_tree_cursor_goto_first_child((TSTreeCursor*)cursor);
+  return ts_tree_cursor_goto_first_child((TSTreeCursor*)cursor) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorGotoNextSibling(
     JNIEnv* env, jclass self, jlong cursor) {
-  return (jboolean)ts_tree_cursor_goto_next_sibling((TSTreeCursor*)cursor);
+  return ts_tree_cursor_goto_next_sibling((TSTreeCursor*)cursor) ? JNI_TRUE : JNI_FALSE;
 }
 
-JNIEXPORT jboolean JNICALL
-Java_usi_si_seart_treesitter_TreeSitter_treeCursorGotoParent(
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeCursorGotoParent(
     JNIEnv* env, jclass self, jlong cursor) {
-  return (jboolean)ts_tree_cursor_goto_parent((TSTreeCursor*)cursor);
+  return ts_tree_cursor_goto_parent((TSTreeCursor*)cursor) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_treeDelete(
