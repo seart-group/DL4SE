@@ -12,7 +12,7 @@ class NodeTest extends TestBase {
     private static final String source = "def foo(bar, baz):\n  print(bar)\n  print(baz)";
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetChild() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -28,7 +28,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetChildByFieldName() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -39,7 +39,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetDescendantForByteRange() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -58,7 +58,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFieldNameForChild() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -72,7 +72,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFirstChildForByte() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -91,7 +91,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFirstNamedChildForByte() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -110,7 +110,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetParent() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -120,7 +120,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetNextNamedSibling() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -133,7 +133,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetNextSibling() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -146,7 +146,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetPrevNamedSibling() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -159,7 +159,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetPrevSibling() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
@@ -172,7 +172,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testHasError() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString("def foo(bar, baz):\n  print(bar.)");
@@ -185,7 +185,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testIsExtra() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString("# this is just a comment");
@@ -196,7 +196,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testIsMissing() {
         @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parseString("class C { public static final int i = 6 }");
@@ -210,7 +210,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows({UnsupportedEncodingException.class})
+    @SneakyThrows(UnsupportedEncodingException.class)
     void testIsNamed() {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
