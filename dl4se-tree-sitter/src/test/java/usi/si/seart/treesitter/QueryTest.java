@@ -9,12 +9,12 @@ class QueryTest extends TestBase {
     @Test
     void testQuery() {
         @Cleanup Query query = new Query(Language.JAVA, "(class_declaration)");
-        Assertions.assertNotEquals(0, query.getPointer(), "Pointer is not null");
+        Assertions.assertFalse(query.isNull(), "Pointer is not null");
     }
 
     @Test
     void testInvalidQuery() {
         @Cleanup Query query = new Query(Language.JAVA, "(class_declaration");
-        Assertions.assertEquals(0, query.getPointer(), "Pointer is null");
+        Assertions.assertTrue(query.isNull(), "Pointer is null");
     }
 }

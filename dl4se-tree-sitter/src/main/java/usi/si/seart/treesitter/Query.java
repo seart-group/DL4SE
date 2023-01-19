@@ -41,4 +41,8 @@ public class Query implements AutoCloseable {
     public void close() {
         TreeSitter.queryDelete(pointer);
     }
+
+    public boolean isNull() {
+        return pointer == 0;
+    }
 }
