@@ -1,6 +1,7 @@
 package usi.si.seart.treesitter;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,12 +9,14 @@ import lombok.experimental.FieldDefaults;
 /**
  * Utility used for pretty-printing entire syntax trees, as well as their subtrees.
  */
+@AllArgsConstructor
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SyntaxTreePrinter {
 
-    int indentLevel = 0;
     final Node node;
+    String indentation = "  ";
+    int currentLevel = 0;
 
     /**
      * @return A string representation of the subtree. Consists only of named nodes.
@@ -41,7 +44,7 @@ public class SyntaxTreePrinter {
         Point startPoint = treeCursorNode.getStartPoint();
         Point endPoint = treeCursorNode.getEndPoint();
         return String.format("%s%s%s [%s] - [%s]%n",
-                "  ".repeat(this.indentLevel),
+                indentation.repeat(currentLevel),
                 (name != null) ? name + ": " : "",
                 type, startPoint, endPoint
         );
@@ -56,14 +59,14 @@ public class SyntaxTreePrinter {
         @Override
         public boolean gotoFirstChild() {
             boolean success = super.gotoFirstChild();
-            if (success) indentLevel++;
+            if (success) currentLevel++;
             return success;
         }
 
         @Override
         public boolean gotoParent() {
             boolean success = super.gotoParent();
-            if (success) indentLevel--;
+            if (success) currentLevel--;
             return success;
         }
     }
