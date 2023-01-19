@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class QueryCapture {
 

@@ -1,5 +1,6 @@
 package usi.si.seart.treesitter;
 
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.Iterator;
@@ -10,8 +11,9 @@ import java.util.Stack;
  * A Node represents a single node in the syntax tree. It tracks its start and end positions in the source code,
  * as well as its relation to other nodes like its parent, siblings and children.
  */
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Node implements Iterable<Node> {
+
   private int context0;
   private int context1;
   private int context2;
