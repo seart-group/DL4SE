@@ -1,6 +1,7 @@
 package usi.si.seart.treesitter;
 
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,8 @@ import java.io.UnsupportedEncodingException;
 class QueryCursorTest extends TestBase {
 
     @Test
-    void testExecSimpleQuery() throws UnsupportedEncodingException {
+    @SneakyThrows(UnsupportedEncodingException.class)
+    void testExecSimpleQuery() {
         @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parseString("class Hello {}");
         @Cleanup Query query = new Query(Language.JAVA, "(class_body) @test");
@@ -21,7 +23,8 @@ class QueryCursorTest extends TestBase {
     }
 
     @Test
-    void testExecNoResultQuery() throws UnsupportedEncodingException {
+    @SneakyThrows(UnsupportedEncodingException.class)
+    void testExecNoResultQuery() {
         @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parseString("class Hello {}");
         @Cleanup Query query = new Query(Language.JAVA, "(method_declaration) @method");
