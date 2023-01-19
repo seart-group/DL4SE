@@ -24,7 +24,7 @@ import lombok.Getter;
  *
  * @apiNote The underlying query value is immutable and can be safely shared between threads.
  */
-@Getter
+@Getter(value = AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Query implements AutoCloseable {
 
