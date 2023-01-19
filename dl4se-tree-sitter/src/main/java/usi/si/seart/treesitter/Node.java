@@ -22,7 +22,7 @@ public class Node implements Iterable<Node> {
   /**
    * Get the node's child at the given index, where zero represents the first child.
    *
-   * @param child The zero-indexed child
+   * @param child The zero-indexed child position
    * @return The Node's child at the given index
    */
   public Node getChild(int child) {
@@ -30,7 +30,7 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * @param name The node field name.
+   * @param name The child field name.
    * @return The node's child with the given field name.
    */
   public Node getChildByFieldName(String name) {
@@ -68,7 +68,9 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * @return The field name for node's child at the given index, where zero represents the first child.
+   * @return
+   * The field name for node's child at the given index,
+   * with zero representing the first child.
    * Returns NULL, if no field is found.
    */
   public String getFieldNameForChild(int child) {
@@ -92,8 +94,6 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * This string is allocated with malloc and the caller is responsible for freeing it using free.
-   *
    * @return An S-expression representing the node as a string.
    */
   public String getNodeString() {
@@ -135,6 +135,9 @@ public class Node implements Iterable<Node> {
     return TreeSitter.nodeParent(this);
   }
 
+  /**
+   * @return The node's range, indicating its byte and file position span.
+   */
   public Range getRange() {
     return new Range(this);
   }
@@ -154,7 +157,7 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * @return The node's type as a null-terminated string
+   * @return The node's type as a string
    */
   public String getType() {
     return TreeSitter.nodeType(this);
