@@ -17,14 +17,14 @@ class NodeTest extends TestBase {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString(source);
         Node root = tree.getRootNode();
+        Node function = root.getChild(0);
         Assertions.assertEquals(1, root.getChildCount());
         Assertions.assertEquals("module", root.getType());
         Assertions.assertEquals(0, root.getStartByte());
         Assertions.assertEquals(44, root.getEndByte());
-
-        Node function = root.getChild(0);
         Assertions.assertEquals("function_definition", function.getType());
         Assertions.assertEquals(5, function.getChildCount());
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> root.getChild(-1));
     }
 
     @Test
@@ -36,6 +36,7 @@ class NodeTest extends TestBase {
         Node function = root.getChild(0);
         Node identifier = function.getChild(1);
         Assertions.assertEquals(identifier, function.getChildByFieldName("name"));
+        Assertions.assertThrows(NullPointerException.class, () -> root.getChildByFieldName(null));
     }
 
     @Test
@@ -55,6 +56,7 @@ class NodeTest extends TestBase {
         Assertions.assertEquals(parameters, root.getDescendantForByteRange(parameters.getStartByte(), parameters.getEndByte()));
         Assertions.assertEquals(colon, root.getDescendantForByteRange(colon.getStartByte(), colon.getEndByte()));
         Assertions.assertEquals(body, root.getDescendantForByteRange(body.getStartByte(), body.getEndByte()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> root.getDescendantForByteRange(2, 0));
     }
 
     @Test
@@ -69,6 +71,7 @@ class NodeTest extends TestBase {
         Assertions.assertEquals("parameters", function.getFieldNameForChild(2));  // "parameters"
         Assertions.assertNull(function.getFieldNameForChild(3));                  // `:`
         Assertions.assertEquals("body", function.getFieldNameForChild(4));        // "body"
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> root.getFieldNameForChild(-1));
     }
 
     @Test
@@ -88,6 +91,7 @@ class NodeTest extends TestBase {
         Assertions.assertEquals(parameters, function.getFirstChildForByte(parameters.getStartByte()));
         Assertions.assertEquals(colon, function.getFirstChildForByte(colon.getStartByte()));
         Assertions.assertEquals(body, function.getFirstChildForByte(body.getStartByte()));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> root.getFirstChildForByte(-1));
     }
 
     @Test
@@ -107,6 +111,7 @@ class NodeTest extends TestBase {
         Assertions.assertEquals(parameters, function.getFirstNamedChildForByte(parameters.getStartByte()));
         Assertions.assertEquals(body, function.getFirstNamedChildForByte(colon.getStartByte()));
         Assertions.assertEquals(body, function.getFirstNamedChildForByte(body.getStartByte()));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> root.getFirstNamedChildForByte(-1));
     }
 
     @Test

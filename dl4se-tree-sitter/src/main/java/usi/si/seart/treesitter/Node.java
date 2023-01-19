@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Stack;
 
 /**
@@ -26,16 +27,23 @@ public class Node implements Iterable<Node> {
    *
    * @param child The zero-indexed child position
    * @return The Node's child at the given index
+   * @throws IndexOutOfBoundsException
+   * if the index is a negative number
    */
   public Node getChild(int child) {
+    if (child < 0)
+      throw new IndexOutOfBoundsException("Child index must not be negative!");
     return TreeSitter.nodeChild(this, child);
   }
 
   /**
    * @param name The child field name.
    * @return The node's child with the given field name.
+   * @throws NullPointerException
+   * if the field name is null
    */
   public Node getChildByFieldName(String name) {
+    Objects.requireNonNull(name, "Field name must not be null!");
     return TreeSitter.nodeChildByFieldName(this, name);
   }
 
@@ -50,8 +58,11 @@ public class Node implements Iterable<Node> {
    * @param startByte The starting byte of the range
    * @param endByte The ending byte of the range
    * @return The smallest node within this node that spans the given range of bytes
+   * @throws IllegalArgumentException if {@code startByte} > {@code endByte}
    */
   public Node getDescendantForByteRange(int startByte, int endByte) {
+    if (startByte > endByte)
+      throw new IllegalArgumentException("The starting byte of the range must not be greater than the ending byte!");
     return TreeSitter.nodeDescendantForByteRange(this, startByte, endByte);
   }
 
@@ -74,24 +85,34 @@ public class Node implements Iterable<Node> {
    * The field name for node's child at the given index,
    * with zero representing the first child.
    * Returns NULL, if no field is found.
+   * @throws IndexOutOfBoundsException
+   * if the index is a negative number
    */
   public String getFieldNameForChild(int child) {
+    if (child < 0)
+      throw new IndexOutOfBoundsException("Child index must not be negative!");
     return TreeSitter.nodeFieldNameForChild(this, child);
   }
 
   /**
    * @param offset The offset in bytes.
    * @return The node's first child that extends beyond the given byte offset.
+   * @throws IndexOutOfBoundsException if the offset is a negative number
    */
   public Node getFirstChildForByte(int offset) {
+    if (offset < 0)
+      throw new IndexOutOfBoundsException("Byte offset must not be negative!");
     return TreeSitter.nodeFirstChildForByte(this, offset);
   }
 
   /**
    * @param offset The offset in bytes.
    * @return The node's first named child that extends beyond the given byte offset.
+   * @throws IndexOutOfBoundsException if the offset is a negative number
    */
   public Node getFirstNamedChildForByte(int offset) {
+    if (offset < 0)
+      throw new IndexOutOfBoundsException("Byte offset must not be negative!");
     return TreeSitter.nodeFirstNamedChildForByte(this, offset);
   }
 
