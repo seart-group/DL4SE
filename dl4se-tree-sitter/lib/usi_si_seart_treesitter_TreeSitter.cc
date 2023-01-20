@@ -366,9 +366,9 @@ JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserDelete(
   ts_parser_delete((TSParser*)parser);
 }
 
-JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserSetLanguage(
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserSetLanguage(
     JNIEnv* env, jclass self, jlong parser, jlong language) {
-  ts_parser_set_language((TSParser*)parser, (TSLanguage*)language);
+  return ts_parser_set_language((TSParser*)parser, (TSLanguage*)language) ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserParseBytes(

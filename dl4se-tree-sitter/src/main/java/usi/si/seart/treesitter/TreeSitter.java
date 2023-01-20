@@ -57,7 +57,7 @@ class TreeSitter {
 
   static native void parserDelete(long parser);
 
-  static native void parserSetLanguage(long parser, long language);
+  static native boolean parserSetLanguage(long parser, long language);
 
   static native long parserParseBytes(long parser, byte[] source, int length);
 

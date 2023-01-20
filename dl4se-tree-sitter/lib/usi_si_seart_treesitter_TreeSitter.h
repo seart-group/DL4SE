@@ -218,9 +218,9 @@ JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserDelete
 /*
  * Class:     usi_si_seart_treesitter_TreeSitter
  * Method:    parserSetLanguage
- * Signature: (JJ)V
+ * Signature: (JJ)Z
  */
-JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserSetLanguage
+JNIEXPORT jboolean JNICALL Java_usi_si_seart_treesitter_TreeSitter_parserSetLanguage
   (JNIEnv *, jclass, jlong, jlong);
 
 /*
