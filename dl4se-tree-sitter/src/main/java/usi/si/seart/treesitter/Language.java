@@ -6,6 +6,7 @@ import java.util.function.LongSupplier;
 
 public enum Language {
 
+    _INVALID_(),
     AGDA(Languages::agda),
     BASH(Languages::bash),
     C(Languages::c),
@@ -42,6 +43,10 @@ public enum Language {
 
     @Getter
     private final long id;
+
+    Language() {
+        this.id = 0L;
+    }
 
     Language(LongSupplier supplier) {
         long id = 0L;
