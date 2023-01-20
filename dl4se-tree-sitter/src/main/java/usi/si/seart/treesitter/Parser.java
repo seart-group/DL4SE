@@ -9,29 +9,70 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 /**
- * Parsers are stateful objects that can be assigned a language and used to produce a
- * {@link Tree Tree} based on some source code.
+ * Parsers are stateful objects that can be assigned a language
+ * and used to produce a {@link Tree Tree} based on some source code.
+ * Instances of this class <strong>can not</strong> be created
+ * without an initially set language.
  */
 public class Parser extends External {
 
+  /**
+   * @param language The language used for parsing.
+   * @throws NullPointerException
+   * if the specified language is null
+   * @throws UnsatisfiedLinkError
+   * if the specified language has not
+   * been linked to the system library
+   * @throws ABIVersionMismatch
+   * if there was an ABI version mismatch
+   */
   public Parser(Language language) {
     super(createIfValid(language));
-    this.setLanguage(language);
   }
 
+  /*
+   * Constructor precondition for creating a parser.
+   * In essence, we should never allocate memory to
+   * these structures if the language:
+   * - Has not been specified (i.e. is null)
+   * - Has not been linked to the system library
+   */
   private static long createIfValid(Language language) {
+    validateLanguage(language);
+    long pointer = TreeSitter.parserNew();
+    setLanguage(pointer, language);
+    return pointer;
+  }
+
+  private static void validateLanguage(Language language) {
     Objects.requireNonNull(language, "Language must not be null!");
-    return TreeSitter.parserNew();
+    long id = language.getId();
+    if (id == 0L) throw new UnsatisfiedLinkError(
+            "Language binding has not been included for: " + language.name().toLowerCase()
+    );
   }
 
   /**
    * Set the language that the parser should use for parsing.
    *
    * @param language The language used for parsing.
+   * @throws NullPointerException
+   * if the specified language is null
+   * @throws UnsatisfiedLinkError
+   * if the specified language has not
+   * been linked to the system library
+   * @throws ABIVersionMismatch
+   * if there was an ABI version mismatch
    */
   public void setLanguage(Language language) {
-    Objects.requireNonNull(language, "Language must not be null!");
-    TreeSitter.parserSetLanguage(pointer, language.getId());
+    validateLanguage(language);
+    setLanguage(pointer, language);
+  }
+
+  private static void setLanguage(long pointer, Language language) {
+    boolean success = TreeSitter.parserSetLanguage(pointer, language.getId());
+    if (!success)
+      throw new ABIVersionMismatch("Language could not be assigned to parser!");
   }
 
   /**
