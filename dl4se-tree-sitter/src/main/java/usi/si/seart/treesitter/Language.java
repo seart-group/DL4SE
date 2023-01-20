@@ -44,12 +44,14 @@ public enum Language {
     @Getter
     private final long id;
 
+    static final long INVALID = 0L;
+
     Language() {
-        this.id = 0L;
+        this.id = INVALID;
     }
 
     Language(LongSupplier supplier) {
-        long id = 0L;
+        long id = INVALID;
         try {
             id = supplier.getAsLong();
         } catch (UnsatisfiedLinkError ignored) {
