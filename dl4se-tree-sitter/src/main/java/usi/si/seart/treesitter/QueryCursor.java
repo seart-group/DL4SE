@@ -1,5 +1,7 @@
 package usi.si.seart.treesitter;
 
+import java.util.Objects;
+
 /**
  * Cursor used for executing queries, carrying the state needed to process them.
  *
@@ -18,6 +20,8 @@ public class QueryCursor extends External {
      * @param node The node which the query will be executed on.
      */
     public void execQuery(Query query, Node node) {
+        Objects.requireNonNull(node, "Node must not be null!");
+        Objects.requireNonNull(query, "Query must not be null!");
         TreeSitter.queryCursorExec(pointer, query.getPointer(), node);
     }
 
