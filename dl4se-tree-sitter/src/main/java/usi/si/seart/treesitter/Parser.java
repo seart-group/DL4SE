@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 /**
  * Parsers are stateful objects that can be assigned a language
@@ -38,18 +37,10 @@ public class Parser extends External {
    * - Has not been linked to the system library
    */
   private static long createIfValid(Language language) {
-    validateLanguage(language);
+    Languages.validate(language);
     long pointer = TreeSitter.parserNew();
     setLanguage(pointer, language);
     return pointer;
-  }
-
-  private static void validateLanguage(Language language) {
-    Objects.requireNonNull(language, "Language must not be null!");
-    long id = language.getId();
-    if (id == 0L) throw new UnsatisfiedLinkError(
-            "Language binding has not been included for: " + language.name().toLowerCase()
-    );
   }
 
   /**
@@ -65,14 +56,13 @@ public class Parser extends External {
    * if there was an ABI version mismatch
    */
   public void setLanguage(Language language) {
-    validateLanguage(language);
+    Languages.validate(language);
     setLanguage(pointer, language);
   }
 
   private static void setLanguage(long pointer, Language language) {
     boolean success = TreeSitter.parserSetLanguage(pointer, language.getId());
-    if (!success)
-      throw new ABIVersionMismatch("Language could not be assigned to parser!");
+    if (!success) throw new ABIVersionMismatch("Language could not be assigned to parser!");
   }
 
   /**

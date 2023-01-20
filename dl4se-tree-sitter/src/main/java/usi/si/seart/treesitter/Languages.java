@@ -2,6 +2,8 @@ package usi.si.seart.treesitter;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.Objects;
+
 @UtilityClass
 class Languages {
   static native long agda();
@@ -37,4 +39,12 @@ class Languages {
   static native long vue();
   static native long yaml();
   static native long wasm();
+
+  static void validate(Language language) {
+    Objects.requireNonNull(language, "Language must not be null!");
+    long id = language.getId();
+    if (id == Language.INVALID) throw new UnsatisfiedLinkError(
+            "Language binding has not been defined for: " + language.name().toLowerCase()
+    );
+  }
 }
