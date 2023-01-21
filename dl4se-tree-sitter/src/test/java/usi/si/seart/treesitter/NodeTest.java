@@ -2,7 +2,9 @@ package usi.si.seart.treesitter;
 
 import lombok.Cleanup;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -10,13 +12,26 @@ import java.io.UnsupportedEncodingException;
 class NodeTest extends TestBase {
 
     private static final String source = "def foo(bar, baz):\n  print(bar)\n  print(baz)";
+    private static Parser parser;
+    private static Tree tree;
+    private static Node root;
+
+    @BeforeAll
+    @SneakyThrows(UnsupportedEncodingException.class)
+    static void beforeAll() {
+        parser = new Parser(Language.PYTHON);
+        tree = parser.parseString(source);
+        root = tree.getRootNode();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        tree.close();
+        parser.close();
+    }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetChild() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Assertions.assertEquals(1, root.getChildCount());
         Assertions.assertEquals("module", root.getType());
@@ -28,11 +43,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetChildByFieldName() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node identifier = function.getChild(1);
         Assertions.assertEquals(identifier, function.getChildByFieldName("name"));
@@ -40,11 +51,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetDescendantForByteRange() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -60,11 +67,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFieldNameForChild() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Assertions.assertNull(function.getFieldNameForChild(0));                  // `def`
         Assertions.assertEquals("name", function.getFieldNameForChild(1));        // "name"
@@ -75,11 +78,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFirstChildForByte() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -95,11 +94,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetFirstNamedChildForByte() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -115,21 +110,13 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetParent() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Assertions.assertNull(root.getParent());
         Assertions.assertEquals(root, root.getChild(0).getParent());
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetNextNamedSibling() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -138,11 +125,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetNextSibling() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -151,11 +134,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetPrevNamedSibling() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node identifier = function.getChild(1);
         Node parameters = function.getChild(2);
@@ -164,11 +143,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testGetPrevSibling() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -179,7 +154,6 @@ class NodeTest extends TestBase {
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
     void testHasError() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString("def foo(bar, baz):\n  print(bar.)");
         Node root = tree.getRootNode();
         Node function = root.getChild(0);
@@ -192,7 +166,6 @@ class NodeTest extends TestBase {
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
     void testIsExtra() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
         @Cleanup Tree tree = parser.parseString("# this is just a comment");
         Node root = tree.getRootNode();
         Node comment = root.getChild(0);
@@ -215,11 +188,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testIsNamed() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Node function = root.getChild(0);
         Node def = function.getChild(0);
         Node identifier = function.getChild(1);
@@ -228,11 +197,7 @@ class NodeTest extends TestBase {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void testIsNull() {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
-        Node root = tree.getRootNode();
         Assertions.assertFalse(root.isNull());
         Assertions.assertTrue(new Node().isNull());
     }
