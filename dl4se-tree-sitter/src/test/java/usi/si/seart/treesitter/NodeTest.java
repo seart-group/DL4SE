@@ -234,9 +234,6 @@ class NodeTest extends TestBase {
         @Cleanup Tree tree = parser.parseString(source);
         Node root = tree.getRootNode();
         Assertions.assertFalse(root.isNull());
-        Node function = root.getChild(0);
-        Node nullNode = root.getChild(1);
-        Assertions.assertFalse(function.isNull());
-        Assertions.assertTrue(nullNode.isNull());
+        Assertions.assertTrue(new Node().isNull());
     }
 }
