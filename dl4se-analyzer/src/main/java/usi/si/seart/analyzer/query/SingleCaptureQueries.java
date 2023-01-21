@@ -10,10 +10,11 @@ import usi.si.seart.treesitter.QueryCapture;
 import usi.si.seart.treesitter.QueryCursor;
 import usi.si.seart.treesitter.QueryMatch;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SingleCaptureQueries implements Queries<List<Node>>, Validated {
@@ -28,14 +29,9 @@ public abstract class SingleCaptureQueries implements Queries<List<Node>>, Valid
     protected List<Node> execute(Node node, String sExpr) {
         validate(sExpr, "Queries must contain at least one capture!");
         @Cleanup Query query = new Query(this.language, sExpr);
-        @Cleanup QueryCursor cursor = new QueryCursor();
-        cursor.execQuery(query, node);
-        List<QueryMatch> matches = new ArrayList<>();
-        QueryMatch match;
-        while ((match = cursor.nextMatch()) != null)
-            matches.add(match);
-        return matches.stream()
-                .map(QueryMatch::getCaptures)
+        @Cleanup QueryCursor cursor = new QueryCursor(node, query);
+        Stream<QueryMatch> matches = StreamSupport.stream(cursor.spliterator(), false);
+        return matches.map(QueryMatch::getCaptures)
                 .flatMap(Arrays::stream)
                 .map(QueryCapture::getNode)
                 .collect(Collectors.toList());
