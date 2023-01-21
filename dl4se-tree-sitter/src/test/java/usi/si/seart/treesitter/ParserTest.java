@@ -16,13 +16,13 @@ import java.nio.file.Path;
 class ParserTest extends TestBase {
 
     @TempDir
-    static Path tmp;
-    static Path tmpFile;
+    private static Path tmp;
+    private static Path tmpFile;
 
-    static Parser parser;
+    private static Parser parser;
 
-    static final String source = "print(\"hi\")\n";
-    static final String nodeString =
+    private static final String source = "print(\"hi\")\n";
+    private static final String nodeString =
             "(module (expression_statement (call function: (identifier) arguments: (argument_list (string)))))";
 
     @BeforeAll
