@@ -28,7 +28,7 @@ public abstract class SingleCaptureQueries implements Queries<List<Node>>, Valid
 
     protected List<Node> execute(Node node, String sExpr) {
         validate(sExpr, "Queries must contain at least one capture!");
-        @Cleanup Query query = new Query(this.language, sExpr);
+        @Cleanup Query query = new Query(language, sExpr);
         @Cleanup QueryCursor cursor = new QueryCursor(node, query);
         Stream<QueryMatch> matches = StreamSupport.stream(cursor.spliterator(), false);
         return matches.map(QueryMatch::getCaptures)

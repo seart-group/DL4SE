@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 class QueryTest extends TestBase {
 
     @Test
+    @SuppressWarnings("resource")
     void testQuery() {
-        @Cleanup Query query = new Query(Language.JAVA, "(class_declaration)");
-        Assertions.assertFalse(query.isNull(), "Pointer is not null");
-    }
-
-    @Test
-    void testInvalidQuery() {
-        @Cleanup Query query = new Query(Language.JAVA, "(class_declaration");
-        Assertions.assertTrue(query.isNull(), "Pointer is null");
+        @Cleanup Query query = new Query(Language.JAVA, "(_)");
+        Assertions.assertNotNull(query, "Query is not null");
+        Assertions.assertThrows(NullPointerException.class, () -> new Query(null, null));
+        Assertions.assertThrows(NullPointerException.class, () -> new Query(Language.JAVA, null));
+        Assertions.assertThrows(NullPointerException.class, () -> new Query(null, "(_)"));
+        Assertions.assertThrows(UnsatisfiedLinkError.class, () -> new Query(Language._INVALID_, "(_)"));
+        Assertions.assertThrows(SymbolicExpressionException.class, () -> new Query(Language.JAVA, "()"));
     }
 }

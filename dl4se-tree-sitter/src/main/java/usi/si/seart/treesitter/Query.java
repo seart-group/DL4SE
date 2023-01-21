@@ -24,14 +24,16 @@ import java.util.Objects;
  */
 public class Query extends External {
 
-    public Query(Language language, String source) {
-        super(createIfValid(language, source));
+    public Query(Language language, String sExpr) {
+        super(createIfValid(language, sExpr));
     }
 
-    private static long createIfValid(Language language, String source) {
-        Objects.requireNonNull(language, "Language must not be null!");
-        Objects.requireNonNull(source, "Source must not be null!");
-        return TreeSitter.queryNew(language.getId(), source);
+    private static long createIfValid(Language language, String sExpr) {
+        Languages.validate(language);
+        Objects.requireNonNull(sExpr, "Pattern must not be null!");
+        long pointer = TreeSitter.queryNew(language.getId(), sExpr);
+        if (pointer != 0L) return pointer;
+        else throw new SymbolicExpressionException("Invalid S-Expression pattern: " + sExpr);
     }
 
     /**
