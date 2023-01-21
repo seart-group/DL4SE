@@ -1,6 +1,7 @@
 package usi.si.seart.treesitter;
 
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,8 @@ import java.io.UnsupportedEncodingException;
 class TreeCursorTest extends TestBase {
 
   @Test
-  void testWalk() throws UnsupportedEncodingException {
+  @SneakyThrows(UnsupportedEncodingException.class)
+  void testWalk() {
     @Cleanup Parser parser = new Parser(Language.PYTHON);
     @Cleanup Tree tree = parser.parseString("def foo(bar, baz):\n  print(bar)\n  print(baz)");
     @Cleanup TreeCursor cursor = tree.getRootNode().walk();

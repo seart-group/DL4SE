@@ -1,6 +1,7 @@
 package usi.si.seart.treesitter;
 
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,8 @@ import java.io.UnsupportedEncodingException;
 class TreeTest extends TestBase {
 
     @Test
-    void testTreeEdit() throws UnsupportedEncodingException {
+    @SneakyThrows(UnsupportedEncodingException.class)
+    void testTreeEdit() {
         @Cleanup Parser parser = new Parser(Language.JAVA);
 
         Tree tree = parser.parseString("class Main {\n    // This is a line comment\n}");
