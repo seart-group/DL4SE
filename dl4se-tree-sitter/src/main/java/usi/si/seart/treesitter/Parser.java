@@ -22,8 +22,6 @@ public class Parser extends External {
    * @throws UnsatisfiedLinkError
    * if the specified language has not
    * been linked to the system library
-   * @throws ABIVersionMismatch
-   * if there was an ABI version mismatch
    */
   public Parser(Language language) {
     super(createIfValid(language));
@@ -52,8 +50,6 @@ public class Parser extends External {
    * @throws UnsatisfiedLinkError
    * if the specified language has not
    * been linked to the system library
-   * @throws ABIVersionMismatch
-   * if there was an ABI version mismatch
    */
   public void setLanguage(Language language) {
     Languages.validate(language);
@@ -62,7 +58,7 @@ public class Parser extends External {
 
   private static void setLanguage(long pointer, Language language) {
     boolean success = TreeSitter.parserSetLanguage(pointer, language.getId());
-    if (!success) throw new ABIVersionMismatch("Language could not be assigned to parser!");
+    if (!success) throw new ABIVersionError("Language could not be assigned to parser!");
   }
 
   /**
