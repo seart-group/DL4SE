@@ -78,7 +78,8 @@ public class Parser extends External {
    */
   public Tree parseString(String source) throws UnsupportedEncodingException {
     byte[] bytes = source.getBytes(StandardCharsets.UTF_16LE);
-    return new Tree(TreeSitter.parserParseBytes(pointer, bytes, bytes.length));
+    long treePointer = TreeSitter.parserParseBytes(pointer, bytes, bytes.length);
+    return new Tree(treePointer, language);
   }
 
   /**
@@ -91,7 +92,8 @@ public class Parser extends External {
    */
   public Tree parseString(Tree oldTree, String source) throws UnsupportedEncodingException {
     byte[] bytes = source.getBytes(StandardCharsets.UTF_16LE);
-    return new Tree(TreeSitter.parserIncrementalParseBytes(pointer, oldTree.getPointer(), bytes, bytes.length));
+    long treePointer = TreeSitter.parserIncrementalParseBytes(pointer, oldTree.getPointer(), bytes, bytes.length);
+    return new Tree(treePointer, language);
   }
 
   /**

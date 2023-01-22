@@ -1,15 +1,24 @@
 package usi.si.seart.treesitter;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
 import java.util.Iterator;
 
 /**
  * A Tree represents the syntax tree of an entire source code file. It contains {@link Node Node}
  * instances that indicate the structure of the source code.
  */
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Tree extends External implements Iterable<Node> {
 
-  Tree(long pointer) {
+  Language language;
+
+  Tree(long pointer, Language language) {
     super(pointer);
+    this.language = language;
   }
 
   /**
