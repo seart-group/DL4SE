@@ -9,8 +9,10 @@ import java.util.Objects;
 import java.util.Stack;
 
 /**
- * A Node represents a single node in the syntax tree. It tracks its start and end positions in the source code,
- * as well as its relation to other nodes like its parent, siblings and children.
+ * A Node represents a single node in the syntax tree.
+ * It tracks its start and end positions in the source code,
+ * as well as its relation to other nodes like its parent,
+ * siblings and children.
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Node implements Iterable<Node> {
@@ -23,7 +25,8 @@ public class Node implements Iterable<Node> {
   private long tree;
 
   /**
-   * Get the node's child at the given index, where zero represents the first child.
+   * Get the node's child at the given index,
+   * where zero represents the first child.
    *
    * @param child The zero-indexed child position
    * @return The Node's child at the given index
@@ -194,8 +197,10 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * Check if the node is <em>extra</em>. Extra nodes represent things like comments,
-   * which are not required the grammar, but can appear anywhere.
+   * Check if the node is <em>extra</em>.
+   * Extra nodes represent things like comments,
+   * which are not required the grammar,
+   * but can appear anywhere.
    *
    * @return true if the node is an extra, false otherwise.
    */
@@ -204,8 +209,10 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * Check if the node is <em>missing</em>. Missing nodes are inserted by the parser in order to recover from certain
-   * kinds of syntax errors.
+   * Check if the node is <em>missing</em>.
+   * Missing nodes are inserted by the parser
+   * in order to recover from certain kinds
+   * of syntax errors.
    *
    * @return true if the node is missing, false otherwise.
    */
@@ -214,8 +221,10 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * Check if the node is <em>named</em>. Named nodes correspond to named rules in the grammar, whereas anonymous nodes
-   * correspond to string literals in the grammar.
+   * Check if the node is <em>named</em>.
+   * Named nodes correspond to named rules in the grammar,
+   * whereas anonymous nodes correspond to string
+   * literals in the grammar.
    *
    * @return true if the node is named, false otherwise.
    */
@@ -224,19 +233,19 @@ public class Node implements Iterable<Node> {
   }
 
   /**
-   * Check if the node is <em>null</em>. Methods such as {@link #getChild(int) getChild} and
-   * {@link #getNextSibling() getNextSibling} will return a null node to indicate that no such node
-   * was found.
+   * Check if the node is <em>null</em> node.
    *
-   * @return true if the current node is a null node, false otherwise
+   * @return true if {@code id == 0}, false otherwise
    */
   public boolean isNull() {
     return TreeSitter.nodeIsNull(this);
   }
 
   /**
-   * A tree cursor allows you to walk a syntax tree more efficiently than is possible using the TSNode functions.
-   * It is a mutable object that is always on a certain syntax node, and can be moved imperatively to different nodes.
+   * A tree cursor allows you to walk a syntax tree more
+   * efficiently than is possible using the instance functions.
+   * It is a mutable object that is always on a certain syntax node,
+   * and can be moved imperatively to different nodes.
    *
    * @return A new tree cursor starting from the given node.
    */
