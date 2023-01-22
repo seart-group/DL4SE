@@ -124,6 +124,7 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
 }
 
 jobject _marshalNode(JNIEnv* env, TSNode node) {
+  if (node.id == 0) return NULL;
   jobject javaObject = env->AllocObject(_nodeClass);
   env->SetIntField(javaObject, _nodeContext0Field, node.context[0]);
   env->SetIntField(javaObject, _nodeContext1Field, node.context[1]);
