@@ -257,6 +257,11 @@ public class Node implements Iterable<Node> {
     return Long.hashCode(id);
   }
 
+  @Override
+  public String toString() {
+    return "Node(id: "+id+", tree: "+tree+")";
+  }
+
   /**
    * @return An iterator over the node subtree, starting from the current node.
    */

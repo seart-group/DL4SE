@@ -54,4 +54,9 @@ public class Query extends External {
     public void close() {
         TreeSitter.queryDelete(pointer);
     }
+
+    @Override
+    public String toString() {
+        return "Query(language: "+language.name()+", expression: '"+sExpr+"')";
+    }
 }

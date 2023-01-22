@@ -18,4 +18,9 @@ public class Range {
     public Range(Node node) {
         this(node.getStartByte(), node.getEndByte(), node.getStartPoint(), node.getEndPoint());
     }
+
+    @Override
+    public String toString() {
+        return "["+startPoint+"] - ["+endPoint+"]";
+    }
 }

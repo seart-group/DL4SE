@@ -52,4 +52,9 @@ public class Tree extends External implements Iterable<Node> {
   public Iterator<Node> iterator() {
     return getRootNode().iterator();
   }
+
+  @Override
+  public String toString() {
+    return "Tree(id: "+pointer+", language: "+language.name()+")";
+  }
 }

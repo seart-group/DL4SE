@@ -12,4 +12,9 @@ public class QueryCapture {
 
     Node node;
     int index;
+
+    @Override
+    public String toString() {
+        return "QueryCapture(index: "+index+", node: "+node+")";
+    }
 }

@@ -125,4 +125,9 @@ public class Parser extends External {
   public void close() {
     TreeSitter.parserDelete(pointer);
   }
+
+  @Override
+  public String toString() {
+    return "Parser(id: "+pointer+", language: "+language.name()+")";
+  }
 }

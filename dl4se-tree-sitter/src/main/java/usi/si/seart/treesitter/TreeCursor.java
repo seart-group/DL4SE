@@ -90,4 +90,9 @@ public class TreeCursor extends External {
       } while (!this.gotoNextSibling());
     }
   }
+
+  @Override
+  public String toString() {
+    return "TreeCursor(id: "+id+", tree: "+tree+")";
+  }
 }
