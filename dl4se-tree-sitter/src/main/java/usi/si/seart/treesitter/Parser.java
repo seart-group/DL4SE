@@ -1,5 +1,9 @@
 package usi.si.seart.treesitter;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -13,7 +17,11 @@ import java.nio.file.Path;
  * Instances of this class <strong>can not</strong> be created
  * without an initially set language.
  */
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Parser extends External {
+
+  Language language;
 
   /**
    * @param language The language used for parsing.
@@ -25,6 +33,7 @@ public class Parser extends External {
    */
   public Parser(Language language) {
     super(createIfValid(language));
+    this.language = language;
   }
 
   /*

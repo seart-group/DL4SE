@@ -1,5 +1,9 @@
 package usi.si.seart.treesitter;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
 import java.util.Objects;
 
 /**
@@ -22,10 +26,17 @@ import java.util.Objects;
  *
  * @apiNote The underlying query value is immutable and can be safely shared between threads.
  */
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Query extends External {
+
+    Language language;
+    String sExpr;
 
     public Query(Language language, String sExpr) {
         super(createIfValid(language, sExpr));
+        this.language = language;
+        this.sExpr = sExpr;
     }
 
     private static long createIfValid(Language language, String sExpr) {
