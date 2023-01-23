@@ -24,7 +24,7 @@ public class PythonSingleCaptureQueries extends SingleCaptureQueries {
                 node,
                 "[" +
                         "(_ (comment) @comment)" +
-                        "(module . (expression_statement (string) @comment))" +
+                        "(module (comment)? . (expression_statement (string) @comment))" +
                         "(class_definition body: (block . (expression_statement (string) @comment)))" +
                         "(function_definition body: (block . (expression_statement (string) @comment)))" +
                 "]"
