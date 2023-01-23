@@ -48,6 +48,27 @@ public class Query extends External {
     }
 
     /**
+     * @return The number of string literals in this query.
+     */
+    public int countStrings() {
+        return TreeSitter.queryStringCount(pointer);
+    }
+
+    /**
+     * @return The number of captures in this query.
+     */
+    public int countCaptures() {
+        return TreeSitter.queryCaptureCount(pointer);
+    }
+
+    /**
+     * @return The number of patterns in this query.
+     */
+    public int countPatterns() {
+        return TreeSitter.queryPatternCount(pointer);
+    }
+
+    /**
      * Delete a query, freeing all the memory that it used.
      */
     @Override

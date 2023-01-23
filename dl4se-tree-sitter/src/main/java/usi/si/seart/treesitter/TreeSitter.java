@@ -67,6 +67,12 @@ class TreeSitter {
 
   static native long queryNew(long language, String source);
 
+  static native int queryStringCount(long query);
+
+  static native int queryCaptureCount(long query);
+
+  static native int queryPatternCount(long query);
+
   static native void queryCursorDelete(long query_cursor);
 
   static native long queryCursorNew();

@@ -408,6 +408,21 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew(
   return (jlong) query;
 }
 
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryPatternCount(
+  JNIEnv* env, jclass self, jlong query) {
+  return (jint)ts_query_pattern_count((TSQuery*)query);
+}
+
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureCount(
+  JNIEnv* env, jclass self, jlong query) {
+  return (jint)ts_query_capture_count((TSQuery*)query);
+}
+
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryStringCount(
+  JNIEnv* env, jclass self, jlong query) {
+  return (jint)ts_query_string_count((TSQuery*)query);
+}
+
 JNIEXPORT void JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCursorDelete(
     JNIEnv* env, jclass self, jlong query_cursor) {
   ts_query_cursor_delete((TSQueryCursor*)query_cursor);

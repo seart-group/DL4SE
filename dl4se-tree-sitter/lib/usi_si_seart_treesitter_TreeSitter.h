@@ -257,6 +257,30 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew
 
 /*
  * Class:     usi_si_seart_treesitter_TreeSitter
+ * Method:    queryStringCount
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryStringCount
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     usi_si_seart_treesitter_TreeSitter
+ * Method:    queryCaptureCount
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureCount
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     usi_si_seart_treesitter_TreeSitter
+ * Method:    queryPatternCount
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryPatternCount
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     usi_si_seart_treesitter_TreeSitter
  * Method:    queryCursorDelete
  * Signature: (J)V
  */
