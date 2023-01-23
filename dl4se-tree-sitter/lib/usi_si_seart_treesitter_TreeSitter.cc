@@ -408,6 +408,14 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew(
   return (jlong) query;
 }
 
+JNIEXPORT jstring JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureName(
+  JNIEnv* env, jclass self, jlong query, jint index) {
+  uint32_t* length = new uint32_t;
+  const char* nameForIndex = ts_query_capture_name_for_id((TSQuery*)query, index, length);
+  jstring result = env->NewStringUTF(nameForIndex);
+  return result;
+}
+
 JNIEXPORT jint JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryPatternCount(
   JNIEnv* env, jclass self, jlong query) {
   return (jint)ts_query_pattern_count((TSQuery*)query);

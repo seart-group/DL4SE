@@ -257,6 +257,14 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew
 
 /*
  * Class:     usi_si_seart_treesitter_TreeSitter
+ * Method:    queryCaptureName
+ * Signature: (JI)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureName
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     usi_si_seart_treesitter_TreeSitter
  * Method:    queryStringCount
  * Signature: (J)I
  */

@@ -36,4 +36,10 @@ class QueryTest extends TestBase {
         Assertions.assertEquals(1, query.countPatterns());
         Assertions.assertEquals(0, query.countStrings());
     }
+
+    @Test
+    void testQueryCaptureName() {
+        QueryCapture capture = new QueryCapture(new Node(), 0);
+        Assertions.assertEquals("capture", query.getCaptureName(capture));
+    }
 }

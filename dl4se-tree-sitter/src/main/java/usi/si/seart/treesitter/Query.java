@@ -69,6 +69,14 @@ public class Query extends External {
     }
 
     /**
+     * @param capture The query capture.
+     * @return The name of the provided query captures.
+     */
+    public String getCaptureName(QueryCapture capture) {
+        return TreeSitter.queryCaptureName(pointer, capture.getIndex());
+    }
+
+    /**
      * Delete a query, freeing all the memory that it used.
      */
     @Override

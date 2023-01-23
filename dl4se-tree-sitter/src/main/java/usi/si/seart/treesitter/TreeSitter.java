@@ -67,6 +67,8 @@ class TreeSitter {
 
   static native long queryNew(long language, String source);
 
+  static native String queryCaptureName(long pointer, int index);
+
   static native int queryStringCount(long query);
 
   static native int queryCaptureCount(long query);
