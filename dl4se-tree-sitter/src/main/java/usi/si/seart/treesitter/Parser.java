@@ -3,6 +3,7 @@ package usi.si.seart.treesitter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import usi.si.seart.treesitter.error.ABIVersionError;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,6 +129,6 @@ public class Parser extends External {
 
   @Override
   public String toString() {
-    return "Parser(id: "+pointer+", language: "+language.name()+")";
+    return "Parser(id: "+pointer+", language: "+language+")";
   }
 }
