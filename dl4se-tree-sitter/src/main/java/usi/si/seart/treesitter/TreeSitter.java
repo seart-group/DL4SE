@@ -1,6 +1,7 @@
 package usi.si.seart.treesitter;
 
 import lombok.experimental.UtilityClass;
+import usi.si.seart.treesitter.exception.query.QueryException;
 
 @UtilityClass
 class TreeSitter {
@@ -65,7 +66,7 @@ class TreeSitter {
 
   static native void queryDelete(long query);
 
-  static native long queryNew(long language, String source);
+  static native long queryNew(long language, String source) throws QueryException;
 
   static native String queryCaptureName(long pointer, int index);
 

@@ -53,9 +53,7 @@ public class Query extends External {
     private static long createIfValid(Language language, String pattern) {
         Languages.validate(language);
         Objects.requireNonNull(pattern, "Pattern must not be null!");
-        long pointer = TreeSitter.queryNew(language.getId(), pattern);
-        if (pointer != 0L) return pointer;
-        else throw new SymbolicExpressionException("Invalid S-Expression pattern: " + pattern);
+        return TreeSitter.queryNew(language.getId(), pattern);
     }
 
     /**
