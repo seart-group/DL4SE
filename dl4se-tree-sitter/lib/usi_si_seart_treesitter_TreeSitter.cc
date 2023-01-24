@@ -417,7 +417,20 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew(
   uint32_t* error_offset = new uint32_t;
   TSQueryError* error_type = new TSQueryError;
   TSQuery* query = ts_query_new((TSLanguage*) language, c_source, source_length, error_offset, error_type);
-  return (jlong) query;
+  switch (*error_type) {
+    case TSQueryErrorSyntax:
+      return env->ThrowNew(_querySyntaxExceptionClass, NULL);
+    case TSQueryErrorNodeType:
+      return env->ThrowNew(_queryNodeTypeExceptionClass, NULL);
+    case TSQueryErrorField:
+      return env->ThrowNew(_queryFieldExceptionClass, NULL);
+    case TSQueryErrorCapture:
+      return env->ThrowNew(_queryCaptureExceptionClass, NULL);
+    case TSQueryErrorStructure:
+      return env->ThrowNew(_queryStructureExceptionClass, NULL);
+    default:
+      return (jlong)query;
+  }
 }
 
 JNIEXPORT jstring JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureName(
