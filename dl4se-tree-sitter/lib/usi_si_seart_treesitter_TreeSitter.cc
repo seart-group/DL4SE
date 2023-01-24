@@ -56,6 +56,12 @@ static jfieldID _treeCursorNodeStartPointField;
 static jfieldID _treeCursorNodeEndPointField;
 static jfieldID _treeCursorNodeIsNamed;
 
+static jclass _queryCaptureExceptionClass;
+static jclass _queryFieldExceptionClass;
+static jclass _queryNodeTypeExceptionClass;
+static jclass _queryStructureExceptionClass;
+static jclass _querySyntaxExceptionClass;
+
 #define _loadClass(VARIABLE, NAME)             \
   {                                            \
     jclass tmp;                                \
@@ -112,6 +118,12 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
   _loadField(_inputEditStartPointField, _inputEditClass, "startPoint", "Lusi/si/seart/treesitter/Point;");
   _loadField(_inputEditOldEndPointField, _inputEditClass, "oldEndPoint", "Lusi/si/seart/treesitter/Point;");
   _loadField(_inputEditNewEndPointField, _inputEditClass, "newEndPoint", "Lusi/si/seart/treesitter/Point;");
+
+  _loadClass(_queryCaptureExceptionClass, "usi/si/seart/treesitter/exception/query/QueryCaptureException");
+  _loadClass(_queryFieldExceptionClass, "usi/si/seart/treesitter/exception/query/QueryFieldException");
+  _loadClass(_queryNodeTypeExceptionClass, "usi/si/seart/treesitter/exception/query/QueryNodeTypeException");
+  _loadClass(_queryStructureExceptionClass, "usi/si/seart/treesitter/exception/query/QueryStructureException");
+  _loadClass(_querySyntaxExceptionClass, "usi/si/seart/treesitter/exception/query/QuerySyntaxException");
 
   return JNI_VERSION;
 }
