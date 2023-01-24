@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,20 +34,28 @@ import java.util.Objects;
 public class Query extends External {
 
     Language language;
-    String sExpr;
+    String pattern;
+    List<String> captures;
 
-    public Query(Language language, String sExpr) {
-        super(createIfValid(language, sExpr));
+    public Query(Language language, String pattern) {
+        super(createIfValid(language, pattern));
         this.language = language;
-        this.sExpr = sExpr;
+        this.pattern = pattern;
+        int capturesCount = TreeSitter.queryCaptureCount(pointer);
+        List<String> captures = new ArrayList<>(capturesCount);
+        for (int idx = 0; idx < capturesCount; idx++) {
+            String capture = TreeSitter.queryCaptureName(pointer, idx);
+            captures.add(capture);
+        }
+        this.captures = Collections.unmodifiableList(captures);
     }
 
-    private static long createIfValid(Language language, String sExpr) {
+    private static long createIfValid(Language language, String pattern) {
         Languages.validate(language);
-        Objects.requireNonNull(sExpr, "Pattern must not be null!");
-        long pointer = TreeSitter.queryNew(language.getId(), sExpr);
+        Objects.requireNonNull(pattern, "Pattern must not be null!");
+        long pointer = TreeSitter.queryNew(language.getId(), pattern);
         if (pointer != 0L) return pointer;
-        else throw new SymbolicExpressionException("Invalid S-Expression pattern: " + sExpr);
+        else throw new SymbolicExpressionException("Invalid S-Expression pattern: " + pattern);
     }
 
     /**
@@ -73,7 +84,7 @@ public class Query extends External {
      * @return The name of the provided query captures.
      */
     public String getCaptureName(QueryCapture capture) {
-        return TreeSitter.queryCaptureName(pointer, capture.getIndex());
+        return captures.get(capture.getIndex());
     }
 
     /**
@@ -86,6 +97,8 @@ public class Query extends External {
 
     @Override
     public String toString() {
-        return "Query(language: "+language.name()+", expression: '"+sExpr+"')";
+        String languageStr = language.name();
+        String capturesStr = String.join(", ", captures);
+        return String.format("Query(language: %s, pattern: '%s', captures: [%s])", languageStr, pattern, capturesStr);
     }
 }
