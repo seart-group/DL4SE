@@ -4,6 +4,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import usi.si.seart.treesitter.exception.query.QueryCaptureException;
+import usi.si.seart.treesitter.exception.query.QueryFieldException;
+import usi.si.seart.treesitter.exception.query.QueryNodeTypeException;
+import usi.si.seart.treesitter.exception.query.QueryStructureException;
+import usi.si.seart.treesitter.exception.query.QuerySyntaxException;
 
 class QueryTest extends TestBase {
 
@@ -27,7 +32,11 @@ class QueryTest extends TestBase {
         Assertions.assertThrows(NullPointerException.class, () -> new Query(Language.JAVA, null));
         Assertions.assertThrows(NullPointerException.class, () -> new Query(null, "(_)"));
         Assertions.assertThrows(UnsatisfiedLinkError.class, () -> new Query(Language._INVALID_, "(_)"));
-        Assertions.assertThrows(SymbolicExpressionException.class, () -> new Query(Language.JAVA, "()"));
+        Assertions.assertThrows(QueryCaptureException.class, () -> new Query(Language.JAVA, "(#eq? @key @value)"));
+        Assertions.assertThrows(QueryFieldException.class, () -> new Query(Language.JAVA, "(program unknown: (_))"));
+        Assertions.assertThrows(QueryNodeTypeException.class, () -> new Query(Language.JAVA, "(null)"));
+        Assertions.assertThrows(QueryStructureException.class, () -> new Query(Language.JAVA, "(program (program))"));
+        Assertions.assertThrows(QuerySyntaxException.class, () -> new Query(Language.JAVA, "()"));
     }
 
     @Test
