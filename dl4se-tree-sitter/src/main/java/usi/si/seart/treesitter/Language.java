@@ -60,4 +60,55 @@ public enum Language {
             this.id = id;
         }
     }
+
+
+    @Override
+    public String toString() {
+        switch (this) {
+            // Unmodified
+            case C:
+            case CSS:
+            case HTML:
+            case PHP:
+            case SCSS:
+            case TOML:
+            case TSX:
+            case YAML:
+                return name();
+
+            // Capital Case
+            case AGDA:
+            case BASH:
+            case DART:
+            case ELM:
+            case ENO:
+            case GO:
+            case HASKELL:
+            case JAVA:
+            case JULIA:
+            case KOTLIN:
+            case LUA:
+            case MARKDOWN:
+            case PYTHON:
+            case RUBY:
+            case RUST:
+            case SCALA:
+            case SWIFT:
+            case VUE:
+                return name().charAt(0) + name().substring(1).toLowerCase();
+
+            // Special Cases
+            case CSHARP: return "C#";
+            case CPP: return "C++";
+            case EMBEDDED_TEMPLATE: return "Embedded Template";
+            case JAVASCRIPT: return "JavaScript";
+            case OCAML: return "OCaml";
+            case TYPESCRIPT: return "TypeScript";
+            case WASM: return "WebAssembly";
+
+            // Default / Undefined
+            default:
+                return "???";
+        }
+    }
 }
