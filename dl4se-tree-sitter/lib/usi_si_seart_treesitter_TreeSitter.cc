@@ -1,6 +1,7 @@
 #include "usi_si_seart_treesitter_TreeSitter.h"
 
 #include <jni.h>
+#include <math.h>
 #include <string.h>
 #include <tree_sitter/api.h>
 
@@ -55,6 +56,8 @@ static jfieldID _treeCursorNodeEndByteField;
 static jfieldID _treeCursorNodeStartPointField;
 static jfieldID _treeCursorNodeEndPointField;
 static jfieldID _treeCursorNodeIsNamed;
+
+static jclass _treeSitterException;
 
 static jclass _queryCaptureExceptionClass;
 static jclass _queryFieldExceptionClass;
@@ -118,6 +121,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
   _loadField(_inputEditStartPointField, _inputEditClass, "startPoint", "Lusi/si/seart/treesitter/Point;");
   _loadField(_inputEditOldEndPointField, _inputEditClass, "oldEndPoint", "Lusi/si/seart/treesitter/Point;");
   _loadField(_inputEditNewEndPointField, _inputEditClass, "newEndPoint", "Lusi/si/seart/treesitter/Point;");
+
+  _loadClass(_treeSitterException, "usi/si/seart/treesitter/exception/TreeSitterException");
 
   _loadClass(_queryCaptureExceptionClass, "usi/si/seart/treesitter/exception/query/QueryCaptureException");
   _loadClass(_queryFieldExceptionClass, "usi/si/seart/treesitter/exception/query/QueryFieldException");
@@ -416,21 +421,39 @@ JNIEXPORT jlong JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryNew(
   c_source = env->GetStringUTFChars(source, NULL);
   uint32_t* error_offset = new uint32_t;
   TSQueryError* error_type = new TSQueryError;
-  TSQuery* query = ts_query_new((TSLanguage*) language, c_source, source_length, error_offset, error_type);
+  TSQuery* query = ts_query_new((TSLanguage*)language, c_source, source_length, error_offset, error_type);
+  jclass exceptionClass;
+  const char* c_pattern;
   switch (*error_type) {
-    case TSQueryErrorSyntax:
-      return env->ThrowNew(_querySyntaxExceptionClass, NULL);
-    case TSQueryErrorNodeType:
-      return env->ThrowNew(_queryNodeTypeExceptionClass, NULL);
-    case TSQueryErrorField:
-      return env->ThrowNew(_queryFieldExceptionClass, NULL);
-    case TSQueryErrorCapture:
-      return env->ThrowNew(_queryCaptureExceptionClass, NULL);
-    case TSQueryErrorStructure:
-      return env->ThrowNew(_queryStructureExceptionClass, NULL);
-    default:
+    case TSQueryErrorNone:
       return (jlong)query;
+    case TSQueryErrorSyntax:
+      exceptionClass = _querySyntaxExceptionClass;
+      c_pattern = "Bad syntax at offset %d";
+      break;
+    case TSQueryErrorNodeType:
+      exceptionClass = _queryNodeTypeExceptionClass;
+      c_pattern = "Bad node name at offset %d";
+      break;
+    case TSQueryErrorField:
+      exceptionClass = _queryFieldExceptionClass;
+      c_pattern = "Bad field name at offset %d";
+      break;
+    case TSQueryErrorCapture:
+      exceptionClass = _queryCaptureExceptionClass;
+      c_pattern = "Bad capture at offset %d";
+      break;
+    case TSQueryErrorStructure:
+      exceptionClass = _queryStructureExceptionClass;
+      c_pattern = "Bad pattern structure at offset %d";
+      break;
+    default:
+      return env->ThrowNew(_treeSitterException, NULL);
   }
+  int digits = static_cast<int>(floor(log10(*error_offset))) + 1;
+  char c_message[strlen(c_pattern) + 1 + digits];
+  snprintf(c_message, sizeof(c_message), c_pattern, *error_offset);
+  return env->ThrowNew(exceptionClass, c_message);
 }
 
 JNIEXPORT jstring JNICALL Java_usi_si_seart_treesitter_TreeSitter_queryCaptureName(
