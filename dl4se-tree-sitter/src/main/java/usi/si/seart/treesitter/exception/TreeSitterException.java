@@ -1,4 +1,4 @@
-package usi.si.seart.treesitter;
+package usi.si.seart.treesitter.exception;
 
 import lombok.experimental.StandardException;
 

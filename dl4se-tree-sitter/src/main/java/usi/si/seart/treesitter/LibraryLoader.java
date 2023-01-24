@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.UtilityClass;
+import usi.si.seart.treesitter.exception.TreeSitterException;
 
 import java.io.File;
 import java.io.FileOutputStream;
