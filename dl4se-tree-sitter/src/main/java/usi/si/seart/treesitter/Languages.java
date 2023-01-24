@@ -44,7 +44,7 @@ class Languages {
     Objects.requireNonNull(language, "Language must not be null!");
     long id = language.getId();
     if (id == Language.INVALID) throw new UnsatisfiedLinkError(
-            "Language binding has not been defined for: " + language.name().toLowerCase()
+            "Language binding has not been defined for: " + language
     );
   }
 }

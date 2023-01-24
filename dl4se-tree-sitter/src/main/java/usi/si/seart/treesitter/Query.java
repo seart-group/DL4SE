@@ -97,8 +97,9 @@ public class Query extends External {
 
     @Override
     public String toString() {
-        String languageStr = language.name();
-        String capturesStr = String.join(", ", captures);
-        return String.format("Query(language: %s, pattern: '%s', captures: [%s])", languageStr, pattern, capturesStr);
+        return String.format(
+                "Query(language: %s, pattern: '%s', captures: [%s])",
+                language, pattern, String.join(", ", captures)
+        );
     }
 }
