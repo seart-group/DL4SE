@@ -196,10 +196,17 @@ public class JavaParser extends AbstractParser {
         if (name.startsWith("set")) return Boilerplate.SETTER;
         if (name.startsWith("get")) return Boilerplate.GETTER;
         switch (name) {
-            case "builder": return Boilerplate.BUILDER;
-            case "equals": return Boilerplate.EQUALS;
-            case "hashCode": return Boilerplate.HASH_CODE;
-            case "toString": return Boilerplate.TO_STRING;
+            case "equals":
+            case "compareTo":
+                return Boilerplate.COMPARISON;
+            case "clone": return Boilerplate.CLONER;
+            case "finalize": return Boilerplate.FINALIZER;
+            case "hashCode": return Boilerplate.HASHER;
+            case "readObject":
+            case "readObjectNoData":
+                return Boilerplate.DESERIALIZER;
+            case "toString": return Boilerplate.STRING_CONVERSION;
+            case "writeObject": return Boilerplate.SERIALIZER;
             default: return null;
         }
     }

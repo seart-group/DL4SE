@@ -52,7 +52,6 @@ class JavaParserTest {
         MethodDeclaration md1 = StaticJavaParser.parseMethodDeclaration("public void method(){}");
         MethodDeclaration md2 = StaticJavaParser.parseMethodDeclaration("public void setX(){}");
         MethodDeclaration md3 = StaticJavaParser.parseMethodDeclaration("public void getX(){}");
-        MethodDeclaration md4 = StaticJavaParser.parseMethodDeclaration("public void builder(){}");
         MethodDeclaration md5 = StaticJavaParser.parseMethodDeclaration("public void toString(){}");
         MethodDeclaration md6 = StaticJavaParser.parseMethodDeclaration("public void equals(){}");
         MethodDeclaration md7 = StaticJavaParser.parseMethodDeclaration("public void hashCode(){}");
@@ -64,10 +63,9 @@ class JavaParserTest {
                     Arguments.of(md1, null),
                     Arguments.of(md2, Boilerplate.SETTER),
                     Arguments.of(md3, Boilerplate.GETTER),
-                    Arguments.of(md4, Boilerplate.BUILDER),
-                    Arguments.of(md5, Boilerplate.TO_STRING),
-                    Arguments.of(md6, Boilerplate.EQUALS),
-                    Arguments.of(md7, Boilerplate.HASH_CODE),
+                    Arguments.of(md5, Boilerplate.STRING_CONVERSION),
+                    Arguments.of(md6, Boilerplate.COMPARISON),
+                    Arguments.of(md7, Boilerplate.HASHER),
                     Arguments.of(cd, Boilerplate.CONSTRUCTOR)
             );
         }

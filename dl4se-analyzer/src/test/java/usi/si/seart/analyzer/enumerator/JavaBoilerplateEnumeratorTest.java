@@ -20,10 +20,15 @@ class JavaBoilerplateEnumeratorTest extends BaseTest {
             "    public void getI(int i) {}\n" +
             "    public void setI() {}\n" +
             "    public void setI(int i) {}\n" +
-            "    public void builder() {}\n" +
+            "    public void compareTo() {}\n" +
             "    public void equals() {}\n" +
             "    public void hashCode() {}\n" +
             "    public void toString() {}\n" +
+            "    public void writeObject() {}\n" +
+            "    public void readObject() {}\n" +
+            "    public void readObjectNoData() {}\n" +
+            "    public void clone() {}\n" +
+            "    public void finalize() {}\n" +
             "    public void run() {}\n" +
             "    public static void main(String[] args) {}\n" +
             "}";
@@ -37,27 +42,38 @@ class JavaBoilerplateEnumeratorTest extends BaseTest {
         Node body = clazz.getChildByFieldName("body");
         Node constructor_0 = body.getChild(1);
         Node constructor_1 = body.getChild(2);
-        Node method_0 = body.getChild(3);
-        Node method_1 = body.getChild(4);
-        Node method_2 = body.getChild(5);
-        Node method_3 = body.getChild(6);
-        Node method_4 = body.getChild(7);
-        Node method_5 = body.getChild(8);
-        Node method_6 = body.getChild(9);
-        Node method_7 = body.getChild(10);
-        Node method_8 = body.getChild(11);
-        Node method_9 = body.getChild(12);
+        Node method_00 = body.getChild(3);
+        Node method_01 = body.getChild(4);
+        Node method_02 = body.getChild(5);
+        Node method_03 = body.getChild(6);
+        Node method_04 = body.getChild(7);
+        Node method_05 = body.getChild(8);
+        Node method_06 = body.getChild(9);
+        Node method_07 = body.getChild(10);
+        Node method_08 = body.getChild(11);
+        Node method_09 = body.getChild(12);
+        Node method_10 = body.getChild(13);
+        Node method_11 = body.getChild(14);
+        Node method_12 = body.getChild(15);
+        Node method_13 = body.getChild(16);
+        Node method_14 = body.getChild(17);
+
         Assertions.assertEquals(Boilerplate.CONSTRUCTOR, enumerator.asEnum(constructor_0));
         Assertions.assertEquals(Boilerplate.CONSTRUCTOR, enumerator.asEnum(constructor_1));
-        Assertions.assertEquals(Boilerplate.GETTER, enumerator.asEnum(method_0));
-        Assertions.assertEquals(Boilerplate.GETTER, enumerator.asEnum(method_1));
-        Assertions.assertEquals(Boilerplate.SETTER, enumerator.asEnum(method_2));
-        Assertions.assertEquals(Boilerplate.SETTER, enumerator.asEnum(method_3));
-        Assertions.assertEquals(Boilerplate.BUILDER, enumerator.asEnum(method_4));
-        Assertions.assertEquals(Boilerplate.EQUALS, enumerator.asEnum(method_5));
-        Assertions.assertEquals(Boilerplate.HASH_CODE, enumerator.asEnum(method_6));
-        Assertions.assertEquals(Boilerplate.TO_STRING, enumerator.asEnum(method_7));
-        Assertions.assertNull(enumerator.asEnum(method_8));
-        Assertions.assertNull(enumerator.asEnum(method_9));
+        Assertions.assertEquals(Boilerplate.GETTER, enumerator.asEnum(method_00));
+        Assertions.assertEquals(Boilerplate.GETTER, enumerator.asEnum(method_01));
+        Assertions.assertEquals(Boilerplate.SETTER, enumerator.asEnum(method_02));
+        Assertions.assertEquals(Boilerplate.SETTER, enumerator.asEnum(method_03));
+        Assertions.assertEquals(Boilerplate.COMPARISON, enumerator.asEnum(method_04));
+        Assertions.assertEquals(Boilerplate.COMPARISON, enumerator.asEnum(method_05));
+        Assertions.assertEquals(Boilerplate.HASHER, enumerator.asEnum(method_06));
+        Assertions.assertEquals(Boilerplate.STRING_CONVERSION, enumerator.asEnum(method_07));
+        Assertions.assertEquals(Boilerplate.SERIALIZER, enumerator.asEnum(method_08));
+        Assertions.assertEquals(Boilerplate.DESERIALIZER, enumerator.asEnum(method_09));
+        Assertions.assertEquals(Boilerplate.DESERIALIZER, enumerator.asEnum(method_10));
+        Assertions.assertEquals(Boilerplate.CLONER, enumerator.asEnum(method_11));
+        Assertions.assertEquals(Boilerplate.FINALIZER, enumerator.asEnum(method_12));
+        Assertions.assertNull(enumerator.asEnum(method_13));
+        Assertions.assertNull(enumerator.asEnum(method_14));
     }
 }
