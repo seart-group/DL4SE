@@ -24,7 +24,8 @@ class PythonTestFilePredicateTest {
                     Arguments.of(Path.of("/src", "latest", "app.py"), false),
                     Arguments.of(Path.of("/src", "test.py"), true),
                     Arguments.of(Path.of("/src", "test_app.py"), true),
-                    Arguments.of(Path.of("/src", "app_test.py"), true)
+                    Arguments.of(Path.of("/src", "app_test.py"), true),
+                    Arguments.of(Path.of("/src", "latest.py"), false)
             );
         }
     }
