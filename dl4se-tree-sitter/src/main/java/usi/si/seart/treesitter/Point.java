@@ -18,4 +18,8 @@ public class Point {
     public String toString() {
         return row + ":" + column;
     }
+
+    public boolean isOrigin() {
+        return row == 0 && column == 0;
+    }
 }
