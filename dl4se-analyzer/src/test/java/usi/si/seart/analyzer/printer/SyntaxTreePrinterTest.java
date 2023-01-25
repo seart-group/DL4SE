@@ -8,7 +8,7 @@ import usi.si.seart.treesitter.Node;
 class SyntaxTreePrinterTest extends BaseTest {
 
     @Test
-    void printTest() {
+    void printRootTest() {
         Printer printer = new SyntaxTreePrinter();
         Node root = tree.getRootNode();
         String actual = printer.print(root);
@@ -45,10 +45,15 @@ class SyntaxTreePrinterTest extends BaseTest {
                 "              arguments: argument_list [5:26] - [5:43]\n" +
                 "                string_literal [5:27] - [5:42]\n";
         Assertions.assertEquals(expected, actual);
+    }
 
+    @Test
+    void printChildTest() {
+        Printer printer = new SyntaxTreePrinter();
+        Node root = tree.getRootNode();
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
-        actual = printer.print(method);
-        expected =
+        String actual = printer.print(method);
+        String expected =
                 "method_declaration [3:4] - [6:5]\n" +
                 "  modifiers [3:4] - [3:17]\n" +
                 "  type: void_type [3:18] - [3:22]\n" +
