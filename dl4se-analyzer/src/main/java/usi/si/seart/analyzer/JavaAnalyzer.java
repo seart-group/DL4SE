@@ -2,17 +2,19 @@ package usi.si.seart.analyzer;
 
 import usi.si.seart.analyzer.enumerator.JavaBoilerplateEnumerator;
 import usi.si.seart.analyzer.predicate.JavaTestFilePredicate;
-import usi.si.seart.analyzer.query.JavaSingleCaptureQueries;
+import usi.si.seart.analyzer.query.multi.JavaMultiCaptureQueries;
+import usi.si.seart.analyzer.query.single.JavaSingleCaptureQueries;
 import usi.si.seart.treesitter.Language;
 
 import java.nio.file.Path;
 
-public class JavaAnalyzer extends PreviousCommentsAnalyzer {
+public class JavaAnalyzer extends AbstractAnalyzer {
 
     public JavaAnalyzer(LocalClone localClone, Path path) {
         super(localClone, path, Language.JAVA);
         this.testFilePredicate = new JavaTestFilePredicate();
-        this.queries = new JavaSingleCaptureQueries();
+        this.singleCaptureQueries = new JavaSingleCaptureQueries();
+        this.multiCaptureQueries = new JavaMultiCaptureQueries();
         this.boilerplateEnumerator = new JavaBoilerplateEnumerator(this::getSourceBytes);
     }
 }

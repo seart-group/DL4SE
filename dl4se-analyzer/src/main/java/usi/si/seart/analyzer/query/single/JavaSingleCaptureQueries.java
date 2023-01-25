@@ -1,10 +1,16 @@
-package usi.si.seart.analyzer.query;
+package usi.si.seart.analyzer.query.single;
 
 import usi.si.seart.treesitter.Language;
 import usi.si.seart.treesitter.Node;
 
 import java.util.List;
 
+/**
+ * @see
+ * <a href="https://tree-sitter.github.io/tree-sitter/using-parsers#query-syntax:~:text=Alternations">
+ *     Query Syntax - Alternations
+ * </a>
+ */
 public class JavaSingleCaptureQueries extends SingleCaptureQueries {
 
     public JavaSingleCaptureQueries() {
@@ -14,10 +20,5 @@ public class JavaSingleCaptureQueries extends SingleCaptureQueries {
     @Override
     public List<Node> getComments(Node node) {
         return execute(node, "[(line_comment) (block_comment)] @comment");
-    }
-
-    @Override
-    public List<Node> getCallableDeclarations(Node node) {
-        return execute(node, "[(constructor_declaration) (method_declaration)] @declaration");
     }
 }

@@ -19,13 +19,17 @@ import usi.si.seart.analyzer.printer.NodePrinter;
 import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
-import usi.si.seart.analyzer.query.Queries;
+import usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
+import usi.si.seart.analyzer.query.single.SingleCaptureQueries;
+import usi.si.seart.analyzer.util.Tuple;
+import usi.si.seart.analyzer.util.stream.DelimiterSuffixedStringCollector;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 import usi.si.seart.treesitter.Language;
 import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Parser;
+import usi.si.seart.treesitter.Query;
 import usi.si.seart.treesitter.Tree;
 
 import java.io.IOException;
@@ -33,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
@@ -63,10 +68,9 @@ public abstract class AbstractAnalyzer implements Analyzer {
     Printer syntaxTreePrinter = new SyntaxTreePrinter();
     Printer sExpressionPrinter = new SExpressionPrinter();
 
-    Queries<List<Node>> queries = new Queries<>() {
+    SingleCaptureQueries singleCaptureQueries = new SingleCaptureQueries(null) {
         @Override
-        public List<Node> getNodes(Node node) {
-            return List.of();
+        public void verify(Query query) {
         }
 
         @Override
@@ -75,7 +79,23 @@ public abstract class AbstractAnalyzer implements Analyzer {
         }
 
         @Override
-        public List<Node> getCallableDeclarations(Node node) {
+        public List<Node> execute(Node node, String pattern) {
+            return List.of();
+        }
+    };
+
+    MultiCaptureQueries multiCaptureQueries = new MultiCaptureQueries(null) {
+        @Override
+        public void verify(Query query) {
+        }
+
+        @Override
+        public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
+            return List.of();
+        }
+
+        @Override
+        public List<List<Tuple<String, Node>>> execute(Node node, String pattern) {
             return List.of();
         }
     };
@@ -136,10 +156,10 @@ public abstract class AbstractAnalyzer implements Analyzer {
     }
 
     protected List<Function> extractFunctionEntities(File file) {
-        List<Node> targets = queries.getCallableDeclarations(tree.getRootNode());
+        List<List<Tuple<String, Node>>> targets = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
         List<Function> functions = new ArrayList<>(targets.size());
-        for (Node node: targets) {
-            Function function = extractFunctionEntity(node);
+        for (List<Tuple<String, Node>> nodes: targets) {
+            Function function = extractFunctionEntity(nodes);
             // These operations are invariant by
             // nature and should not be overridden
             function.setFile(file);
@@ -149,21 +169,59 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return functions;
     }
 
-    protected Function extractFunctionEntity(Node node) {
+    protected Function extractFunctionEntity(List<Tuple<String, Node>> nodes) {
+        Node target = nodes.stream()
+                .filter(tuple -> tuple.getKey().equals("target"))
+                .map(Tuple::getValue)
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+        String content = nodes.stream()
+                .map(Tuple::getValue)
+                .map(node -> nodePrinter.print(node))
+                .collect(new DelimiterSuffixedStringCollector("\n"));
+        String ast = nodes.stream()
+                .map(Tuple::getValue)
+                .map(node -> syntaxTreePrinter.print(node))
+                .collect(new DelimiterSuffixedStringCollector("\n"));
+        String sExp = nodes.stream()
+                .map(Tuple::getValue)
+                .map(node -> sExpressionPrinter.print(node))
+                .collect(new DelimiterSuffixedStringCollector(" "));
+
+        Long sumCodeTokens = nodes.stream()
+                .map(Tuple::getValue)
+                .mapToLong(node -> codeTokenCounter.count(node))
+                .sum();
+        Long sumTotalTokens = nodes.stream()
+                .map(Tuple::getValue)
+                .mapToLong(node -> totalTokenCounter.count(node))
+                .sum();
+        Long sumLines = nodes.stream()
+                .map(Tuple::getValue)
+                .mapToLong(node -> lineCounter.count(node))
+                .sum();
+        Long sumCharacters = nodes.stream()
+                .map(Tuple::getValue)
+                .mapToLong(node -> characterCounter.count(node))
+                .sum();
+        boolean anyContainsNonAscii = nodes.stream()
+                .map(Tuple::getValue)
+                .anyMatch(node -> containsNonAscii.test(node));
+
         return Function.builder()
                 .repo(localClone.getGitRepo())
-                .content(nodePrinter.print(node))
-                .contentHash(contentHasher.hash(node))
-                .ast(syntaxTreePrinter.print(node))
-                .astHash(syntaxTreeHasher.hash(node))
-                .sExpression("(sexp " + sExpressionPrinter.print(node) + ")")
-                .totalTokens(totalTokenCounter.count(node))
-                .codeTokens(codeTokenCounter.count(node))
-                .lines(lineCounter.count(node))
-                .characters(characterCounter.count(node))
-                .containsNonAscii(containsNonAscii.test(node))
-                .containsError(containsError.test(node))
-                .boilerplateType(boilerplateEnumerator.asEnum(node))
+                .ast(ast)
+                .content(content)
+                .astHash(syntaxTreeHasher.hash(target))
+                .contentHash(contentHasher.hash(target))
+                .sExpression("(sexp " + sExp + ")")
+                .totalTokens(sumTotalTokens)
+                .codeTokens(sumCodeTokens)
+                .lines(sumLines)
+                .characters(sumCharacters)
+                .containsNonAscii(anyContainsNonAscii)
+                .containsError(containsError.test(target))
+                .boilerplateType(boilerplateEnumerator.asEnum(target))
                 .build();
     }
 }
