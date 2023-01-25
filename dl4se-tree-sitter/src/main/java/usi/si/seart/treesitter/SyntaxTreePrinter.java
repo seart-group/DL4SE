@@ -14,6 +14,12 @@ public class SyntaxTreePrinter {
 
     int depth = 0;
     final Node node;
+    Point offset = new Point(0, 0);
+
+    public SyntaxTreePrinter(Node node, Point offset) {
+        this.node = node;
+        this.offset = offset;
+    }
 
     /**
      * @return A string representation of the subtree. Consists only of named nodes.
@@ -25,6 +31,7 @@ public class SyntaxTreePrinter {
         for (;;) {
             TreeCursorNode cursorNode = cursor.getCurrentTreeCursorNode();
             if (cursorNode.isNamed()) {
+                recalculatePosition(cursorNode);
                 String indentation = "  ".repeat(depth);
                 stringBuilder
                         .append(indentation)
@@ -35,6 +42,21 @@ public class SyntaxTreePrinter {
             do {
                 if (!cursor.gotoParent()) return stringBuilder.toString();
             } while (!cursor.gotoNextSibling());
+        }
+    }
+
+    private void recalculatePosition(TreeCursorNode cursorNode) {
+        if (!offset.isOrigin()) {
+            Point cursorStartPoint = cursorNode.getStartPoint();
+            Point cursorEndPoint = cursorNode.getEndPoint();
+
+            int rowOffset = offset.getRow();
+            cursorStartPoint.setRow(cursorStartPoint.getRow() + rowOffset);
+            cursorEndPoint.setRow(cursorEndPoint.getRow() + rowOffset);
+
+            int columnOffset = offset.getColumn();
+            cursorStartPoint.setColumn(cursorStartPoint.getColumn() + columnOffset);
+            cursorEndPoint.setColumn(cursorEndPoint.getColumn() + columnOffset);
         }
     }
 
