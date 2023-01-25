@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@EqualsAndHashCode
 public class Point {
 
     int row;
