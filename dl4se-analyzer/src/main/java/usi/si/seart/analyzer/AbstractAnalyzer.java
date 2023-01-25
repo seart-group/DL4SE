@@ -207,6 +207,9 @@ public abstract class AbstractAnalyzer implements Analyzer {
         boolean anyContainsNonAscii = nodes.stream()
                 .map(Tuple::getValue)
                 .anyMatch(node -> containsNonAscii.test(node));
+        boolean anyContainsError = nodes.stream()
+                .map(Tuple::getValue)
+                .anyMatch(node -> containsError.test(node));
 
         return Function.builder()
                 .repo(localClone.getGitRepo())
@@ -220,7 +223,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .lines(sumLines)
                 .characters(sumCharacters)
                 .containsNonAscii(anyContainsNonAscii)
-                .containsError(containsError.test(target))
+                .containsError(anyContainsError)
                 .boilerplateType(boilerplateEnumerator.asEnum(target))
                 .build();
     }
