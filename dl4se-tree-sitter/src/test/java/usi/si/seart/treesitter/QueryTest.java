@@ -1,5 +1,6 @@
 package usi.si.seart.treesitter;
 
+import lombok.Cleanup;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,5 +51,12 @@ class QueryTest extends TestBase {
     void testQueryCaptureName() {
         QueryCapture capture = new QueryCapture(new Node(), 0);
         Assertions.assertEquals("capture", query.getCaptureName(capture));
+    }
+
+    @Test
+    void testQueryHasCaptures() {
+        Assertions.assertTrue(query.hasCaptures());
+        @Cleanup Query query = new Query(Language.JAVA, "(_)");
+        Assertions.assertFalse(query.hasCaptures());
     }
 }

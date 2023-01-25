@@ -86,6 +86,13 @@ public class Query extends External {
     }
 
     /**
+     * @return true if the query has captures, false otherwise.
+     */
+    public boolean hasCaptures() {
+        return !captures.isEmpty();
+    }
+
+    /**
      * Delete a query, freeing all the memory that it used.
      */
     @Override
