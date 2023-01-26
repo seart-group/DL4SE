@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-public class SExpressionPrinter extends AbstractPrinter {
+public class SymbolicExpressionPrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {

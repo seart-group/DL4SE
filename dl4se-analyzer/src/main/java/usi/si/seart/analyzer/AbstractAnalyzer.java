@@ -18,7 +18,7 @@ import usi.si.seart.analyzer.predicate.node.NodePredicate;
 import usi.si.seart.analyzer.predicate.path.TestFilePredicate;
 import usi.si.seart.analyzer.printer.NodePrinter;
 import usi.si.seart.analyzer.printer.Printer;
-import usi.si.seart.analyzer.printer.SExpressionPrinter;
+import usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
 import usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
 import usi.si.seart.analyzer.query.single.SingleCaptureQueries;
@@ -65,7 +65,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
 
     Printer nodePrinter;
     Printer syntaxTreePrinter = new SyntaxTreePrinter();
-    Printer sExpressionPrinter = new SExpressionPrinter();
+    Printer expressionPrinter = new SymbolicExpressionPrinter();
 
     SingleCaptureQueries singleCaptureQueries = new SingleCaptureQueries(null) {
         @Override
@@ -143,7 +143,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .contentHash(contentHasher.hash(node))
                 .ast(syntaxTreePrinter.print(node))
                 .astHash(syntaxTreeHasher.hash(node))
-                .sExpression(sExpressionPrinter.print(node))
+                .symbolicExpression(expressionPrinter.print(node))
                 .totalTokens(totalTokenCounter.count(node))
                 .codeTokens(codeTokenCounter.count(node))
                 .lines(lineCounter.count(node))
@@ -183,7 +183,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .content(nodePrinter.print(nodes))
                 .astHash(syntaxTreeHasher.hash(nodes))
                 .contentHash(contentHasher.hash(nodes))
-                .sExpression(sExpressionPrinter.print(nodes))
+                .symbolicExpression(expressionPrinter.print(nodes))
                 .totalTokens(totalTokenCounter.count(nodes))
                 .codeTokens(codeTokenCounter.count(nodes))
                 .lines(lineCounter.count(nodes))

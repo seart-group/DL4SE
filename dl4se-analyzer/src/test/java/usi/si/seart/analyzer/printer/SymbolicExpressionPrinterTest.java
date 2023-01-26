@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.treesitter.Node;
 
-class SExpressionPrinterTest extends BaseTest {
+class SymbolicExpressionPrinterTest extends BaseTest {
 
     @Test
     void printRootTest() {
-        Printer printer = new SExpressionPrinter();
+        Printer printer = new SymbolicExpressionPrinter();
         Node root = tree.getRootNode();
         String actual = printer.print(root);
         String expected =
@@ -64,7 +64,7 @@ class SExpressionPrinterTest extends BaseTest {
 
     @Test
     void printChildTest() {
-        Printer printer = new SExpressionPrinter();
+        Printer printer = new SymbolicExpressionPrinter();
         Node root = tree.getRootNode();
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
         String actual = printer.print(method);
@@ -103,7 +103,7 @@ class SExpressionPrinterTest extends BaseTest {
 
     @Test
     void printMultipleTest() {
-        Printer printer = new SExpressionPrinter();
+        Printer printer = new SymbolicExpressionPrinter();
         Node root = tree.getRootNode();
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);
