@@ -10,8 +10,7 @@ public class SyntaxTreeHasher extends SHA256Hasher {
         super();
     }
 
-    @Override
-    public String hash(Node node) {
+    protected void update(Node node) {
         @Cleanup TreeCursor cursor = node.walk();
         cursor.preorderTraversal(current -> {
             boolean leafNode = current.getChildCount() == 0;
@@ -22,8 +21,5 @@ public class SyntaxTreeHasher extends SHA256Hasher {
                 md.update(bytes);
             }
         });
-
-        byte[] hash = md.digest();
-        return bytesToHex(hash);
     }
 }

@@ -17,7 +17,7 @@ public class ContentHasher extends SHA256Hasher {
     }
 
     @Override
-    public String hash(Node node) {
+    protected void update(Node node) {
         @Cleanup TreeCursor cursor = node.walk();
         cursor.preorderTraversal(current -> {
             boolean leafNode = current.getChildCount() == 0;
@@ -27,8 +27,5 @@ public class ContentHasher extends SHA256Hasher {
                 md.update(mapper.getBytesForRange(range));
             }
         });
-
-        byte[] hash = md.digest();
-        return bytesToHex(hash);
     }
 }
