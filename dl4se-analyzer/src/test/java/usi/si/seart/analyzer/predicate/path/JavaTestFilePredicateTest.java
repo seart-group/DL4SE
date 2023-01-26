@@ -1,4 +1,4 @@
-package usi.si.seart.analyzer.predicate;
+package usi.si.seart.analyzer.predicate.path;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-class TestFilePredicateTest {
+class JavaTestFilePredicateTest {
 
-    private static class PathPredicateProvider implements ArgumentsProvider {
+    private static class JavaPathPredicateProvider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
@@ -22,16 +22,22 @@ class TestFilePredicateTest {
                     Arguments.of(Path.of("/src", "tests", "README"), true),
                     Arguments.of(Path.of("/src", "latest", "README"), false),
                     Arguments.of(Path.of("/src", "main", "App.java"), false),
-                    Arguments.of(Path.of("/src", "main", "Test.java"), false),
-                    Arguments.of(Path.of("/src", "main", "TestApp.java"), false)
+                    Arguments.of(Path.of("/src", "main", "Test.java"), true),
+                    Arguments.of(Path.of("/src", "main", "TestApp.java"), true),
+                    Arguments.of(Path.of("/src", "main", "AppTest.java"), true),
+                    Arguments.of(Path.of("/src", "main", "AppTests.java"), true),
+                    Arguments.of(Path.of("/src", "main", "AppTestCase.java"), true),
+                    Arguments.of(Path.of("/src", "main", "AppIT.java"), true),
+                    Arguments.of(Path.of("/src", "main", "ITApp.java"), true),
+                    Arguments.of(Path.of("/src", "main", "AppITCase.java"), true)
             );
         }
     }
 
     @ParameterizedTest
-    @ArgumentsSource(PathPredicateProvider.class)
+    @ArgumentsSource(JavaPathPredicateProvider.class)
     void pathPredicateTest(Path path, boolean expected) {
-        Predicate<Path> predicate = new TestFilePredicate() {};
+        Predicate<Path> predicate = new JavaTestFilePredicate();
         Assertions.assertEquals(expected, predicate.test(path));
     }
 }

@@ -1,4 +1,4 @@
-package usi.si.seart.analyzer.predicate;
+package usi.si.seart.analyzer.predicate.path;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;

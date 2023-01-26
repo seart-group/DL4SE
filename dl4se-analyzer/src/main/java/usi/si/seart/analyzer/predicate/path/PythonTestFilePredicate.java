@@ -1,4 +1,4 @@
-package usi.si.seart.analyzer.predicate;
+package usi.si.seart.analyzer.predicate.path;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -6,16 +6,12 @@ import java.nio.file.PathMatcher;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class JavaTestFilePredicate extends TestFilePredicate {
+public class PythonTestFilePredicate extends TestFilePredicate {
 
     private static final Set<String> FILE_PATTERNS = Set.of(
-            "**/Test*.java",
-            "**/*Test.java",
-            "**/*Tests.java",
-            "**/*TestCase.java",
-            "**/IT*.java",
-            "**/*IT.java",
-            "**/*ITCase.java"
+            "**/test.py",
+            "**/*_test.py",
+            "**/test_*.py"
     );
 
     @Override
