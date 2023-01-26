@@ -29,7 +29,7 @@ public class NodePrinter extends ContentPrinter {
     }
 
     @Override
-    public Collector<CharSequence, ?, String> resultCollector() {
+    protected Collector<CharSequence, ?, String> resultCollector() {
         return Collectors.joining("\n");
     }
 }

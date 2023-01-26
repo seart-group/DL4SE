@@ -13,7 +13,7 @@ public class SExpressionPrinter extends AbstractPrinter {
     }
 
     @Override
-    public Collector<CharSequence, ?, String> resultCollector() {
+    protected Collector<CharSequence, ?, String> resultCollector() {
         return Collectors.joining(" ");
     }
 }
