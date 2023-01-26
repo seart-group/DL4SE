@@ -156,10 +156,10 @@ public abstract class AbstractAnalyzer implements Analyzer {
     }
 
     protected List<Function> extractFunctionEntities(File file) {
-        List<List<Tuple<String, Node>>> targets = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
-        List<Function> functions = new ArrayList<>(targets.size());
-        for (List<Tuple<String, Node>> nodes: targets) {
-            Function function = extractFunctionEntity(nodes);
+        List<List<Tuple<String, Node>>> matches = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
+        List<Function> functions = new ArrayList<>(matches.size());
+        for (List<Tuple<String, Node>> match: matches) {
+            Function function = extractFunctionEntity(match);
             // These operations are invariant by
             // nature and should not be overridden
             function.setFile(file);
@@ -169,45 +169,45 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return functions;
     }
 
-    protected Function extractFunctionEntity(List<Tuple<String, Node>> nodes) {
-        Node target = nodes.stream()
+    protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
+        Node function = match.stream()
                 .filter(tuple -> tuple.getKey().equals("target"))
                 .map(Tuple::getValue)
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
-        String content = nodes.stream()
+        String content = match.stream()
                 .map(Tuple::getValue)
                 .map(node -> nodePrinter.print(node))
                 .collect(new DelimiterSuffixedStringCollector("\n"));
-        String ast = nodes.stream()
+        String ast = match.stream()
                 .map(Tuple::getValue)
                 .map(node -> syntaxTreePrinter.print(node))
                 .collect(new DelimiterSuffixedStringCollector("\n"));
-        String sExp = nodes.stream()
+        String sExp = match.stream()
                 .map(Tuple::getValue)
                 .map(node -> sExpressionPrinter.print(node))
                 .collect(new DelimiterSuffixedStringCollector(" "));
 
-        Long sumCodeTokens = nodes.stream()
+        Long sumCodeTokens = match.stream()
                 .map(Tuple::getValue)
                 .mapToLong(node -> codeTokenCounter.count(node))
                 .sum();
-        Long sumTotalTokens = nodes.stream()
+        Long sumTotalTokens = match.stream()
                 .map(Tuple::getValue)
                 .mapToLong(node -> totalTokenCounter.count(node))
                 .sum();
-        Long sumLines = nodes.stream()
+        Long sumLines = match.stream()
                 .map(Tuple::getValue)
                 .mapToLong(node -> lineCounter.count(node))
                 .sum();
-        Long sumCharacters = nodes.stream()
+        Long sumCharacters = match.stream()
                 .map(Tuple::getValue)
                 .mapToLong(node -> characterCounter.count(node))
                 .sum();
-        boolean anyContainsNonAscii = nodes.stream()
+        boolean anyContainsNonAscii = match.stream()
                 .map(Tuple::getValue)
                 .anyMatch(node -> containsNonAscii.test(node));
-        boolean anyContainsError = nodes.stream()
+        boolean anyContainsError = match.stream()
                 .map(Tuple::getValue)
                 .anyMatch(node -> containsError.test(node));
 
@@ -215,8 +215,8 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .repo(localClone.getGitRepo())
                 .ast(ast)
                 .content(content)
-                .astHash(syntaxTreeHasher.hash(target))
-                .contentHash(contentHasher.hash(target))
+                .astHash(syntaxTreeHasher.hash(function))
+                .contentHash(contentHasher.hash(function))
                 .sExpression("(sexp " + sExp + ")")
                 .totalTokens(sumTotalTokens)
                 .codeTokens(sumCodeTokens)
@@ -224,7 +224,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .characters(sumCharacters)
                 .containsNonAscii(anyContainsNonAscii)
                 .containsError(anyContainsError)
-                .boilerplateType(boilerplateEnumerator.asEnum(target))
+                .boilerplateType(boilerplateEnumerator.asEnum(function))
                 .build();
     }
 }
