@@ -5,7 +5,16 @@ import org.junit.jupiter.api.Test;
 import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.treesitter.Node;
 
+import java.util.HashSet;
+
 class LineCounterTest extends BaseTest {
+
+    @Test
+    void countEmptyTest() {
+        Counter counter = new LineCounter();
+        Assertions.assertEquals(0, counter.count());
+        Assertions.assertEquals(0, counter.count(new HashSet<>()));
+    }
 
     @Test
     void countRootTest() {

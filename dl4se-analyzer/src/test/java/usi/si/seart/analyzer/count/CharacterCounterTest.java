@@ -5,7 +5,16 @@ import org.junit.jupiter.api.Test;
 import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.treesitter.Node;
 
+import java.util.HashSet;
+
 class CharacterCounterTest extends BaseTest {
+
+    @Test
+    void countEmptyTest() {
+        Counter counter = new CharacterCounter(getNodeMapper());
+        Assertions.assertEquals(0, counter.count());
+        Assertions.assertEquals(0, counter.count(new HashSet<>()));
+    }
 
     @Test
     void countRootTest(){
