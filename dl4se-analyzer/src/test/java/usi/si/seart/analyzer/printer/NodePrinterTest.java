@@ -5,7 +5,16 @@ import org.junit.jupiter.api.Test;
 import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.treesitter.Node;
 
+import java.util.HashSet;
+
 class NodePrinterTest extends BaseTest {
+
+    @Test
+    void printNothingTest() {
+        Printer printer = new NodePrinter(getNodeMapper());
+        Assertions.assertEquals("", printer.print());
+        Assertions.assertEquals("", printer.print(new HashSet<>()));
+    }
 
     @Test
     void printRootTest() {
