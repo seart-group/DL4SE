@@ -8,8 +8,16 @@ import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 
 class ContainsNonAsciiPredicateTest extends PredicateTest {
+
+    @Test
+    void emptyInputTest() {
+        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        Assertions.assertFalse(predicate.test());
+        Assertions.assertFalse(predicate.test(new HashSet<>()));
+    }
 
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)

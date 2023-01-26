@@ -10,8 +10,16 @@ import usi.si.seart.treesitter.Parser;
 import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 
 class ContainsErrorPredicateTest extends PredicateTest {
+
+    @Test
+    void emptyInputTest() {
+        NodePredicate predicate = new ContainsErrorPredicate();
+        Assertions.assertFalse(predicate.test());
+        Assertions.assertFalse(predicate.test(new HashSet<>()));
+    }
 
     @Test
     void containsNoErrorTest() {
