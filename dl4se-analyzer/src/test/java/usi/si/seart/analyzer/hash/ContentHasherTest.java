@@ -7,8 +7,16 @@ import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 
 class ContentHasherTest extends HasherTest {
+
+    @Test
+    void emptyTest() {
+        Hasher hasher = new ContentHasher(getNodeMapper());
+        Assertions.assertEquals(empty, hasher.hash());
+        Assertions.assertEquals(empty, hasher.hash(new HashSet<>()));
+    }
 
     @Test
     void hashTest() {

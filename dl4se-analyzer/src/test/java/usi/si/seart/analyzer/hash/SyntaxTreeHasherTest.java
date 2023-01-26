@@ -6,8 +6,16 @@ import org.junit.jupiter.api.Test;
 import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 
 class SyntaxTreeHasherTest extends HasherTest {
+
+    @Test
+    void emptyTest() {
+        Hasher hasher = new SyntaxTreeHasher();
+        Assertions.assertEquals(empty, hasher.hash());
+        Assertions.assertEquals(empty, hasher.hash(new HashSet<>()));
+    }
 
     @Test
     void hashTest() {
