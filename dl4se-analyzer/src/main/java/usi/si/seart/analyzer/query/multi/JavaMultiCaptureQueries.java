@@ -26,12 +26,8 @@ public class JavaMultiCaptureQueries extends MultiCaptureQueries {
     public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
         return execute(
                 node,
-                "(" +
-                    "[(line_comment)(block_comment)]* @additional . (method_declaration) @target" +
-                ")" +
-                "(" +
-                    "[(line_comment)(block_comment)]* @additional . (constructor_declaration) @target" +
-                ")"
+                "([(line_comment)(block_comment)]* @additional . (method_declaration) @target)" +
+                "([(line_comment)(block_comment)]* @additional . (constructor_declaration) @target)"
         );
     }
 }
