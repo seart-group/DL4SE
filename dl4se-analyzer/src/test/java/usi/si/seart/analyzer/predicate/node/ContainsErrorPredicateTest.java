@@ -1,4 +1,4 @@
-package usi.si.seart.analyzer.predicate;
+package usi.si.seart.analyzer.predicate.node;
 
 import lombok.Cleanup;
 import lombok.SneakyThrows;

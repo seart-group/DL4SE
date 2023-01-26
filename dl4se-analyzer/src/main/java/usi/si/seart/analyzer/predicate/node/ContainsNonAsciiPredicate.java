@@ -1,4 +1,4 @@
-package usi.si.seart.analyzer.predicate;
+package usi.si.seart.analyzer.predicate.node;
 
 import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Node;
