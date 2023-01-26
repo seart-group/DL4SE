@@ -5,7 +5,7 @@ import usi.si.seart.treesitter.Node;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class SExpressionPrinter implements Printer {
+public class SExpressionPrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {

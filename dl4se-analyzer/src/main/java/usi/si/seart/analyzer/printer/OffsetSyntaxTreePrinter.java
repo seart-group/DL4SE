@@ -5,7 +5,7 @@ import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Point;
 
 @AllArgsConstructor
-public class OffsetSyntaxTreePrinter implements Printer {
+public class OffsetSyntaxTreePrinter extends AbstractPrinter {
 
     private final Point offset;
 
