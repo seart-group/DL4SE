@@ -2,9 +2,7 @@ package usi.si.seart.analyzer.predicate;
 
 import usi.si.seart.treesitter.Node;
 
-import java.util.function.Predicate;
-
-public class ContainsErrorPredicate implements Predicate<Node> {
+public class ContainsErrorPredicate extends NodePredicate {
 
     @Override
     public boolean test(Node node) {

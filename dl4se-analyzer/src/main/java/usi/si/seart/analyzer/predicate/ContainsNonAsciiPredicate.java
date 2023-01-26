@@ -4,7 +4,7 @@ import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Range;
 
-public class ContainsNonAsciiPredicate extends ContentPredicate {
+public class ContainsNonAsciiPredicate extends NodeContentPredicate {
 
     public ContainsNonAsciiPredicate(NodeMapper mapper) {
         super(mapper);

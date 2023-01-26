@@ -8,16 +8,8 @@ import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.function.Predicate;
 
 class ContainsNonAsciiPredicateTest extends PredicateTest {
-
-    @Test
-    void containsNonAsciiTest() {
-        Predicate<Node> predicate = new ContainsNonAsciiPredicate(getNodeMapper());
-        boolean result = predicate.test(tree.getRootNode());
-        Assertions.assertTrue(result);
-    }
 
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
@@ -35,9 +27,26 @@ class ContainsNonAsciiPredicateTest extends PredicateTest {
                 "    }\n" +
                 "}";
         byte[] bytes_2 = input_2.getBytes(StandardCharsets.UTF_16LE);
-        Predicate<Node> predicate = new ContainsNonAsciiPredicate(() -> bytes_2);
+        NodePredicate predicate = new ContainsNonAsciiPredicate(() -> bytes_2);
         Tree tree = parser.parseString(input_2);
         boolean result = predicate.test(tree.getRootNode());
         Assertions.assertFalse(result);
+    }
+
+    @Test
+    void containsNonAsciiTest() {
+        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        boolean result = predicate.test(tree.getRootNode());
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void anyContainsNonAscii() {
+        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        Node root = tree.getRootNode();
+        Node package_declaration = root.getChild(0);
+        Node class_declaration = root.getChild(1);
+        boolean result = predicate.test(package_declaration, class_declaration);
+        Assertions.assertTrue(result);
     }
 }

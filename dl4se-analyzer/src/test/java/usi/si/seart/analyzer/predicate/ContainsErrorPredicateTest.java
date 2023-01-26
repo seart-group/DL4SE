@@ -10,9 +10,15 @@ import usi.si.seart.treesitter.Parser;
 import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
-import java.util.function.Predicate;
 
 class ContainsErrorPredicateTest extends PredicateTest {
+
+    @Test
+    void containsNoErrorTest() {
+        NodePredicate predicate = new ContainsErrorPredicate();
+        boolean result = predicate.test(tree.getRootNode());
+        Assertions.assertFalse(result);
+    }
 
     @Test
     @SneakyThrows(UnsupportedEncodingException.class)
@@ -20,15 +26,21 @@ class ContainsErrorPredicateTest extends PredicateTest {
         @Cleanup Parser parser = new Parser(Language.C);
         Tree error = parser.parseString(getInput());
         Node root = error.getRootNode();
-        Predicate<Node> predicate = new ContainsErrorPredicate();
+        NodePredicate predicate = new ContainsErrorPredicate();
         boolean result = predicate.test(root);
         Assertions.assertTrue(result);
     }
 
     @Test
-    void containsNoErrorTest() {
-        Predicate<Node> predicate = new ContainsErrorPredicate();
-        boolean result = predicate.test(tree.getRootNode());
-        Assertions.assertFalse(result);
+    @SneakyThrows(UnsupportedEncodingException.class)
+    void anyContainsErrorTest() {
+        @Cleanup Parser parser = new Parser(Language.C);
+        Tree error = parser.parseString(getInput());
+        Node root = error.getRootNode();
+        Node declaration = root.getChild(0);
+        Node function_definition = root.getChild(1);
+        NodePredicate predicate = new ContainsErrorPredicate();
+        boolean result = predicate.test(declaration, function_definition);
+        Assertions.assertTrue(result);
     }
 }
