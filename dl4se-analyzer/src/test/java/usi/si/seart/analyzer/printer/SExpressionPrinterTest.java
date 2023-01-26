@@ -8,7 +8,7 @@ import usi.si.seart.treesitter.Node;
 class SExpressionPrinterTest extends BaseTest {
 
     @Test
-    void printTest() {
+    void printRootTest() {
         Printer printer = new SExpressionPrinter();
         Node root = tree.getRootNode();
         String actual = printer.print(root);
@@ -45,10 +45,15 @@ class SExpressionPrinterTest extends BaseTest {
                  "arguments: (argument_list " +
                  "(string_literal)))))))))";
         Assertions.assertEquals(expected, actual);
+    }
 
+    @Test
+    void printChildTest() {
+        Printer printer = new SExpressionPrinter();
+        Node root = tree.getRootNode();
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
-        actual = printer.print(method);
-        expected =
+        String actual = printer.print(method);
+        String expected =
                 "(method_declaration " +
                 "(modifiers) " +
                 "type: (void_type) " +
@@ -69,6 +74,49 @@ class SExpressionPrinterTest extends BaseTest {
                 "name: (identifier) " +
                 "arguments: (argument_list " +
                 "(string_literal))))))";
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void printMultipleTest() {
+        Printer printer = new SExpressionPrinter();
+        Node root = tree.getRootNode();
+        Node package_declaration = root.getChild(0);
+        Node class_declaration = root.getChild(1);
+        String actual = printer.print(package_declaration, class_declaration);
+        // The "program" root node is removed because
+        // we are printing its children individually
+        String expected =
+                "(package_declaration " +
+                "(scoped_identifier " +
+                "scope: (scoped_identifier " +
+                "scope: (identifier) " +
+                "name: (identifier)) " +
+                "name: (identifier))) " +
+                "(class_declaration " +
+                "(modifiers) " +
+                "name: (identifier) " +
+                "body: (class_body " +
+                "(method_declaration " +
+                "(modifiers) " +
+                "type: (void_type) " +
+                "name: (identifier) " +
+                "parameters: (formal_parameters " +
+                "(formal_parameter " +
+                "type: (array_type " +
+                "element: (type_identifier) " +
+                "dimensions: (dimensions)) " +
+                "name: (identifier))) " +
+                "body: (block " +
+                "(line_comment) " +
+                "(expression_statement " +
+                "(method_invocation " +
+                "object: (field_access " +
+                "object: (identifier) " +
+                "field: (identifier)) " +
+                "name: (identifier) " +
+                "arguments: (argument_list " +
+                "(string_literal))))))))";
         Assertions.assertEquals(expected, actual);
     }
 }

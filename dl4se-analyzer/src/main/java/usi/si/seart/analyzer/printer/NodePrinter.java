@@ -5,6 +5,7 @@ import usi.si.seart.treesitter.Node;
 import usi.si.seart.treesitter.Range;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class NodePrinter extends ContentPrinter {
@@ -27,4 +28,8 @@ public class NodePrinter extends ContentPrinter {
         return String.join("\n", lines);
     }
 
+    @Override
+    public Collector<CharSequence, ?, String> resultCollector() {
+        return Collectors.joining("\n");
+    }
 }
