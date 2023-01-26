@@ -1,7 +1,7 @@
 package usi.si.seart.analyzer;
 
 import usi.si.seart.analyzer.enumerator.JavaBoilerplateEnumerator;
-import usi.si.seart.analyzer.predicate.JavaTestFilePredicate;
+import usi.si.seart.analyzer.predicate.path.JavaTestFilePredicate;
 import usi.si.seart.analyzer.query.multi.JavaMultiCaptureQueries;
 import usi.si.seart.analyzer.query.single.JavaSingleCaptureQueries;
 import usi.si.seart.treesitter.Language;

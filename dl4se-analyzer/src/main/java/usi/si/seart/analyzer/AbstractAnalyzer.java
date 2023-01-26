@@ -12,9 +12,10 @@ import usi.si.seart.analyzer.enumerator.Enumerator;
 import usi.si.seart.analyzer.hash.ContentHasher;
 import usi.si.seart.analyzer.hash.Hasher;
 import usi.si.seart.analyzer.hash.SyntaxTreeHasher;
-import usi.si.seart.analyzer.predicate.ContainsErrorPredicate;
-import usi.si.seart.analyzer.predicate.ContainsNonAsciiPredicate;
-import usi.si.seart.analyzer.predicate.TestFilePredicate;
+import usi.si.seart.analyzer.predicate.node.ContainsErrorPredicate;
+import usi.si.seart.analyzer.predicate.node.ContainsNonAsciiPredicate;
+import usi.si.seart.analyzer.predicate.node.NodePredicate;
+import usi.si.seart.analyzer.predicate.path.TestFilePredicate;
 import usi.si.seart.analyzer.printer.NodePrinter;
 import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SExpressionPrinter;
@@ -22,7 +23,6 @@ import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
 import usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
 import usi.si.seart.analyzer.query.single.SingleCaptureQueries;
 import usi.si.seart.analyzer.util.Tuple;
-import usi.si.seart.analyzer.util.stream.DelimiterSuffixedStringCollector;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
@@ -37,8 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class AbstractAnalyzer implements Analyzer {
@@ -59,10 +58,10 @@ public abstract class AbstractAnalyzer implements Analyzer {
     Hasher contentHasher;
     Hasher syntaxTreeHasher = new SyntaxTreeHasher();
 
-    Predicate<Node> containsError = new ContainsErrorPredicate();
-    Predicate<Node> containsNonAscii;
+    NodePredicate containsError = new ContainsErrorPredicate();
+    NodePredicate containsNonAscii;
 
-    Predicate<Path> testFilePredicate = new TestFilePredicate() {};
+    TestFilePredicate testFilePredicate = new TestFilePredicate() {};
 
     Printer nodePrinter;
     Printer syntaxTreePrinter = new SyntaxTreePrinter();
@@ -170,60 +169,25 @@ public abstract class AbstractAnalyzer implements Analyzer {
     }
 
     protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
+        List<Node> nodes = match.stream().map(Tuple::getValue).collect(Collectors.toList());
         Node function = match.stream()
                 .filter(tuple -> tuple.getKey().equals("target"))
                 .map(Tuple::getValue)
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
-        String content = match.stream()
-                .map(Tuple::getValue)
-                .map(node -> nodePrinter.print(node))
-                .collect(new DelimiterSuffixedStringCollector("\n"));
-        String ast = match.stream()
-                .map(Tuple::getValue)
-                .map(node -> syntaxTreePrinter.print(node))
-                .collect(new DelimiterSuffixedStringCollector("\n"));
-        String sExp = match.stream()
-                .map(Tuple::getValue)
-                .map(node -> sExpressionPrinter.print(node))
-                .collect(new DelimiterSuffixedStringCollector(" "));
-
-        Long sumCodeTokens = match.stream()
-                .map(Tuple::getValue)
-                .mapToLong(node -> codeTokenCounter.count(node))
-                .sum();
-        Long sumTotalTokens = match.stream()
-                .map(Tuple::getValue)
-                .mapToLong(node -> totalTokenCounter.count(node))
-                .sum();
-        Long sumLines = match.stream()
-                .map(Tuple::getValue)
-                .mapToLong(node -> lineCounter.count(node))
-                .sum();
-        Long sumCharacters = match.stream()
-                .map(Tuple::getValue)
-                .mapToLong(node -> characterCounter.count(node))
-                .sum();
-        boolean anyContainsNonAscii = match.stream()
-                .map(Tuple::getValue)
-                .anyMatch(node -> containsNonAscii.test(node));
-        boolean anyContainsError = match.stream()
-                .map(Tuple::getValue)
-                .anyMatch(node -> containsError.test(node));
-
+                .orElseThrow(IllegalStateException::new);
         return Function.builder()
                 .repo(localClone.getGitRepo())
-                .ast(ast)
-                .content(content)
-                .astHash(syntaxTreeHasher.hash(function))
-                .contentHash(contentHasher.hash(function))
-                .sExpression("(sexp " + sExp + ")")
-                .totalTokens(sumTotalTokens)
-                .codeTokens(sumCodeTokens)
-                .lines(sumLines)
-                .characters(sumCharacters)
-                .containsNonAscii(anyContainsNonAscii)
-                .containsError(anyContainsError)
+                .ast(syntaxTreePrinter.print(nodes))
+                .content(nodePrinter.print(nodes))
+                .astHash(syntaxTreeHasher.hash(nodes))
+                .contentHash(contentHasher.hash(nodes))
+                .sExpression("(sexp " + sExpressionPrinter.print(nodes) + ")")
+                .totalTokens(totalTokenCounter.count(nodes))
+                .codeTokens(codeTokenCounter.count(nodes))
+                .lines(lineCounter.count(nodes))
+                .characters(characterCounter.count(nodes))
+                .containsNonAscii(containsNonAscii.test(nodes))
+                .containsError(containsError.test(nodes))
                 .boilerplateType(boilerplateEnumerator.asEnum(function))
                 .build();
     }

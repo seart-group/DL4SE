@@ -1,6 +1,7 @@
 package usi.si.seart.analyzer;
 
-import usi.si.seart.analyzer.predicate.PythonTestFilePredicate;
+import usi.si.seart.analyzer.enumerator.PythonBoilerplateEnumerator;
+import usi.si.seart.analyzer.predicate.path.PythonTestFilePredicate;
 import usi.si.seart.analyzer.query.multi.PythonMultiCaptureQueries;
 import usi.si.seart.analyzer.query.single.PythonSingleCaptureQueries;
 import usi.si.seart.treesitter.Language;
