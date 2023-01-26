@@ -143,7 +143,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .contentHash(contentHasher.hash(node))
                 .ast(syntaxTreePrinter.print(node))
                 .astHash(syntaxTreeHasher.hash(node))
-                .sExpression("(sexp " + sExpressionPrinter.print(node) + ")")
+                .sExpression("(" + sExpressionPrinter.print(node) + ")")
                 .totalTokens(totalTokenCounter.count(node))
                 .codeTokens(codeTokenCounter.count(node))
                 .lines(lineCounter.count(node))
@@ -169,7 +169,9 @@ public abstract class AbstractAnalyzer implements Analyzer {
     }
 
     protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
-        List<Node> nodes = match.stream().map(Tuple::getValue).collect(Collectors.toList());
+        List<Node> nodes = match.stream()
+                .map(Tuple::getValue)
+                .collect(Collectors.toList());
         Node function = match.stream()
                 .filter(tuple -> tuple.getKey().equals("target"))
                 .map(Tuple::getValue)
@@ -181,7 +183,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .content(nodePrinter.print(nodes))
                 .astHash(syntaxTreeHasher.hash(nodes))
                 .contentHash(contentHasher.hash(nodes))
-                .sExpression("(sexp " + sExpressionPrinter.print(nodes) + ")")
+                .sExpression("(" + sExpressionPrinter.print(nodes) + ")")
                 .totalTokens(totalTokenCounter.count(nodes))
                 .codeTokens(codeTokenCounter.count(nodes))
                 .lines(lineCounter.count(nodes))
