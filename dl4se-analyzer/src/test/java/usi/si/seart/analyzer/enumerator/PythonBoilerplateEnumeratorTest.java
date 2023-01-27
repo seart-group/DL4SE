@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import usi.si.seart.analyzer.test.BaseTest;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.treesitter.Language;
 import usi.si.seart.treesitter.Node;
@@ -20,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
 
-class PythonBoilerplateEnumeratorTest extends BaseTest {
+class PythonBoilerplateEnumeratorTest {
 
     private static class PythonCodeProvider implements ArgumentsProvider {
 
