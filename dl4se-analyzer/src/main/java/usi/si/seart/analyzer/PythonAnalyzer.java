@@ -15,6 +15,6 @@ public class PythonAnalyzer extends AbstractAnalyzer {
         this.testFilePredicate = new PythonTestFilePredicate();
         this.singleCaptureQueries = new PythonSingleCaptureQueries();
         this.multiCaptureQueries = new PythonMultiCaptureQueries();
-        // this.boilerplateEnumerator = new PythonBoilerplateEnumerator(this::getSourceBytes);
+        this.boilerplateEnumerator = new PythonBoilerplateEnumerator(this::getSourceBytes);
     }
 }
