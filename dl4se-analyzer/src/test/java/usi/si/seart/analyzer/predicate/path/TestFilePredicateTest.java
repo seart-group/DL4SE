@@ -16,7 +16,7 @@ class TestFilePredicateTest {
     private static class PathPredicateProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
             return Stream.of(
                     Arguments.of(Path.of("/src", "test", "README"), true),
                     Arguments.of(Path.of("/src", "tests", "README"), true),

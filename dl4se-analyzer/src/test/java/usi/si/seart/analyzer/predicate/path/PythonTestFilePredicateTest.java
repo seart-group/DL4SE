@@ -16,7 +16,7 @@ class PythonTestFilePredicateTest {
     private static class PythonPathPredicateProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
             return Stream.of(
                     Arguments.of(Path.of("/src", "app.py"), false),
                     Arguments.of(Path.of("/src", "test", "app.py"), true),

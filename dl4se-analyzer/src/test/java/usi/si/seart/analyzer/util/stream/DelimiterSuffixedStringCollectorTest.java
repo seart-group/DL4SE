@@ -15,7 +15,7 @@ class DelimiterSuffixedStringCollectorTest {
     private static class StringsArgumentsProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
             return Stream.of(
                     Arguments.of("", Stream.of(), " "),
                     Arguments.of("A ", Stream.of("A"), " "),
