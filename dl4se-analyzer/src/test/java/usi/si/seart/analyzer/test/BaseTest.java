@@ -1,9 +1,7 @@
 package usi.si.seart.analyzer.test;
 
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.treesitter.Language;
@@ -17,34 +15,36 @@ import java.util.List;
 
 public abstract class BaseTest {
 
-    protected static Parser parser;
-
     static {
         LibraryLoader.load();
     }
 
-    @BeforeAll
-    static void beforeAll() {
-        parser = new Parser(Language.JAVA);
-    }
-
-    @AfterAll
-    static void afterAll() {
-        parser.close();
-    }
-
+    protected Parser parser;
     protected Tree tree;
 
     @BeforeEach
+    protected void setUp() {
+        setUpParser();
+        setUpTree();
+    }
+
+    void setUpParser() {
+        parser = new Parser(getLanguage());
+    }
+
     @SneakyThrows(UnsupportedEncodingException.class)
-    void setUp() {
+    void setUpTree() {
         tree = parser.parseString(getInput());
     }
 
     @AfterEach
     void tearDown() {
+        parser.close();
         tree.close();
-        tree = null;
+    }
+
+    protected Language getLanguage() {
+        return Language.JAVA;
     }
 
     protected String getInput() {
