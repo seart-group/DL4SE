@@ -1,16 +1,28 @@
-package usi.si.seart.analyzer.hash;
+package usi.si.seart.analyzer.test;
 
-import lombok.SneakyThrows;
-import usi.si.seart.analyzer.test.JavaBaseTest;
+import usi.si.seart.treesitter.Language;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public abstract class HasherTest extends JavaBaseTest {
+public abstract class JavaBaseTest extends BaseTest {
 
-    // https://crypto.stackexchange.com/a/26135
-    protected String empty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+    @Override
+    protected Language getLanguage() {
+        return Language.JAVA;
+    }
+
+    @Override
+    protected String getInput() {
+        return
+            "package ch.usi.si;\n" +
+            "\n" +
+            "public class Main {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        //line comment\n" +
+            "        System.out.println(\"Hello, World!\");\n" +
+            "    }\n" +
+            "}";
+    }
 
     @Override
     protected List<String> getTokens() {
@@ -26,13 +38,15 @@ public abstract class HasherTest extends JavaBaseTest {
             "class",
             "Main",
             "{",
+            "//line comment",
             "public",
             "static",
             "void",
             "main",
             "(",
             "String",
-            "[]",
+            "[",
+            "]",
             "args",
             ")",
             "{",
@@ -64,13 +78,15 @@ public abstract class HasherTest extends JavaBaseTest {
             "class",
             "identifier",
             "{",
+            "line_comment",
             "public",
             "static",
             "void_type",
             "identifier",
             "(",
             "type_identifier",
-            "[]",
+            "[",
+            "]",
             "identifier",
             ")",
             "{",
@@ -86,12 +102,5 @@ public abstract class HasherTest extends JavaBaseTest {
             "}",
             "}"
         );
-    }
-
-    @SneakyThrows({NoSuchAlgorithmException.class})
-    protected String sha256(String input) {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(input.getBytes(SHA256Hasher.DEFAULT_CHARSET));
-        return SHA256Hasher.bytesToHex(hash);
     }
 }

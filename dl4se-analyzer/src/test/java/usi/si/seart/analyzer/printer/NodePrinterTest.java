@@ -2,12 +2,12 @@ package usi.si.seart.analyzer.printer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import usi.si.seart.analyzer.test.BaseTest;
+import usi.si.seart.analyzer.test.JavaBaseTest;
 import usi.si.seart.treesitter.Node;
 
 import java.util.HashSet;
 
-class NodePrinterTest extends BaseTest {
+class NodePrinterTest extends JavaBaseTest {
 
     @Test
     void printNothingTest() {

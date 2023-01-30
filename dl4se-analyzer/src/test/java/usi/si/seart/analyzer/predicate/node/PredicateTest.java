@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.predicate.node;
 
-import usi.si.seart.analyzer.test.BaseTest;
+import usi.si.seart.analyzer.test.JavaBaseTest;
 
-public abstract class PredicateTest extends BaseTest {
+public abstract class PredicateTest extends JavaBaseTest {
 
     @Override
     protected String getInput() {

@@ -2,12 +2,12 @@ package usi.si.seart.analyzer.count;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import usi.si.seart.analyzer.test.BaseTest;
+import usi.si.seart.analyzer.test.JavaBaseTest;
 import usi.si.seart.treesitter.Node;
 
 import java.util.HashSet;
 
-class LineCounterTest extends BaseTest {
+class LineCounterTest extends JavaBaseTest {
 
     @Test
     void countEmptyTest() {

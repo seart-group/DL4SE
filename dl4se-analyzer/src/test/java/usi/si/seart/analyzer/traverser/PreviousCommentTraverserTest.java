@@ -3,12 +3,12 @@ package usi.si.seart.analyzer.traverser;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import usi.si.seart.analyzer.test.BaseTest;
+import usi.si.seart.analyzer.test.JavaBaseTest;
 import usi.si.seart.treesitter.Node;
 
 import java.util.Collection;
 
-class PreviousCommentTraverserTest extends BaseTest {
+class PreviousCommentTraverserTest extends JavaBaseTest {
 
     @Override
     protected String getInput() {

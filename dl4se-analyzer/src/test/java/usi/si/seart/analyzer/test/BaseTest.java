@@ -43,21 +43,9 @@ public abstract class BaseTest {
         tree.close();
     }
 
-    protected Language getLanguage() {
-        return Language.JAVA;
-    }
+    protected abstract Language getLanguage();
 
-    protected String getInput() {
-        return
-            "package ch.usi.si;\n" +
-            "\n" +
-            "public class Main {\n" +
-            "    public static void main(String[] args) {\n" +
-            "        //line comment\n" +
-            "        System.out.println(\"Hello, World!\");\n" +
-            "    }\n" +
-            "}";
-    }
+    protected abstract String getInput();
 
     protected byte[] getBytes() {
         return getInput().getBytes(StandardCharsets.UTF_16LE);
@@ -67,87 +55,13 @@ public abstract class BaseTest {
         return this::getBytes;
     }
 
-    protected List<String> getTokens() {
-        return List.of(
-            "package",
-            "ch",
-            ".",
-            "usi",
-            ".",
-            "si",
-            ";",
-            "public",
-            "class",
-            "Main",
-            "{",
-            "//line comment",
-            "public",
-            "static",
-            "void",
-            "main",
-            "(",
-            "String",
-            "[",
-            "]",
-            "args",
-            ")",
-            "{",
-            "System",
-            ".",
-            "out",
-            ".",
-            "println",
-            "(",
-            "\"Hello, World!\"",
-            ")",
-            ";",
-            "}",
-            "}"
-        );
-    }
+    protected abstract List<String> getTokens();
 
     protected String getJoinedTokens() {
         return String.join("", getTokens());
     }
 
-    protected List <String> getNodes() {
-        return List.of(
-            "package",
-            "identifier",
-            ".",
-            "identifier",
-            ".",
-            "identifier",
-            ";",
-            "public",
-            "class",
-            "identifier",
-            "{",
-            "line_comment",
-            "public",
-            "static",
-            "void_type",
-            "identifier",
-            "(",
-            "type_identifier",
-            "[",
-            "]",
-            "identifier",
-            ")",
-            "{",
-            "identifier",
-            ".",
-            "identifier",
-            ".",
-            "identifier",
-            "(",
-            "string_literal",
-            ")",
-            ";",
-            "}",
-            "}"
-        );
-    }
+    protected abstract List <String> getNodes();
 
     protected String getJoinedNodes() {
         return String.join("", getNodes());
