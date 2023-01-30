@@ -7,18 +7,18 @@ import usi.si.seart.treesitter.Node;
 
 import java.util.HashSet;
 
-class TokenCounterTest extends BaseTest {
+class JavaTokenCounterTest extends BaseTest {
 
     @Test
     void countEmptyTest() {
-        Counter counter = new TokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter(getNodeMapper());
         Assertions.assertEquals(0, counter.count());
         Assertions.assertEquals(0, counter.count(new HashSet<>()));
     }
 
     @Test
     void countRootTest() {
-        Counter counter = new TokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter(getNodeMapper());
         Long actual = counter.count(tree.getRootNode());
         // Add 1 for the extra comment word
         Assertions.assertEquals(
@@ -29,7 +29,7 @@ class TokenCounterTest extends BaseTest {
 
     @Test
     void countChildrenTest() {
-        Counter counter = new TokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter(getNodeMapper());
         Node root = tree.getRootNode();
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);

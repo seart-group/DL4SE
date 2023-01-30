@@ -1,5 +1,6 @@
 package usi.si.seart.analyzer;
 
+import usi.si.seart.analyzer.count.JavaTokenCounter;
 import usi.si.seart.analyzer.enumerator.JavaBoilerplateEnumerator;
 import usi.si.seart.analyzer.predicate.path.JavaTestFilePredicate;
 import usi.si.seart.analyzer.query.multi.JavaMultiCaptureQueries;
@@ -12,6 +13,7 @@ public class JavaAnalyzer extends AbstractAnalyzer {
 
     public JavaAnalyzer(LocalClone localClone, Path path) {
         super(localClone, path, Language.JAVA);
+        this.totalTokenCounter = new JavaTokenCounter(this::getSourceBytes);
         this.testFilePredicate = new JavaTestFilePredicate();
         this.singleCaptureQueries = new JavaSingleCaptureQueries();
         this.multiCaptureQueries = new JavaMultiCaptureQueries();

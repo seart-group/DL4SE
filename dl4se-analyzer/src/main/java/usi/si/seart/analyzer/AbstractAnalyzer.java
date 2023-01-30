@@ -101,7 +101,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
 
     Enumerator<Boilerplate> boilerplateEnumerator = node -> null;
 
-    @SneakyThrows({IOException.class})
+    @SneakyThrows(IOException.class)
     protected AbstractAnalyzer(LocalClone localClone, Path path, Language language) {
         this.language = language;
         this.parser = new Parser(language);
@@ -110,7 +110,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
         this.source = Files.readString(path);
         this.tree = parser.parseString(source);
         NodeMapper mapper = this::getSourceBytes;
-        this.totalTokenCounter = new TokenCounter(mapper);
+        this.totalTokenCounter = new TokenCounter(mapper){};
         this.characterCounter = new CharacterCounter(mapper);
         this.contentHasher = new ContentHasher(mapper);
         this.containsNonAscii = new ContainsNonAsciiPredicate(mapper);
