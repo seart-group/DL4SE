@@ -7,7 +7,7 @@ import usi.si.seart.treesitter.Node;
 
 import java.util.HashSet;
 
-class CodeTokenCounterTest extends JavaBaseTest {
+class JavaCodeTokenCounterTest extends JavaBaseTest {
 
     @Test
     void countEmptyTest() {

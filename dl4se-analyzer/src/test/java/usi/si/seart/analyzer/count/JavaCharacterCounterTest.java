@@ -7,7 +7,7 @@ import usi.si.seart.treesitter.Node;
 
 import java.util.HashSet;
 
-class CharacterCounterTest extends JavaBaseTest {
+class JavaCharacterCounterTest extends JavaBaseTest {
 
     @Test
     void countEmptyTest() {

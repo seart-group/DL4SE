@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public abstract class HasherTest extends JavaBaseTest {
+public abstract class JavaHasherTest extends JavaBaseTest {
 
     // https://crypto.stackexchange.com/a/26135
     protected String empty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
