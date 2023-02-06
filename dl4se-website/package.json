@@ -12,8 +12,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint-vue": "vue-cli-service lint",
-    "lint-formatting": "npx prettier --check .",
-    "lint-eslint": "npx eslint .",
+    "lint-formatting": "prettier --check .",
+    "lint-eslint": "eslint .",
     "lint": "npm run lint-vue && npm run lint-formatting && run lint-eslint"
   },
   "dependencies": {
