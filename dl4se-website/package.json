@@ -14,7 +14,7 @@
     "lint-vue": "vue-cli-service lint",
     "lint-formatting": "prettier --check .",
     "lint-eslint": "eslint .",
-    "lint": "npm run lint-vue && npm run lint-formatting && run lint-eslint"
+    "lint": "npm run lint-vue && npm run lint-formatting && npm run lint-eslint"
   },
   "dependencies": {
     "@vue/composition-api": "^1.7.0",
