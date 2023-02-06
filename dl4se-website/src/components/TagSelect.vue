@@ -1,21 +1,36 @@
 <template>
   <div class="tag-select">
-    <input type="file" ref="tags-file" class="d-none" @change="read">
-    <b-form-tags :id="id" no-outer-focus
-                 separator=" " :placeholder="placeholder"
-                 v-model="tags" :tag-validator="validator"
-                 class="tag-select-container"
+    <input type="file" ref="tags-file" class="d-none" @change="read" />
+    <b-form-tags
+      :id="id"
+      no-outer-focus
+      separator=" "
+      :placeholder="placeholder"
+      v-model="tags"
+      :tag-validator="validator"
+      class="tag-select-container"
     >
-      <template v-slot="{
-        inputAttrs, inputHandlers, placeholder, tags, addTag, removeTag,
-        isInvalid, invalidTagText, isDuplicate, duplicateTagText
-      }">
+      <template
+        v-slot="{
+          inputAttrs,
+          inputHandlers,
+          placeholder,
+          tags,
+          addTag,
+          removeTag,
+          isInvalid,
+          invalidTagText,
+          isDuplicate,
+          duplicateTagText
+        }"
+      >
         <b-input-group class="tag-select-input-group">
-          <b-form-input v-bind="inputAttrs"
-                        v-on="inputHandlers"
-                        :disabled="disabled"
-                        :placeholder="placeholder"
-                        class="tag-select-input"
+          <b-form-input
+            v-bind="inputAttrs"
+            v-on="inputHandlers"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            class="tag-select-input"
           />
           <b-input-group-append>
             <b-button class="tag-select-btn" :disabled="disabled" @click="addTag()">Add</b-button>
@@ -29,8 +44,16 @@
         <b-form-text v-if="isDuplicate" class="tag-select-feedback-text">
           {{ duplicateTagText }}
         </b-form-text>
-        <div :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'">
-          <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="tag-select-tag" @remove="removeTag(tag)">
+        <div
+          :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'"
+        >
+          <b-form-tag
+            v-for="tag in tags"
+            :key="tag"
+            ref="tags-values"
+            class="tag-select-tag"
+            @remove="removeTag(tag)"
+          >
             {{ tag }}
           </b-form-tag>
         </div>
@@ -97,9 +120,10 @@ export default {
   },
   updated() {
     const tags = this.$refs["tags-values"]
-    tags?.map(tag => tag.$el.children[1])
-        .filter(button => !button.hasAttribute("tabindex"))
-        .forEach(button => button.setAttribute("tabindex", "-1"))
+    tags
+      ?.map((tag) => tag.$el.children[1])
+      .filter((button) => !button.hasAttribute("tabindex"))
+      .forEach((button) => button.setAttribute("tabindex", "-1"))
   },
   data() {
     return {

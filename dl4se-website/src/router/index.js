@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue"
+import VueRouter from "vue-router"
 import axios from "@/axios"
-import HomeView from '@/views/HomeView'
-import LogInView from '@/views/LogInView'
-import DashboardView from '@/views/DashboardView'
+import HomeView from "@/views/HomeView"
+import LogInView from "@/views/LogInView"
+import DashboardView from "@/views/DashboardView"
 import RegisterView from "@/views/RegisterView"
 import VerifyView from "@/views/VerifyView"
 import NotFoundView from "@/views/NotFoundView"
@@ -19,32 +19,32 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
+    path: "/",
+    name: "home",
     component: HomeView,
     meta: {
       public: true
     }
   },
   {
-    path: '/login',
-    name: 'login',
+    path: "/login",
+    name: "login",
     component: LogInView,
     meta: {
       public: true
     }
   },
   {
-    path: '/register',
-    name: 'register',
+    path: "/register",
+    name: "register",
     component: RegisterView,
     meta: {
       public: true
     }
   },
   {
-    path: '/verify/:token',
-    name: 'verify',
+    path: "/verify/:token",
+    name: "verify",
     component: VerifyView,
     props: true,
     meta: {
@@ -52,16 +52,16 @@ const routes = [
     }
   },
   {
-    path: '/password/request',
-    name: 'forgot',
+    path: "/password/request",
+    name: "forgot",
     component: ForgotPasswordView,
     meta: {
       public: true
     }
   },
   {
-    path: '/password/reset/:token',
-    name: 'reset',
+    path: "/password/reset/:token",
+    name: "reset",
     component: ResetPasswordView,
     props: true,
     meta: {
@@ -69,16 +69,16 @@ const routes = [
     }
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
+    path: "/dashboard",
+    name: "dashboard",
     component: DashboardView,
     meta: {
       public: false
     }
   },
   {
-    path: '/code/:uuid?',
-    name: 'code-regular',
+    path: "/code/:uuid?",
+    name: "code-regular",
     component: TaskCreateView,
     props: true,
     meta: {
@@ -86,8 +86,8 @@ const routes = [
     }
   },
   {
-    path: '/generic/code/:uuid?',
-    name: 'code-generic',
+    path: "/generic/code/:uuid?",
+    name: "code-generic",
     component: TaskCreateView,
     props: (route) => ({
       generic: true,
@@ -98,8 +98,8 @@ const routes = [
     }
   },
   {
-    path: '/download/:uuid',
-    name: 'download',
+    path: "/download/:uuid",
+    name: "download",
     component: DownloadView,
     props: true,
     meta: {
@@ -107,31 +107,31 @@ const routes = [
     }
   },
   {
-    path: '/stats',
-    name: 'stats',
+    path: "/stats",
+    name: "stats",
     component: StatsView,
     meta: {
       public: true
     }
   },
   {
-    path: '/about',
-    name: 'about',
+    path: "/about",
+    name: "about",
     component: AboutView,
     meta: {
       public: true
     }
   },
   {
-    path: '/docs',
-    name: 'docs',
+    path: "/docs",
+    name: "docs",
     component: DocsView,
     meta: {
       public: true
     }
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: "/:pathMatch(.*)*",
     component: NotFoundView,
     meta: {
       public: true
@@ -140,7 +140,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes,
   scrollBehavior: (to) => {
@@ -154,33 +154,31 @@ router.beforeEach(async (to, _from, next) => {
   if (to.meta.public) {
     next()
   } else {
-    await axios.get("/user")
-        .then(() => next())
-        .catch((err) => {
-          const code = err.response.status
-          if (code === 401) {
-            const wasLoggedIn = !!router.app.$store.getters.getToken
-            if (wasLoggedIn) {
-              router.app.$store.dispatch("logOut", to.name).then(() => {
-                router.app.$bvToast.toast(
-                    "Your session has expired, please log in again.",
-                    {
-                      toaster: "b-toaster-top-right",
-                      title: "Logged Out",
-                      variant: "secondary",
-                      autoHideDelay: 3000,
-                      appendToast: true,
-                      solid: true
-                    }
-                )
+    await axios
+      .get("/user")
+      .then(() => next())
+      .catch((err) => {
+        const code = err.response.status
+        if (code === 401) {
+          const wasLoggedIn = !!router.app.$store.getters.getToken
+          if (wasLoggedIn) {
+            router.app.$store.dispatch("logOut", to.name).then(() => {
+              router.app.$bvToast.toast("Your session has expired, please log in again.", {
+                toaster: "b-toaster-top-right",
+                title: "Logged Out",
+                variant: "secondary",
+                autoHideDelay: 3000,
+                appendToast: true,
+                solid: true
               })
-            } else {
-              next({ name: "login", query: { target: to.name } })
-            }
+            })
           } else {
-            next({ name: "home" })
+            next({ name: "login", query: { target: to.name } })
           }
-        })
+        } else {
+          next({ name: "home" })
+        }
+      })
   }
 })
 

@@ -1,11 +1,12 @@
 <template>
   <b-input-group class="clearable-input">
-    <b-input type="text"
-             :id="id"
-             v-model.trim="input"
-             :placeholder="placeholder"
-             @input="setInput"
-             class="clearable-input-field"
+    <b-input
+      type="text"
+      :id="id"
+      v-model.trim="input"
+      :placeholder="placeholder"
+      @input="setInput"
+      class="clearable-input-field"
     />
     <b-input-group-append class="clearable-input-group">
       <b-button class="clearable-input-button" @click="clear">
@@ -29,7 +30,7 @@ export default {
   methods: {
     setInput(value) {
       const trimmed = value.trim()
-      this.input = (trimmed) ? trimmed : null
+      this.input = trimmed ? trimmed : null
     },
     clear() {
       this.input = null
@@ -37,7 +38,7 @@ export default {
   },
   watch: {
     input() {
-      this.$emit('input', this.input)
+      this.$emit("input", this.input)
     }
   },
   data() {
