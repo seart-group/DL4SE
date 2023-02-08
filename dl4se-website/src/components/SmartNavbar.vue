@@ -1,5 +1,5 @@
 <script>
-import {BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle} from "bootstrap-vue"
+import { BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle } from "bootstrap-vue"
 
 export default {
   name: "b-smart-navbar",
@@ -19,44 +19,42 @@ export default {
   },
   render(createElement, { props, data }) {
     return createElement(
-        BNavbar,
-        {
-          props: {
-            ...props,
-            toggleable: "sm",
-            sticky: true
-          },
-          attrs: {
-            id: props.id,
-            ...data.attrs
-          },
-          class: {
-            "smart-navbar": true,
-            ...data.class || {},
-            ...Object.fromEntries(
-                data.staticClass?.split(" ").map(sc => [sc, true]) || []
-            )
-          },
-          on: data.listeners,
-          directives: data.directives ?? []
+      BNavbar,
+      {
+        props: {
+          ...props,
+          toggleable: "sm",
+          sticky: true
         },
-        [
-            createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),
-            createElement(BNavbarToggle, { props: { target: `${props.id}-collapse` } }, []),
-            createElement(
-                BCollapse,
-                {
-                  props: {
-                    id: `${props.id}-collapse`,
-                    isNav: true
-                  }
-                },
-                [
-                    createElement(BNavbarNav, {}, data.scopedSlots["nav-items-left"]()),
-                    createElement(BNavbarNav, { class: "ml-auto" }, data.scopedSlots["nav-items-right"]())
-                ]
-            )
-        ]
+        attrs: {
+          id: props.id,
+          ...data.attrs
+        },
+        class: {
+          "smart-navbar": true,
+          ...(data.class || {}),
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+        },
+        on: data.listeners,
+        directives: data.directives ?? []
+      },
+      [
+        createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),
+        createElement(BNavbarToggle, { props: { target: `${props.id}-collapse` } }, []),
+        createElement(
+          BCollapse,
+          {
+            props: {
+              id: `${props.id}-collapse`,
+              isNav: true
+            }
+          },
+          [
+            createElement(BNavbarNav, {}, data.scopedSlots["nav-items-left"]()),
+            createElement(BNavbarNav, { class: "ml-auto" }, data.scopedSlots["nav-items-right"]())
+          ]
+        )
+      ]
     )
   }
 }

@@ -2,17 +2,32 @@
   <b-form @submit.prevent.stop="submit" novalidate class="text-input-form">
     <slot name="header" />
     <b-form-row v-for="([key, data], idx) in Object.entries(inputs)" :key="key">
-      <b-form-group :id="`label-${key}`" class="text-input-group-left"
-                    :label-for="`input-${key}`" :state="entryState(key)"
+      <b-form-group
+        :id="`label-${key}`"
+        class="text-input-group-left"
+        :label-for="`input-${key}`"
+        :state="entryState(key)"
       >
         <template #label v-if="data.label">
           {{ data.label }}
-          <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
+          <b-icon-asterisk
+            v-if="entryRequired(key)"
+            font-scale="0.35"
+            shift-v="32"
+            class="text-input-icon"
+          />
         </template>
-        <b-form-input :id="`input-${key}`" :name="key" :type="data.type" class="text-input-field"
-                      :state="entryState(key)" :disabled="submitted"
-                      :autofocus="!idx" :autocomplete="data.autocomplete"
-                      :placeholder="data.placeholder" v-model.trim="data.value"
+        <b-form-input
+          :id="`input-${key}`"
+          :name="key"
+          :type="data.type"
+          class="text-input-field"
+          :state="entryState(key)"
+          :disabled="submitted"
+          :autofocus="!idx"
+          :autocomplete="data.autocomplete"
+          :placeholder="data.placeholder"
+          v-model.trim="data.value"
         />
         <template #invalid-feedback v-if="entryFeedback(key)">
           <ul class="text-input-feedback">
@@ -47,7 +62,7 @@ import bootstrapMixin from "@/mixins/bootstrapMixin"
 
 export default {
   name: "b-text-input-form",
-  mixins: [ bootstrapMixin ],
+  mixins: [bootstrapMixin],
   props: {
     value: Object,
     consumer: {
@@ -57,12 +72,14 @@ export default {
   },
   computed: {
     displayRequired() {
-      return Object.values(this.inputs).map(input => {
-        const inputRules = Object.keys(input.rules)
-        const isRequired = inputRules.includes("required")
-        const isLabelled = !!input.label
-        return isLabelled && isRequired
-      }).reduce((curr, acc) => curr || acc, false)
+      return Object.values(this.inputs)
+        .map((input) => {
+          const inputRules = Object.keys(input.rules)
+          const isRequired = inputRules.includes("required")
+          const isLabelled = !!input.label
+          return isLabelled && isRequired
+        })
+        .reduce((curr, acc) => curr || acc, false)
     },
     submitDisabled() {
       return this.v$.$invalid || this.submitted
@@ -82,7 +99,7 @@ export default {
       return this.entryDirty(key) ? this.entryValid(key) : null
     },
     entryErrors(key) {
-      return this.v$.inputs[key].$errors.map(error => error.$message).filter(message => message)
+      return this.v$.inputs[key].$errors.map((error) => error.$message).filter((message) => message)
     },
     entryFeedback(key) {
       return this.inputs[key].feedback && !!this.entryErrors(key).length
@@ -94,7 +111,7 @@ export default {
     }
   },
   watch: {
-    "inputs": {
+    inputs: {
       nested: true,
       handler() {
         this.$emit("input", this.inputs)

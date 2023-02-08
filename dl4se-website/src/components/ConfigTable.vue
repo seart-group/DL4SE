@@ -1,8 +1,13 @@
 <template>
   <div class="config-table-container">
     <b-overlay :show="busy" variant="light">
-      <b-table-simple responsive borderless :hover="hasMappings" sticky-header="370px"
-                      class="config-table-border" table-class="config-table"
+      <b-table-simple
+        responsive
+        borderless
+        :hover="hasMappings"
+        sticky-header="370px"
+        class="config-table-border"
+        table-class="config-table"
       >
         <b-thead head-variant="dark" class="config-table-header-row">
           <b-tr>
@@ -12,22 +17,19 @@
         </b-thead>
         <b-tbody class="config-table-body">
           <template v-if="hasMappings">
-            <b-tr v-for="key in Object.keys(mappings)" :key="key"
-                  class="config-table-row"
-            >
+            <b-tr v-for="key in Object.keys(mappings)" :key="key" class="config-table-row">
               <b-td class="text-monospace">
-                <label :for="`${key}_input`"
-                       class="config-table-label"
-                >
+                <label :for="`${key}_input`" class="config-table-label">
                   {{ key }}
                 </label>
               </b-td>
               <b-td>
-                <b-input :id="`${key}_input`"
-                         :state="configState(key)"
-                         :disabled="busy"
-                         v-model.trim="mappings[key]"
-                         class="config-table-input"
+                <b-input
+                  :id="`${key}_input`"
+                  :state="configState(key)"
+                  :disabled="busy"
+                  v-model.trim="mappings[key]"
+                  class="config-table-input"
                 />
               </b-td>
             </b-tr>
@@ -36,9 +38,7 @@
             <b-tr class="b-table-empty-row config-table-row">
               <b-td colspan="2">
                 <div role="alert" aria-live="polite">
-                  <div class="text-center my-2">
-                    There are no records to show
-                  </div>
+                  <div class="text-center my-2">There are no records to show</div>
                 </div>
               </b-td>
             </b-tr>
@@ -50,16 +50,10 @@
       <b-row no-gutters align-h="center">
         <b-col cols="auto">
           <b-button-group>
-            <b-button @click="consume"
-                      :disabled="consumeDisabled"
-                      class="config-table-btn"
-            >
+            <b-button @click="consume" :disabled="consumeDisabled" class="config-table-btn">
               <b-icon-cloud-upload /> Synchronize
             </b-button>
-            <b-button @click="refresh"
-                      :disabled="busy"
-                      class="config-table-btn"
-            >
+            <b-button @click="refresh" :disabled="busy" class="config-table-btn">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>
           </b-button-group>
@@ -70,8 +64,8 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
-import {required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
 
 export default {
   name: "b-config-table",
@@ -86,13 +80,13 @@ export default {
     consumer: {
       type: Function,
       default() {
-        return Promise.reject();
+        return Promise.reject()
       }
     }
   },
   computed: {
     hasMappings() {
-      return !!this.mappings && (Object.keys(this.mappings).length > 0)
+      return !!this.mappings && Object.keys(this.mappings).length > 0
     },
     consumeDisabled() {
       return this.v$.$invalid || !this.v$.$anyDirty || this.busy
@@ -111,8 +105,8 @@ export default {
     async consume() {
       this.busy = true
       await this.consumer(this.mappings)
-          .then(res => this.mappings = res)
-          .catch(() => this.mappings = {})
+        .then((res) => (this.mappings = res))
+        .catch(() => (this.mappings = {}))
       // TODO 20.10.22: Add some form of error handling in rare event of failures
       this.v$.$reset()
       this.busy = false
@@ -120,8 +114,8 @@ export default {
     async refresh() {
       this.busy = true
       await this.supplier()
-          .then(res => this.mappings = res)
-          .catch(() => this.mappings = {})
+        .then((res) => (this.mappings = res))
+        .catch(() => (this.mappings = {}))
       this.v$.$reset()
       this.busy = false
     }
@@ -130,7 +124,7 @@ export default {
     await this.refresh()
   },
   setup(props) {
-    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
       v$: useVuelidate(globalConfig)
     }
@@ -145,7 +139,10 @@ export default {
     if (this.hasMappings) {
       const rules = { $autoDirty: true, required }
       return {
-        mappings: Object.keys(this.mappings).reduce((acc, key) => Object.assign(acc, {[key]: rules}), {})
+        mappings: Object.keys(this.mappings).reduce(
+          (acc, key) => Object.assign(acc, { [key]: rules }),
+          {}
+        )
       }
     } else {
       return {}

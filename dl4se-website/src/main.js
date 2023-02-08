@@ -1,21 +1,21 @@
-import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
-import {Fragment} from 'vue-frag'
-import {Chart} from "chart.js"
-import AOS from 'aos'
-import App from '@/App'
-import router from '@/router'
-import store from '@/store'
-import axios from '@/axios'
-import VueAxios from 'vue-axios'
-import VueScreen from 'vue-screen'
-import VueScrollTo from 'vue-scrollto'
-import _ from 'lodash'
-import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'aos/dist/aos.css'
-import '@/assets/styles/style.sass'
+import Vue from "vue"
+import VueCompositionAPI from "@vue/composition-api"
+import { Fragment } from "vue-frag"
+import { Chart } from "chart.js"
+import AOS from "aos"
+import App from "@/App"
+import router from "@/router"
+import store from "@/store"
+import axios from "@/axios"
+import VueAxios from "vue-axios"
+import VueScreen from "vue-screen"
+import VueScrollTo from "vue-scrollto"
+import _ from "lodash"
+import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue"
+import "bootstrap/dist/css/bootstrap.css"
+import "bootstrap-vue/dist/bootstrap-vue.css"
+import "aos/dist/aos.css"
+import "@/assets/styles/style.sass"
 
 Vue.config.productionTip = false
 
@@ -30,11 +30,11 @@ Vue.use(BootstrapVueIcons)
 
 Vue.prototype.$_ = _
 
-Vue.component('fragment', Fragment)
+Vue.component("fragment", Fragment)
 
-if (process.env.NODE_ENV === 'development') {
-  const { LoremIpsum } = require('vue-lorem-ipsum')
-  Vue.component('lorem-ipsum', LoremIpsum)
+if (process.env.NODE_ENV === "development") {
+  const { LoremIpsum } = require("vue-lorem-ipsum")
+  Vue.component("lorem-ipsum", LoremIpsum)
 }
 
 Vue.prototype.$AOS = AOS
@@ -57,8 +57,8 @@ Vue.directive("aos", (el, binding) => {
 new Vue({
   router,
   store,
-  render: h => h(App),
+  render: (h) => h(App),
   mounted() {
     this.$AOS.init()
   }
-}).$mount('#app')
+}).$mount("#app")

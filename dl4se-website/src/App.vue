@@ -9,42 +9,34 @@
           </b-link>
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'stats' }"
-                      :active="isOnPage('stats')"
-                      :disabled="!connected"
-          >
+          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">
             Statistics
           </b-nav-item>
-          <b-nav-item :to="{ name: 'about' }"
-                      :active="isOnPage('about')"
-          >
-            About
-          </b-nav-item>
+          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')"> About </b-nav-item>
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
-            <b-nav-item :to="{ name: 'dashboard' }"
-                        :active="isOnPage('dashboard')"
-                        :disabled="!connected"
+            <b-nav-item
+              :to="{ name: 'dashboard' }"
+              :active="isOnPage('dashboard')"
+              :disabled="!connected"
             >
               Dashboard
             </b-nav-item>
-            <b-nav-item @click="showLogOutModal"
-                        :disabled="!connected"
-            >
-              Log Out
-            </b-nav-item>
+            <b-nav-item @click="showLogOutModal" :disabled="!connected"> Log Out </b-nav-item>
           </template>
           <template v-else>
-            <b-nav-item :to="{ name: 'login', query: { target: loginTarget } }"
-                        :active="isOnPage('login')"
-                        :disabled="!connected"
+            <b-nav-item
+              :to="{ name: 'login', query: { target: loginTarget } }"
+              :active="isOnPage('login')"
+              :disabled="!connected"
             >
               Log In
             </b-nav-item>
-            <b-nav-item :to="{ name: 'register' }"
-                        :active="isOnPage('register')"
-                        :disabled="!connected"
+            <b-nav-item
+              :to="{ name: 'register' }"
+              :active="isOnPage('register')"
+              :disabled="!connected"
             >
               Register
             </b-nav-item>
@@ -53,10 +45,7 @@
       </b-smart-navbar>
     </header>
     <main>
-      <router-view :connected="connected"
-                   :logged-in="loggedIn"
-                   class="router-view"
-      />
+      <router-view :connected="connected" :logged-in="loggedIn" class="router-view" />
     </main>
     <footer>
       <b-footer :authors="authors" :organisation="organisation" />
@@ -71,7 +60,7 @@ import BSmartNavbar from "@/components/SmartNavbar"
 
 export default {
   components: { BFooter, BSmartNavbar },
-  mixins: [ bootstrapMixin ],
+  mixins: [bootstrapMixin],
   computed: {
     currentPage() {
       return this.$route.name
@@ -80,10 +69,10 @@ export default {
       return !!this.$store.getters.getToken
     },
     loginTarget() {
-      const isHome = this.isOnPage('home')
-      const isLogin = this.isOnPage('login')
-      const isRegister = this.isOnPage('register')
-      return (isHome || isLogin || isRegister) ? undefined : this.currentPage
+      const isHome = this.isOnPage("home")
+      const isLogin = this.isOnPage("login")
+      const isRegister = this.isOnPage("register")
+      return isHome || isLogin || isRegister ? undefined : this.currentPage
     }
   },
   methods: {
@@ -92,8 +81,8 @@ export default {
     },
     showLogOutModal() {
       this.showConfirmModal(
-          "Log Out",
-          "Any unsaved changes will be lost. Are you sure you want to continue?"
+        "Log Out",
+        "Any unsaved changes will be lost. Are you sure you want to continue?"
       ).then((confirmed) => {
         if (confirmed) this.$store.dispatch("logOut")
       })
@@ -103,9 +92,9 @@ export default {
     await this.$http.get("/").catch(() => {
       this.connected = false
       this.appendToast(
-          "Server Connection Refused",
-          "The DL4SE server is currently unavailable. Please try accessing the site later.",
-          "danger"
+        "Server Connection Refused",
+        "The DL4SE server is currently unavailable. Please try accessing the site later.",
+        "danger"
       )
     })
   },

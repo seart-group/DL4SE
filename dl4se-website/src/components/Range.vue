@@ -1,26 +1,30 @@
 <template>
   <div class="range">
     <template v-if="lowerBound">
-      <label :for="id + '-lower'" class="m-0">
-        At least&nbsp;
-      </label>
-      <b-counter :id="id + '-lower'" class="py-2" placeholder="min"
-                 :min="min" :max="lowerMax" v-model.number="count.lower"
+      <label :for="id + '-lower'" class="m-0"> At least&nbsp; </label>
+      <b-counter
+        :id="id + '-lower'"
+        class="py-2"
+        placeholder="min"
+        :min="min"
+        :max="lowerMax"
+        v-model.number="count.lower"
       />
     </template>
     <template v-if="upperBound">
       <p class="m-0" v-if="lowerBound">&nbsp;and&nbsp;</p>
       <b-break md />
-      <label :for="id + '-upper'" class="m-0">
-        {{ (lowerBound) ? 'a' : 'A' }}t most&nbsp;
-      </label>
-      <b-counter :id="id + '-upper'" class="py-2" placeholder="max"
-                 :min="upperMin" :max="max" v-model.number="count.upper"
+      <label :for="id + '-upper'" class="m-0"> {{ lowerBound ? "a" : "A" }}t most&nbsp; </label>
+      <b-counter
+        :id="id + '-upper'"
+        class="py-2"
+        placeholder="max"
+        :min="upperMin"
+        :max="max"
+        v-model.number="count.upper"
       />
     </template>
-    <p class="m-0" v-if="field">
-      &nbsp;{{ field }}
-    </p>
+    <p class="m-0" v-if="field">&nbsp;{{ field }}</p>
   </div>
 </template>
 
@@ -49,10 +53,10 @@ export default {
   },
   computed: {
     lowerMax() {
-      return (this.count.upper !== null && this.count.upper <= this.max) ? this.count.upper : this.max
+      return this.count.upper !== null && this.count.upper <= this.max ? this.count.upper : this.max
     },
     upperMin() {
-      return (this.count.lower !== null && this.min <= this.count.lower) ? this.count.lower : this.min
+      return this.count.lower !== null && this.min <= this.count.lower ? this.count.lower : this.min
     }
   },
   watch: {
@@ -64,7 +68,7 @@ export default {
     }
   },
   setup(props) {
-    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
       v$: useVuelidate(globalConfig)
     }
