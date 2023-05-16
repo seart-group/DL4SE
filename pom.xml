@@ -35,8 +35,10 @@
   <properties>
     <revision>1.0.0</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.8.2</junit.version>
-    <javaparser.version>3.24.4</javaparser.version>
+    <junit.version>5.9.3</junit.version>
+    <javaparser.version>3.25.3</javaparser.version>
+    <lombok.version>1.18.26</lombok.version>
+    <postgresql.version>42.6.0</postgresql.version>
   </properties>
 
   <dependencyManagement>
@@ -65,12 +67,12 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
+      <version>${lombok.version}</version>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.5.0</version>
+      <version>${postgresql.version}</version>
     </dependency>
   </dependencies>
 
