@@ -1,6 +1,6 @@
 package usi.si.seart.analyzer.test;
 
-import usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.Language;
 
 import java.util.List;
 

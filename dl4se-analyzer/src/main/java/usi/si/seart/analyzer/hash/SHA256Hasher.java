@@ -1,7 +1,7 @@
 package usi.si.seart.analyzer.hash;
 
+import ch.usi.si.seart.treesitter.Node;
 import lombok.SneakyThrows;
-import usi.si.seart.treesitter.Node;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

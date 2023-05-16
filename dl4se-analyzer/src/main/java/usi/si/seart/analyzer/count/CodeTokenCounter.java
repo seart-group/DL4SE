@@ -1,6 +1,6 @@
 package usi.si.seart.analyzer.count;
 
-import usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Node;
 
 public class CodeTokenCounter extends TraverseCounter {
 

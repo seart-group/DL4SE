@@ -1,15 +1,15 @@
 package usi.si.seart.analyzer.query.single;
 
+import ch.usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Query;
+import ch.usi.si.seart.treesitter.QueryCapture;
+import ch.usi.si.seart.treesitter.QueryCursor;
+import ch.usi.si.seart.treesitter.QueryMatch;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import usi.si.seart.analyzer.query.Queries;
-import usi.si.seart.treesitter.Language;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Query;
-import usi.si.seart.treesitter.QueryCapture;
-import usi.si.seart.treesitter.QueryCursor;
-import usi.si.seart.treesitter.QueryMatch;
 
 import java.util.Arrays;
 import java.util.List;

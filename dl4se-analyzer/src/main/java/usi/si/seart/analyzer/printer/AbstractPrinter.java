@@ -1,6 +1,6 @@
 package usi.si.seart.analyzer.printer;
 
-import usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Node;
 
 import java.util.Collection;
 import java.util.stream.Collector;

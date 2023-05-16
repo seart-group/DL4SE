@@ -25,9 +25,9 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>usi.si.seart</groupId>
-      <artifactId>dl4se-tree-sitter</artifactId>
-      <version>${project.version}</version>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>java-tree-sitter</artifactId>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
 

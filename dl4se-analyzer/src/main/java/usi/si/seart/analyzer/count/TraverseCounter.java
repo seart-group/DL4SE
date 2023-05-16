@@ -1,11 +1,11 @@
 package usi.si.seart.analyzer.count;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.TreeCursor;
 import lombok.AccessLevel;
 import lombok.Cleanup;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.TreeCursor;
 
 import java.util.concurrent.atomic.AtomicLong;
 

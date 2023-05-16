@@ -1,13 +1,13 @@
 package usi.si.seart.analyzer.test;
 
+import ch.usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.LibraryLoader;
+import ch.usi.si.seart.treesitter.Parser;
+import ch.usi.si.seart.treesitter.Tree;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import usi.si.seart.analyzer.NodeMapper;
-import usi.si.seart.treesitter.Language;
-import usi.si.seart.treesitter.LibraryLoader;
-import usi.si.seart.treesitter.Parser;
-import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

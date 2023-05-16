@@ -1,11 +1,11 @@
 package usi.si.seart.analyzer.hash;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Range;
+import ch.usi.si.seart.treesitter.TreeCursor;
 import lombok.Cleanup;
 import lombok.Getter;
 import usi.si.seart.analyzer.NodeMapper;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Range;
-import usi.si.seart.treesitter.TreeCursor;
 
 @Getter
 public class ContentHasher extends SHA256Hasher {

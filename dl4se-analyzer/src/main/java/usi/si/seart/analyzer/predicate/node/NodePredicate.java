@@ -1,6 +1,6 @@
 package usi.si.seart.analyzer.predicate.node;
 
-import usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Node;
 
 import java.util.Collection;
 import java.util.function.Predicate;

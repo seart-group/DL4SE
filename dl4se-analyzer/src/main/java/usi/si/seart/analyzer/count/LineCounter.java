@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.count;
 
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Point;
-import usi.si.seart.treesitter.Range;
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Point;
+import ch.usi.si.seart.treesitter.Range;
 
 public class LineCounter implements Counter {
 

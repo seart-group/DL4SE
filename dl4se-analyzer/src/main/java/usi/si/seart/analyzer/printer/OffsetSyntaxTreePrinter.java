@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.printer;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Point;
 import lombok.AllArgsConstructor;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Point;
 
 @AllArgsConstructor
 public class OffsetSyntaxTreePrinter extends AbstractPrinter {
@@ -11,6 +11,6 @@ public class OffsetSyntaxTreePrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {
-        return new usi.si.seart.treesitter.SyntaxTreePrinter(node, offset).printSubtree();
+        return new ch.usi.si.seart.treesitter.SyntaxTreePrinter(node, offset).printSubtree();
     }
 }

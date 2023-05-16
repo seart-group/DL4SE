@@ -1,5 +1,10 @@
 package usi.si.seart.analyzer;
 
+import ch.usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Parser;
+import ch.usi.si.seart.treesitter.Query;
+import ch.usi.si.seart.treesitter.Tree;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -26,11 +31,6 @@ import usi.si.seart.analyzer.util.Tuple;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
-import usi.si.seart.treesitter.Language;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Parser;
-import usi.si.seart.treesitter.Query;
-import usi.si.seart.treesitter.Tree;
 
 import java.io.IOException;
 import java.nio.file.Files;

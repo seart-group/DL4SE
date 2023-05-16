@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.hash;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.TreeCursor;
 import lombok.Cleanup;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.TreeCursor;
 
 public class SyntaxTreeHasher extends SHA256Hasher {
 

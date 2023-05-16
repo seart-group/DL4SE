@@ -1,7 +1,7 @@
 package usi.si.seart.analyzer.query;
 
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Query;
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Query;
 
 import java.util.List;
 

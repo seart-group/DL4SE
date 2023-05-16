@@ -1,9 +1,9 @@
 package usi.si.seart.analyzer.enumerator;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Range;
 import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.model.code.Boilerplate;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Range;
 
 public class PythonBoilerplateEnumerator extends BoilerplateEnumerator {
 

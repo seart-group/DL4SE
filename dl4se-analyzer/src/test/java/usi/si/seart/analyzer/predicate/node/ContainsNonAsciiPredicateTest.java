@@ -1,10 +1,10 @@
 package usi.si.seart.analyzer.predicate.node;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Tree;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

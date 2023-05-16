@@ -1,6 +1,6 @@
 package usi.si.seart.analyzer;
 
-import usi.si.seart.treesitter.Range;
+import ch.usi.si.seart.treesitter.Range;
 
 import java.util.Arrays;
 

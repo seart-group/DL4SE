@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.query.multi;
 
+import ch.usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.Node;
 import usi.si.seart.analyzer.util.Tuple;
-import usi.si.seart.treesitter.Language;
-import usi.si.seart.treesitter.Node;
 
 import java.util.List;
 

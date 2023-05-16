@@ -1,8 +1,8 @@
 package usi.si.seart.analyzer.predicate.node;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Range;
 import usi.si.seart.analyzer.NodeMapper;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Range;
 
 public class ContainsNonAsciiPredicate extends NodeContentPredicate {
 

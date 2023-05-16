@@ -1,5 +1,9 @@
 package usi.si.seart.analyzer.enumerator;
 
+import ch.usi.si.seart.treesitter.Language;
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Parser;
+import ch.usi.si.seart.treesitter.Tree;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +13,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.model.code.Boilerplate;
-import usi.si.seart.treesitter.Language;
-import usi.si.seart.treesitter.Node;
-import usi.si.seart.treesitter.Parser;
-import usi.si.seart.treesitter.Tree;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
