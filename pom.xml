@@ -39,6 +39,7 @@
     <javaparser.version>3.25.3</javaparser.version>
     <lombok.version>1.18.26</lombok.version>
     <postgresql.version>42.6.0</postgresql.version>
+    <jackson.version>2.15.0</jackson.version>
   </properties>
 
   <dependencyManagement>
@@ -47,6 +48,13 @@
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
         <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
