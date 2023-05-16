@@ -12,6 +12,9 @@ public class PythonAnalyzer extends AbstractAnalyzer {
 
     public PythonAnalyzer(LocalClone localClone, Path path) {
         super(localClone, path, Language.PYTHON);
+        // TODO: 16.05.23 Add dedicated counters for all/code-only tokens
+        // this.codeTokenCounter = new PythonCodeTokenCounter();
+        // this.totalTokenCounter = new PythonTokenCounter(this::getSourceBytes);
         this.testFilePredicate = new PythonTestFilePredicate();
         this.singleCaptureQueries = new PythonSingleCaptureQueries();
         this.multiCaptureQueries = new PythonMultiCaptureQueries();

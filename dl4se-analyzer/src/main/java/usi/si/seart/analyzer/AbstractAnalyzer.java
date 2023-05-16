@@ -168,6 +168,12 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return functions;
     }
 
+    // TODO: 25.01.23 Parse content again for the AST
+    // - use the same parser instance to construct a new tree from the content
+    // - in case we are dealing with Java, wrap the content with `class _ {\n...}` (define protected `wrap`)
+    // - define extraction of the targets from the wrapper
+    //   (just getChildren or more specific getChild(0).getChildByFieldName("body"))
+    // - stream over them and do the same as before
     protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
         List<Node> nodes = match.stream()
                 .map(Tuple::getValue)
