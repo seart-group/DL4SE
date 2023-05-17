@@ -15,22 +15,26 @@ public abstract class TraverseCounter implements Counter {
 
     AtomicLong count = new AtomicLong();
 
-    // TODO: 16.05.23
-    //  This implementation will not work for languages like Python.
-    //  tree-sitter treats Python strings as non-leaf nodes that can contain interpolations.
-    //  Rather than editing the grammar, which would hurt users of our API, we should alter this logic.
     @Override
     public Long count(Node node) {
         @Cleanup TreeCursor cursor = node.walk();
-        cursor.preorderTraversal(this::nodeCallback);
-        Long result = count.get();
-        this.reset();
-        return result;
+        while (true) {
+            Node current = cursor.getCurrentNode();
+            nodeCallback(current);
+            if (shouldExplore(current) && cursor.gotoFirstChild()) {
+                continue;
+            }
+            while (!cursor.gotoNextSibling()) {
+                if (!cursor.gotoParent()) {
+                    return count.getAndSet(0);
+                }
+            }
+        }
     }
 
     protected abstract void nodeCallback(Node node);
 
-    protected void reset() {
-        this.count.set(0);
+    protected boolean shouldExplore(Node node) {
+        return true;
     }
 }
