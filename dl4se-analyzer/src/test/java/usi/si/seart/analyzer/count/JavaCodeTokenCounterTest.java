@@ -34,6 +34,10 @@ class JavaCodeTokenCounterTest extends JavaBaseTest {
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);
         Long actual = counter.count(package_declaration, class_declaration);
-        Assertions.assertEquals(getNodes().size() - 1, actual, actual);
+        // Remove 1 for the comment node
+        Assertions.assertEquals(
+                getNodes().size() - 1, actual,
+                "Total number of code tokens should be equal to the number of input tokens without the comments!"
+        );
     }
 }
