@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 class JavaLineCounterTest extends JavaBaseTest {
 
+    private static final String message = "Total number of lines should be equal to the number of lines reported by the `lines()` method";
+
     @Test
     void countEmptyTest() {
         Counter counter = new LineCounter();
@@ -20,10 +22,7 @@ class JavaLineCounterTest extends JavaBaseTest {
     void countRootTest() {
         Counter counter = new LineCounter();
         Long actual = counter.count(tree.getRootNode());
-        Assertions.assertEquals(
-                getInput().lines().count(), actual,
-                "Total number of lines should be equal to the number of lines reported by String method"
-        );
+        Assertions.assertEquals(getInput().lines().count(), actual, message);
     }
 
     @Test
@@ -34,6 +33,6 @@ class JavaLineCounterTest extends JavaBaseTest {
         Node class_declaration = root.getChild(1);
         Long actual = counter.count(package_declaration, class_declaration);
         // Subtract one for the lost space between package and class
-        Assertions.assertEquals(getInput().lines().count() - 1, actual);
+        Assertions.assertEquals(getInput().lines().count() - 1, actual, message);
     }
 }

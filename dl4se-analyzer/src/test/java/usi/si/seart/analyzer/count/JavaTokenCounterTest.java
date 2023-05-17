@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 class JavaTokenCounterTest extends JavaBaseTest {
 
+    private static final String message = "Total number of tokens should be equal to the number of input tokens including comment tokens (words)!";
+
     @Test
     void countEmptyTest() {
         Counter counter = new JavaTokenCounter(getNodeMapper());
@@ -20,11 +22,8 @@ class JavaTokenCounterTest extends JavaBaseTest {
     void countRootTest() {
         Counter counter = new JavaTokenCounter(getNodeMapper());
         Long actual = counter.count(tree.getRootNode());
-        // Add 1 for the extra comment word
-        Assertions.assertEquals(
-                getNodes().size() + 2, actual,
-                "Total number of tokens should be equal to the number of input tokens including comment tokens (words)!"
-        );
+        // Add 2 for the individual comment words
+        Assertions.assertEquals(getNodes().size() + 2, actual, message);
     }
 
     @Test
@@ -34,6 +33,7 @@ class JavaTokenCounterTest extends JavaBaseTest {
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);
         Long actual = counter.count(package_declaration, class_declaration);
-        Assertions.assertEquals(getNodes().size() + 2, actual);
+        // Add 2 for the individual comment words
+        Assertions.assertEquals(getNodes().size() + 2, actual, message);
     }
 }

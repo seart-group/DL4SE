@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 class PythonCodeTokenCounterTest extends PythonBaseTest {
 
+    private static final String message = "Total number of code tokens should be equal to the number of input tokens without the comments!";
+
     @Test
     void countEmptyTest() {
         Counter counter = new PythonCodeTokenCounter();
@@ -21,10 +23,7 @@ class PythonCodeTokenCounterTest extends PythonBaseTest {
         Counter counter = new PythonCodeTokenCounter();
         Long actual = counter.count(tree.getRootNode());
         // Remove 1 for the comment node
-        Assertions.assertEquals(
-                getNodes().size() - 1, actual,
-                "Total number of code tokens should be equal to the number of input tokens without the comments!"
-        );
+        Assertions.assertEquals(getNodes().size() - 1, actual, message);
     }
 
     @Test
@@ -35,9 +34,6 @@ class PythonCodeTokenCounterTest extends PythonBaseTest {
         Node[] children = function.getChildren().toArray(new Node[0]);
         Long actual = counter.count(children);
         // Remove 1 for the comment node
-        Assertions.assertEquals(
-                getNodes().size() - 1, actual,
-                "Total number of code tokens should be equal to the number of input tokens without the comments!"
-        );
+        Assertions.assertEquals(getNodes().size() - 1, actual, message);
     }
 }

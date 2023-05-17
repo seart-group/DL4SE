@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 class JavaCodeTokenCounterTest extends JavaBaseTest {
 
+    private static final String message = "Total number of code tokens should be equal to the number of input tokens without the comments!";
+
     @Test
     void countEmptyTest() {
         Counter counter = new CodeTokenCounter();
@@ -21,10 +23,7 @@ class JavaCodeTokenCounterTest extends JavaBaseTest {
         Counter counter = new CodeTokenCounter();
         Long actual = counter.count(tree.getRootNode());
         // Remove 1 for the comment node
-        Assertions.assertEquals(
-                getNodes().size() - 1, actual,
-                "Total number of code tokens should be equal to the number of input tokens without the comments!"
-        );
+        Assertions.assertEquals(getNodes().size() - 1, actual, message);
     }
 
     @Test
@@ -35,9 +34,6 @@ class JavaCodeTokenCounterTest extends JavaBaseTest {
         Node class_declaration = root.getChild(1);
         Long actual = counter.count(package_declaration, class_declaration);
         // Remove 1 for the comment node
-        Assertions.assertEquals(
-                getNodes().size() - 1, actual,
-                "Total number of code tokens should be equal to the number of input tokens without the comments!"
-        );
+        Assertions.assertEquals(getNodes().size() - 1, actual, message);
     }
 }

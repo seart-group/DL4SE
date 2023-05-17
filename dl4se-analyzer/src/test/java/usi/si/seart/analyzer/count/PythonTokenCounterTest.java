@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 class PythonTokenCounterTest extends PythonBaseTest {
 
+    private static final String message = "Total number of tokens should be equal to the number of input tokens including comment tokens (words)!";
+
     @Test
     void countEmptyTest() {
         Counter counter = new PythonTokenCounter(getNodeMapper());
@@ -21,10 +23,7 @@ class PythonTokenCounterTest extends PythonBaseTest {
         Counter counter = new PythonTokenCounter(getNodeMapper());
         Long actual = counter.count(tree.getRootNode());
         // Add 2 for the individual comment words
-        Assertions.assertEquals(
-                getNodes().size() + 2, actual,
-                "Total number of tokens should be equal to the number of input tokens including comment tokens (words)!"
-        );
+        Assertions.assertEquals(getNodes().size() + 2, actual, message);
     }
 
     @Test
@@ -35,9 +34,6 @@ class PythonTokenCounterTest extends PythonBaseTest {
         Node[] children = function.getChildren().toArray(new Node[0]);
         Long actual = counter.count(children);
         // Add 2 for the individual comment words
-        Assertions.assertEquals(
-                getNodes().size() + 2, actual,
-                "Total number of tokens should be equal to the number of input tokens including comment tokens (words)!"
-        );
+        Assertions.assertEquals(getNodes().size() + 2, actual, message);
     }
 }
