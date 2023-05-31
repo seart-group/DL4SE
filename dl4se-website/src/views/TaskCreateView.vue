@@ -50,7 +50,7 @@
                 <b-range
                   id="issues-range"
                   field="issues"
-                  v-model="contributors"
+                  v-model="issues"
                   lower-bound
                   :min="0"
                 />
@@ -59,7 +59,7 @@
                 <b-range
                   id="contributors-range"
                   field="contributors"
-                  v-model="issues"
+                  v-model="contributors"
                   lower-bound
                   :min="0"
                 />
