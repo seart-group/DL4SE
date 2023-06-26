@@ -47,13 +47,7 @@
                 />
               </b-col>
               <b-col lg="6" md="12">
-                <b-range
-                  id="issues-range"
-                  field="issues"
-                  v-model="issues"
-                  lower-bound
-                  :min="0"
-                />
+                <b-range id="issues-range" field="issues" v-model="issues" lower-bound :min="0" />
               </b-col>
               <b-col lg="6" md="12">
                 <b-range
