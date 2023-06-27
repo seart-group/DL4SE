@@ -1,7 +1,6 @@
 package usi.si.seart.http;
 
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
@@ -53,10 +52,9 @@ public class HttpClient {
     private static final Pattern HEADER_LINK = Pattern.compile("<([^>]+)>;\\s?rel=\"(\\w+)\"");
 
     public Map<String, String> getNavigationLinks(HttpResponse response){
-        HttpHeaders responseHeaders = response.getHeaders();
-        String linkHeaderValue = responseHeaders.getFirstHeaderStringValue("links");
+        String xLinkSearch = response.getHeaders().getFirstHeaderStringValue("x-link-search");
         Map<String, String> links = new HashMap<>();
-        Matcher matcher = HEADER_LINK.matcher(linkHeaderValue);
+        Matcher matcher = HEADER_LINK.matcher(xLinkSearch);
 
         while (matcher.find()) {
             String rel = matcher.group(2);
