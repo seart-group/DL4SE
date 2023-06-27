@@ -37,6 +37,7 @@
     <junit.version>5.9.3</junit.version>
     <javaparser.version>3.25.3</javaparser.version>
     <lombok.version>1.18.26</lombok.version>
+    <janino.version>3.1.9</janino.version>
     <postgresql.version>42.6.0</postgresql.version>
     <jackson.version>2.15.2</jackson.version>
   </properties>
