@@ -4,7 +4,7 @@
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/dl4se-server/pom.xml" goal="clean package -am -DskipTests" />
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/dl4se-server/pom.xml" goal="-e clean package -pl dl4se-server -am -DskipTests" />
     </method>
   </configuration>
 </component>

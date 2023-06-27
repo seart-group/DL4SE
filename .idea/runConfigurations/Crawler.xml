@@ -8,7 +8,7 @@
       <env name="CODE_SEARCH_URL" value="http://gym.si.usi.ch:48001/api/r/search" />
     </envs>
     <method v="2">
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/dl4se-crawler/pom.xml" goal="clean package -am -DskipTests" />
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="-e clean package -pl dl4se-crawler -am -DskipTests" />
     </method>
   </configuration>
 </component>
