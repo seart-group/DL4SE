@@ -39,6 +39,7 @@
     <lombok.version>1.18.26</lombok.version>
     <janino.version>3.1.9</janino.version>
     <postgresql.version>42.6.0</postgresql.version>
+    <jjwt.version>0.11.5</jjwt.version>
     <jackson.version>2.15.2</jackson.version>
   </properties>
 
