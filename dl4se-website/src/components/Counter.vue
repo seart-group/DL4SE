@@ -1,12 +1,31 @@
 <template>
   <div class="counter">
-    <b-input type="number" :id="id" :placeholder="placeholder" :class="counterClasses"
-             v-model.number="count" :min="min" :max="max" :state="state"
-             @input="setCount" @keydown.up.prevent="increment" @keydown.down.prevent="decrement"
+    <b-input
+      type="number"
+      :id="id"
+      :placeholder="placeholder"
+      :class="counterClasses"
+      v-model.number="count"
+      :min="min"
+      :max="max"
+      :state="state"
+      @input="setCount"
+      @keydown.up.prevent="increment"
+      @keydown.down.prevent="decrement"
     />
     <div class="counter-btn-group">
-      <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" tabindex="-1" />
-      <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" tabindex="-1" />
+      <b-button
+        type="button"
+        @click="increment"
+        class="counter-btn-top counter-btn-chevron-up"
+        tabindex="-1"
+      />
+      <b-button
+        type="button"
+        @click="decrement"
+        class="counter-btn-bottom counter-btn-chevron-down"
+        tabindex="-1"
+      />
     </div>
   </div>
 </template>
@@ -46,14 +65,14 @@ export default {
         return null
     },
     counterClasses() {
-      const internal = [ "counter-input" ]
+      const internal = ["counter-input"]
       return [...internal, ...this.counterClass.split(" ")]
     }
   },
   methods: {
     toNumberOrNull(value) {
       let parsed = parseFloat(value)
-      return (isNaN(parsed)) ? null : parsed
+      return isNaN(parsed) ? null : parsed
     },
     setCount(value) {
       this.count = this.toNumberOrNull(value)
@@ -80,7 +99,7 @@ export default {
     }
   },
   setup(props) {
-    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
       v$: useVuelidate(globalConfig)
     }

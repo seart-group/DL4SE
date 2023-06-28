@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VuexPersistence from 'vuex-persist'
+import Vue from "vue"
+import Vuex from "vuex"
+import VuexPersistence from "vuex-persist"
 import router from "@/router"
 
 Vue.use(Vuex)
@@ -15,7 +15,7 @@ export default new Vuex.Store({
   },
   getters: {
     getToken(state) {
-      return state.token;
+      return state.token
     }
   },
   mutations: {
@@ -30,14 +30,12 @@ export default new Vuex.Store({
     async logOut(context, target) {
       context.commit("clearToken")
       const isPrivate = !router.currentRoute.meta.public
-      if (isPrivate)
-        await router.replace({name: "login", query: {target: target}})
+      if (isPrivate) await router.replace({ name: "login", query: { target: target } })
       // else
       //   router.go(0)
       // Uncomment previous lines to enable refresh on public page logout
     }
   },
-  modules: {
-  },
-  plugins: [ vuexLocal.plugin ]
+  modules: {},
+  plugins: [vuexLocal.plugin]
 })

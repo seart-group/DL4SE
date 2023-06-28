@@ -2,11 +2,11 @@ package usi.si.seart.controller;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -49,8 +49,7 @@ import usi.si.seart.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -156,7 +155,6 @@ public class TaskController {
         return ResponseEntity.ok(token.getValue());
     }
 
-    @SneakyThrows({FileNotFoundException.class})
     @GetMapping(value = "/download/{uuid}")
     public ResponseEntity<?> download(@PathVariable UUID uuid, @RequestParam @NotBlank String token) {
         downloadService.consume(token);
@@ -164,14 +162,17 @@ public class TaskController {
 
         Path exportFilePath = fileSystemService.getTaskArchive(task);
         String exportFileName = exportFilePath.getFileName().toString();
-        long exportFileSize = exportFilePath.toFile().length();
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(exportFilePath.toFile()));
+        File exportFile = exportFilePath.toFile();
+        long exportFileSize = exportFile.length();
+        long exportFileLastModified = exportFile.lastModified();
+        Resource resource = new FileSystemResource(exportFile);
         ContentDisposition disposition = ContentDisposition.attachment().filename(exportFileName).build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "gzip"));
         headers.setContentLength(exportFileSize);
         headers.setContentDisposition(disposition);
+        headers.setLastModified(exportFileLastModified);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
