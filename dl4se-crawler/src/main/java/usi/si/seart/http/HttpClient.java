@@ -3,7 +3,9 @@ package usi.si.seart.http;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,8 +27,21 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HttpClient {
 
-    static HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-    static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+    private static final class RequestInitializer implements HttpRequestInitializer {
+
+        private static final int TIMEOUT = 60_000;
+
+        @Override
+        public void initialize(HttpRequest request) {
+            request.setReadTimeout(TIMEOUT);
+            request.setConnectTimeout(TIMEOUT);
+        }
+    }
+
+    private static final HttpTransport transport = new NetHttpTransport();
+    private static final HttpRequestInitializer requestInitializer = new RequestInitializer();
+    private static final HttpRequestFactory requestFactory = transport.createRequestFactory(requestInitializer);
+    private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
     @SneakyThrows
     public HttpResponse getRequest(GenericUrl url) {
