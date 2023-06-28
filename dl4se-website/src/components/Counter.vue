@@ -32,7 +32,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import { between } from "@vuelidate/validators"
+import { between, requiredIf } from "@vuelidate/validators"
 
 export default {
   name: "b-counter",
@@ -55,22 +55,11 @@ export default {
       default: Number.MAX_SAFE_INTEGER
     },
     placeholder: String,
-    validators: {
-      type: Array,
-      default() {
-        return []
-      }
-    }
+    required: Boolean
   },
   computed: {
-    invalidParent() {
-      return this.validators
-        .map((validator) => validator.$invalid)
-        .reduce((curr, acc) => curr || acc, false)
-    },
     state() {
-      if (this.invalidParent) return false
-      else if (this.v$.$dirty) return !this.v$.$invalid
+      if (this.v$.$dirty || this.required) return !this.v$.$invalid
       else return null
     },
     counterClasses() {
@@ -99,14 +88,11 @@ export default {
       } else {
         this.count = this.min
       }
-    },
-    resetValidation() {
-      if (this.count === null) this.v$.$reset()
     }
   },
   watch: {
     count() {
-      this.resetValidation()
+      if (!this.count) this.v$.$reset()
       this.$emit("input", this.toNumberOrNull(this.count))
     }
   },
@@ -125,7 +111,8 @@ export default {
     return {
       count: {
         $autoDirty: true,
-        between: between(this.min, this.max)
+        between: between(this.min, this.max),
+        required: requiredIf(this.required)
       }
     }
   }

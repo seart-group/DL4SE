@@ -145,7 +145,7 @@ public class TaskController {
 
         User owner = task.getUser();
         boolean isOwner = requester.equals(owner);
-        boolean isAdmin = Role.ADMIN == owner.getRole();
+        boolean isAdmin = Role.ADMIN == requester.getRole();
         Status status = task.getStatus();
         boolean isFinished = status == Status.FINISHED;
         boolean canDownload = isFinished && (isOwner || isAdmin);

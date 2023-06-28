@@ -4,13 +4,13 @@
     <p class="masking-pad" />
     <b-counter
       :id="id + '-counter'"
-      class="py-2"
-      counter-class="masking-counter-input"
       placeholder="%"
+      v-model.number="local.masking.percentage"
       :min="1"
       :max="100"
-      v-model.number="local.masking.percentage"
-      :validators="[v$.local.masking.percentage]"
+      :required="!!local.masking.token"
+      class="py-2"
+      counter-class="masking-counter-input"
     />
     <p class="m-0">&nbsp;of&nbsp;</p>
     <b-break />
@@ -23,7 +23,7 @@
         placeholder="extra_id"
         v-model.trim="local.masking.token"
         @input="setToken"
-        :state="inputState"
+        :state="tokenState"
       />
     </div>
     <p class="m-0">&nbsp;token</p>
@@ -54,17 +54,20 @@ export default {
     tokenSpecified() {
       return this.local.masking.token != null
     },
-    anyInputEmpty() {
-      return this.local.masking.percentage === null || this.local.masking.token === null
+    anySpecified() {
+      return !!this.percentageSpecified || !!this.tokenSpecified
     },
-    bothInputsEmpty() {
-      return this.local.masking.percentage === null && this.local.masking.token === null
+    anyEmpty() {
+      return !this.local.masking.percentage || !this.local.masking.token
     },
-    inputState() {
-      return this.v$.local.masking.$anyDirty ? !this.v$.local.masking.token.$invalid : null
+    bothEmpty() {
+      return !this.local.masking.percentage && !this.local.masking.token
+    },
+    tokenState() {
+      return this.anySpecified ? !this.v$.local.masking.token.$invalid : null
     },
     checkboxDisabled() {
-      return this.anyInputEmpty || this.v$.$invalid
+      return this.anyEmpty || this.v$.$invalid
     }
   },
   methods: {
@@ -77,10 +80,10 @@ export default {
     },
     resetCheckbox() {
       if (this.v$.$invalid) this.local.masking.contiguousOnly = false
-      if (this.bothInputsEmpty) this.local.masking.contiguousOnly = null
+      if (this.bothEmpty) this.local.masking.contiguousOnly = null
     },
     resetValidation() {
-      if (this.bothInputsEmpty) this.v$.$reset()
+      if (this.bothEmpty) this.v$.$reset()
     }
   },
   watch: {
@@ -121,10 +124,6 @@ export default {
     return {
       local: {
         masking: {
-          percentage: {
-            $autoDirty: true,
-            required: requiredIf(this.tokenSpecified)
-          },
           token: {
             $autoDirty: true,
             required: requiredIf(this.percentageSpecified)
