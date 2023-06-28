@@ -2,18 +2,28 @@
   <div class="masking">
     <label :for="id + '-counter'" class="m-0"> Randomly mask&nbsp; </label>
     <p class="masking-pad" />
-    <b-counter :id="id + '-counter'" placeholder="%"
-               v-model.number="local.masking.percentage" :min="1" :max="100"
-               :required="!!local.masking.token"
-               class="py-2" counter-class="masking-counter-input"
+    <b-counter
+      :id="id + '-counter'"
+      placeholder="%"
+      v-model.number="local.masking.percentage"
+      :min="1"
+      :max="100"
+      :required="!!local.masking.token"
+      class="py-2"
+      counter-class="masking-counter-input"
     />
     <p class="m-0">&nbsp;of&nbsp;</p>
     <b-break />
     <p class="m-0">tokens&nbsp;</p>
     <label :for="id + '-token'" class="m-0"> using the&nbsp; </label>
     <div class="py-2">
-      <b-input :id="id + '-token'" class="masking-token-input" placeholder="extra_id"
-               v-model.trim="local.masking.token" @input="setToken" :state="tokenState"
+      <b-input
+        :id="id + '-token'"
+        class="masking-token-input"
+        placeholder="extra_id"
+        v-model.trim="local.masking.token"
+        @input="setToken"
+        :state="tokenState"
       />
     </div>
     <p class="m-0">&nbsp;token</p>
@@ -54,7 +64,7 @@ export default {
       return !this.local.masking.percentage && !this.local.masking.token
     },
     tokenState() {
-      return (this.anySpecified) ? !this.v$.local.masking.token.$invalid : null
+      return this.anySpecified ? !this.v$.local.masking.token.$invalid : null
     },
     checkboxDisabled() {
       return this.anyEmpty || this.v$.$invalid

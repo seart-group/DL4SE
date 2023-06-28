@@ -32,7 +32,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import {between, requiredIf} from "@vuelidate/validators"
+import { between, requiredIf } from "@vuelidate/validators"
 
 export default {
   name: "b-counter",
@@ -59,10 +59,8 @@ export default {
   },
   computed: {
     state() {
-      if (this.v$.$dirty || this.required)
-        return !this.v$.$invalid
-      else
-        return null
+      if (this.v$.$dirty || this.required) return !this.v$.$invalid
+      else return null
     },
     counterClasses() {
       const internal = ["counter-input"]
@@ -95,7 +93,7 @@ export default {
   watch: {
     count() {
       if (!this.count) this.v$.$reset()
-      this.$emit('input', this.toNumberOrNull(this.count))
+      this.$emit("input", this.toNumberOrNull(this.count))
     }
   },
   setup(props) {
