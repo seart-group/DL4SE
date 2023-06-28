@@ -1,12 +1,17 @@
 package usi.si.seart.http;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpIOExceptionHandler;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.util.BackOff;
+import com.google.api.client.util.BackOffUtils;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.client.util.Sleeper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -16,6 +21,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.http.payload.GhsGitRepo;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +33,26 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HttpClient {
 
+    private static final class RetryHandler implements HttpIOExceptionHandler {
+
+        BackOff backOff = new ExponentialBackOff();
+        Sleeper sleeper = Sleeper.DEFAULT;
+
+        @Override
+        public boolean handleIOException(HttpRequest request, boolean supportsRetry) throws IOException {
+            if (!supportsRetry) {
+                return false;
+            }
+
+            try {
+                return BackOffUtils.next(sleeper, backOff);
+            } catch (InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                return false;
+            }
+        }
+    }
+
     private static final class RequestInitializer implements HttpRequestInitializer {
 
         private static final int TIMEOUT = 60_000;
@@ -35,6 +61,7 @@ public class HttpClient {
         public void initialize(HttpRequest request) {
             request.setReadTimeout(TIMEOUT);
             request.setConnectTimeout(TIMEOUT);
+            request.setIOExceptionHandler(new RetryHandler());
         }
     }
 
