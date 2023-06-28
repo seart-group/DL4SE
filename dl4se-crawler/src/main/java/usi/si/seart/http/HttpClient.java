@@ -16,9 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import lombok.AccessLevel;
 import lombok.SneakyThrows;
-import lombok.experimental.FieldDefaults;
 import usi.si.seart.http.payload.GhsGitRepo;
 
 import java.io.IOException;
@@ -30,7 +28,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HttpClient {
 
     private static final class RetryHandler implements HttpIOExceptionHandler {
