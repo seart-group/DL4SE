@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author dabico
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Git {
+public class Git implements AutoCloseable {
 
     private static final String repoLinkPattern = "https://github.com/%s.git";
 
@@ -311,5 +311,15 @@ public class Git {
         Process process = builder.start();
         process.waitFor();
         return process;
+    }
+
+    @Override
+    @SneakyThrows(InterruptedException.class)
+    public void close() throws IOException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("rm", "-rf", localDir.getFileName().toString());
+        builder.directory(localDir.getParent().toFile());
+        Process process = builder.start();
+        process.waitFor();
     }
 }

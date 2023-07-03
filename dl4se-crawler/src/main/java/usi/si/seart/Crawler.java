@@ -25,6 +25,7 @@ import usi.si.seart.parser.ParsingException;
 import usi.si.seart.utils.HibernateUtils;
 import usi.si.seart.utils.PathUtils;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -135,15 +136,14 @@ public class Crawler {
         saveProgress();
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     private static void updateRepoData(GitRepo repo, Set<Language> repoLanguages) {
         String name = repo.getName();
         LocalDateTime lastCommit = repo.getLastCommit();
 
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
-        try {
-            Git git = new Git(name, cloneDir, lastCommit);
+        try (Git git = new Git(name, cloneDir, lastCommit)) {
 
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
@@ -173,8 +173,6 @@ public class Crawler {
             HibernateUtils.save(repo);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
-        } finally {
-            PathUtils.forceDelete(cloneDir);
         }
     }
 
@@ -197,15 +195,14 @@ public class Crawler {
         HibernateUtils.updateFilePathByRepoId(repo.getId(), oldFilePath, newFilePath);
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     private static void mineRepoData(GitRepo repo, Set<Language> repoLanguages) {
         String name = repo.getName();
         LocalDateTime lastUpdateGhs = repo.getLastCommit();
 
         Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
-        try {
-            Git git = new Git(name, cloneDir, true);
+        try (Git git = new Git(name, cloneDir, true)) {
             Git.Commit latest = git.getLastCommitInfo();
 
             mineRepoDataForLanguages(repo, cloneDir, repoLanguages);
@@ -217,8 +214,6 @@ public class Crawler {
             HibernateUtils.save(repo);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
-        } finally {
-            PathUtils.forceDelete(cloneDir);
         }
     }
 
