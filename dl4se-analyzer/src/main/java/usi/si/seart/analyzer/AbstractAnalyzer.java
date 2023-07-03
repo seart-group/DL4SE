@@ -131,6 +131,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
     public final Result analyze() {
         File file = extractFileEntity();
         List<Function> functions = extractFunctionEntities(file);
+        file.setFunctions(functions);
         return new Analyzer.Result(file, functions);
     }
 
