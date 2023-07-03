@@ -1,7 +1,3 @@
-ALTER TABLE task ADD size bigint;
-
-ALTER TABLE git_repo RENAME COLUMN is_deleted TO is_unavailable;
-
 CREATE MATERIALIZED VIEW table_counts AS
 SELECT 'user' AS "table", COUNT(id) FROM "user"
 UNION
@@ -35,5 +31,3 @@ CREATE UNIQUE INDEX ON git_repos_by_language(lang_id);
 CREATE UNIQUE INDEX ON files_by_language(lang_id);
 CREATE UNIQUE INDEX ON functions_by_language(lang_id);
 CREATE UNIQUE INDEX ON code_size_in_bytes(size);
-
-INSERT INTO configuration(key, value, last_update) VALUES ('view_maintainer_cron', '0 0 0 * * *', now());

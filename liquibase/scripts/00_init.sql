@@ -25,7 +25,7 @@ CREATE TABLE "git_repo" (
     "stars" bigint NOT NULL,
     "last_commit" timestamp NOT NULL,
     "last_commit_sha" text NOT NULL,
-    "is_deleted" boolean NOT NULL
+    "is_unavailable" boolean NOT NULL
 );
 
 CREATE TABLE "git_repo_language" (
@@ -94,4 +94,5 @@ CREATE INDEX "function_file_id_idx" ON "function" (file_id);
 -- ADD LANGUAGES
 INSERT INTO language(id, name, extensions)
 VALUES
-    (nextval('hibernate_sequence'), 'Java', '{java}');
+    (nextval('hibernate_sequence'), 'Java', '{java}'),
+    (nextval('hibernate_sequence'), 'Python', '{py}');
