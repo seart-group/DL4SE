@@ -41,14 +41,16 @@ CREATE TABLE "file" (
     "is_parsed" boolean NOT NULL,
     "content" text NOT NULL,
     "content_hash" text NOT NULL,
-    "ast" text,
-    "ast_hash" text,
-    "total_tokens" bigint,
-    "code_tokens" bigint,
+    "ast" text NOT NULL,
+    "ast_hash" text NOT NULL,
+    "symbolic_expression" text NOT NULL,
+    "total_tokens" bigint NOT NULL,
+    "code_tokens" bigint NOT NULL,
     "lines" bigint NOT NULL,
     "characters" bigint NOT NULL,
     "is_test" boolean NOT NULL,
     "contains_non_ascii" boolean NOT NULL,
+    "contains_error" boolean NOT NULL,
     UNIQUE (repo_id, path)
 );
 
@@ -59,14 +61,16 @@ CREATE TABLE "function" (
     "file_id" bigint NOT NULL,
     "content" text NOT NULL,
     "content_hash" text NOT NULL,
-    "ast" text,
-    "ast_hash" text,
-    "total_tokens" bigint,
-    "code_tokens" bigint,
+    "ast" text NOT NULL,
+    "ast_hash" text NOT NULL,
+    "symbolic_expression" text NOT NULL,
+    "total_tokens" bigint NOT NULL,
+    "code_tokens" bigint NOT NULL,
     "lines" bigint NOT NULL,
     "characters" bigint NOT NULL,
     "is_test" boolean NOT NULL,
     "contains_non_ascii" boolean NOT NULL,
+    "contains_error" boolean NOT NULL,
     "boilerplate_type" text
 );
 

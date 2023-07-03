@@ -57,23 +57,36 @@ public abstract class Code {
     @JsonProperty(value = "content_hash")
     String contentHash;
 
+    @NotNull
     String ast;
 
+    @NotNull
     @Column(name = "ast_hash")
     @JsonProperty(value = "ast_hash")
     String astHash;
 
+    @NotNull
+    @Column(name = "symbolic_expression")
+    @JsonProperty(value = "symbolic_expression")
+    String symbolicExpression;
+
+    @NotNull
+    @PositiveOrZero
     @Column(name = "total_tokens")
     @JsonProperty(value = "total_tokens")
     Long totalTokens;
 
+    @NotNull
+    @PositiveOrZero
     @Column(name = "code_tokens")
     @JsonProperty(value = "code_tokens")
     Long codeTokens;
 
+    @NotNull
     @PositiveOrZero
     Long lines;
 
+    @NotNull
     @PositiveOrZero
     Long characters;
 
@@ -87,4 +100,9 @@ public abstract class Code {
     @Column(name = "contains_non_ascii")
     @JsonProperty(value = "contains_non_ascii")
     Boolean containsNonAscii;
+
+    @NotNull
+    @Column(name = "contains_error")
+    @JsonProperty(value = "contains_error")
+    Boolean containsError;
 }
