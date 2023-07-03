@@ -1,8 +1,7 @@
 package usi.si.seart.git;
 
-public class GitException extends Exception {
+import lombok.experimental.StandardException;
 
-    public GitException(String message) {
-        super(message);
-    }
+@StandardException
+public class GitException extends Exception {
 }
