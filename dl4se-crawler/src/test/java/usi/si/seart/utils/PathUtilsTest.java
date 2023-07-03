@@ -28,24 +28,4 @@ class PathUtilsTest {
         Assertions.assertTrue(PathUtils.isTestFile(file8));
         Assertions.assertTrue(PathUtils.isTestFile(file9));
     }
-
-    @Test
-    void getExtensionTest() {
-        Path path1 = Path.of("/java/src/org/json/App.java");
-        Path path2 = Path.of("/App.java");
-        Path path3 = Path.of("App.java");
-        Path path4 = Path.of("/java/src/org.json/App.java");
-        Path path5 = Path.of("/.gitignore");
-        Path path6 = Path.of("/java/src/org/json");
-        Path path7 = Path.of("/java/src.org/json");
-        Path path8 = Path.of("");
-        Assertions.assertEquals("java", PathUtils.getExtension(path1));
-        Assertions.assertEquals("java", PathUtils.getExtension(path2));
-        Assertions.assertEquals("java", PathUtils.getExtension(path3));
-        Assertions.assertEquals("java", PathUtils.getExtension(path4));
-        Assertions.assertEquals("gitignore", PathUtils.getExtension(path5));
-        Assertions.assertEquals("", PathUtils.getExtension(path6));
-        Assertions.assertEquals("", PathUtils.getExtension(path7));
-        Assertions.assertEquals("", PathUtils.getExtension(path8));
-    }
 }

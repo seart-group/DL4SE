@@ -238,7 +238,7 @@ public class Crawler {
     }
 
     private static File parseFile(Path filePath) {
-        String extension = PathUtils.getExtension(filePath);
+        String extension = com.google.common.io.Files.getFileExtension(filePath.toString());
         Language language = extensionToLanguage.get(extension);
 
         Parser parser = Parser.getParser(language);

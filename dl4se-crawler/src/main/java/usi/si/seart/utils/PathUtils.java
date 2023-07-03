@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -63,24 +62,5 @@ public class PathUtils {
     //TODO 08.03.22: Switch pattern matching based on extension
     public boolean isTestFile(Path path) {
         return testPathMatcher.matches(path);
-    }
-
-    /**
-     * Extract the file extension for a given file path.
-     *
-     * @param path {@code Path} that we are testing against.
-     * @return The file extension {@code String}. If the file has no extension or is a directory, then an empty
-     * string is returned.
-     */
-    public String getExtension(Path path) {
-        Objects.requireNonNull(path);
-        String fileName = path.getFileName().toString();
-        if (fileName.contains(".")) {
-            int extStart = fileName.lastIndexOf(".") + 1;
-            if (extStart < fileName.length() && extStart > 0) {
-                return fileName.substring(extStart);
-            }
-        }
-        return "";
     }
 }
