@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 class StringUtilsTest {
 
     @Test
@@ -40,13 +37,5 @@ class StringUtilsTest {
     void normalizeSpaceTest(String input) {
         String baseline = "This is a String";
         Assertions.assertEquals(baseline, StringUtils.normalizeSpace(input));
-    }
-
-    @Test
-    void fromInputStreamTest() {
-        String expected = "abcd1234";
-        InputStream inputStream = new ByteArrayInputStream(expected.getBytes());
-        String actual = StringUtils.fromInputStream(inputStream);
-        Assertions.assertEquals(expected, actual);
     }
 }

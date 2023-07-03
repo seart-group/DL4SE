@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.collection.utils.CollectionUtils;
+import usi.si.seart.converter.InputStreamToStringConverter;
 import usi.si.seart.model.Language;
-import usi.si.seart.utils.StringUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -137,7 +138,8 @@ public class Git implements AutoCloseable {
             Process process = executeGitCommand("log", "-1", "--format=%H%n%at");
             checkFailure(process);
 
-            String output = StringUtils.fromInputStream(process.getInputStream());
+            InputStream inputStream = process.getInputStream();
+            String output = InputStreamToStringConverter.getInstance().convert(inputStream);
             List<String> outputLines = output.lines().collect(Collectors.toList());
             this.sha = outputLines.get(0);
             Instant lastUpdateInstant = Instant.ofEpochSecond(Integer.parseInt(outputLines.get(1)));
@@ -270,10 +272,12 @@ public class Git implements AutoCloseable {
             processOutput(process);
         }
 
+        @SuppressWarnings("DataFlowIssue")
         private void processOutput(Process process) throws GitException {
             checkFailure(process);
 
-            String output = StringUtils.fromInputStream(process.getInputStream());
+            InputStream inputStream = process.getInputStream();
+            String output = InputStreamToStringConverter.getInstance().convert(inputStream);
             output.lines().forEach(line -> {
                 Consumer<String> consumer;
                 char status = line.charAt(0);
@@ -295,7 +299,8 @@ public class Git implements AutoCloseable {
 
     private void checkFailure(Process process) throws GitException {
         if (process.exitValue() != 0){
-            String errorMessage = StringUtils.fromInputStream(process.getErrorStream());
+            InputStream errorStream = process.getErrorStream();
+            String errorMessage = InputStreamToStringConverter.getInstance().convert(errorStream);
             throw new GitException("Operation failed for ["+name+"]:\n" + errorMessage);
         }
     }

@@ -3,8 +3,6 @@ package usi.si.seart.utils;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -78,21 +76,5 @@ public class StringUtils {
         }
 
         return builder.toString().trim();
-    }
-
-    /**
-     * Used to read any arbitrary {@code InputStream} into a {@code String}.
-     *
-     * @param inputStream An {@code InputStream}.
-     * @return The stream contents as a {@code String}.
-     * @apiNote Intended to be used for processing the STD/ERR output of a {@link java.lang.Process Process}.
-     * @implNote We suppress throws of {@link IOException}.
-     * @author dabico
-     * @see <a href="https://www.baeldung.com/convert-input-stream-to-string#converting-with-java-9---inputstreamreadallbytes">Baeldung Guide</a>
-     */
-    @SneakyThrows({IOException.class})
-    public String fromInputStream(InputStream inputStream) {
-        Objects.requireNonNull(inputStream);
-        return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
     }
 }
