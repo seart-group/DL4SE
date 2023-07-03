@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Git {
 
-    static String repoLinkPattern = "https://github.com/%s.git";
+    private static final String repoLinkPattern = "https://github.com/%s.git";
 
     Path localDir;
     String name;
