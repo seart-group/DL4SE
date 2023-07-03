@@ -13,10 +13,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InputStreamToStringConverter extends Converter<InputStream, String> {
+public class InputStreamToString extends Converter<InputStream, String> {
 
     @Getter
-    private static final Converter<InputStream, String> instance = new InputStreamToStringConverter();
+    private static final Converter<InputStream, String> converter = new InputStreamToString();
 
     @Override
     @SneakyThrows(IOException.class)

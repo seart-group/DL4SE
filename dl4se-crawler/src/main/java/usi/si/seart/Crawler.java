@@ -8,8 +8,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.CollectionUtils;
-import usi.si.seart.converter.DateToLDTConverter;
-import usi.si.seart.converter.GhsToGitRepoConverter;
+import usi.si.seart.converter.DateToLocalDateTime;
+import usi.si.seart.converter.GhsGitRepoToGitRepo;
 import usi.si.seart.git.Git;
 import usi.si.seart.git.GitException;
 import usi.si.seart.http.HttpClient;
@@ -108,7 +108,7 @@ public class Crawler {
 
     private static void checkRepoData(GhsGitRepo item) {
         String name = item.getName();
-        LocalDateTime lastUpdateGhs = DateToLDTConverter.getInstance().convert(item.getLastCommit());
+        LocalDateTime lastUpdateGhs = DateToLocalDateTime.getConverter().convert(item.getLastCommit());
         lastJob.setCheckpoint(lastUpdateGhs);
 
         Set<String> repoLanguageNames = CollectionUtils.intersection(names, item.getRepoLanguages());
@@ -127,7 +127,7 @@ public class Crawler {
             item.update(repo);
             operation = Crawler::updateRepoData;
         } else {
-            repo = GhsToGitRepoConverter.getInstance().convert(item);
+            repo = GhsGitRepoToGitRepo.getConverter().convert(item);
             HibernateUtils.save(repo);
             operation = Crawler::mineRepoData;
         }

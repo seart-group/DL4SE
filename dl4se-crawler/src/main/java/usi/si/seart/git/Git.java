@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.collection.utils.CollectionUtils;
-import usi.si.seart.converter.InputStreamToStringConverter;
+import usi.si.seart.converter.InputStreamToString;
 import usi.si.seart.model.Language;
 
 import java.io.IOException;
@@ -139,7 +139,7 @@ public class Git implements AutoCloseable {
             checkFailure(process);
 
             InputStream inputStream = process.getInputStream();
-            String output = InputStreamToStringConverter.getInstance().convert(inputStream);
+            String output = InputStreamToString.getConverter().convert(inputStream);
             List<String> outputLines = output.lines().collect(Collectors.toList());
             this.sha = outputLines.get(0);
             Instant lastUpdateInstant = Instant.ofEpochSecond(Integer.parseInt(outputLines.get(1)));
@@ -277,7 +277,7 @@ public class Git implements AutoCloseable {
             checkFailure(process);
 
             InputStream inputStream = process.getInputStream();
-            String output = InputStreamToStringConverter.getInstance().convert(inputStream);
+            String output = InputStreamToString.getConverter().convert(inputStream);
             output.lines().forEach(line -> {
                 Consumer<String> consumer;
                 char status = line.charAt(0);
@@ -300,7 +300,7 @@ public class Git implements AutoCloseable {
     private void checkFailure(Process process) throws GitException {
         if (process.exitValue() != 0){
             InputStream errorStream = process.getErrorStream();
-            String errorMessage = InputStreamToStringConverter.getInstance().convert(errorStream);
+            String errorMessage = InputStreamToString.getConverter().convert(errorStream);
             throw new GitException("Operation failed for ["+name+"]:\n" + errorMessage);
         }
     }

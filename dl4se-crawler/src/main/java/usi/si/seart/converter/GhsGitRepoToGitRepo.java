@@ -10,10 +10,10 @@ import usi.si.seart.model.GitRepo;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
+public class GhsGitRepoToGitRepo extends Converter<GhsGitRepo, GitRepo> {
 
     @Getter
-    private static final Converter<GhsGitRepo, GitRepo> instance = new GhsToGitRepoConverter();
+    private static final Converter<GhsGitRepo, GitRepo> converter = new GhsGitRepoToGitRepo();
 
     @Override
     protected GitRepo doForward(GhsGitRepo ghsGitRepo) {
@@ -31,7 +31,7 @@ public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
         if (issues != null) builder.issues(issues);
         Long stars = ghsGitRepo.getStargazers();
         if (stars != null) builder.stars(stars);
-        LocalDateTime lastCommit = DateToLDTConverter.getInstance().convert(ghsGitRepo.getLastCommit());
+        LocalDateTime lastCommit = DateToLocalDateTime.getConverter().convert(ghsGitRepo.getLastCommit());
         if (lastCommit != null) builder.lastCommit(lastCommit);
         String lastCommitSHA = ghsGitRepo.getLastCommitSHA();
         if (lastCommitSHA != null) builder.lastCommitSHA(lastCommitSHA);

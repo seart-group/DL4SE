@@ -10,10 +10,10 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DateToLDTConverter extends Converter<Date, LocalDateTime> {
+public class DateToLocalDateTime extends Converter<Date, LocalDateTime> {
 
     @Getter
-    public static final Converter<Date, LocalDateTime> instance = new DateToLDTConverter();
+    private static final Converter<Date, LocalDateTime> converter = new DateToLocalDateTime();
 
     @Override
     protected LocalDateTime doForward(Date date) {
