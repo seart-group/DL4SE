@@ -1,6 +1,5 @@
 package usi.si.seart.utils;
 
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.nio.file.FileSystems;
@@ -83,23 +82,5 @@ public class PathUtils {
             }
         }
         return "";
-    }
-
-    /**
-     * Forcefully delete a file, or a directory and all its contents.
-     *
-     * @implNote We suppress throws of {@link java.io.IOException IOException} and {@link InterruptedException}.
-     * @param path {@code Path} to file or directory that we wish to delete.
-     * @see ProcessBuilder
-     * @see <a href="https://www.baeldung.com/run-shell-command-in-java#ProcessBuilder">Run Shell Commands in Java</a>
-     */
-    @SneakyThrows
-    public void forceDelete(Path path) {
-        Objects.requireNonNull(path);
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.command("rm", "-rf", path.getFileName().toString());
-        builder.directory(path.getParent().toFile());
-        Process process = builder.start();
-        process.waitFor();
     }
 }
