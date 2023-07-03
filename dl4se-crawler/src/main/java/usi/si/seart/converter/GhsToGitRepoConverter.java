@@ -1,5 +1,6 @@
 package usi.si.seart.converter;
 
+import com.google.common.base.Converter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
     private static final Converter<GhsGitRepo, GitRepo> instance = new GhsToGitRepoConverter();
 
     @Override
-    protected GitRepo forward(GhsGitRepo ghsGitRepo) {
+    protected GitRepo doForward(GhsGitRepo ghsGitRepo) {
         GitRepo.GitRepoBuilder builder = GitRepo.builder();
 
         builder.name(ghsGitRepo.getName());
@@ -39,7 +40,7 @@ public class GhsToGitRepoConverter extends Converter<GhsGitRepo, GitRepo> {
     }
 
     @Override
-    protected GhsGitRepo backward(GitRepo repo) {
+    protected GhsGitRepo doBackward(GitRepo repo) {
         throw new UnsupportedOperationException("Backwards conversion is not supported!");
     }
 }
