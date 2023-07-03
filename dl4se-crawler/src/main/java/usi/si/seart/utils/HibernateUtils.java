@@ -97,6 +97,15 @@ public class HibernateUtils {
         }
     }
 
+    public Set<File> getFilesByRepo(Long id) {
+        try (Session session = factory.openSession()) {
+            return session.createQuery("SELECT f FROM File f WHERE repo.id = :id", File.class)
+                    .setParameter("id", id)
+                    .stream()
+                    .collect(Collectors.toSet());
+        }
+    }
+
     public void deleteFileByRepoIdAndPath(Long id, Path path) {
         Session session = factory.openSession();
         Transaction transaction = null;
