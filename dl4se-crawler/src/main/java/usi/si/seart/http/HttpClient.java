@@ -67,13 +67,13 @@ public class HttpClient {
     private static final HttpRequestFactory requestFactory = transport.createRequestFactory(requestInitializer);
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public HttpResponse getRequest(GenericUrl url) {
         HttpRequest request = requestFactory.buildGetRequest(url);
         return request.execute();
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public List<GhsGitRepo> getSearchResults(HttpResponse response) {
         String responseString = response.parseAsString();
         JsonObject searchResult = gson.fromJson(responseString, JsonObject.class);
