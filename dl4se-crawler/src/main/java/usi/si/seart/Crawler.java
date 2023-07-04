@@ -3,6 +3,7 @@ package usi.si.seart;
 import ch.usi.si.seart.treesitter.LibraryLoader;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
+import com.google.common.base.Strings;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -161,6 +162,8 @@ public class Crawler {
             repo.setLastCommitSHA(latest.getSha());
 
             Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
+            if (!Strings.isNullOrEmpty(diff.toString()))
+                log.debug("Diff since last update:\n{}", diff);
             diff.getAdded().forEach(path -> addFile(repo, path, localDirectory));
             diff.getDeleted().forEach(path -> deleteFile(repo, path));
             diff.getModified().forEach(path -> {
@@ -243,6 +246,7 @@ public class Crawler {
     }
 
     private static Optional<Analyzer.Result> tryAnalyze(LocalClone localClone, Path filePath) {
+        log.trace("Analyzing file: {}", localClone.relativePathOf(filePath));
         String extension = com.google.common.io.Files.getFileExtension(filePath.toString());
         Language language = extensionToLanguage.get(extension);
         try (Analyzer analyzer = AnalyzerFactory.getAnalyzer(language).apply(localClone, filePath)) {
