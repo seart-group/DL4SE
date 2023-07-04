@@ -13,7 +13,7 @@ public class CrawlerProperties {
     public static final String ghsSearchUrl;
 
     static {
-        PropertiesReader propertiesReader = new PropertiesReader("application.properties");
+        PropertiesReader propertiesReader = new PropertiesReader("properties.txt");
         tmpDirPrefix = propertiesReader.getProperty("app.general.tmpDirPrefix");
         String dateString = propertiesReader.getProperty("app.crawl.startDate");
         startDate = LocalDate.parse(dateString);
