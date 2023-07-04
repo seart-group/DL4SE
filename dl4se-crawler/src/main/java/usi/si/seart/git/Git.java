@@ -272,7 +272,6 @@ public class Git implements AutoCloseable {
             processOutput(process);
         }
 
-        @SuppressWarnings("DataFlowIssue")
         private void processOutput(Process process) throws GitException {
             checkFailure(process);
 
