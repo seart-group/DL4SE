@@ -4,6 +4,7 @@ import ch.usi.si.seart.treesitter.LibraryLoader;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +13,6 @@ import usi.si.seart.analyzer.Analyzer;
 import usi.si.seart.analyzer.AnalyzerFactory;
 import usi.si.seart.analyzer.LocalClone;
 import usi.si.seart.collection.Tuple;
-import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.DateToLocalDateTime;
 import usi.si.seart.converter.GhsGitRepoToGitRepo;
 import usi.si.seart.git.Git;
@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -115,8 +116,11 @@ public class Crawler {
         LocalDateTime lastUpdateGhs = DateToLocalDateTime.getConverter().convert(item.getLastCommit());
         lastJob.setCheckpoint(lastUpdateGhs);
 
-        Set<String> repoLanguageNames = CollectionUtils.intersection(names, item.getRepoLanguages());
-        Set<Language> repoLanguages = CollectionUtils.getAllValuesFrom(nameToLanguage, repoLanguageNames);
+        Set<String> repoLanguageNames = Sets.intersection(names, item.getRepoLanguages());
+        Set<Language> repoLanguages = repoLanguageNames.stream()
+                .map(nameToLanguage::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
         if (repoLanguages.isEmpty()) {
             log.debug("Skipping: {}. No files of interest found!", name);
@@ -150,7 +154,7 @@ public class Crawler {
         LocalClone localClone = new LocalClone(repo, localDirectory);
         try (Git git = new Git(name, localDirectory, lastCommit)) {
 
-            Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
+            Set<Language> notMined = Sets.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
                 mineRepoDataForLanguages(localClone, notMined);
                 repo.setLanguages(repoLanguages);
@@ -237,7 +241,7 @@ public class Crawler {
                 .map(Path::of)
                 .map(localDirectory::resolve)
                 .collect(Collectors.toSet());
-        Set<Path> targets = CollectionUtils.difference(candidates, analyzed);
+        Set<Path> targets = Sets.difference(candidates, analyzed);
         for (Path path: targets) {
             tryAnalyze(localClone, path)
                     .map(Analyzer.Result::getFile)

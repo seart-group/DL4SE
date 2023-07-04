@@ -1,10 +1,10 @@
 package usi.si.seart.git;
 
+import com.google.common.collect.ObjectArrays;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.InputStreamToString;
 import usi.si.seart.model.Language;
 
@@ -268,7 +268,8 @@ public class Git implements AutoCloseable {
 
         private Diff(String startSHA, String endSHA, String... extensions) throws GitException {
             String[] base = new String[] { "diff", "--name-status", "--diff-filter=ADMRC", startSHA, endSHA, "--" };
-            Process process = executeGitCommand(CollectionUtils.merge(base, extensions));
+            String[] command = ObjectArrays.concat(base, extensions, String.class);
+            Process process = executeGitCommand(command);
             processOutput(process);
         }
 
