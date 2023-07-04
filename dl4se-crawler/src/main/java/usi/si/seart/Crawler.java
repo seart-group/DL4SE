@@ -1,11 +1,15 @@
 package usi.si.seart;
 
+import ch.usi.si.seart.treesitter.LibraryLoader;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import usi.si.seart.analyzer.Analyzer;
+import usi.si.seart.analyzer.AnalyzerFactory;
+import usi.si.seart.analyzer.LocalClone;
 import usi.si.seart.collection.Tuple;
 import usi.si.seart.collection.utils.CollectionUtils;
 import usi.si.seart.converter.DateToLocalDateTime;
@@ -19,11 +23,7 @@ import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.job.CrawlJob;
-import usi.si.seart.parser.FallbackParser;
-import usi.si.seart.parser.Parser;
-import usi.si.seart.parser.ParsingException;
 import usi.si.seart.utils.HibernateUtils;
-import usi.si.seart.utils.PathUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,6 +55,8 @@ public class Crawler {
     static Map<String, Language> extensionToLanguage;
 
     static {
+        LibraryLoader.load();
+
         lastJob = HibernateUtils.getLastJob();
 
         languages = HibernateUtils.getLanguages();
@@ -142,12 +145,13 @@ public class Crawler {
         LocalDateTime lastCommit = repo.getLastCommit();
 
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
-        Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
-        try (Git git = new Git(name, cloneDir, lastCommit)) {
+        Path localDirectory = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
+        LocalClone localClone = new LocalClone(repo, localDirectory);
+        try (Git git = new Git(name, localDirectory, lastCommit)) {
 
             Set<Language> notMined = CollectionUtils.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
-                mineRepoDataForLanguages(repo, cloneDir, notMined);
+                mineRepoDataForLanguages(localClone, notMined);
                 repo.setLanguages(repoLanguages);
                 HibernateUtils.save(repo);
             }
@@ -157,18 +161,18 @@ public class Crawler {
             repo.setLastCommitSHA(latest.getSha());
 
             Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
-            diff.getAdded().forEach(path -> addFile(repo, path, cloneDir));
+            diff.getAdded().forEach(path -> addFile(repo, path, localDirectory));
             diff.getDeleted().forEach(path -> deleteFile(repo, path));
             diff.getModified().forEach(path -> {
                 deleteFile(repo, path);
-                addFile(repo, path, cloneDir);
+                addFile(repo, path, localDirectory);
             });
             diff.getRenamed().forEach((key, value) -> renameFile(repo, key, value));
             diff.getEdited().forEach((key, value) -> {
                 deleteFile(repo, key);
-                addFile(repo, value, cloneDir);
+                addFile(repo, value, localDirectory);
             });
-            diff.getCopied().forEach((key, value) -> addFile(repo, value, cloneDir));
+            diff.getCopied().forEach((key, value) -> addFile(repo, value, localDirectory));
 
             HibernateUtils.save(repo);
         } catch (GitException ex) {
@@ -177,14 +181,10 @@ public class Crawler {
     }
 
     private static void addFile(GitRepo repo, Path filePath, Path dirPath) {
-        Path absolute = dirPath.resolve(filePath);
-        File file = parseFile(absolute);
-        if (file != null) {
-            file.setPath(filePath.toString());
-            file.setRepo(repo);
-            file.getFunctions().forEach(function -> function.setRepo(repo));
-            HibernateUtils.save(file);
-        }
+        LocalClone localClone = new LocalClone(repo, dirPath);
+        tryAnalyze(localClone, filePath)
+                .map(Analyzer.Result::getFile)
+                .ifPresent(HibernateUtils::save);
     }
 
     private static void deleteFile(GitRepo repo, Path filePath) {
@@ -200,12 +200,13 @@ public class Crawler {
         String name = repo.getName();
         LocalDateTime lastUpdateGhs = repo.getLastCommit();
 
-        Path cloneDir = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
+        Path localDirectory = Files.createTempDirectory(CrawlerProperties.tmpDirPrefix);
+        LocalClone localClone = new LocalClone(repo, localDirectory);
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
-        try (Git git = new Git(name, cloneDir, true)) {
+        try (Git git = new Git(name, localDirectory, true)) {
             Git.Commit latest = git.getLastCommitInfo();
 
-            mineRepoDataForLanguages(repo, cloneDir, repoLanguages);
+            mineRepoDataForLanguages(localClone, repoLanguages);
 
             repo.setLanguages(repoLanguages);
             repo.setLastCommit(latest.getTimestamp());
@@ -217,39 +218,41 @@ public class Crawler {
         }
     }
 
-    @SneakyThrows
-    private static void mineRepoDataForLanguages(GitRepo repo, Path dirPath, Set<Language> languages) {
+    @SneakyThrows(IOException.class)
+    private static void mineRepoDataForLanguages(LocalClone localClone, Set<Language> languages) {
+        GitRepo repo = localClone.getGitRepo();
+        Path localDirectory = localClone.getDiskPath();
         String[] extensions = languages.stream()
                 .map(Language::getExtensions)
                 .flatMap(Collection::stream)
                 .toArray(String[]::new);
         ExtensionBasedFileVisitor visitor = ExtensionBasedFileVisitor.forExtensions(extensions);
-        Files.walkFileTree(dirPath, visitor);
-        List<Path> paths = visitor.getVisited();
-        for (Path path: paths) {
-            File file = parseFile(path);
-            if (file != null) {
-                file.setPath(dirPath.relativize(path).toString());
-                file.setRepo(repo);
-                file.getFunctions().forEach(function -> function.setRepo(repo));
-                HibernateUtils.save(file);
-            }
+        Files.walkFileTree(localDirectory, visitor);
+        Set<Path> candidates = new HashSet<>(visitor.getVisited());
+        Set<Path> analyzed = HibernateUtils.getFilesByRepo(repo.getId()).stream()
+                .map(File::getPath)
+                .map(Path::of)
+                .map(localDirectory::resolve)
+                .collect(Collectors.toSet());
+        Set<Path> targets = CollectionUtils.difference(candidates, analyzed);
+        for (Path path: targets) {
+            tryAnalyze(localClone, path)
+                    .map(Analyzer.Result::getFile)
+                    .ifPresent(HibernateUtils::save);
         }
     }
 
-    private static File parseFile(Path filePath) {
+    private static Optional<Analyzer.Result> tryAnalyze(LocalClone localClone, Path filePath) {
         String extension = com.google.common.io.Files.getFileExtension(filePath.toString());
         Language language = extensionToLanguage.get(extension);
-
-        Parser parser = Parser.getParser(language);
-        File file;
-        try {
-            file = parser.parse(filePath);
-        } catch (ParsingException ignored) {
-            parser = new FallbackParser(language);
-            file = parser.parse(filePath);
+        try (Analyzer analyzer = AnalyzerFactory.getAnalyzer(language).apply(localClone, filePath)) {
+            Analyzer.Result result = analyzer.analyze();
+            result.getFile().setLanguage(language);
+            result.getFunctions().forEach(function -> function.setLanguage(language));
+            return Optional.of(result);
+        } catch (Exception ex) {
+            log.error("", ex);
+            return Optional.empty();
         }
-
-        return file;
     }
 }
