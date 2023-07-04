@@ -50,9 +50,9 @@
       <artifactId>hibernate-jpamodelgen</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.vladmihalcea</groupId>
-      <artifactId>hibernate-types-55</artifactId>
-      <version>2.19.2</version>
+      <groupId>io.hypersistence</groupId>
+      <artifactId>hypersistence-utils-hibernate-55</artifactId>
+      <version>3.5.0</version>
     </dependency>
   </dependencies>
 
