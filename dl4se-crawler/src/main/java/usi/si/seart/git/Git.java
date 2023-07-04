@@ -295,6 +295,22 @@ public class Git implements AutoCloseable {
                 consumer.accept(line);
             });
         }
+
+        /**
+         * @return A simplified output of the calculated diff.
+         * The percentages for copied and edited files are not preserved.
+         */
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            added.forEach(path -> builder.append("A\t").append(path).append('\n'));
+            deleted.forEach(path -> builder.append("D\t").append(path).append('\n'));
+            modified.forEach(path -> builder.append("M\t").append(path).append('\n'));
+            renamed.forEach((p1, p2) -> builder.append("R\t").append(p1).append('\t').append(p2).append('\n'));
+            copied.forEach((p1, p2) -> builder.append("C\t").append(p1).append('\t').append(p2).append('\n'));
+            edited.forEach((p1, p2) -> builder.append("E\t").append(p1).append('\t').append(p2).append('\n'));
+            return builder.toString();
+        }
     }
 
     private void checkFailure(Process process) throws GitException {
