@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -62,21 +63,13 @@ public class File extends Code {
         return Objects.hash(repo.getName(), path, contentHash, getClass().hashCode());
     }
 
+    @Override
     public String toString() {
-        return "File(id=" + this.id +
-                ", repo=" + this.repo +
-                ", language=" + this.language +
-                ", path=" + this.path +
-                ", content=" + this.content +
-                ", contentHash=" + this.contentHash +
-                ", ast=" + this.ast +
-                ", astHash=" + this.astHash +
-                ", isParsed=" + this.isParsed +
-                ", totalTokens=" + this.totalTokens +
-                ", codeTokens=" + this.codeTokens +
-                ", lines=" + this.lines +
-                ", characters=" + this.characters +
-                ", isTest=" + this.isTest +
-                ", containsNonAscii=" + this.containsNonAscii + ")";
+        return new StringJoiner(", ", File.class.getSimpleName() + "(", ")")
+                .add("id=" + id)
+                .add("repo=" + repo)
+                .add("path='" + path + "'")
+                .add("language=" + language)
+                .toString();
     }
 }

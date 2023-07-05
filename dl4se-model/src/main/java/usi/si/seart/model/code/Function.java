@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "function")
@@ -60,20 +61,13 @@ public class Function extends Code {
         return Objects.hash(repo.getName(), file.getPath(), contentHash, getClass().hashCode());
     }
 
+    @Override
     public String toString() {
-        return "Function(id=" + this.id +
-                ", repo=" + this.repo +
-                ", language=" + this.language +
-                ", content=" + this.content +
-                ", contentHash=" + this.contentHash +
-                ", ast=" + this.ast +
-                ", astHash=" + this.astHash +
-                ", totalTokens=" + this.totalTokens +
-                ", codeTokens=" + this.codeTokens +
-                ", lines=" + this.lines +
-                ", characters=" + this.characters +
-                ", isTest=" + this.isTest +
-                ", boilerplateType=" + this.boilerplateType +
-                ", containsNonAscii=" + this.containsNonAscii + ")";
+        return new StringJoiner(", ", Function.class.getSimpleName() + "(", ")")
+                .add("id=" + id)
+                .add("repo=" + repo)
+                .add("file=" + file)
+                .add("language=" + language)
+                .toString();
     }
 }
