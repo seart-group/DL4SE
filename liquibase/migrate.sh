@@ -5,5 +5,4 @@ liquibase \
   --password="$DATABASE_PASS" \
   --url="jdbc:postgresql://$DATABASE_HOST:$DATABASE_PORT/$DATABASE_NAME" \
   --changeLogFile="liquibase/changelog.xml" \
-  --hub-mode=off \
   update
