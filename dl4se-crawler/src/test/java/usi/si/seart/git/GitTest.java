@@ -9,6 +9,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import usi.si.seart.crawler.git.Git;
+import usi.si.seart.crawler.git.GitException;
 import usi.si.seart.model.Language;
 
 import java.io.File;

@@ -1,3 +1,0 @@
-app.general.tmpDirPrefix=dl4se
-app.crawl.startDate=2008-01-01
-app.crawl.ghs.searchUrl=${CODE_SEARCH_URL}
