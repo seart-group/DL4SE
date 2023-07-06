@@ -4,7 +4,6 @@ import com.google.api.client.http.GenericUrl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import usi.si.seart.model.job.Job;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,11 +19,6 @@ public class CrawlerConfig {
     @Bean
     public GenericUrl baseUrl(@Value("${app.crawl-job.url}") String url) {
         return new GenericUrl(url);
-    }
-
-    @Bean
-    public Job jobType(@Value("${app.crawl-job.type}") String name) {
-        return Job.valueOf(name);
     }
 
     @Bean
