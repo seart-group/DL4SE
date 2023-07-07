@@ -2,6 +2,7 @@ package usi.si.seart.validation.constraints;
 
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
+import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,10 @@ class OWASPEmailTest {
 
     @BeforeAll
     static void setUp() {
-        @Cleanup ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        @Cleanup ValidatorFactory factory = Validation.byDefaultProvider()
+                .configure()
+                .messageInterpolator(new ParameterMessageInterpolator())
+                .buildValidatorFactory();
         validator = factory.getValidator();
     }
 
