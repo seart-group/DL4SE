@@ -1,20 +1,23 @@
-FROM maven:3.8.4-jdk-11-slim AS build
+FROM maven:3.9.3-eclipse-temurin-11-alpine AS build
 
 COPY ./pom.xml /pom.xml
+COPY ./dl4se-analyzer /dl4se-analyzer
 COPY ./dl4se-crawler /dl4se-crawler
 COPY ./dl4se-model /dl4se-model
 COPY ./dl4se-server /dl4se-server
 COPY ./dl4se-src2abs /dl4se-src2abs
 
-RUN mvn -e --no-transfer-progress clean package -pl dl4se-crawler -am -DskipTests
+RUN mvn -e \
+        --no-transfer-progress \
+        clean \
+        package \
+        -pl dl4se-crawler \
+        -am -DskipTests
 
-FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+FROM eclipse-temurin:11.0.19_7-jre-alpine
 
 COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
-COPY ./deployment/crawler/entrypoint.sh ./
-RUN chmod 777 ./entrypoint.sh
+RUN apk update --quiet && apk add --no-cache git libstdc++
 
-RUN apk update && apk add git
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT java -jar crawler.jar
