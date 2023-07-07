@@ -14,7 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <app.mainClass>usi.si.seart.Crawler</app.mainClass>
+    <project.module.mainClass>usi.si.seart.crawler.Application</project.module.mainClass>
   </properties>
 
   <dependencies>
@@ -98,7 +98,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>${app.mainClass}</mainClass>
+              <mainClass>${project.module.mainClass}</mainClass>
             </manifest>
           </archive>
         </configuration>
