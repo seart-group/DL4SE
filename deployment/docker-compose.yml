@@ -52,7 +52,6 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      CODE_SEARCH_URL: http://gym.si.usi.ch:48001/api/r/search
     volumes:
       - ./logs:/logs
     depends_on:
