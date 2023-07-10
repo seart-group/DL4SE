@@ -54,7 +54,7 @@ services:
       DATABASE_PASS: ${DATABASE_PASS}
       CODE_SEARCH_URL: http://gym.si.usi.ch:48001/api/r/search
     volumes:
-      - logs-crawler:/logs
+      - ./logs:/logs
     depends_on:
       dl4se-liquibase:
         condition: service_completed_successfully
@@ -86,7 +86,7 @@ services:
       KEYSTORE_PASS: ${KEYSTORE_PASS}
       WEBSITE_URL: http://localhost:${WEBSITE_PORT}
     volumes:
-      - logs-server:/logs
+      - ./logs:/logs
       - tmp-server:/tmp
     depends_on:
       dl4se-liquibase:
@@ -125,10 +125,6 @@ services:
 volumes:
   data:
     name: dl4se-data
-  logs-crawler:
-    name: dl4se-logs-crawler
-  logs-server:
-    name: dl4se-logs-server
   tmp-server:
     name: dl4se-tmp-server
 
