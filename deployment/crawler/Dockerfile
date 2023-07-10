@@ -18,6 +18,22 @@ FROM eclipse-temurin:11.0.19_7-jre-alpine
 
 COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
-RUN apk update --quiet && apk add --no-cache git libstdc++
+RUN apk update --quiet && \
+    apk add --no-cache \
+            --quiet \
+            git \
+            libstdc++ \
+            openssl
+
+RUN openssl s_client -showcerts -connect seart-ghs.si.usi.ch:443 </dev/null 2>/dev/null | \
+    openssl x509 -outform PEM > /tmp/seart-ghs.si.usi.ch.pem
+
+RUN keytool \
+    -import \
+    -alias seart-ghs.si.usi.ch \
+    -file /tmp/seart-ghs.si.usi.ch.pem \
+    -keystore $JAVA_HOME/lib/security/cacerts \
+    -storepass changeit \
+    -noprompt
 
 ENTRYPOINT java -jar crawler.jar
