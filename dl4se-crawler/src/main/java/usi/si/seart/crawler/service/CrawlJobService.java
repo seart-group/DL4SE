@@ -1,11 +1,9 @@
 package usi.si.seart.crawler.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.crawler.repository.CrawlJobRepository;
@@ -22,11 +20,9 @@ public interface CrawlJobService {
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
+    @AllArgsConstructor(onConstructor_ = @Autowired)
     class CrawlJobServiceImpl implements CrawlJobService {
 
-        @NonFinal
-        @Value("${app.crawl-job.type}")
         Job jobType;
 
         CrawlJobRepository crawlJobRepository;
