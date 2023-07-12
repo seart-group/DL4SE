@@ -3,13 +3,11 @@ package usi.si.seart.crawler.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.task.TaskSchedulerCustomizer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ErrorHandler;
 
 @Configuration
-@EnableAsync
 @EnableScheduling
 public class SchedulerConfig implements TaskSchedulerCustomizer {
 
