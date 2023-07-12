@@ -19,7 +19,9 @@ public class NodePrinter extends ContentPrinter {
         Range range = node.getRange();
         String content = mapper.getContentForRange(range);
         int offset = node.getStartPoint().getColumn();
-        List<String> lines = content.lines().collect(Collectors.toList());
+        List<String> lines = content.lines()
+                .map(line -> line.replace("\t", "    "))
+                .collect(Collectors.toList());
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line.length() > offset)
