@@ -91,7 +91,7 @@ public class CodeCrawler implements Runnable {
 
     @Scheduled(fixedDelayString = "${app.crawl-job.next-run-delay}")
     public void run() {
-        GenericUrl url = baseUrl;
+        GenericUrl url = baseUrl.clone();
         LocalDate checkpoint = crawlJobService.getProgress()
                 .getCheckpoint()
                 .toLocalDate();
