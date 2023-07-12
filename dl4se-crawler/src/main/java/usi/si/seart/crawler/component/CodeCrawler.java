@@ -12,7 +12,7 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -54,8 +54,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(value = "app.crawl-job.type", havingValue = "CODE")
-//@ConditionalOnExpression("#{jobType == T(usi.si.seart.model.job.Job).CODE}")
+@ConditionalOnExpression(
+        "#{T(usi.si.seart.model.job.Job).valueOf('${app.crawl-job.type}') == T(usi.si.seart.model.job.Job).CODE}"
+)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CodeCrawler implements Runnable {
