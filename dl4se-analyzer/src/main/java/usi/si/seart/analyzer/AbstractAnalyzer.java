@@ -6,6 +6,7 @@ import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Query;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.AccessLevel;
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.analyzer.count.CharacterCounter;
@@ -33,6 +34,7 @@ import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -169,12 +171,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return functions;
     }
 
-    // TODO: 25.01.23 Parse content again for the AST
-    // - use the same parser instance to construct a new tree from the content
-    // - in case we are dealing with Java, wrap the content with `class _ {\n...}` (define protected `wrap`)
-    // - define extraction of the targets from the wrapper
-    //   (just getChildren or more specific getChild(0).getChildByFieldName("body"))
-    // - stream over them and do the same as before
+    @SneakyThrows(UnsupportedEncodingException.class)
     protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
         List<Node> nodes = match.stream()
                 .map(Tuple::getValue)
@@ -184,10 +181,18 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .map(Tuple::getValue)
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
+
+        String content = nodePrinter.print(nodes);
+        String wrapped = wrapContent(content);
+        @Cleanup Tree intermediate = parser.parseString(wrapped);
+        List<Node> unwrapped = unwrapNodes(intermediate);
+        Printer astPrinter = getAstPrinter();
+        String ast = astPrinter.print(unwrapped);
+
         return Function.builder()
                 .repo(localClone.getGitRepo())
-                .ast(syntaxTreePrinter.print(nodes))
-                .content(nodePrinter.print(nodes))
+                .ast(ast)
+                .content(content)
                 .astHash(syntaxTreeHasher.hash(nodes))
                 .contentHash(contentHasher.hash(nodes))
                 .symbolicExpression(expressionPrinter.print(nodes))
@@ -199,5 +204,17 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .containsError(containsError.test(nodes))
                 .boilerplateType(boilerplateEnumerator.asEnum(function))
                 .build();
+    }
+
+    protected String wrapContent(String content) {
+        return content;
+    }
+
+    protected List<Node> unwrapNodes(Tree tree) {
+        return tree.getRootNode().getChildren();
+    }
+
+    protected Printer getAstPrinter() {
+        return syntaxTreePrinter;
     }
 }
