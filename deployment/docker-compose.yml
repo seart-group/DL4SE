@@ -86,7 +86,7 @@ services:
       WEBSITE_URL: http://localhost:${WEBSITE_PORT}
     volumes:
       - ./logs:/logs
-      - tmp-server:/tmp
+      - server-tmp:/tmp
     depends_on:
       dl4se-liquibase:
         condition: service_completed_successfully
@@ -124,8 +124,8 @@ services:
 volumes:
   data:
     name: dl4se-data
-  tmp-server:
-    name: dl4se-tmp-server
+  server-tmp:
+    name: dl4se-server-tmp
 
 networks:
   default:
