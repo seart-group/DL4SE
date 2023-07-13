@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface FileService {
 
     List<File> getAllByRepo(GitRepo gitRepo);
-    File create(File file);
+    void create(File file);
     void delete(GitRepo gitRepo, Path path);
     void rename(GitRepo gitRepo, Path oldPath, Path newPath);
 
@@ -36,8 +36,8 @@ public interface FileService {
 
         @Override
         @Transactional
-        public File create(File file) {
-            return fileRepository.save(file);
+        public void create(File file) {
+            fileRepository.save(file);
         }
 
         @Override
