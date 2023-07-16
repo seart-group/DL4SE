@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.crawler.repository.GitRepoRepository;
 import usi.si.seart.model.GitRepo;
 
@@ -29,7 +28,6 @@ public interface GitRepoService {
         }
 
         @Override
-        @Transactional
         public GitRepo createOrUpdate(GitRepo gitRepo) {
             return gitRepoRepository.save(gitRepo);
         }

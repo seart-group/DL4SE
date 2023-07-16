@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import usi.si.seart.crawler.repository.FileRepository;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.code.File;
@@ -35,13 +34,11 @@ public interface FileService {
         }
 
         @Override
-        @Transactional
         public void create(File file) {
             fileRepository.save(file);
         }
 
         @Override
-        @Transactional
         public void delete(GitRepo gitRepo, Path path) {
             Optional<File> optional = fileRepository.findByRepoAndPath(gitRepo, path.toString());
             File file = optional.orElseThrow(EntityNotFoundException::new);
@@ -49,7 +46,6 @@ public interface FileService {
         }
 
         @Override
-        @Transactional
         public void rename(GitRepo gitRepo, Path oldPath, Path newPath) {
             Optional<File> optional = fileRepository.findByRepoAndPath(gitRepo, oldPath.toString());
             File file = optional.orElseThrow(EntityNotFoundException::new);
