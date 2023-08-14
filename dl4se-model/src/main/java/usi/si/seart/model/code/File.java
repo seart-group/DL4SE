@@ -45,7 +45,7 @@ public class File extends Code {
     @JsonProperty(value = "is_parsed")
     Boolean isParsed = false;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Singular
     @JsonIgnore
     List<Function> functions = new ArrayList<>();
