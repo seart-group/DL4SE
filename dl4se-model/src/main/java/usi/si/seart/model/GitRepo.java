@@ -14,7 +14,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -101,13 +100,13 @@ public class GitRepo {
     @Builder.Default
     Boolean isUnavailable = false;
 
-    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "repo")
     @ToString.Exclude
     @JsonIgnore
     @Builder.Default
     List<File> files = new ArrayList<>();
 
-    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "repo")
     @ToString.Exclude
     @JsonIgnore
     @Builder.Default
