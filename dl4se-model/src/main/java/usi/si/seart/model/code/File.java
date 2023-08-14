@@ -27,7 +27,7 @@ import java.util.StringJoiner;
 @Entity
 @Table(
         name = "file",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"repo_id", "path"})}
+        uniqueConstraints = @UniqueConstraint(columnNames = {"repo_id", "path"})
 )
 @Getter
 @Setter
