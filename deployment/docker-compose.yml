@@ -4,7 +4,7 @@ services:
 
   dl4se-db:
     container_name: dl4se-db
-    image: postgres:15.3-alpine
+    image: postgres:15.4-alpine
     volumes:
       - data:/var/lib/postgresql/data
     networks: [ default ]
