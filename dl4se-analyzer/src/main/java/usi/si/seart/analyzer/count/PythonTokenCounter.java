@@ -2,6 +2,7 @@ package usi.si.seart.analyzer.count;
 
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Range;
+import org.apache.commons.lang3.StringUtils;
 import usi.si.seart.analyzer.NodeMapper;
 
 public class PythonTokenCounter extends TokenCounter {
@@ -18,8 +19,9 @@ public class PythonTokenCounter extends TokenCounter {
             count.addAndGet(1L);
         } else if (leafNode && type.equals("comment")) {
             Range range = node.getRange();
-            String content = mapper.getContentForRange(range).substring(1);
-            String[] tokens = content.split("\\s+");
+            String content = mapper.getContentForRange(range);
+            content = StringUtils.substringAfter(content, "#");
+            String[] tokens = StringUtils.split(content);
             count.addAndGet(tokens.length + 1L);
         } else if (leafNode) {
             count.addAndGet(1L);
