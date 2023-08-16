@@ -2,6 +2,7 @@ package usi.si.seart.analyzer.count;
 
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Range;
+import org.apache.commons.lang3.StringUtils;
 import usi.si.seart.analyzer.NodeMapper;
 
 public class JavaTokenCounter extends TokenCounter {
@@ -17,17 +18,16 @@ public class JavaTokenCounter extends TokenCounter {
             String[] tokens;
             Range range = node.getRange();
             String content = mapper.getContentForRange(range);
-            String type = node.getType();
-            switch (type) {
+            switch (node.getType()) {
                 case "block_comment":
-                    int idxLo = (content.startsWith("/**")) ? 3 : 2;
-                    int idxHi = content.length() - 2;
-                    content = content.substring(idxLo, idxHi);
+                    content = StringUtils.substringBetween(content, "/*", "*/").trim();
+                    if (content.startsWith("*"))
+                        content = content.substring(1).trim();
                     tokens = content.split("\\s+");
                     count.addAndGet(tokens.length + 2L);
                     break;
                 case "line_comment":
-                    content = content.substring(2);
+                    content = StringUtils.substringAfter(content, "//").trim();
                     tokens = content.split("\\s+");
                     count.addAndGet(tokens.length + 1L);
                     break;
