@@ -20,15 +20,15 @@ public class JavaTokenCounter extends TokenCounter {
             String content = mapper.getContentForRange(range);
             switch (node.getType()) {
                 case "block_comment":
-                    content = StringUtils.substringBetween(content, "/*", "*/").trim();
+                    content = StringUtils.substringBetween(content, "/*", "*/");
                     if (content.startsWith("*"))
-                        content = content.substring(1).trim();
-                    tokens = content.split("\\s+");
+                        content = content.substring(1);
+                    tokens = StringUtils.split(content);
                     count.addAndGet(tokens.length + 2L);
                     break;
                 case "line_comment":
-                    content = StringUtils.substringAfter(content, "//").trim();
-                    tokens = content.split("\\s+");
+                    content = StringUtils.substringAfter(content, "//");
+                    tokens = StringUtils.split(content);
                     count.addAndGet(tokens.length + 1L);
                     break;
                 default:
