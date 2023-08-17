@@ -290,6 +290,8 @@ dist
 
 ### Docker Compose
 *.prod.yml
+*.temp.yml
+*.override.yml
 
 ### C template
 # Object files
