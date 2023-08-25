@@ -18,14 +18,15 @@ public class NodePrinter extends ContentPrinter {
     public String print(Node node) {
         Range range = node.getRange();
         String content = mapper.getContentForRange(range);
-        int offset = node.getStartPoint().getColumn();
         List<String> lines = content.lines()
                 .map(line -> line.replace("\t", "    "))
                 .collect(Collectors.toList());
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
-            if (line.length() > offset)
-                lines.set(i, line.substring(offset));
+            int spaces = countStartSpaces(line);
+            int column = node.getStartPoint().getColumn();
+            int offset = Math.min(spaces, column);
+            lines.set(i, line.substring(offset));
         }
         return String.join("\n", lines);
     }
@@ -33,5 +34,14 @@ public class NodePrinter extends ContentPrinter {
     @Override
     protected Collector<CharSequence, ?, String> resultCollector() {
         return Collectors.joining("\n");
+    }
+
+    private int countStartSpaces(String line) {
+        int count = 0;
+        for (char c : line.toCharArray()) {
+            if (c == ' ') count++;
+            else break;
+        }
+        return count;
     }
 }
