@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class used to traverse a directory structure, and save references to all files whose extension matches at least one
+ * Class used to traverse a directory structure,
+ * and save references to all files whose extension matches at least one
  * of the extensions specified in the constructor.
  * Creating with no extensions specified will match all files.
  * Use as follows:
@@ -28,7 +29,7 @@ import java.util.Objects;
  *     List<Path> javaFiles = visitor.getVisited();
  * }</pre>
  *
- * @see java.nio.file.SimpleFileVisitor SimpleFileVisitor
+ * @see SimpleFileVisitor SimpleFileVisitor
  * @see java.nio.file.Files#walkFileTree(Path, java.nio.file.FileVisitor) Files.walkFileTree
  * @author dabico
  */
@@ -41,11 +42,13 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     List<Path> visited;
 
     /**
-     * Static factory used for creating instances of the class. We use it in order to enforce pre-conditions before any
+     * Static factory used for creating instances of the class.
+     * We use it in order to enforce pre-conditions before any
      * actual class instances are created.
      *
-     * @param extensions File extension names. Must not be {@code null} or contain any {@code null} values, empty or
-     *                   blank strings.
+     * @param extensions File extension names.
+     * Must not be {@code null} or contain any
+     * {@code null} values, empty or blank strings.
      * @return A new instance of the class.
      */
     public static ExtensionBasedFileVisitor forExtensions(String... extensions) {
@@ -78,11 +81,12 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     /**
      * {@inheritDoc}
      *
-     * If the file extension matches the visitor pattern, then it is recorded in the list of visited files.
+     * If the file extension matches the visitor pattern,
+     * then it is recorded in the list of visited files.
      *
-     * @param path  a reference to the file
-     * @param attrs the file's basic attributes
-     * @return the visit result
+     * @param path  a reference to the file.
+     * @param attrs the file's basic attributes.
+     * @return the visit result.
      */
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
@@ -97,8 +101,8 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
      *
      * Unlike its superclass, this variant just silently ignores the exception.
      *
-     * @param path a reference to the file
-     * @param ex   the I/O exception that prevented the file from being visited
+     * @param path a reference to the file.
+     * @param ex the I/O exception that prevented the file from being visited.
      */
     @Override
     public FileVisitResult visitFileFailed(Path path, IOException ex) {
@@ -107,10 +111,11 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
 
     /**
      * Invoked for a directory before entries in the directory are visited.
-     * Always returns {@link FileVisitResult#CONTINUE CONTINUE} to ensure that directory contents are visited.
+     * Always returns {@link FileVisitResult#CONTINUE CONTINUE}
+     * to ensure that directory contents are visited.
      *
-     * @param path  a reference to the directory
-     * @param attrs the directory's basic attributes
+     * @param path a reference to the directory.
+     * @param attrs the directory's basic attributes.
      */
     @Override
     public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) {
@@ -118,13 +123,14 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     /**
-     * Invoked for a directory after entries in the directory, and all of their descendants, have been visited.
-     * Always returns {@link FileVisitResult#CONTINUE CONTINUE}, signifying that all contents have been visited.
+     * Invoked for a directory after entries in the directory,
+     * and all of their descendants, have been visited.
+     * Always returns {@link FileVisitResult#CONTINUE CONTINUE},
+     * signifying that all contents have been visited.
      *
-     * @param dir a reference to the directory
-     * @param ex  {@code null} if the iteration of the directory completes without
-     *            an error; otherwise the I/O exception that caused the iteration
-     *            of the directory to complete prematurely
+     * @param dir a reference to the directory.
+     * @param ex {@code null} if the iteration of the directory completes without an error;
+     * otherwise the I/O exception that caused the iteration of the directory to complete prematurely.
      */
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException ex) {
