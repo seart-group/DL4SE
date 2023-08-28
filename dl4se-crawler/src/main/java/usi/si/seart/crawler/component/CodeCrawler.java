@@ -35,8 +35,10 @@ import usi.si.seart.model.code.Function;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,6 +78,13 @@ public class CodeCrawler implements Runnable {
     @Value("${app.general.tmp-dir-prefix}")
     String prefix;
 
+    @NonFinal
+    @Value("${app.crawl-job.ignore-pattern}")
+    String ignorePattern;
+
+    @NonFinal
+    PathMatcher ignoreMatcher = FileSystems.getDefault().getPathMatcher("glob:");
+
     Set<String> languageNames = new HashSet<>();
     Map<String, Language> nameToLanguage = new HashMap<>();
     Map<String, Language> extensionToLanguage = new HashMap<>();
@@ -88,6 +98,8 @@ public class CodeCrawler implements Runnable {
             nameToLanguage.put(name, language);
             extensions.forEach(extension -> extensionToLanguage.put(extension, language));
         });
+        if (!ignorePattern.isBlank())
+            ignoreMatcher = FileSystems.getDefault().getPathMatcher("glob:" + ignorePattern);
     }
 
     @Scheduled(fixedDelayString = "${app.crawl-job.next-run-delay}")
@@ -251,8 +263,10 @@ public class CodeCrawler implements Runnable {
                 .map(Path::of)
                 .map(localDirectory::resolve)
                 .collect(Collectors.toSet());
-        Set<Path> targets = Sets.difference(candidates, analyzed);
-        targets.forEach(target -> analyzeAndStore(localClone, target));
+        Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
+                .filter(Predicate.not(ignoreMatcher::matches))
+                .collect(Collectors.toSet());
+        filtered.forEach(target -> analyzeAndStore(localClone, target));
     }
 
     private void analyzeAndStore(LocalClone localClone, Path path) {
