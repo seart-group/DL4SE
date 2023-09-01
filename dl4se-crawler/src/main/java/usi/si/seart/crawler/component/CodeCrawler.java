@@ -83,6 +83,10 @@ public class CodeCrawler implements Runnable {
     String ignorePattern;
 
     @NonFinal
+    @Value("${app.crawl-job.ignore-projects}")
+    List<String> ignoreProjects;
+
+    @NonFinal
     PathMatcher ignoreMatcher = FileSystems.getDefault().getPathMatcher("glob:");
 
     Set<String> languageNames = new HashSet<>();
@@ -140,6 +144,12 @@ public class CodeCrawler implements Runnable {
 
     private void inspectSearchResult(SearchResultDto item) {
         String name = item.getName();
+
+        if (ignoreProjects.contains(name)) {
+            log.debug("Skipping: {}. Repository is set to be ignored by crawler!", name);
+            return;
+        }
+
         LocalDateTime lastUpdateGhs = conversionService.convert(item.getLastCommit(), LocalDateTime.class);
 
         Set<String> repoLanguageNames = Sets.intersection(languageNames, item.getRepoLanguages());
