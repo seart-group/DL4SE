@@ -11,16 +11,16 @@ public abstract class AbstractPrinter implements Printer {
 
     @Override
     public String print(Node... nodes) {
-        return Stream.of(nodes)
-                .map(this::print)
-                .collect(resultCollector());
+        return print(Stream.of(nodes));
     }
 
     @Override
     public String print(Collection<Node> nodes) {
-        return nodes.stream()
-                .map(this::print)
-                .collect(resultCollector());
+        return print(nodes.stream());
+    }
+
+    protected String print(Stream<Node> nodes) {
+        return nodes.map(this::print).collect(resultCollector());
     }
 
     protected Collector<CharSequence, ?, String> resultCollector() {
