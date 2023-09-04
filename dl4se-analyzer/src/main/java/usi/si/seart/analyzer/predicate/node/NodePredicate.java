@@ -7,13 +7,18 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public abstract class NodePredicate implements Predicate<Node> {
+
     public abstract boolean test(Node node);
 
     public boolean test(Node... nodes) {
-        return Stream.of(nodes).anyMatch(this);
+        return test(Stream.of(nodes));
     }
 
     public boolean test(Collection<Node> nodes) {
-        return nodes.stream().anyMatch(this);
+        return test(nodes.stream());
+    }
+
+    protected boolean test(Stream<Node> nodes) {
+        return nodes.anyMatch(this);
     }
 }
