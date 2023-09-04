@@ -1,14 +1,8 @@
 package usi.si.seart.analyzer.printer;
 
 import ch.usi.si.seart.treesitter.Node;
+import usi.si.seart.analyzer.util.stream.MinimumSizeLimitCollector;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 public class SymbolicExpressionPrinter extends AbstractPrinter {
@@ -20,39 +14,21 @@ public class SymbolicExpressionPrinter extends AbstractPrinter {
 
     @Override
     protected Collector<CharSequence, ?, String> resultCollector() {
-        return new Collector<CharSequence, StringJoiner, String>() {
-
-            int count = 0;
+        return new MinimumSizeLimitCollector(2) {
 
             @Override
-            public Supplier<StringJoiner> supplier() {
-                return () -> new StringJoiner(" ");
+            protected String getDelimiter() {
+                return " ";
             }
 
             @Override
-            public BiConsumer<StringJoiner, CharSequence> accumulator() {
-                return (joiner, sequence) -> {
-                    count++;
-                    joiner.add(sequence);
-                };
+            protected String getPrefix() {
+                return "(";
             }
 
             @Override
-            public BinaryOperator<StringJoiner> combiner() {
-                return StringJoiner::merge;
-            }
-
-            @Override
-            public Function<StringJoiner, String> finisher() {
-                return (joiner) -> {
-                    String joined = joiner.toString();
-                    return  (count > 1) ? "(" + joined + ")" : joined;
-                };
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return Collections.emptySet();
+            protected String getSuffix() {
+                return ")";
             }
         };
     }
