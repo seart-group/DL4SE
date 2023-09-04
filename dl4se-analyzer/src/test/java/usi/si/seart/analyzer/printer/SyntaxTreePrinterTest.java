@@ -22,37 +22,71 @@ class SyntaxTreePrinterTest extends JavaBaseTest {
         Node root = tree.getRootNode();
         String actual = printer.print(root);
         String expected =
-                "program [0:0] - [7:1]\n" +
-                "  package_declaration [0:0] - [0:18]\n" +
-                "    scoped_identifier [0:8] - [0:17]\n" +
-                "      scope: scoped_identifier [0:8] - [0:14]\n" +
-                "        scope: identifier [0:8] - [0:10]\n" +
-                "        name: identifier [0:11] - [0:14]\n" +
-                "      name: identifier [0:15] - [0:17]\n" +
-                "  class_declaration [2:0] - [7:1]\n" +
-                "    modifiers [2:0] - [2:6]\n" +
-                "    name: identifier [2:13] - [2:17]\n" +
-                "    body: class_body [2:18] - [7:1]\n" +
-                "      method_declaration [3:4] - [6:5]\n" +
-                "        modifiers [3:4] - [3:17]\n" +
-                "        type: void_type [3:18] - [3:22]\n" +
-                "        name: identifier [3:23] - [3:27]\n" +
-                "        parameters: formal_parameters [3:27] - [3:42]\n" +
-                "          formal_parameter [3:28] - [3:41]\n" +
-                "            type: array_type [3:28] - [3:36]\n" +
-                "              element: type_identifier [3:28] - [3:34]\n" +
-                "              dimensions: dimensions [3:34] - [3:36]\n" +
-                "            name: identifier [3:37] - [3:41]\n" +
-                "        body: block [3:43] - [6:5]\n" +
-                "          line_comment [4:8] - [4:22]\n" +
-                "          expression_statement [5:8] - [5:44]\n" +
-                "            method_invocation [5:8] - [5:43]\n" +
-                "              object: field_access [5:8] - [5:18]\n" +
-                "                object: identifier [5:8] - [5:14]\n" +
-                "                field: identifier [5:15] - [5:18]\n" +
-                "              name: identifier [5:19] - [5:26]\n" +
-                "              arguments: argument_list [5:26] - [5:43]\n" +
-                "                string_literal [5:27] - [5:42]\n";
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                SyntaxTreePrinter.TAG_OPEN +
+                    "<program start=\"0:0\" end=\"7:1\">" +
+                        "<package_declaration start=\"0:0\" end=\"0:18\">" +
+                            "<scoped_identifier start=\"0:8\" end=\"0:17\">" +
+                                "<scoped_identifier name=\"scope\" start=\"0:8\" end=\"0:14\">" +
+                                    "<identifier name=\"scope\" start=\"0:8\" end=\"0:10\">" +
+                                    "</identifier>" +
+                                    "<identifier name=\"name\" start=\"0:11\" end=\"0:14\">" +
+                                    "</identifier>" +
+                                "</scoped_identifier>" +
+                                "<identifier name=\"name\" start=\"0:15\" end=\"0:17\">" +
+                                "</identifier>" +
+                            "</scoped_identifier>" +
+                        "</package_declaration>" +
+                        "<class_declaration start=\"2:0\" end=\"7:1\">" +
+                            "<modifiers start=\"2:0\" end=\"2:6\">" +
+                            "</modifiers>" +
+                            "<identifier name=\"name\" start=\"2:13\" end=\"2:17\">" +
+                            "</identifier>" +
+                            "<class_body name=\"body\" start=\"2:18\" end=\"7:1\">" +
+                                "<method_declaration start=\"3:4\" end=\"6:5\">" +
+                                    "<modifiers start=\"3:4\" end=\"3:17\">" +
+                                    "</modifiers>" +
+                                    "<void_type name=\"type\" start=\"3:18\" end=\"3:22\">" +
+                                    "</void_type>" +
+                                    "<identifier name=\"name\" start=\"3:23\" end=\"3:27\">" +
+                                    "</identifier>" +
+                                    "<formal_parameters name=\"parameters\" start=\"3:27\" end=\"3:42\">" +
+                                        "<formal_parameter start=\"3:28\" end=\"3:41\">" +
+                                            "<array_type name=\"type\" start=\"3:28\" end=\"3:36\">" +
+                                                "<type_identifier name=\"element\" start=\"3:28\" end=\"3:34\">" +
+                                                "</type_identifier>" +
+                                                "<dimensions name=\"dimensions\" start=\"3:34\" end=\"3:36\">" +
+                                                "</dimensions>" +
+                                            "</array_type>" +
+                                            "<identifier name=\"name\" start=\"3:37\" end=\"3:41\">" +
+                                            "</identifier>" +
+                                        "</formal_parameter>" +
+                                    "</formal_parameters>" +
+                                    "<block name=\"body\" start=\"3:43\" end=\"6:5\">" +
+                                        "<line_comment start=\"4:8\" end=\"4:22\">" +
+                                        "</line_comment>" +
+                                        "<expression_statement start=\"5:8\" end=\"5:44\">" +
+                                            "<method_invocation start=\"5:8\" end=\"5:43\">" +
+                                                "<field_access name=\"object\" start=\"5:8\" end=\"5:18\">" +
+                                                    "<identifier name=\"object\" start=\"5:8\" end=\"5:14\">" +
+                                                    "</identifier>" +
+                                                    "<identifier name=\"field\" start=\"5:15\" end=\"5:18\">" +
+                                                    "</identifier>" +
+                                                "</field_access>" +
+                                                "<identifier name=\"name\" start=\"5:19\" end=\"5:26\">" +
+                                                "</identifier>" +
+                                                "<argument_list name=\"arguments\" start=\"5:26\" end=\"5:43\">" +
+                                                    "<string_literal start=\"5:27\" end=\"5:42\">" +
+                                                    "</string_literal>" +
+                                                "</argument_list>" +
+                                            "</method_invocation>" +
+                                        "</expression_statement>" +
+                                    "</block>" +
+                                "</method_declaration>" +
+                            "</class_body>" +
+                        "</class_declaration>" +
+                    "</program>" +
+                SyntaxTreePrinter.TAG_CLOSE ;
         Assertions.assertEquals(expected, actual);
     }
 
@@ -63,26 +97,49 @@ class SyntaxTreePrinterTest extends JavaBaseTest {
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
         String actual = printer.print(method);
         String expected =
-                "method_declaration [3:4] - [6:5]\n" +
-                "  modifiers [3:4] - [3:17]\n" +
-                "  type: void_type [3:18] - [3:22]\n" +
-                "  name: identifier [3:23] - [3:27]\n" +
-                "  parameters: formal_parameters [3:27] - [3:42]\n" +
-                "    formal_parameter [3:28] - [3:41]\n" +
-                "      type: array_type [3:28] - [3:36]\n" +
-                "        element: type_identifier [3:28] - [3:34]\n" +
-                "        dimensions: dimensions [3:34] - [3:36]\n" +
-                "      name: identifier [3:37] - [3:41]\n" +
-                "  body: block [3:43] - [6:5]\n" +
-                "    line_comment [4:8] - [4:22]\n" +
-                "    expression_statement [5:8] - [5:44]\n" +
-                "      method_invocation [5:8] - [5:43]\n" +
-                "        object: field_access [5:8] - [5:18]\n" +
-                "          object: identifier [5:8] - [5:14]\n" +
-                "          field: identifier [5:15] - [5:18]\n" +
-                "        name: identifier [5:19] - [5:26]\n" +
-                "        arguments: argument_list [5:26] - [5:43]\n" +
-                "          string_literal [5:27] - [5:42]\n";
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                SyntaxTreePrinter.TAG_OPEN +
+                    "<method_declaration start=\"3:4\" end=\"6:5\">" +
+                        "<modifiers start=\"3:4\" end=\"3:17\">" +
+                        "</modifiers>" +
+                        "<void_type name=\"type\" start=\"3:18\" end=\"3:22\">" +
+                        "</void_type>" +
+                        "<identifier name=\"name\" start=\"3:23\" end=\"3:27\">" +
+                        "</identifier>" +
+                        "<formal_parameters name=\"parameters\" start=\"3:27\" end=\"3:42\">" +
+                            "<formal_parameter start=\"3:28\" end=\"3:41\">" +
+                                "<array_type name=\"type\" start=\"3:28\" end=\"3:36\">" +
+                                    "<type_identifier name=\"element\" start=\"3:28\" end=\"3:34\">" +
+                                    "</type_identifier>" +
+                                    "<dimensions name=\"dimensions\" start=\"3:34\" end=\"3:36\">" +
+                                    "</dimensions>" +
+                                "</array_type>" +
+                                "<identifier name=\"name\" start=\"3:37\" end=\"3:41\">" +
+                                "</identifier>" +
+                            "</formal_parameter>" +
+                        "</formal_parameters>" +
+                        "<block name=\"body\" start=\"3:43\" end=\"6:5\">" +
+                            "<line_comment start=\"4:8\" end=\"4:22\">" +
+                            "</line_comment>" +
+                            "<expression_statement start=\"5:8\" end=\"5:44\">" +
+                                "<method_invocation start=\"5:8\" end=\"5:43\">" +
+                                    "<field_access name=\"object\" start=\"5:8\" end=\"5:18\">" +
+                                        "<identifier name=\"object\" start=\"5:8\" end=\"5:14\">" +
+                                        "</identifier>" +
+                                        "<identifier name=\"field\" start=\"5:15\" end=\"5:18\">" +
+                                        "</identifier>" +
+                                    "</field_access>" +
+                                    "<identifier name=\"name\" start=\"5:19\" end=\"5:26\">" +
+                                    "</identifier>" +
+                                    "<argument_list name=\"arguments\" start=\"5:26\" end=\"5:43\">" +
+                                        "<string_literal start=\"5:27\" end=\"5:42\">" +
+                                        "</string_literal>" +
+                                    "</argument_list>" +
+                                "</method_invocation>" +
+                            "</expression_statement>" +
+                        "</block>" +
+                    "</method_declaration>" +
+                SyntaxTreePrinter.TAG_CLOSE;
         Assertions.assertEquals(expected, actual);
     }
 
@@ -94,36 +151,69 @@ class SyntaxTreePrinterTest extends JavaBaseTest {
         Node class_declaration = root.getChild(1);
         String actual = printer.print(package_declaration, class_declaration);
         String expected =
-                "package_declaration [0:0] - [0:18]\n" +
-                "  scoped_identifier [0:8] - [0:17]\n" +
-                "    scope: scoped_identifier [0:8] - [0:14]\n" +
-                "      scope: identifier [0:8] - [0:10]\n" +
-                "      name: identifier [0:11] - [0:14]\n" +
-                "    name: identifier [0:15] - [0:17]\n" +
-                "class_declaration [2:0] - [7:1]\n" +
-                "  modifiers [2:0] - [2:6]\n" +
-                "  name: identifier [2:13] - [2:17]\n" +
-                "  body: class_body [2:18] - [7:1]\n" +
-                "    method_declaration [3:4] - [6:5]\n" +
-                "      modifiers [3:4] - [3:17]\n" +
-                "      type: void_type [3:18] - [3:22]\n" +
-                "      name: identifier [3:23] - [3:27]\n" +
-                "      parameters: formal_parameters [3:27] - [3:42]\n" +
-                "        formal_parameter [3:28] - [3:41]\n" +
-                "          type: array_type [3:28] - [3:36]\n" +
-                "            element: type_identifier [3:28] - [3:34]\n" +
-                "            dimensions: dimensions [3:34] - [3:36]\n" +
-                "          name: identifier [3:37] - [3:41]\n" +
-                "      body: block [3:43] - [6:5]\n" +
-                "        line_comment [4:8] - [4:22]\n" +
-                "        expression_statement [5:8] - [5:44]\n" +
-                "          method_invocation [5:8] - [5:43]\n" +
-                "            object: field_access [5:8] - [5:18]\n" +
-                "              object: identifier [5:8] - [5:14]\n" +
-                "              field: identifier [5:15] - [5:18]\n" +
-                "            name: identifier [5:19] - [5:26]\n" +
-                "            arguments: argument_list [5:26] - [5:43]\n" +
-                "              string_literal [5:27] - [5:42]\n";
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                SyntaxTreePrinter.TAG_OPEN +
+                    "<package_declaration start=\"0:0\" end=\"0:18\">" +
+                        "<scoped_identifier start=\"0:8\" end=\"0:17\">" +
+                            "<scoped_identifier name=\"scope\" start=\"0:8\" end=\"0:14\">" +
+                                "<identifier name=\"scope\" start=\"0:8\" end=\"0:10\">" +
+                                "</identifier>" +
+                                "<identifier name=\"name\" start=\"0:11\" end=\"0:14\">" +
+                                "</identifier>" +
+                            "</scoped_identifier>" +
+                            "<identifier name=\"name\" start=\"0:15\" end=\"0:17\">" +
+                            "</identifier>" +
+                        "</scoped_identifier>" +
+                    "</package_declaration>" +
+                    "<class_declaration start=\"2:0\" end=\"7:1\">" +
+                        "<modifiers start=\"2:0\" end=\"2:6\">" +
+                        "</modifiers>" +
+                        "<identifier name=\"name\" start=\"2:13\" end=\"2:17\">" +
+                        "</identifier>" +
+                        "<class_body name=\"body\" start=\"2:18\" end=\"7:1\">" +
+                            "<method_declaration start=\"3:4\" end=\"6:5\">" +
+                                "<modifiers start=\"3:4\" end=\"3:17\">" +
+                                "</modifiers>" +
+                                "<void_type name=\"type\" start=\"3:18\" end=\"3:22\">" +
+                                "</void_type>" +
+                                "<identifier name=\"name\" start=\"3:23\" end=\"3:27\">" +
+                                "</identifier>" +
+                                "<formal_parameters name=\"parameters\" start=\"3:27\" end=\"3:42\">" +
+                                    "<formal_parameter start=\"3:28\" end=\"3:41\">" +
+                                        "<array_type name=\"type\" start=\"3:28\" end=\"3:36\">" +
+                                            "<type_identifier name=\"element\" start=\"3:28\" end=\"3:34\">" +
+                                            "</type_identifier>" +
+                                            "<dimensions name=\"dimensions\" start=\"3:34\" end=\"3:36\">" +
+                                            "</dimensions>" +
+                                        "</array_type>" +
+                                        "<identifier name=\"name\" start=\"3:37\" end=\"3:41\">" +
+                                        "</identifier>" +
+                                    "</formal_parameter>" +
+                                "</formal_parameters>" +
+                                "<block name=\"body\" start=\"3:43\" end=\"6:5\">" +
+                                    "<line_comment start=\"4:8\" end=\"4:22\">" +
+                                    "</line_comment>" +
+                                    "<expression_statement start=\"5:8\" end=\"5:44\">" +
+                                        "<method_invocation start=\"5:8\" end=\"5:43\">" +
+                                            "<field_access name=\"object\" start=\"5:8\" end=\"5:18\">" +
+                                                "<identifier name=\"object\" start=\"5:8\" end=\"5:14\">" +
+                                                "</identifier>" +
+                                                "<identifier name=\"field\" start=\"5:15\" end=\"5:18\">" +
+                                                "</identifier>" +
+                                            "</field_access>" +
+                                            "<identifier name=\"name\" start=\"5:19\" end=\"5:26\">" +
+                                            "</identifier>" +
+                                            "<argument_list name=\"arguments\" start=\"5:26\" end=\"5:43\">" +
+                                                "<string_literal start=\"5:27\" end=\"5:42\">" +
+                                                "</string_literal>" +
+                                            "</argument_list>" +
+                                        "</method_invocation>" +
+                                    "</expression_statement>" +
+                                "</block>" +
+                            "</method_declaration>" +
+                        "</class_body>" +
+                    "</class_declaration>" +
+                SyntaxTreePrinter.TAG_CLOSE;
         Assertions.assertEquals(expected, actual);
     }
 }

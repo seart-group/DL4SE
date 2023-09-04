@@ -15,26 +15,49 @@ class OffsetSyntaxTreePrinterTest extends JavaBaseTest {
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
         String actual = printer.print(method);
         String expected =
-                "method_declaration [3:4] - [6:5]\n" +
-                "  modifiers [3:4] - [3:17]\n" +
-                "  type: void_type [3:18] - [3:22]\n" +
-                "  name: identifier [3:23] - [3:27]\n" +
-                "  parameters: formal_parameters [3:27] - [3:42]\n" +
-                "    formal_parameter [3:28] - [3:41]\n" +
-                "      type: array_type [3:28] - [3:36]\n" +
-                "        element: type_identifier [3:28] - [3:34]\n" +
-                "        dimensions: dimensions [3:34] - [3:36]\n" +
-                "      name: identifier [3:37] - [3:41]\n" +
-                "  body: block [3:43] - [6:5]\n" +
-                "    line_comment [4:8] - [4:22]\n" +
-                "    expression_statement [5:8] - [5:44]\n" +
-                "      method_invocation [5:8] - [5:43]\n" +
-                "        object: field_access [5:8] - [5:18]\n" +
-                "          object: identifier [5:8] - [5:14]\n" +
-                "          field: identifier [5:15] - [5:18]\n" +
-                "        name: identifier [5:19] - [5:26]\n" +
-                "        arguments: argument_list [5:26] - [5:43]\n" +
-                "          string_literal [5:27] - [5:42]\n";
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                OffsetSyntaxTreePrinter.TAG_OPEN +
+                    "<method_declaration start=\"3:4\" end=\"6:5\">" +
+                        "<modifiers start=\"3:4\" end=\"3:17\">" +
+                        "</modifiers>" +
+                        "<void_type name=\"type\" start=\"3:18\" end=\"3:22\">" +
+                        "</void_type>" +
+                        "<identifier name=\"name\" start=\"3:23\" end=\"3:27\">" +
+                        "</identifier>" +
+                        "<formal_parameters name=\"parameters\" start=\"3:27\" end=\"3:42\">" +
+                            "<formal_parameter start=\"3:28\" end=\"3:41\">" +
+                                "<array_type name=\"type\" start=\"3:28\" end=\"3:36\">" +
+                                    "<type_identifier name=\"element\" start=\"3:28\" end=\"3:34\">" +
+                                    "</type_identifier>" +
+                                    "<dimensions name=\"dimensions\" start=\"3:34\" end=\"3:36\">" +
+                                    "</dimensions>" +
+                                "</array_type>" +
+                                "<identifier name=\"name\" start=\"3:37\" end=\"3:41\">" +
+                                "</identifier>" +
+                            "</formal_parameter>" +
+                        "</formal_parameters>" +
+                        "<block name=\"body\" start=\"3:43\" end=\"6:5\">" +
+                            "<line_comment start=\"4:8\" end=\"4:22\">" +
+                            "</line_comment>" +
+                            "<expression_statement start=\"5:8\" end=\"5:44\">" +
+                                "<method_invocation start=\"5:8\" end=\"5:43\">" +
+                                    "<field_access name=\"object\" start=\"5:8\" end=\"5:18\">" +
+                                        "<identifier name=\"object\" start=\"5:8\" end=\"5:14\">" +
+                                        "</identifier>" +
+                                        "<identifier name=\"field\" start=\"5:15\" end=\"5:18\">" +
+                                        "</identifier>" +
+                                    "</field_access>" +
+                                    "<identifier name=\"name\" start=\"5:19\" end=\"5:26\">" +
+                                    "</identifier>" +
+                                    "<argument_list name=\"arguments\" start=\"5:26\" end=\"5:43\">" +
+                                        "<string_literal start=\"5:27\" end=\"5:42\">" +
+                                        "</string_literal>" +
+                                    "</argument_list>" +
+                                "</method_invocation>" +
+                            "</expression_statement>" +
+                        "</block>" +
+                    "</method_declaration>" +
+                OffsetSyntaxTreePrinter.TAG_CLOSE;
         Assertions.assertEquals(expected, actual);
     }
 
@@ -45,26 +68,49 @@ class OffsetSyntaxTreePrinterTest extends JavaBaseTest {
         Node method = root.getChild(1).getChildByFieldName("body").getChild(1);
         String actual = printer.print(method);
         String expected =
-                "method_declaration [2:2] - [5:3]\n" +
-                "  modifiers [2:2] - [2:15]\n" +
-                "  type: void_type [2:16] - [2:20]\n" +
-                "  name: identifier [2:21] - [2:25]\n" +
-                "  parameters: formal_parameters [2:25] - [2:40]\n" +
-                "    formal_parameter [2:26] - [2:39]\n" +
-                "      type: array_type [2:26] - [2:34]\n" +
-                "        element: type_identifier [2:26] - [2:32]\n" +
-                "        dimensions: dimensions [2:32] - [2:34]\n" +
-                "      name: identifier [2:35] - [2:39]\n" +
-                "  body: block [2:41] - [5:3]\n" +
-                "    line_comment [3:6] - [3:20]\n" +
-                "    expression_statement [4:6] - [4:42]\n" +
-                "      method_invocation [4:6] - [4:41]\n" +
-                "        object: field_access [4:6] - [4:16]\n" +
-                "          object: identifier [4:6] - [4:12]\n" +
-                "          field: identifier [4:13] - [4:16]\n" +
-                "        name: identifier [4:17] - [4:24]\n" +
-                "        arguments: argument_list [4:24] - [4:41]\n" +
-                "          string_literal [4:25] - [4:40]\n";
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                OffsetSyntaxTreePrinter.TAG_OPEN +
+                    "<method_declaration start=\"2:2\" end=\"5:3\">" +
+                        "<modifiers start=\"2:2\" end=\"2:15\">" +
+                        "</modifiers>" +
+                        "<void_type name=\"type\" start=\"2:16\" end=\"2:20\">" +
+                        "</void_type>" +
+                        "<identifier name=\"name\" start=\"2:21\" end=\"2:25\">" +
+                        "</identifier>" +
+                        "<formal_parameters name=\"parameters\" start=\"2:25\" end=\"2:40\">" +
+                            "<formal_parameter start=\"2:26\" end=\"2:39\">" +
+                                "<array_type name=\"type\" start=\"2:26\" end=\"2:34\">" +
+                                    "<type_identifier name=\"element\" start=\"2:26\" end=\"2:32\">" +
+                                    "</type_identifier>" +
+                                    "<dimensions name=\"dimensions\" start=\"2:32\" end=\"2:34\">" +
+                                    "</dimensions>" +
+                                "</array_type>" +
+                                "<identifier name=\"name\" start=\"2:35\" end=\"2:39\">" +
+                                "</identifier>" +
+                            "</formal_parameter>" +
+                        "</formal_parameters>" +
+                        "<block name=\"body\" start=\"2:41\" end=\"5:3\">" +
+                            "<line_comment start=\"3:6\" end=\"3:20\">" +
+                            "</line_comment>" +
+                            "<expression_statement start=\"4:6\" end=\"4:42\">" +
+                                "<method_invocation start=\"4:6\" end=\"4:41\">" +
+                                    "<field_access name=\"object\" start=\"4:6\" end=\"4:16\">" +
+                                        "<identifier name=\"object\" start=\"4:6\" end=\"4:12\">" +
+                                        "</identifier>" +
+                                        "<identifier name=\"field\" start=\"4:13\" end=\"4:16\">" +
+                                        "</identifier>" +
+                                    "</field_access>" +
+                                    "<identifier name=\"name\" start=\"4:17\" end=\"4:24\">" +
+                                    "</identifier>" +
+                                    "<argument_list name=\"arguments\" start=\"4:24\" end=\"4:41\">" +
+                                        "<string_literal start=\"4:25\" end=\"4:40\">" +
+                                        "</string_literal>" +
+                                    "</argument_list>" +
+                                "</method_invocation>" +
+                            "</expression_statement>" +
+                        "</block>" +
+                    "</method_declaration>" +
+                OffsetSyntaxTreePrinter.TAG_CLOSE;
         Assertions.assertEquals(expected, actual);
     }
 }
