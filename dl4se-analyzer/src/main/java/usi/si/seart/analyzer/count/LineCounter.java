@@ -4,7 +4,7 @@ import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Point;
 import ch.usi.si.seart.treesitter.Range;
 
-public class LineCounter implements Counter {
+public class LineCounter extends AbstractCounter {
 
     @Override
     public Long count(Node node) {

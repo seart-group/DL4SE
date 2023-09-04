@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class TraverseCounter implements Counter {
+public abstract class TraverseCounter extends AbstractCounter {
 
     AtomicLong count = new AtomicLong();
 
