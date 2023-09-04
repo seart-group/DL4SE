@@ -9,8 +9,12 @@ public class SyntaxTreePrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {
-        @Cleanup TreeCursor cursor = node.walk();
+        @Cleanup TreeCursor cursor = getCursor(node);
         TreePrinter printer = new ch.usi.si.seart.treesitter.printer.SyntaxTreePrinter(cursor);
         return printer.print();
+    }
+
+    protected TreeCursor getCursor(Node node) {
+        return node.walk();
     }
 }
