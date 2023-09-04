@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 
 @AllArgsConstructor
-public class OffsetSyntaxTreePrinter extends AbstractPrinter {
+public class OffsetSyntaxTreePrinter extends SyntaxTreePrinter {
 
     private final Point offset;
 
