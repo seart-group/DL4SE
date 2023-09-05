@@ -13,6 +13,7 @@ import usi.si.seart.analyzer.query.Queries;
 import usi.si.seart.analyzer.util.Tuple;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,5 +42,31 @@ public abstract class MultiCaptureQueries implements Queries<List<List<Tuple<Str
             }
             return tuples;
         }).collect(Collectors.toList());
+    }
+
+    public static MultiCaptureQueries getInstance(Language language) {
+        switch (language) {
+            case JAVA:
+                return new JavaMultiCaptureQueries();
+            case PYTHON:
+                return new PythonMultiCaptureQueries();
+            default:
+                return new MultiCaptureQueries(null) {
+
+                    @Override
+                    public void verify(Query query) {
+                    }
+
+                    @Override
+                    public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
+                        return Collections.emptyList();
+                    }
+
+                    @Override
+                    public List<List<Tuple<String, Node>>> execute(Node node, String pattern) {
+                        return Collections.emptyList();
+                    }
+                };
+        }
     }
 }

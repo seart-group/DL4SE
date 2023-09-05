@@ -12,6 +12,7 @@ import lombok.Cleanup;
 import usi.si.seart.analyzer.query.Queries;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,5 +34,22 @@ public abstract class SingleCaptureQueries implements Queries<List<Node>> {
                 .flatMap(Arrays::stream)
                 .map(QueryCapture::getNode)
                 .collect(Collectors.toList());
+    }
+
+    public static SingleCaptureQueries getInstance(Language language) {
+        switch (language) {
+            case JAVA:
+                return new JavaSingleCaptureQueries();
+            case PYTHON:
+                return new PythonSingleCaptureQueries();
+            default:
+                return new SingleCaptureQueries(null) {
+
+                    @Override
+                    public List<Node> getComments(Node node) {
+                        return Collections.emptyList();
+                    }
+                };
+        }
     }
 }
