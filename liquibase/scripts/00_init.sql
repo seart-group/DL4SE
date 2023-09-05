@@ -86,8 +86,3 @@ CREATE INDEX "file_lang_id_idx" ON "file" (lang_id);
 CREATE INDEX "function_repo_id_idx" ON "function" (repo_id);
 CREATE INDEX "function_lang_id_idx" ON "function" (lang_id);
 CREATE INDEX "function_file_id_idx" ON "function" (file_id);
-
-INSERT INTO language(id, name, extensions)
-VALUES
-    (nextval('hibernate_sequence'), 'Java', '{java}'),
-    (nextval('hibernate_sequence'), 'Python', '{py}');
