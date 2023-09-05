@@ -9,10 +9,8 @@ import usi.si.seart.crawler.repository.FileRepository;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.code.File;
 
-import javax.persistence.EntityNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 public interface FileService {
 
@@ -45,10 +43,7 @@ public interface FileService {
 
         @Override
         public void rename(GitRepo gitRepo, Path oldPath, Path newPath) {
-            Optional<File> optional = fileRepository.findByRepoAndPath(gitRepo, oldPath.toString());
-            File file = optional.orElseThrow(EntityNotFoundException::new);
-            file.setPath(newPath.toString());
-            fileRepository.save(file);
+            fileRepository.updatePathByRepo(gitRepo, oldPath.toString(), newPath.toString());
         }
     }
 }
