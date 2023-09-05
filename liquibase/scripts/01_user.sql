@@ -1,4 +1,3 @@
--- TABLES
 CREATE TABLE "configuration" (
     "key" text PRIMARY KEY NOT NULL,
     "value" text NOT NULL,
@@ -82,14 +81,12 @@ CREATE TABLE "processing" (
     "abstract_idioms" text[] NOT NULL
 );
 
--- FOREIGN KEYS
 ALTER TABLE "token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "query" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 ALTER TABLE "query" ADD FOREIGN KEY ("lang_id") REFERENCES "language" ("id");
 ALTER TABLE "processing" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id") ON DELETE CASCADE;
 
--- INDEXES
 CREATE INDEX "token_user_id_idx" ON "token" (user_id);
 CREATE INDEX "task_user_id_idx" ON "task" (user_id);
 CREATE INDEX "task_expired_idx" ON "task" (finished, expired) WHERE finished IS NOT NULL AND expired = false;
@@ -102,7 +99,6 @@ CREATE INDEX "file_ast_hash_idx" ON "file" (ast_hash);
 CREATE INDEX "function_ast_hash_idx" ON "function" (ast_hash);
 CREATE INDEX "git_repo_stats_idx" ON "git_repo" (commits, contributors, issues, stars) INCLUDE (is_fork, license);
 
--- ADD CONFIGURATION PROPERTIES
 INSERT INTO configuration(key, value, last_update)
 VALUES
     ('request_limit', '3', now()),
