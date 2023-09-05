@@ -3,6 +3,7 @@ package usi.si.seart.analyzer;
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
+import ch.usi.si.seart.treesitter.Point;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.AccessLevel;
 import lombok.Cleanup;
@@ -23,6 +24,7 @@ import usi.si.seart.analyzer.predicate.node.ContainsNonAsciiPredicate;
 import usi.si.seart.analyzer.predicate.node.NodePredicate;
 import usi.si.seart.analyzer.predicate.path.TestFilePredicate;
 import usi.si.seart.analyzer.printer.NodePrinter;
+import usi.si.seart.analyzer.printer.OffsetSyntaxTreePrinter;
 import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
@@ -38,6 +40,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -153,7 +156,6 @@ public abstract class AbstractAnalyzer implements Analyzer {
         return functions;
     }
 
-    @SneakyThrows(UnsupportedEncodingException.class)
     protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
         List<Node> nodes = match.stream()
                 .map(Tuple::getValue)
@@ -164,17 +166,13 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
 
-        String content = nodePrinter.print(nodes);
-        String wrapped = wrapContent(content);
-        @Cleanup Tree intermediate = parser.parseString(wrapped);
-        List<Node> unwrapped = unwrapNodes(intermediate);
-        Printer astPrinter = getAstPrinter();
-        String ast = astPrinter.print(unwrapped);
+        Printer standalone = getStandalonePrinter(language);
+        String ast = standalone.print(nodes);
 
         return Function.builder()
                 .repo(localClone.getGitRepo())
                 .ast(ast)
-                .content(content)
+                .content(nodePrinter.print(nodes))
                 .astHash(syntaxTreeHasher.hash(nodes))
                 .contentHash(contentHasher.hash(nodes))
                 .symbolicExpression(expressionPrinter.print(nodes))
@@ -188,15 +186,66 @@ public abstract class AbstractAnalyzer implements Analyzer {
                 .build();
     }
 
-    protected String wrapContent(String content) {
-        return content;
+    FunctionSyntaxTreePrinter getStandalonePrinter(Language language) {
+        if (Language.JAVA.equals(language)) {
+            return new FunctionSyntaxTreePrinter() {
+
+                @Override
+                protected String wrap(String content) {
+                    return "class _ {\n" + content + "\n}\n";
+                }
+
+                @Override
+                protected List<Node> getTargets(Tree tree) {
+                    Node root = tree.getRootNode();
+                    Node declaration = root.getChild(0);
+                    Node body = declaration.getChildByFieldName("body");
+                    return body.getChildren();
+                }
+
+                @Override
+                protected Printer getAstPrinter() {
+                    return new OffsetSyntaxTreePrinter(new Point(-1, 0));
+                }
+            };
+        } else {
+            return new FunctionSyntaxTreePrinter() {};
+        }
     }
 
-    protected List<Node> unwrapNodes(Tree tree) {
-        return tree.getRootNode().getChildren();
-    }
+    private abstract class FunctionSyntaxTreePrinter implements Printer {
 
-    protected Printer getAstPrinter() {
-        return syntaxTreePrinter;
+        protected String wrap(String content) {
+            return content;
+        }
+
+        protected List<Node> getTargets(Tree tree) {
+            return tree.getRootNode().getChildren();
+        }
+
+        protected Printer getAstPrinter() {
+            return syntaxTreePrinter;
+        }
+
+        @Override
+        public String print(Node node) {
+            return print(List.of(node));
+        }
+
+        @Override
+        public String print(Node... nodes) {
+            return print(List.of(nodes));
+        }
+
+        @Override
+        @SneakyThrows(UnsupportedEncodingException.class)
+        public String print(Collection<Node> nodes) {
+            String content = nodePrinter.print(nodes);
+            String wrapped = wrap(content);
+            @Cleanup Tree tree = parser.parseString(wrapped);
+            List<Node> targets = getTargets(tree);
+            Printer astPrinter = getAstPrinter();
+            return astPrinter.print(targets);
+        }
     }
 }
