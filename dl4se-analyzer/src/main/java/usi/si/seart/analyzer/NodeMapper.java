@@ -2,9 +2,13 @@ package usi.si.seart.analyzer;
 
 import ch.usi.si.seart.treesitter.Range;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public interface NodeMapper {
+
+    Charset DEFAULT_CHARSET = StandardCharsets.UTF_16LE;
 
     byte[] getBytes();
 
@@ -16,6 +20,6 @@ public interface NodeMapper {
 
     default String getContentForRange(Range range) {
         byte[] bytes = getBytesForRange(range);
-        return new String(bytes, Settings.DEFAULT_CHARSET);
+        return new String(bytes, DEFAULT_CHARSET);
     }
 }
