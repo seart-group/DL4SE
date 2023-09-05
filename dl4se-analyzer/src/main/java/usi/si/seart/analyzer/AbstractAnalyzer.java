@@ -102,7 +102,7 @@ public abstract class AbstractAnalyzer implements Analyzer {
     }
 
     protected final byte[] getSourceBytes() {
-        return source.getBytes(Settings.DEFAULT_CHARSET);
+        return source.getBytes(NodeMapper.DEFAULT_CHARSET);
     }
 
     @Override
