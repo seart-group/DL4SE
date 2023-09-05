@@ -3,7 +3,6 @@ package usi.si.seart.analyzer;
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
-import ch.usi.si.seart.treesitter.Query;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.AccessLevel;
 import lombok.Cleanup;
@@ -14,6 +13,7 @@ import usi.si.seart.analyzer.count.CodeTokenCounter;
 import usi.si.seart.analyzer.count.Counter;
 import usi.si.seart.analyzer.count.LineCounter;
 import usi.si.seart.analyzer.count.TokenCounter;
+import usi.si.seart.analyzer.enumerator.BoilerplateEnumerator;
 import usi.si.seart.analyzer.enumerator.Enumerator;
 import usi.si.seart.analyzer.hash.ContentHasher;
 import usi.si.seart.analyzer.hash.Hasher;
@@ -39,9 +39,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 public abstract class AbstractAnalyzer implements Analyzer {
 
     Language language;
@@ -52,56 +53,27 @@ public abstract class AbstractAnalyzer implements Analyzer {
     Path path;
     String source;
 
-    Counter lineCounter = new LineCounter();
-    Counter codeTokenCounter = new CodeTokenCounter();
+    Counter lineCounter;
     Counter totalTokenCounter;
+    Counter codeTokenCounter;
     Counter characterCounter;
 
     Hasher contentHasher;
-    Hasher syntaxTreeHasher = new SyntaxTreeHasher();
+    Hasher syntaxTreeHasher;
 
-    NodePredicate containsError = new ContainsErrorPredicate();
+    NodePredicate containsError;
     NodePredicate containsNonAscii;
 
-    TestFilePredicate testFilePredicate = new TestFilePredicate() {};
+    Predicate<Path> testFilePredicate;
 
     Printer nodePrinter;
-    Printer syntaxTreePrinter = new SyntaxTreePrinter();
-    Printer expressionPrinter = new SymbolicExpressionPrinter();
+    Printer syntaxTreePrinter;
+    Printer expressionPrinter;
 
-    SingleCaptureQueries singleCaptureQueries = new SingleCaptureQueries(null) {
-        @Override
-        public void verify(Query query) {
-        }
+    SingleCaptureQueries singleCaptureQueries;
+    MultiCaptureQueries multiCaptureQueries;
 
-        @Override
-        public List<Node> getComments(Node node) {
-            return List.of();
-        }
-
-        @Override
-        public List<Node> execute(Node node, String pattern) {
-            return List.of();
-        }
-    };
-
-    MultiCaptureQueries multiCaptureQueries = new MultiCaptureQueries(null) {
-        @Override
-        public void verify(Query query) {
-        }
-
-        @Override
-        public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
-            return List.of();
-        }
-
-        @Override
-        public List<List<Tuple<String, Node>>> execute(Node node, String pattern) {
-            return List.of();
-        }
-    };
-
-    Enumerator<Boilerplate> boilerplateEnumerator = node -> null;
+    Enumerator<Boilerplate> boilerplateEnumerator;
 
     @SneakyThrows(IOException.class)
     protected AbstractAnalyzer(LocalClone localClone, Path path, Language language) {
@@ -112,11 +84,21 @@ public abstract class AbstractAnalyzer implements Analyzer {
         this.source = Files.readString(path);
         this.tree = parser.parseString(source);
         NodeMapper mapper = this::getSourceBytes;
-        this.totalTokenCounter = new TokenCounter(mapper){};
+        this.lineCounter = new LineCounter();
+        this.totalTokenCounter = TokenCounter.getInstance(language, mapper);
+        this.codeTokenCounter = CodeTokenCounter.getInstance(language);
         this.characterCounter = new CharacterCounter(mapper);
         this.contentHasher = new ContentHasher(mapper);
+        this.syntaxTreeHasher = new SyntaxTreeHasher();
+        this.containsError = new ContainsErrorPredicate();
         this.containsNonAscii = new ContainsNonAsciiPredicate(mapper);
+        this.testFilePredicate = TestFilePredicate.getInstance(language);
         this.nodePrinter = new NodePrinter(mapper);
+        this.syntaxTreePrinter = new SyntaxTreePrinter();
+        this.expressionPrinter = new SymbolicExpressionPrinter();
+        this.singleCaptureQueries = SingleCaptureQueries.getInstance(language);
+        this.multiCaptureQueries = MultiCaptureQueries.getInstance(language);
+        this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language, mapper);
     }
 
     protected final byte[] getSourceBytes() {
