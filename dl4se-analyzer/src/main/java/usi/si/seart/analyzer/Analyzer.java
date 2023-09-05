@@ -91,7 +91,7 @@ public class Analyzer implements AutoCloseable {
         this.path = path;
         this.source = Files.readString(path);
         this.tree = parser.parseString(source);
-        NodeMapper mapper = this::getSourceBytes;
+        NodeMapper mapper = () -> source.getBytes(NodeMapper.DEFAULT_CHARSET);
         this.lineCounter = new LineCounter();
         this.totalTokenCounter = TokenCounter.getInstance(language, mapper);
         this.codeTokenCounter = CodeTokenCounter.getInstance(language);
@@ -107,10 +107,6 @@ public class Analyzer implements AutoCloseable {
         this.singleCaptureQueries = SingleCaptureQueries.getInstance(language);
         this.multiCaptureQueries = MultiCaptureQueries.getInstance(language);
         this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language, mapper);
-    }
-
-    protected final byte[] getSourceBytes() {
-        return source.getBytes(NodeMapper.DEFAULT_CHARSET);
     }
 
     @Override
