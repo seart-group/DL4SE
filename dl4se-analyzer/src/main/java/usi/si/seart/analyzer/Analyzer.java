@@ -130,7 +130,7 @@ public class Analyzer implements AutoCloseable {
         return new Result(file, functions);
     }
 
-    protected File extractFileEntity() {
+    private File extractFileEntity() {
         Node node = tree.getRootNode();
         return File.builder()
                 .repo(localClone.getGitRepo())
@@ -150,7 +150,7 @@ public class Analyzer implements AutoCloseable {
                 .build();
     }
 
-    protected List<Function> extractFunctionEntities(File file) {
+    private List<Function> extractFunctionEntities(File file) {
         List<List<Tuple<String, Node>>> matches = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
         List<Function> functions = new ArrayList<>(matches.size());
         for (List<Tuple<String, Node>> match: matches) {
@@ -164,7 +164,7 @@ public class Analyzer implements AutoCloseable {
         return functions;
     }
 
-    protected Function extractFunctionEntity(List<Tuple<String, Node>> match) {
+    private Function extractFunctionEntity(List<Tuple<String, Node>> match) {
         List<Node> nodes = match.stream()
                 .map(Tuple::getValue)
                 .collect(Collectors.toList());
@@ -194,7 +194,7 @@ public class Analyzer implements AutoCloseable {
                 .build();
     }
 
-    FunctionSyntaxTreePrinter getStandalonePrinter(Language language) {
+    private FunctionSyntaxTreePrinter getStandalonePrinter(Language language) {
         if (Language.JAVA.equals(language)) {
             return new FunctionSyntaxTreePrinter() {
 
