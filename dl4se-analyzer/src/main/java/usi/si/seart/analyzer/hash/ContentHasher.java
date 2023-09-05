@@ -24,7 +24,8 @@ public class ContentHasher extends SHA256Hasher {
             boolean isComment = current.getType().contains("comment");
             if (leafNode && !isComment) {
                 Range range = current.getRange();
-                md.update(mapper.getBytesForRange(range));
+                byte[] bytes = mapper.getBytesForRange(range);
+                md.update(bytes);
             }
         });
     }
