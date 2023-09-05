@@ -14,4 +14,6 @@ public interface FileRepository extends JpaRepository<File, Long> {
     List<File> findAllByRepo(@NotNull GitRepo repo);
 
     Optional<File> findByRepoAndPath(@NotNull GitRepo repo, @NotBlank String path);
+
+    void deleteByRepoAndPath(@NotNull GitRepo repo, @NotBlank String path);
 }

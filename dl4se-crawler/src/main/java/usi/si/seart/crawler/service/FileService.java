@@ -40,9 +40,7 @@ public interface FileService {
 
         @Override
         public void delete(GitRepo gitRepo, Path path) {
-            Optional<File> optional = fileRepository.findByRepoAndPath(gitRepo, path.toString());
-            File file = optional.orElseThrow(EntityNotFoundException::new);
-            fileRepository.delete(file);
+            fileRepository.deleteByRepoAndPath(gitRepo, path.toString());
         }
 
         @Override
