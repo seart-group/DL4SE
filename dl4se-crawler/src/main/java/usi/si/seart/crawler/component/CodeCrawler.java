@@ -34,10 +34,8 @@ import usi.si.seart.model.code.Function;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,20 +71,15 @@ public class CodeCrawler implements Runnable {
     LanguageService languageService;
     ConversionService conversionService;
 
+    Predicate<Path> analyzeFilePredicate;
+
     @NonFinal
     @Value("${app.general.tmp-dir-prefix}")
     String prefix;
 
     @NonFinal
-    @Value("${app.crawl-job.ignore-pattern}")
-    String ignorePattern;
-
-    @NonFinal
-    @Value("${app.crawl-job.ignore-projects}")
+    @Value("${app.crawl-job.ignore.project-names}")
     List<String> ignoreProjects;
-
-    @NonFinal
-    PathMatcher ignoreMatcher = FileSystems.getDefault().getPathMatcher("glob:");
 
     Set<String> languageNames = new HashSet<>();
     Map<String, Language> nameToLanguage = new HashMap<>();
@@ -101,8 +94,6 @@ public class CodeCrawler implements Runnable {
             nameToLanguage.put(name, language);
             extensions.forEach(extension -> extensionToLanguage.put(extension, language));
         });
-        if (!ignorePattern.isBlank())
-            ignoreMatcher = FileSystems.getDefault().getPathMatcher("glob:" + ignorePattern);
     }
 
     @Scheduled(fixedDelayString = "${app.crawl-job.next-run-delay}")
@@ -273,7 +264,7 @@ public class CodeCrawler implements Runnable {
                 .map(localDirectory::resolve)
                 .collect(Collectors.toSet());
         Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
-                .filter(Predicate.not(ignoreMatcher::matches))
+                .filter(analyzeFilePredicate)
                 .collect(Collectors.toSet());
         filtered.forEach(target -> analyzeAndStore(localClone, target));
     }
