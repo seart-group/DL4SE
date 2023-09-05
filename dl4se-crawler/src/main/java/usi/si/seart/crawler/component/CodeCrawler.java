@@ -17,7 +17,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import usi.si.seart.analyzer.Analyzer;
-import usi.si.seart.analyzer.AnalyzerFactory;
 import usi.si.seart.analyzer.LocalClone;
 import usi.si.seart.crawler.dto.SearchResultDto;
 import usi.si.seart.crawler.git.Git;
@@ -283,7 +282,8 @@ public class CodeCrawler implements Runnable {
         log.trace("Analyzing file: {}", localClone.relativePathOf(path));
         String extension = com.google.common.io.Files.getFileExtension(path.toString());
         Language language = extensionToLanguage.get(extension);
-        try (Analyzer analyzer = AnalyzerFactory.getAnalyzer(language).apply(localClone, path)) {
+        String name = language.getName().toUpperCase();
+        try (Analyzer analyzer = new Analyzer(localClone, path, name)) {
             Analyzer.Result result = analyzer.analyze();
             File file = result.getFile();
             List<Function> functions = result.getFunctions();
