@@ -31,7 +31,6 @@ import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
 import usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
-import usi.si.seart.analyzer.query.single.SingleCaptureQueries;
 import usi.si.seart.analyzer.util.Tuple;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
@@ -75,7 +74,6 @@ public class Analyzer implements AutoCloseable {
     Printer syntaxTreePrinter;
     Printer expressionPrinter;
 
-    SingleCaptureQueries singleCaptureQueries;
     MultiCaptureQueries multiCaptureQueries;
 
     Enumerator<Boilerplate> boilerplateEnumerator;
@@ -104,7 +102,6 @@ public class Analyzer implements AutoCloseable {
         this.nodePrinter = new NodePrinter(mapper);
         this.syntaxTreePrinter = new SyntaxTreePrinter();
         this.expressionPrinter = new SymbolicExpressionPrinter();
-        this.singleCaptureQueries = SingleCaptureQueries.getInstance(language);
         this.multiCaptureQueries = MultiCaptureQueries.getInstance(language);
         this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language, mapper);
     }
