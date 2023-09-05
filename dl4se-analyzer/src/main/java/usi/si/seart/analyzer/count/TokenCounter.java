@@ -1,5 +1,6 @@
 package usi.si.seart.analyzer.count;
 
+import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Range;
 import usi.si.seart.analyzer.NodeMapper;
@@ -23,6 +24,17 @@ public abstract class TokenCounter extends ContentTraverseCounter {
             } else {
                 count.addAndGet(1L);
             }
+        }
+    }
+
+    public static TokenCounter getInstance(Language language, NodeMapper mapper) {
+        switch (language) {
+            case JAVA:
+                return new JavaTokenCounter(mapper);
+            case PYTHON:
+                return new PythonTokenCounter(mapper);
+            default:
+                return new TokenCounter(mapper) {};
         }
     }
 }
