@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import usi.si.seart.analyzer.NodeMapper;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.List;
 
 public abstract class BaseTest {
@@ -48,7 +48,11 @@ public abstract class BaseTest {
     protected abstract String getInput();
 
     protected byte[] getBytes() {
-        return getInput().getBytes(StandardCharsets.UTF_16LE);
+        return getInput().getBytes(getCharset());
+    }
+
+    protected Charset getCharset() {
+        return NodeMapper.DEFAULT_CHARSET;
     }
 
     protected NodeMapper getNodeMapper() {
