@@ -3,15 +3,11 @@ package usi.si.seart.analyzer.hash;
 import ch.usi.si.seart.treesitter.Node;
 import lombok.SneakyThrows;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 public abstract class SHA256Hasher implements Hasher {
-
-    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_16LE;
 
     protected final MessageDigest md;
 

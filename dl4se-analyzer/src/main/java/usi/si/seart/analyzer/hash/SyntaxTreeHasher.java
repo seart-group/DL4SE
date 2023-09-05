@@ -17,7 +17,7 @@ public class SyntaxTreeHasher extends SHA256Hasher {
             boolean isComment = current.getType().contains("comment");
             if (leafNode && !isComment) {
                 String type = current.getType();
-                byte[] bytes = type.getBytes(DEFAULT_CHARSET);
+                byte[] bytes = type.getBytes();
                 md.update(bytes);
             }
         });

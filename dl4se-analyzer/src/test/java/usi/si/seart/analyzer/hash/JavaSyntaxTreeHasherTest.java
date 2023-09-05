@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 
 class JavaSyntaxTreeHasherTest extends JavaHasherTest {
@@ -53,5 +54,10 @@ class JavaSyntaxTreeHasherTest extends JavaHasherTest {
         String first = hasher.hash(tree.getRootNode());
         String second = hasher.hash(other.getRootNode());
         Assertions.assertEquals(first, second, "Comments should not impact the hashing result!");
+    }
+
+    @Override
+    protected Charset getCharset() {
+        return Charset.defaultCharset();
     }
 }
