@@ -193,18 +193,35 @@ public class CodeCrawler implements Runnable {
             Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
             if (!Strings.isNullOrEmpty(diff.toString()))
                 log.debug("Diff since last update:\n{}", diff);
-            diff.getAdded().forEach(path -> addFile(localClone, path));
+            diff.getAdded().stream()
+                    .filter(analyzeFilePredicate)
+                    .forEach(path -> addFile(localClone, path));
             diff.getDeleted().forEach(path -> deleteFile(repo, path));
             diff.getModified().forEach(path -> {
                 deleteFile(repo, path);
-                addFile(localClone, path);
+                if (analyzeFilePredicate.test(path))
+                    addFile(localClone, path);
             });
-            diff.getRenamed().forEach((key, value) -> renameFile(repo, key, value));
+            diff.getRenamed().forEach((key, value) -> {
+                boolean validOld = analyzeFilePredicate.test(key);
+                boolean validNew = analyzeFilePredicate.test(value);
+                if (validOld && validNew)
+                    renameFile(repo, key, value);
+                else if (validOld)
+                    deleteFile(repo, key);
+                else if (validNew)
+                    addFile(localClone, value);
+            });
             diff.getEdited().forEach((key, value) -> {
                 deleteFile(repo, key);
-                addFile(localClone, value);
+                if (analyzeFilePredicate.test(value))
+                    addFile(localClone, value);
             });
-            diff.getCopied().forEach((key, value) -> addFile(localClone, value));
+            diff.getCopied()
+                    .values()
+                    .stream()
+                    .filter(analyzeFilePredicate)
+                    .forEach(value -> addFile(localClone, value));
 
             gitRepoService.createOrUpdate(repo);
         } catch (GitException ex) {
