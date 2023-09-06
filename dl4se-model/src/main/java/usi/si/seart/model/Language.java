@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
@@ -55,12 +54,13 @@ public class Language {
     @NotEmpty
     @Type(type = "list-array")
     @Column(columnDefinition = "text[]")
-    @Singular
+    @Builder.Default
     @ToString.Exclude
     @JsonIgnore
     List<@NotNull String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")
+    @Builder.Default
     @ToString.Exclude
     @JsonIgnore
     Set<GitRepo> repos = new HashSet<>();

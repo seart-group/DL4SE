@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -32,13 +34,15 @@ class GitTest {
     // https://github.com/dabico/dl4se-history
     String historyRepoName = "dabico/dl4se-history";
 
-    Language java = Language.builder().extension("java").build();
-    Language python = Language.builder().extension("py").build();
+    Language java = Language.builder().extensions(Collections.singletonList("java")).build();
+    Language python = Language.builder().extensions(Collections.singletonList("py")).build();
     Language cpp = Language.builder()
-            .extension("c")
-            .extension("cc")
-            .extension("cpp")
-            .extension("cxx")
+            .extensions(List.of(
+                    "c",
+                    "cc",
+                    "cpp",
+                    "cxx"
+            ))
             .build();
 
     @Test
