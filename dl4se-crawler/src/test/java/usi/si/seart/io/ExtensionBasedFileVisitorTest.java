@@ -72,6 +72,7 @@ class ExtensionBasedFileVisitorTest {
 
     @Test
     void nullExtensionsTest() {
-        Assertions.assertThrows(NullPointerException.class, () -> ExtensionBasedFileVisitor.forExtensions(null));
+        String[] invalid = null;
+        Assertions.assertThrows(NullPointerException.class, () -> ExtensionBasedFileVisitor.forExtensions(invalid));
     }
 }
