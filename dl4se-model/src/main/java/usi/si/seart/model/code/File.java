@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -46,7 +45,7 @@ public class File extends Code {
     Boolean isParsed = false;
 
     @OneToMany(mappedBy = "file", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @Singular
+    @Builder.Default
     @JsonIgnore
     List<Function> functions = new ArrayList<>();
 
