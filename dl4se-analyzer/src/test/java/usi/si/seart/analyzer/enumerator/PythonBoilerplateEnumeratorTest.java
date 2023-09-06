@@ -5,7 +5,6 @@ import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.Cleanup;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +13,6 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.model.code.Boilerplate;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
@@ -120,11 +118,10 @@ class PythonBoilerplateEnumeratorTest {
 
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(PythonCodeProvider.class)
-    @SneakyThrows(UnsupportedEncodingException.class)
     void asEnumTest(List<String> sources, Boilerplate expected) {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
         for (String source: sources) {
-            @Cleanup Tree tree = parser.parseString(source);
+            @Cleanup Tree tree = parser.parse(source);
             Node root = tree.getRootNode();
             Node function_definition = root.getChild(0);
             BoilerplateEnumerator enumerator = new PythonBoilerplateEnumerator(
@@ -150,10 +147,9 @@ class PythonBoilerplateEnumeratorTest {
 
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(PythonCodeProviderSpecial.class)
-    @SneakyThrows(UnsupportedEncodingException.class)
     void asEnumTestSpecial(String source, Boilerplate expected) {
         @Cleanup Parser parser = new Parser(Language.PYTHON);
-        @Cleanup Tree tree = parser.parseString(source);
+        @Cleanup Tree tree = parser.parse(source);
         Node root = tree.getRootNode();
         Node decorated_definition = root.getChild(0);
         Node function_definition = decorated_definition.getChildByFieldName("definition");

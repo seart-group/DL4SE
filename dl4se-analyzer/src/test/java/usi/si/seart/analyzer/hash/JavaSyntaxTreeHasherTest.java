@@ -1,11 +1,9 @@
 package usi.si.seart.analyzer.hash;
 
 import ch.usi.si.seart.treesitter.Tree;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 
@@ -35,7 +33,6 @@ class JavaSyntaxTreeHasherTest extends JavaHasherTest {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void noCommentImpactTest() {
         String input_2 =
                 "package ch.usi.si;\n" +
@@ -49,7 +46,7 @@ class JavaSyntaxTreeHasherTest extends JavaHasherTest {
                 "        System.out.println(\"Hello, World!\");\n" +
                 "    }\n" +
                 "}";
-        Tree other = parser.parseString(input_2);
+        Tree other = parser.parse(input_2);
         Hasher hasher = new SyntaxTreeHasher();
         String first = hasher.hash(tree.getRootNode());
         String second = hasher.hash(other.getRootNode());

@@ -2,11 +2,9 @@ package usi.si.seart.analyzer.predicate.node;
 
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Tree;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
@@ -20,7 +18,6 @@ class ContainsNonAsciiPredicateTest extends PredicateTest {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void containsOnlyAsciiTest() {
         String input_2 =
                 "package ch.usi.si;\n" +
@@ -36,7 +33,7 @@ class ContainsNonAsciiPredicateTest extends PredicateTest {
                 "}";
         byte[] bytes_2 = input_2.getBytes(StandardCharsets.UTF_16LE);
         NodePredicate predicate = new ContainsNonAsciiPredicate(() -> bytes_2);
-        Tree tree = parser.parseString(input_2);
+        Tree tree = parser.parse(input_2);
         boolean result = predicate.test(tree.getRootNode());
         Assertions.assertFalse(result);
     }

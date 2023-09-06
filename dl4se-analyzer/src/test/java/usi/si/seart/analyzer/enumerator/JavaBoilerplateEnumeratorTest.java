@@ -5,7 +5,6 @@ import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.Cleanup;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +13,6 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.model.code.Boilerplate;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
@@ -48,13 +46,12 @@ class JavaBoilerplateEnumeratorTest {
 
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(JavaCodeProvider.class)
-    @SneakyThrows(UnsupportedEncodingException.class)
     void asEnumTest(String source, Boilerplate expected) {
         BoilerplateEnumerator enumerator = new JavaBoilerplateEnumerator(
                 () -> source.getBytes(StandardCharsets.UTF_16LE)
         );
         @Cleanup Parser parser = new Parser(Language.JAVA);
-        @Cleanup Tree tree = parser.parseString(source);
+        @Cleanup Tree tree = parser.parse(source);
         Node root = tree.getRootNode();
         Node class_declaration = root.getChild(0);
         Node class_body = class_declaration.getChildByFieldName("body");

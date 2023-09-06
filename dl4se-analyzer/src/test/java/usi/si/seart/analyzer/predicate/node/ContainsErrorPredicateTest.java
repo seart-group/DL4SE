@@ -5,11 +5,9 @@ import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Tree;
 import lombok.Cleanup;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 
 class ContainsErrorPredicateTest extends PredicateTest {
@@ -29,10 +27,9 @@ class ContainsErrorPredicateTest extends PredicateTest {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void containsErrorTest() {
         @Cleanup Parser parser = new Parser(Language.C);
-        Tree error = parser.parseString(getInput());
+        Tree error = parser.parse(getInput());
         Node root = error.getRootNode();
         NodePredicate predicate = new ContainsErrorPredicate();
         boolean result = predicate.test(root);
@@ -40,10 +37,9 @@ class ContainsErrorPredicateTest extends PredicateTest {
     }
 
     @Test
-    @SneakyThrows(UnsupportedEncodingException.class)
     void anyContainsErrorTest() {
         @Cleanup Parser parser = new Parser(Language.C);
-        Tree error = parser.parseString(getInput());
+        Tree error = parser.parse(getInput());
         Node root = error.getRootNode();
         Node declaration = root.getChild(0);
         Node function_definition = root.getChild(1);
