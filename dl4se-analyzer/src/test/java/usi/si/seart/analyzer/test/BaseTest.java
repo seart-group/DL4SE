@@ -4,12 +4,10 @@ import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.LibraryLoader;
 import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Tree;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import usi.si.seart.analyzer.NodeMapper;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -32,9 +30,8 @@ public abstract class BaseTest {
         parser = new Parser(getLanguage());
     }
 
-    @SneakyThrows(UnsupportedEncodingException.class)
     void setUpTree() {
-        tree = parser.parseString(getInput());
+        tree = parser.parse(getInput());
     }
 
     @AfterEach

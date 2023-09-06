@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import usi.si.seart.analyzer.count.CharacterCounter;
 import usi.si.seart.analyzer.count.CodeTokenCounter;
@@ -37,7 +36,6 @@ import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -88,7 +86,7 @@ public class Analyzer implements AutoCloseable {
         this.localClone = localClone;
         this.path = path;
         this.source = Files.readString(path);
-        this.tree = parser.parseString(source);
+        this.tree = parser.parse(source);
         NodeMapper mapper = () -> source.getBytes(NodeMapper.DEFAULT_CHARSET);
         this.lineCounter = new LineCounter();
         this.totalTokenCounter = TokenCounter.getInstance(language, mapper);
@@ -243,11 +241,10 @@ public class Analyzer implements AutoCloseable {
         }
 
         @Override
-        @SneakyThrows(UnsupportedEncodingException.class)
         public String print(Collection<Node> nodes) {
             String content = nodePrinter.print(nodes);
             String wrapped = wrap(content);
-            @Cleanup Tree tree = parser.parseString(wrapped);
+            @Cleanup Tree tree = parser.parse(wrapped);
             List<Node> targets = getTargets(tree);
             Printer astPrinter = getAstPrinter();
             return astPrinter.print(targets);
