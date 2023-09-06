@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
+import usi.si.seart.validation.constraints.Hash;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,7 +53,7 @@ public abstract class Code {
     @NotNull
     String content;
 
-    @NotNull
+    @Hash
     @Column(name = "content_hash")
     @JsonProperty(value = "content_hash")
     String contentHash;
@@ -60,7 +61,7 @@ public abstract class Code {
     @NotNull
     String ast;
 
-    @NotNull
+    @Hash
     @Column(name = "ast_hash")
     @JsonProperty(value = "ast_hash")
     String astHash;
