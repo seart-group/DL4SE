@@ -32,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @ReportAsSingleViolation
 public @interface Hash {
 
-    String message() default "Not a valid hash";
+    String message() default "{usi.si.seart.validation.constraints.Hash.message}";
 
     Class<?>[] groups() default { };
 

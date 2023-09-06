@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @ReportAsSingleViolation
 public @interface NullOrNotBlank {
 
-    String message() default "Value is neither unset, nor does it contain a single non-whitespace character";
+    String message() default "{usi.si.seart.validation.constraints.NullOrNotBlank.message}";
 
     Class<?>[] groups() default { };
 

@@ -38,7 +38,7 @@ public @interface Password {
     @OverridesAttribute(constraint = Pattern.class, name = "regexp")
     String regexp() default "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d).{6,20}$";
 
-    String message() default "Not a valid password";
+    String message() default "{usi.si.seart.validation.constraints.Password.message}";
 
     Class<?>[] groups() default { };
 

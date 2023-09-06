@@ -37,7 +37,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @ReportAsSingleViolation
 public @interface OWASPEmail {
 
-    String message() default "Not a valid email address";
+    String message() default "{usi.si.seart.validation.constraints.OWASPEmail.message}";
 
     Class<?>[] groups() default { };
 

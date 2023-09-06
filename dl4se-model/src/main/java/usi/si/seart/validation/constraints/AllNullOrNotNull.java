@@ -20,7 +20,7 @@ public @interface AllNullOrNotNull {
 
     String[] fields();
 
-    String message() default "All fields must contain either a non-null value, or null";
+    String message() default "{usi.si.seart.validation.constraints.AllNullOrNotNull.message}";
 
     Class<?>[] groups() default {};
 

@@ -35,7 +35,7 @@ public @interface NullOrRange {
 
     @OverridesAttribute(constraint = Range.class, name = "max") long max() default Long.MAX_VALUE;
 
-    String message() default "Value is neither unset, nor within the valid value range";
+    String message() default "{usi.si.seart.validation.constraints.NullOrRange.message}";
 
     Class<?>[] groups() default { };
 
