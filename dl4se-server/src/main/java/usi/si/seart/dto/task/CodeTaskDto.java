@@ -25,10 +25,12 @@ public class CodeTaskDto {
     @Valid
     @NotNull
     @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
     CodeQueryDto query = new FileQueryDto();
 
     @Valid
     @NotNull
     @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
     CodeProcessingDto processing = new CodeProcessingDto();
 }
