@@ -43,7 +43,7 @@
     <jjwt.version>0.11.5</jjwt.version>
     <jackson.version>2.15.2</jackson.version>
     <springframework.version>2.7.15</springframework.version>
-    <springcloud.version>2021.0.3</springcloud.version>
+    <springcloud.version>2021.0.8</springcloud.version>
   </properties>
 
   <dependencyManagement>
