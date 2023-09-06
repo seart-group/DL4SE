@@ -3,10 +3,10 @@ package usi.si.seart.model.task.processing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
@@ -68,7 +68,7 @@ public class CodeProcessing extends Processing {
 
     @NotNull
     @Type(type = "list-array")
-    @Singular
+    @Builder.Default
     @Column(name = "abstract_idioms")
     @JsonProperty(value = "abstract_idioms")
     List<@NotBlank String> abstractIdioms = new ArrayList<>();
