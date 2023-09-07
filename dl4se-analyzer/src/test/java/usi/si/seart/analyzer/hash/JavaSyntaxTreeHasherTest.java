@@ -12,8 +12,8 @@ class JavaSyntaxTreeHasherTest extends JavaHasherTest {
     @Test
     void emptyTest() {
         Hasher hasher = new SyntaxTreeHasher();
-        Assertions.assertEquals(empty, hasher.hash());
-        Assertions.assertEquals(empty, hasher.hash(new HashSet<>()));
+        Assertions.assertEquals(EMPTY, hasher.hash());
+        Assertions.assertEquals(EMPTY, hasher.hash(new HashSet<>()));
     }
 
     @Test
