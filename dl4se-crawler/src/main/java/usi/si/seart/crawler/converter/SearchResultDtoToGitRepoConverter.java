@@ -16,6 +16,7 @@ public class SearchResultDtoToGitRepoConverter implements Converter<SearchResult
     public GitRepo convert(SearchResultDto source) {
         GitRepo.GitRepoBuilder builder = GitRepo.builder();
 
+        builder.id(source.getId());
         builder.name(source.getName());
         builder.license(source.getLicense());
         builder.isFork(source.getIsFork());

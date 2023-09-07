@@ -17,7 +17,6 @@ import usi.si.seart.validation.constraints.NullOrNotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -49,7 +48,6 @@ import java.util.Set;
 public class GitRepo {
 
     @Id
-    @GeneratedValue
     @JsonIgnore
     Long id;
 
