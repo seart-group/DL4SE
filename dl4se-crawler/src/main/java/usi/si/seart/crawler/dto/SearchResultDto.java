@@ -9,10 +9,11 @@ import lombok.experimental.FieldDefaults;
 import usi.si.seart.model.GitRepo;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -55,11 +56,11 @@ public class SearchResultDto {
     Set<String> labels;
     Set<String> topics;
 
-    public Set<String> getRepoLanguages() {
-        Set<String> repoLanguages = new HashSet<>();
-        repoLanguages.add(mainLanguage);
-        repoLanguages.addAll(languages.keySet());
-        return repoLanguages;
+    public Set<String> getAllLanguages() {
+        return Stream.concat(
+                languages.keySet().stream(),
+                Stream.of(mainLanguage)
+        ).collect(Collectors.toSet());
     }
 
     public void update(GitRepo repo) {

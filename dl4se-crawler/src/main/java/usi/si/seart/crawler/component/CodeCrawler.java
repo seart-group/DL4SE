@@ -142,7 +142,7 @@ public class CodeCrawler implements Runnable {
 
         LocalDateTime lastUpdateGhs = conversionService.convert(item.getLastCommit(), LocalDateTime.class);
 
-        Set<String> repoLanguageNames = Sets.intersection(languageNames, item.getRepoLanguages());
+        Set<String> repoLanguageNames = Sets.intersection(languageNames, item.getAllLanguages());
         Set<Language> repoLanguages = repoLanguageNames.stream()
                 .map(nameToLanguage::get)
                 .filter(Objects::nonNull)
