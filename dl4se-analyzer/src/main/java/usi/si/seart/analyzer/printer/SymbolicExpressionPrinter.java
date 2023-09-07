@@ -9,7 +9,7 @@ public class SymbolicExpressionPrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {
-        return node.getNodeString();
+        return new ch.usi.si.seart.treesitter.printer.SymbolicExpressionPrinter(node.walk()).print();
     }
 
     @Override
