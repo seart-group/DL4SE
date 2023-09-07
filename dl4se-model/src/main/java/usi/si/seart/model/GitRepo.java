@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicUpdate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
+import usi.si.seart.validation.constraints.NullOrNotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,6 +58,7 @@ public class GitRepo {
     @Column(unique = true)
     String name;
 
+    @NullOrNotBlank
     String license;
 
     @NotNull
