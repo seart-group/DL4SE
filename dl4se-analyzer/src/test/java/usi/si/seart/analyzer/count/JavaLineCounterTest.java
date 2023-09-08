@@ -1,6 +1,8 @@
 package usi.si.seart.analyzer.count;
 
 import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Tree;
+import lombok.Cleanup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import usi.si.seart.analyzer.test.JavaBaseTest;
@@ -34,5 +36,17 @@ class JavaLineCounterTest extends JavaBaseTest {
         Long actual = counter.count(package_declaration, class_declaration);
         // Subtract one for the lost space between package and class
         Assertions.assertEquals(getInput().lines().count() - 1, actual, message);
+    }
+
+    @Test
+    void countChildrenOnSameLineTest() {
+        Counter counter = new LineCounter();
+        String input = "/* */ class _ {\n}\n";
+        @Cleanup Tree tree = parser.parse(input);
+        Node root = tree.getRootNode();
+        Node comment = root.getChild(0);
+        Node class_declaration = root.getChild(1);
+        Long actual = counter.count(comment, class_declaration);
+        Assertions.assertEquals(input.lines().count(), actual);
     }
 }
