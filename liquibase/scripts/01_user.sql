@@ -1,3 +1,5 @@
+-- liquibase formatted sql
+
 CREATE TABLE "configuration" (
     "key" text PRIMARY KEY NOT NULL,
     "value" text NOT NULL,

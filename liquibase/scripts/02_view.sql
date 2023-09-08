@@ -1,3 +1,5 @@
+-- liquibase formatted sql
+
 CREATE MATERIALIZED VIEW table_counts AS
 SELECT 'user' AS "table", COUNT(id) FROM "user"
 UNION

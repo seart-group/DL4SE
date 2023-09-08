@@ -1,3 +1,5 @@
+-- liquibase formatted sql
+
 CREATE SEQUENCE hibernate_sequence START 1 INCREMENT 1;
 
 CREATE TABLE "crawl_job" (
