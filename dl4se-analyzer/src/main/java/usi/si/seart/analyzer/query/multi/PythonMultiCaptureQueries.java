@@ -2,7 +2,7 @@ package usi.si.seart.analyzer.query.multi;
 
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
-import usi.si.seart.analyzer.util.Tuple;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class PythonMultiCaptureQueries extends MultiCaptureQueries {
     }
 
     @Override
-    public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
+    public List<List<Pair<String, Node>>> getCallableDeclarations(Node node) {
         return execute(node, "(_ (decorator)* @additional (function_definition) @target)");
     }
 }

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.tuple.Pair;
 import usi.si.seart.analyzer.count.CharacterCounter;
 import usi.si.seart.analyzer.count.CodeTokenCounter;
 import usi.si.seart.analyzer.count.Counter;
@@ -30,7 +31,6 @@ import usi.si.seart.analyzer.printer.Printer;
 import usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import usi.si.seart.analyzer.printer.SyntaxTreePrinter;
 import usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
-import usi.si.seart.analyzer.util.Tuple;
 import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
@@ -146,9 +146,9 @@ public class Analyzer implements AutoCloseable {
     }
 
     private List<Function> extractFunctionEntities(File file) {
-        List<List<Tuple<String, Node>>> matches = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
+        List<List<Pair<String, Node>>> matches = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
         List<Function> functions = new ArrayList<>(matches.size());
-        for (List<Tuple<String, Node>> match: matches) {
+        for (List<Pair<String, Node>> match: matches) {
             Function function = extractFunctionEntity(match);
             // These operations are invariant by
             // nature and should not be overridden
@@ -159,13 +159,13 @@ public class Analyzer implements AutoCloseable {
         return functions;
     }
 
-    private Function extractFunctionEntity(List<Tuple<String, Node>> match) {
+    private Function extractFunctionEntity(List<Pair<String, Node>> match) {
         List<Node> nodes = match.stream()
-                .map(Tuple::getValue)
+                .map(Pair::getValue)
                 .collect(Collectors.toList());
         Node function = match.stream()
                 .filter(tuple -> tuple.getKey().equals("target"))
-                .map(Tuple::getValue)
+                .map(Pair::getValue)
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
 

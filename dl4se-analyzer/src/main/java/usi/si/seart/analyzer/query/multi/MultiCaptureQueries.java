@@ -9,8 +9,8 @@ import ch.usi.si.seart.treesitter.QueryMatch;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
+import org.apache.commons.lang3.tuple.Pair;
 import usi.si.seart.analyzer.query.Queries;
-import usi.si.seart.analyzer.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,24 +20,24 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class MultiCaptureQueries implements Queries<List<List<Tuple<String, Node>>>> {
+public abstract class MultiCaptureQueries implements Queries<List<List<Pair<String, Node>>>> {
 
     private final Language language;
 
-    public abstract List<List<Tuple<String, Node>>> getCallableDeclarations(Node node);
+    public abstract List<List<Pair<String, Node>>> getCallableDeclarations(Node node);
 
-    public List<List<Tuple<String, Node>>> execute(Node node, String pattern) {
+    public List<List<Pair<String, Node>>> execute(Node node, String pattern) {
         @Cleanup Query query = new Query(language, pattern);
         verify(query);
         @Cleanup QueryCursor cursor = new QueryCursor(node, query);
         Stream<QueryMatch> matches = StreamSupport.stream(cursor.spliterator(), false);
         return matches.map(match -> {
             QueryCapture[] captures = match.getCaptures();
-            List<Tuple<String, Node>> tuples = new ArrayList<>(captures.length);
+            List<Pair<String, Node>> tuples = new ArrayList<>(captures.length);
             for (QueryCapture capture: captures) {
                 Node capturedNode = capture.getNode();
                 String captureName = query.getCaptureName(capture);
-                Tuple<String, Node> tuple = Tuple.of(captureName, capturedNode);
+                Pair<String, Node> tuple = Pair.of(captureName, capturedNode);
                 tuples.add(tuple);
             }
             return tuples;
@@ -58,12 +58,12 @@ public abstract class MultiCaptureQueries implements Queries<List<List<Tuple<Str
                     }
 
                     @Override
-                    public List<List<Tuple<String, Node>>> getCallableDeclarations(Node node) {
+                    public List<List<Pair<String, Node>>> getCallableDeclarations(Node node) {
                         return Collections.emptyList();
                     }
 
                     @Override
-                    public List<List<Tuple<String, Node>>> execute(Node node, String pattern) {
+                    public List<List<Pair<String, Node>>> execute(Node node, String pattern) {
                         return Collections.emptyList();
                     }
                 };
