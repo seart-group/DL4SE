@@ -1,4 +1,5 @@
 -- liquibase formatted sql
+-- changeset dabico:3
 
 CREATE MATERIALIZED VIEW table_counts AS
 SELECT 'user' AS "table", COUNT(id) FROM "user"

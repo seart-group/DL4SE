@@ -1,4 +1,5 @@
 -- liquibase formatted sql
+-- changeset dabico:1
 
 CREATE SEQUENCE hibernate_sequence START 1 INCREMENT 1;
 

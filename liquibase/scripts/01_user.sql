@@ -1,4 +1,5 @@
 -- liquibase formatted sql
+-- changeset dabico:2
 
 CREATE TABLE "configuration" (
     "key" text PRIMARY KEY NOT NULL,
