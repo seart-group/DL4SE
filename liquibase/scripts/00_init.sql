@@ -38,7 +38,6 @@ CREATE TABLE "file" (
     "repo_id" bigint NOT NULL,
     "lang_id" bigint NOT NULL,
     "path" text NOT NULL,
-    "is_parsed" boolean NOT NULL,
     "content" text NOT NULL,
     "content_hash" text NOT NULL,
     "ast" text NOT NULL,
