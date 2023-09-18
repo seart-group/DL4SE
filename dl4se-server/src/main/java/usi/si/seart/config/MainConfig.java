@@ -34,12 +34,9 @@ import java.text.SimpleDateFormat;
 @Configuration
 public class MainConfig {
 
-    @Value("${java.io.tmpdir}")
-    private String tmpDir;
-
     @Bean
-    public Path fileStorageDirPath() {
-        return Path.of(tmpDir, "dl4se_storage");
+    public Path fileStorageDirPath(@Value("${java.io.tmpdir}") String value) {
+        return Path.of(value, "dl4se_storage");
     }
 
     @Bean
