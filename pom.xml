@@ -36,6 +36,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.0</junit.version>
     <javaparser.version>3.25.5</javaparser.version>
+    <treesitter.version>1.4.2</treesitter.version>
     <lombok.version>1.18.28</lombok.version>
     <google.guava.version>32.1.2-jre</google.guava.version>
     <google.httpClient.version>1.43.3</google.httpClient.version>
@@ -114,6 +115,11 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>java-tree-sitter</artifactId>
+      <version>${treesitter.version}</version>
     </dependency>
   </dependencies>
 
