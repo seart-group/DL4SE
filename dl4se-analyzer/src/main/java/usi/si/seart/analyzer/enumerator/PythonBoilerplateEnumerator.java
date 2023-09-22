@@ -1,15 +1,9 @@
 package usi.si.seart.analyzer.enumerator;
 
 import ch.usi.si.seart.treesitter.Node;
-import ch.usi.si.seart.treesitter.Range;
-import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.model.code.Boilerplate;
 
 public class PythonBoilerplateEnumerator extends BoilerplateEnumerator {
-
-    public PythonBoilerplateEnumerator(NodeMapper mapper) {
-        super(mapper);
-    }
 
     @Override
     public Boilerplate asEnum(Node node) {
@@ -18,7 +12,7 @@ public class PythonBoilerplateEnumerator extends BoilerplateEnumerator {
             for (Node prev = node.getPrevSibling(); prev != null; prev = prev.getPrevSibling()) {
                 switch (prev.getType()) {
                     case "decorator":
-                        String decorator = mapper.getContentForRange(prev.getRange());
+                        String decorator = prev.getContent();
                         if (decorator.equals("@property")) return Boilerplate.GETTER;
                         else if (decorator.endsWith(".setter")) return Boilerplate.SETTER;
                     case "comment":
@@ -29,8 +23,7 @@ public class PythonBoilerplateEnumerator extends BoilerplateEnumerator {
             }
         }
         Node identifier = node.getChildByFieldName("name");
-        Range range = identifier.getRange();
-        String name = mapper.getContentForRange(range);
+        String name = identifier.getContent();
         switch (name) {
             case "__new__":
                 return Boilerplate.CONSTRUCTOR;

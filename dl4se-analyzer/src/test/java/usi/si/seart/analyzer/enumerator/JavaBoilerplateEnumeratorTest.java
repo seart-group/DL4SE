@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.model.code.Boilerplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 class JavaBoilerplateEnumeratorTest {
@@ -47,9 +46,7 @@ class JavaBoilerplateEnumeratorTest {
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(JavaCodeProvider.class)
     void asEnumTest(String source, Boilerplate expected) {
-        BoilerplateEnumerator enumerator = new JavaBoilerplateEnumerator(
-                () -> source.getBytes(StandardCharsets.UTF_16LE)
-        );
+        BoilerplateEnumerator enumerator = new JavaBoilerplateEnumerator();
         @Cleanup Parser parser = new Parser(Language.JAVA);
         @Cleanup Tree tree = parser.parse(source);
         Node root = tree.getRootNode();

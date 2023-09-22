@@ -53,7 +53,6 @@ public class Analyzer implements AutoCloseable {
 
     LocalClone localClone;
     Path path;
-    String source;
 
     Counter lineCounter;
     Counter totalTokenCounter;
@@ -85,23 +84,22 @@ public class Analyzer implements AutoCloseable {
         this.parser = new Parser(language);
         this.localClone = localClone;
         this.path = path;
-        this.source = Files.readString(path);
+        String source = Files.readString(path);
         this.tree = parser.parse(source);
-        NodeMapper mapper = () -> source.getBytes(NodeMapper.DEFAULT_CHARSET);
         this.lineCounter = new LineCounter();
-        this.totalTokenCounter = TokenCounter.getInstance(language, mapper);
+        this.totalTokenCounter = TokenCounter.getInstance(language);
         this.codeTokenCounter = CodeTokenCounter.getInstance(language);
-        this.characterCounter = new CharacterCounter(mapper);
-        this.contentHasher = new ContentHasher(mapper);
+        this.characterCounter = new CharacterCounter();
+        this.contentHasher = new ContentHasher();
         this.syntaxTreeHasher = new SyntaxTreeHasher();
         this.containsError = new ContainsErrorPredicate();
-        this.containsNonAscii = new ContainsNonAsciiPredicate(mapper);
+        this.containsNonAscii = new ContainsNonAsciiPredicate();
         this.testFilePredicate = TestFilePredicate.getInstance(language);
-        this.nodePrinter = new NodePrinter(mapper);
+        this.nodePrinter = new NodePrinter();
         this.syntaxTreePrinter = new SyntaxTreePrinter();
         this.expressionPrinter = new SymbolicExpressionPrinter();
         this.multiCaptureQueries = MultiCaptureQueries.getInstance(language);
-        this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language, mapper);
+        this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language);
     }
 
     @Override

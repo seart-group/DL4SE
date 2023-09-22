@@ -1,15 +1,9 @@
 package usi.si.seart.analyzer.enumerator;
 
 import ch.usi.si.seart.treesitter.Node;
-import ch.usi.si.seart.treesitter.Range;
-import usi.si.seart.analyzer.NodeMapper;
 import usi.si.seart.model.code.Boilerplate;
 
 public class JavaBoilerplateEnumerator extends BoilerplateEnumerator {
-
-    public JavaBoilerplateEnumerator(NodeMapper mapper) {
-        super(mapper);
-    }
 
     @Override
     public Boilerplate asEnum(Node node) {
@@ -17,8 +11,7 @@ public class JavaBoilerplateEnumerator extends BoilerplateEnumerator {
         if (type.equals("constructor_declaration")) return Boilerplate.CONSTRUCTOR;
         if (!type.equals("method_declaration")) return null;
         Node identifier = node.getChildByFieldName("name");
-        Range range = identifier.getRange();
-        String name = mapper.getContentForRange(range);
+        String name = identifier.getContent();
         if (name.startsWith("set")) return Boilerplate.SETTER;
         if (name.startsWith("get")) return Boilerplate.GETTER;
         switch (name) {

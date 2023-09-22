@@ -5,14 +5,13 @@ import ch.usi.si.seart.treesitter.Tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 class ContainsNonAsciiPredicateTest extends PredicateTest {
 
     @Test
     void emptyInputTest() {
-        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        NodePredicate predicate = new ContainsNonAsciiPredicate();
         Assertions.assertFalse(predicate.test());
         Assertions.assertFalse(predicate.test(new HashSet<>()));
     }
@@ -31,8 +30,7 @@ class ContainsNonAsciiPredicateTest extends PredicateTest {
                 "        System.out.println(\"Hello, World!\");\n" +
                 "    }\n" +
                 "}";
-        byte[] bytes_2 = input_2.getBytes(StandardCharsets.UTF_16LE);
-        NodePredicate predicate = new ContainsNonAsciiPredicate(() -> bytes_2);
+        NodePredicate predicate = new ContainsNonAsciiPredicate();
         Tree tree = parser.parse(input_2);
         boolean result = predicate.test(tree.getRootNode());
         Assertions.assertFalse(result);
@@ -40,14 +38,14 @@ class ContainsNonAsciiPredicateTest extends PredicateTest {
 
     @Test
     void containsNonAsciiTest() {
-        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        NodePredicate predicate = new ContainsNonAsciiPredicate();
         boolean result = predicate.test(tree.getRootNode());
         Assertions.assertTrue(result);
     }
 
     @Test
     void anyContainsNonAscii() {
-        NodePredicate predicate = new ContainsNonAsciiPredicate(getNodeMapper());
+        NodePredicate predicate = new ContainsNonAsciiPredicate();
         Node root = tree.getRootNode();
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);

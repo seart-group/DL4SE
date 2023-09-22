@@ -6,9 +6,9 @@ import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Tree;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import usi.si.seart.analyzer.NodeMapper;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public abstract class BaseTest {
@@ -44,16 +44,8 @@ public abstract class BaseTest {
 
     protected abstract String getInput();
 
-    protected byte[] getBytes() {
-        return getInput().getBytes(getCharset());
-    }
-
     protected Charset getCharset() {
-        return NodeMapper.DEFAULT_CHARSET;
-    }
-
-    protected NodeMapper getNodeMapper() {
-        return this::getBytes;
+        return StandardCharsets.UTF_16LE;
     }
 
     protected abstract List<String> getTokens();

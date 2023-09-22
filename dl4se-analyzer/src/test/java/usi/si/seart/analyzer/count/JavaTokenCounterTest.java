@@ -13,14 +13,14 @@ class JavaTokenCounterTest extends JavaBaseTest {
 
     @Test
     void countEmptyTest() {
-        Counter counter = new JavaTokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter();
         Assertions.assertEquals(0, counter.count());
         Assertions.assertEquals(0, counter.count(new HashSet<>()));
     }
 
     @Test
     void countRootTest() {
-        Counter counter = new JavaTokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter();
         Long actual = counter.count(tree.getRootNode());
         // Add 2 for the individual comment words
         Assertions.assertEquals(getNodes().size() + 2, actual, message);
@@ -28,7 +28,7 @@ class JavaTokenCounterTest extends JavaBaseTest {
 
     @Test
     void countChildrenTest() {
-        Counter counter = new JavaTokenCounter(getNodeMapper());
+        Counter counter = new JavaTokenCounter();
         Node root = tree.getRootNode();
         Node package_declaration = root.getChild(0);
         Node class_declaration = root.getChild(1);

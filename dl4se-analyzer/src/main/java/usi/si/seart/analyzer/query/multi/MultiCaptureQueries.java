@@ -29,7 +29,7 @@ public abstract class MultiCaptureQueries implements Queries<List<List<Pair<Stri
     public List<List<Pair<String, Node>>> execute(Node node, String pattern) {
         @Cleanup Query query = new Query(language, pattern);
         verify(query);
-        @Cleanup QueryCursor cursor = new QueryCursor(node, query);
+        @Cleanup QueryCursor cursor = node.walk(query);
         Stream<QueryMatch> matches = StreamSupport.stream(cursor.spliterator(), false);
         return matches.map(match -> {
             QueryCapture[] captures = match.getCaptures();

@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import usi.si.seart.model.code.Boilerplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -124,9 +123,7 @@ class PythonBoilerplateEnumeratorTest {
             @Cleanup Tree tree = parser.parse(source);
             Node root = tree.getRootNode();
             Node function_definition = root.getChild(0);
-            BoilerplateEnumerator enumerator = new PythonBoilerplateEnumerator(
-                    () -> source.getBytes(StandardCharsets.UTF_16LE)
-            );
+            BoilerplateEnumerator enumerator = new PythonBoilerplateEnumerator();
             Boilerplate actual = enumerator.asEnum(function_definition);
             Assertions.assertEquals(expected, actual);
         }
@@ -153,9 +150,7 @@ class PythonBoilerplateEnumeratorTest {
         Node root = tree.getRootNode();
         Node decorated_definition = root.getChild(0);
         Node function_definition = decorated_definition.getChildByFieldName("definition");
-        BoilerplateEnumerator enumerator = new PythonBoilerplateEnumerator(
-                () -> source.getBytes(StandardCharsets.UTF_16LE)
-        );
+        BoilerplateEnumerator enumerator = new PythonBoilerplateEnumerator();
         Boilerplate actual = enumerator.asEnum(function_definition);
         Assertions.assertEquals(expected, actual);
     }

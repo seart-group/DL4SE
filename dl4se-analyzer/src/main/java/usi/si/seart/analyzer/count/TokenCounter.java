@@ -2,14 +2,8 @@ package usi.si.seart.analyzer.count;
 
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
-import ch.usi.si.seart.treesitter.Range;
-import usi.si.seart.analyzer.NodeMapper;
 
-public abstract class TokenCounter extends ContentTraverseCounter {
-
-    public TokenCounter(NodeMapper mapper) {
-        super(mapper);
-    }
+public abstract class TokenCounter extends TraverseCounter {
 
     @Override
     protected void nodeCallback(Node node) {
@@ -17,8 +11,7 @@ public abstract class TokenCounter extends ContentTraverseCounter {
         if (leafNode) {
             String type = node.getType();
             if (type.equals("comment")) {
-                Range range = node.getRange();
-                String content = mapper.getContentForRange(range);
+                String content = node.getContent();
                 String[] tokens = content.split("\\s+");
                 count.addAndGet(tokens.length);
             } else {
@@ -27,14 +20,14 @@ public abstract class TokenCounter extends ContentTraverseCounter {
         }
     }
 
-    public static TokenCounter getInstance(Language language, NodeMapper mapper) {
+    public static TokenCounter getInstance(Language language) {
         switch (language) {
             case JAVA:
-                return new JavaTokenCounter(mapper);
+                return new JavaTokenCounter();
             case PYTHON:
-                return new PythonTokenCounter(mapper);
+                return new PythonTokenCounter();
             default:
-                return new TokenCounter(mapper) {};
+                return new TokenCounter() {};
         }
     }
 }

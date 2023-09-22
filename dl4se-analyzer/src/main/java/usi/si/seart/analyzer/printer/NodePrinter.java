@@ -1,23 +1,16 @@
 package usi.si.seart.analyzer.printer;
 
 import ch.usi.si.seart.treesitter.Node;
-import ch.usi.si.seart.treesitter.Range;
-import usi.si.seart.analyzer.NodeMapper;
 
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class NodePrinter extends ContentPrinter {
-
-    public NodePrinter(NodeMapper mapper) {
-        super(mapper);
-    }
+public class NodePrinter extends AbstractPrinter {
 
     @Override
     public String print(Node node) {
-        Range range = node.getRange();
-        String content = mapper.getContentForRange(range);
+        String content = node.getContent();
         List<String> lines = content.lines()
                 .map(line -> line.replace("\t", "    "))
                 .collect(Collectors.toList());
