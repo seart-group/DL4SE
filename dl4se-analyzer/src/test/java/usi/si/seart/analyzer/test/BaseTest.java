@@ -27,7 +27,7 @@ public abstract class BaseTest {
     }
 
     void setUpParser() {
-        parser = new Parser(getLanguage());
+        parser = Parser.getFor(getLanguage());
     }
 
     void setUpTree() {
