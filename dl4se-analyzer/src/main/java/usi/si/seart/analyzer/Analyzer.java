@@ -81,7 +81,7 @@ public class Analyzer implements AutoCloseable {
 
     public Analyzer(LocalClone localClone, Path path, Language language) throws IOException {
         this.language = language;
-        this.parser = new Parser(language);
+        this.parser = Parser.getFor(language);
         this.localClone = localClone;
         this.path = path;
         String source = Files.readString(path);
