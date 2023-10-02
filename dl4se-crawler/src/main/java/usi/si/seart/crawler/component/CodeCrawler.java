@@ -290,8 +290,7 @@ public class CodeCrawler implements Runnable {
         log.trace("Analyzing file: {}", localClone.relativePathOf(path));
         String extension = com.google.common.io.Files.getFileExtension(path.toString());
         Language language = extensionToLanguage.get(extension);
-        String name = language.getName().toUpperCase();
-        try (Analyzer analyzer = new Analyzer(localClone, path, name)) {
+        try (Analyzer analyzer = new Analyzer(localClone, path)) {
             Analyzer.Result result = analyzer.analyze();
             File file = result.getFile();
             List<Function> functions = result.getFunctions();
