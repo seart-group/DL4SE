@@ -28,7 +28,7 @@ class ContainsErrorPredicateTest extends PredicateTest {
 
     @Test
     void containsErrorTest() {
-        @Cleanup Parser parser = new Parser(Language.C);
+        @Cleanup Parser parser = Parser.getFor(Language.C);
         Tree error = parser.parse(getInput());
         Node root = error.getRootNode();
         NodePredicate predicate = new ContainsErrorPredicate();
@@ -38,7 +38,7 @@ class ContainsErrorPredicateTest extends PredicateTest {
 
     @Test
     void anyContainsErrorTest() {
-        @Cleanup Parser parser = new Parser(Language.C);
+        @Cleanup Parser parser = Parser.getFor(Language.C);
         Tree error = parser.parse(getInput());
         Node root = error.getRootNode();
         Node declaration = root.getChild(0);

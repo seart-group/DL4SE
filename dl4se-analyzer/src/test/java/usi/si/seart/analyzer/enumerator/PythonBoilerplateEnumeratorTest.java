@@ -118,7 +118,7 @@ class PythonBoilerplateEnumeratorTest {
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(PythonCodeProvider.class)
     void asEnumTest(List<String> sources, Boilerplate expected) {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
+        @Cleanup Parser parser = Parser.getFor(Language.PYTHON);
         for (String source: sources) {
             @Cleanup Tree tree = parser.parse(source);
             Node root = tree.getRootNode();
@@ -145,7 +145,7 @@ class PythonBoilerplateEnumeratorTest {
     @ParameterizedTest(name = "[{index}] {1}")
     @ArgumentsSource(PythonCodeProviderSpecial.class)
     void asEnumTestSpecial(String source, Boilerplate expected) {
-        @Cleanup Parser parser = new Parser(Language.PYTHON);
+        @Cleanup Parser parser = Parser.getFor(Language.PYTHON);
         @Cleanup Tree tree = parser.parse(source);
         Node root = tree.getRootNode();
         Node decorated_definition = root.getChild(0);

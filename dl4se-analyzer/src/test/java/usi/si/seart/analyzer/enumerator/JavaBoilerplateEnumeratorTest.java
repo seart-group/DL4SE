@@ -47,7 +47,7 @@ class JavaBoilerplateEnumeratorTest {
     @ArgumentsSource(JavaCodeProvider.class)
     void asEnumTest(String source, Boilerplate expected) {
         BoilerplateEnumerator enumerator = new JavaBoilerplateEnumerator();
-        @Cleanup Parser parser = new Parser(Language.JAVA);
+        @Cleanup Parser parser = Parser.getFor(Language.JAVA);
         @Cleanup Tree tree = parser.parse(source);
         Node root = tree.getRootNode();
         Node class_declaration = root.getChild(0);
