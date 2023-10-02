@@ -75,8 +75,15 @@ public class Analyzer implements AutoCloseable {
 
     Enumerator<Boilerplate> boilerplateEnumerator;
 
-    public Analyzer(LocalClone localClone, Path path, String languageName) throws IOException {
-        this(localClone, path, Language.valueOf(languageName));
+    public Analyzer(LocalClone localClone, Path path) throws IOException {
+        this(
+                localClone,
+                path,
+                Language.associatedWith(path)
+                        .stream()
+                        .findFirst()
+                        .orElseThrow()
+        );
     }
 
     public Analyzer(LocalClone localClone, Path path, Language language) throws IOException {
