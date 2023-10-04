@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import usi.si.seart.analyzer.Analyzer;
 import usi.si.seart.analyzer.LocalClone;
+import usi.si.seart.crawler.config.CrawlerConfig;
 import usi.si.seart.crawler.dto.SearchResultDto;
 import usi.si.seart.crawler.git.Git;
 import usi.si.seart.crawler.git.GitException;
@@ -49,7 +50,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -71,14 +71,14 @@ public class CodeCrawler implements Runnable {
     LanguageService languageService;
     ConversionService conversionService;
 
-    Predicate<Path> analyzeFilePredicate;
+    CrawlerConfig.FileFilter fileFilter;
 
     @NonFinal
     @Value("${app.general.tmp-dir-prefix}")
     String prefix;
 
     @NonFinal
-    @Value("${app.crawl-job.ignore.project-names}")
+    @Value("${app.crawl-job.ignore.repository.names}")
     List<String> ignoreProjects;
 
     Set<String> languageNames = new HashSet<>();
@@ -194,17 +194,17 @@ public class CodeCrawler implements Runnable {
             if (!Strings.isNullOrEmpty(diff.toString()))
                 log.debug("Diff since last update:\n{}", diff);
             diff.getAdded().stream()
-                    .filter(analyzeFilePredicate)
+                    .filter(fileFilter)
                     .forEach(path -> addFile(localClone, path));
             diff.getDeleted().forEach(path -> deleteFile(repo, path));
             diff.getModified().forEach(path -> {
                 deleteFile(repo, path);
-                if (analyzeFilePredicate.test(path))
+                if (fileFilter.test(path))
                     addFile(localClone, path);
             });
             diff.getRenamed().forEach((key, value) -> {
-                boolean validOld = analyzeFilePredicate.test(key);
-                boolean validNew = analyzeFilePredicate.test(value);
+                boolean validOld = fileFilter.test(key);
+                boolean validNew = fileFilter.test(value);
                 if (validOld && validNew)
                     renameFile(repo, key, value);
                 else if (validOld)
@@ -214,13 +214,13 @@ public class CodeCrawler implements Runnable {
             });
             diff.getEdited().forEach((key, value) -> {
                 deleteFile(repo, key);
-                if (analyzeFilePredicate.test(value))
+                if (fileFilter.test(value))
                     addFile(localClone, value);
             });
             diff.getCopied()
                     .values()
                     .stream()
-                    .filter(analyzeFilePredicate)
+                    .filter(fileFilter)
                     .forEach(value -> addFile(localClone, value));
 
             gitRepoService.createOrUpdate(repo);
@@ -281,7 +281,7 @@ public class CodeCrawler implements Runnable {
                 .map(localDirectory::resolve)
                 .collect(Collectors.toSet());
         Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
-                .filter(analyzeFilePredicate)
+                .filter(fileFilter)
                 .collect(Collectors.toSet());
         filtered.forEach(target -> analyzeAndStore(localClone, target));
     }
@@ -291,6 +291,7 @@ public class CodeCrawler implements Runnable {
         String extension = com.google.common.io.Files.getFileExtension(path.toString());
         Language language = extensionToLanguage.get(extension);
         try (Analyzer analyzer = new Analyzer(localClone, path)) {
+            fileFilter.getMaxParseTime().ifPresent(analyzer::setParserTimeout);
             Analyzer.Result result = analyzer.analyze();
             File file = result.getFile();
             List<Function> functions = result.getFunctions();
