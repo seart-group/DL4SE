@@ -5,6 +5,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import lombok.AccessLevel;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -112,7 +113,7 @@ public class CodeCrawler implements Runnable {
         log.info("Finished! Next run scheduled for: {}", nextRun);
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     private GenericUrl fetchSearchResults(GenericUrl url, LocalDate checkpoint) {
         GenericUrl requestUrl = url.set("committedMin", checkpoint.toString())
                                     .set("sort", "lastCommit")
@@ -169,16 +170,14 @@ public class CodeCrawler implements Runnable {
         saveCrawlProgress(lastUpdateGhs);
     }
 
-    @SneakyThrows(IOException.class)
     private void updateRepoData(GitRepo repo, Set<Language> repoLanguages) {
         String name = repo.getName();
         LocalDateTime lastCommit = repo.getLastCommit();
-
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
-        Path localDirectory = Files.createTempDirectory(prefix);
-        LocalClone localClone = new LocalClone(repo, localDirectory);
-        try (Git git = new Git(name, localDirectory, lastCommit)) {
-
+        try {
+            Path localDirectory = Files.createTempDirectory(prefix);
+            LocalClone localClone = new LocalClone(repo, localDirectory);
+            @Cleanup Git git = new Git(name, localDirectory, lastCommit);
             Set<Language> notMined = Sets.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
                 mineRepoData(localClone, notMined);
@@ -224,6 +223,8 @@ public class CodeCrawler implements Runnable {
                     .forEach(value -> addFile(localClone, value));
 
             gitRepoService.createOrUpdate(repo);
+        } catch (IOException ex) {
+            log.error("Could not create temporary directory for: " + name, ex);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
         }
@@ -241,24 +242,22 @@ public class CodeCrawler implements Runnable {
         fileService.rename(repo, oldPath, newPath);
     }
 
-    @SneakyThrows(IOException.class)
     private void mineRepoData(GitRepo repo, Set<Language> languages) {
         String name = repo.getName();
         LocalDateTime lastUpdateGhs = repo.getLastCommit();
-
-        Path localDirectory = Files.createTempDirectory(prefix);
-        LocalClone localClone = new LocalClone(repo, localDirectory);
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
-        try (Git git = new Git(name, localDirectory, true)) {
+        try {
+            Path localDirectory = Files.createTempDirectory(prefix);
+            LocalClone localClone = new LocalClone(repo, localDirectory);
+            @Cleanup Git git = new Git(name, localDirectory, true);
             Git.Commit latest = git.getLastCommitInfo();
-
             mineRepoData(localClone, languages);
-
             repo.setLanguages(languages);
             repo.setLastCommit(latest.getTimestamp());
             repo.setLastCommitSHA(latest.getSha());
-
             gitRepoService.createOrUpdate(repo);
+        } catch (IOException ex) {
+            log.error("Could not create temporary directory for: " + name, ex);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
         }
@@ -287,7 +286,8 @@ public class CodeCrawler implements Runnable {
     }
 
     private void analyzeAndStore(LocalClone localClone, Path path) {
-        log.trace("Analyzing file: {}", localClone.relativePathOf(path));
+        Path relative = localClone.relativePathOf(path);
+        log.debug("Analyzing file: {}", relative);
         String extension = com.google.common.io.Files.getFileExtension(path.toString());
         Language language = extensionToLanguage.get(extension);
         try (Analyzer analyzer = new Analyzer(localClone, path)) {
@@ -299,7 +299,7 @@ public class CodeCrawler implements Runnable {
             functions.forEach(function -> function.setLanguage(language));
             fileService.create(file);
         } catch (Exception ex) {
-            log.error("", ex);
+            log.error("Exception occurred while analyzing: {}", relative, ex);
         }
     }
 }
