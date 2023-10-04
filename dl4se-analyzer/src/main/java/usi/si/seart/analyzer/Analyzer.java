@@ -38,6 +38,7 @@ import usi.si.seart.model.code.Function;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -113,6 +114,10 @@ public class Analyzer implements AutoCloseable {
     public void close() {
         tree.close();
         parser.close();
+    }
+
+    public void setParserTimeout(Duration duration) {
+        parser.setTimeout(duration);
     }
 
     @Getter
