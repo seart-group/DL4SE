@@ -14,11 +14,13 @@ import org.springframework.util.unit.DataSize;
 import usi.si.seart.model.job.Job;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.time.Duration;
@@ -82,6 +84,8 @@ public class CrawlerConfig {
                     long bytes = Files.size(path);
                     DataSize size = DataSize.ofBytes(bytes);
                     return size.compareTo(maxSize) < 0;
+                } catch (NoSuchFileException ex) {
+                    return false;
                 } catch (IOException ex) {
                     throw new UncheckedIOException(ex);
                 }
@@ -100,6 +104,8 @@ public class CrawlerConfig {
                         if (lines >= maxLines) return false;
                     }
                     return true;
+                } catch (FileNotFoundException ex) {
+                    return false;
                 } catch (IOException ex) {
                     throw new UncheckedIOException(ex);
                 }
