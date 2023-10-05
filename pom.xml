@@ -37,7 +37,7 @@
     <junit.version>5.10.0</junit.version>
     <javaparser.version>3.25.5</javaparser.version>
     <treesitter.version>1.7.0</treesitter.version>
-    <lombok.version>1.18.28</lombok.version>
+    <lombok.version>1.18.30</lombok.version>
     <google.guava.version>32.1.2-jre</google.guava.version>
     <google.httpClient.version>1.43.3</google.httpClient.version>
     <janino.version>3.1.10</janino.version>
