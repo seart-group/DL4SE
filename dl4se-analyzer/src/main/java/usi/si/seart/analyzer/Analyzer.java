@@ -22,6 +22,7 @@ import usi.si.seart.analyzer.enumerator.Enumerator;
 import usi.si.seart.analyzer.hash.ContentHasher;
 import usi.si.seart.analyzer.hash.Hasher;
 import usi.si.seart.analyzer.hash.SyntaxTreeHasher;
+import usi.si.seart.analyzer.io.NullFilteredReader;
 import usi.si.seart.analyzer.predicate.node.ContainsErrorPredicate;
 import usi.si.seart.analyzer.predicate.node.ContainsNonAsciiPredicate;
 import usi.si.seart.analyzer.predicate.node.NodePredicate;
@@ -37,7 +38,6 @@ import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
 import java.io.FileReader;
-import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
@@ -267,39 +267,5 @@ public class Analyzer implements AutoCloseable {
         @Cleanup Reader fileReader = new FileReader(path.toFile());
         @Cleanup Reader filterReader = new NullFilteredReader(fileReader);
         return CharStreams.toString(filterReader);
-    }
-
-    private static class NullFilteredReader extends FilterReader {
-
-        private NullFilteredReader(Reader in) {
-            super(in);
-        }
-
-        @Override
-        public int read() throws IOException {
-            int current;
-            do current = super.read();
-            while (current == 0);
-            return current;
-        }
-
-        @Override
-        public int read(char[] cbuf, int off, int len) throws IOException {
-            int read = super.read(cbuf, off, len);
-            if (read == -1) return -1;
-            int pos = off - 1;
-            for (int readPos = off; readPos < off + read; readPos++) {
-                if (cbuf[readPos] == 0) {
-                    continue;
-                } else {
-                    pos++;
-                }
-
-                if (pos < readPos) {
-                    cbuf[pos] = cbuf[readPos];
-                }
-            }
-            return pos - off + 1;
-        }
     }
 }
