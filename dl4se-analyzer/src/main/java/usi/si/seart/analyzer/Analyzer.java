@@ -5,6 +5,7 @@ import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Parser;
 import ch.usi.si.seart.treesitter.Point;
 import ch.usi.si.seart.treesitter.Tree;
+import com.google.common.io.CharStreams;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
@@ -35,8 +36,10 @@ import usi.si.seart.model.code.Boilerplate;
 import usi.si.seart.model.code.File;
 import usi.si.seart.model.code.Function;
 
+import java.io.FileReader;
+import java.io.FilterReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -92,8 +95,7 @@ public class Analyzer implements AutoCloseable {
         this.parser = Parser.getFor(language);
         this.localClone = localClone;
         this.path = path;
-        String source = Files.readString(path);
-        this.tree = parser.parse(source);
+        this.tree = parser.parse(readFile(path));
         this.lineCounter = new LineCounter();
         this.totalTokenCounter = TokenCounter.getInstance(language);
         this.codeTokenCounter = CodeTokenCounter.getInstance(language);
@@ -258,6 +260,46 @@ public class Analyzer implements AutoCloseable {
             List<Node> targets = getTargets(tree);
             Printer astPrinter = getAstPrinter();
             return astPrinter.print(targets);
+        }
+    }
+
+    private static String readFile(Path path) throws IOException {
+        @Cleanup Reader fileReader = new FileReader(path.toFile());
+        @Cleanup Reader filterReader = new NullFilteredReader(fileReader);
+        return CharStreams.toString(filterReader);
+    }
+
+    private static class NullFilteredReader extends FilterReader {
+
+        private NullFilteredReader(Reader in) {
+            super(in);
+        }
+
+        @Override
+        public int read() throws IOException {
+            int current;
+            do current = super.read();
+            while (current == 0);
+            return current;
+        }
+
+        @Override
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            int read = super.read(cbuf, off, len);
+            if (read == -1) return -1;
+            int pos = off - 1;
+            for (int readPos = off; readPos < off + read; readPos++) {
+                if (cbuf[readPos] == 0) {
+                    continue;
+                } else {
+                    pos++;
+                }
+
+                if (pos < readPos) {
+                    cbuf[pos] = cbuf[readPos];
+                }
+            }
+            return pos - off + 1;
         }
     }
 }
