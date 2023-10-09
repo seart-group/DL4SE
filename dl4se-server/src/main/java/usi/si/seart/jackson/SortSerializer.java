@@ -11,7 +11,7 @@ public class SortSerializer extends StdSerializer<Sort> {
 
     public static final SortSerializer INSTANCE = new SortSerializer();
 
-    public SortSerializer() {
+    private SortSerializer() {
         super(Sort.class);
     }
 

@@ -9,11 +9,11 @@ import java.io.IOException;
 
 public class PageSerializer extends StdSerializer<Page<?>> {
 
-    public PageSerializer() {
+    public static final PageSerializer INSTANCE = new PageSerializer();
+
+    private PageSerializer() {
         super(Page.class, false);
     }
-
-    public static final PageSerializer INSTANCE = new PageSerializer();
 
     @Override
     public void serialize(Page<?> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
