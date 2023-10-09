@@ -22,12 +22,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import usi.si.seart.security.CustomUserDetailsService;
-import usi.si.seart.security.jwt.JwtAuthenticationEntryPoint;
 import usi.si.seart.security.jwt.JwtRequestFilter;
 
-import java.security.Key;
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -40,8 +40,6 @@ import java.security.Key;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     CustomUserDetailsService userDetailsService;
-
-    JwtAuthenticationEntryPoint entryPoint;
 
     @NonFinal
     @Value("${jwt.secret}")
@@ -59,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(entryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -119,6 +117,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey())
                 .build();
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> {
+            int code = HttpServletResponse.SC_UNAUTHORIZED;
+            String message = Encode.forHtml(authException.getMessage());
+            response.sendError(code, message);
+        };
     }
 
     @Override
