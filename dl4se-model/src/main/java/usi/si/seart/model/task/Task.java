@@ -2,6 +2,9 @@ package usi.si.seart.model.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,30 +12,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import usi.si.seart.model.task.processing.Processing;
-import usi.si.seart.model.task.query.Query;
+import org.hibernate.annotations.TypeDefs;
+import usi.si.seart.model.job.Job;
 import usi.si.seart.model.type.StringEnumType;
 import usi.si.seart.model.user.User;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -44,16 +40,17 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "task")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dataset", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PROTECTED)
-@TypeDef(name = "string-enum", typeClass = StringEnumType.class)
-public abstract class Task {
+@TypeDefs({
+        @TypeDef(name = "string-enum", typeClass = StringEnumType.class),
+        @TypeDef(name = "json", typeClass = JsonType.class)
+})
+public class Task {
 
     @Id
     @GeneratedValue
@@ -70,11 +67,20 @@ public abstract class Task {
     @JoinColumn(name = "user_id")
     User user;
 
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
-    Query query;
+    @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
+    @Type(type = "string-enum")
+    Job dataset;
 
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
-    Processing processing;
+    @NotNull
+    @Type(type = "json")
+    @Builder.Default
+    JsonNode query = JsonNodeFactory.instance.objectNode();
+
+    @NotNull
+    @Type(type = "json")
+    @Builder.Default
+    JsonNode processing = JsonNodeFactory.instance.objectNode();
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
@@ -130,6 +136,6 @@ public abstract class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, query, processing);
+        return Objects.hash(user, dataset, query, processing);
     }
 }

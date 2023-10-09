@@ -1,5 +1,6 @@
 package usi.si.seart.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -25,16 +26,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import usi.si.seart.dto.task.CodeTaskDto;
+import usi.si.seart.dto.task.TaskDto;
 import usi.si.seart.dto.task.TaskSearchDto;
-import usi.si.seart.dto.task.processing.CodeProcessingDto;
-import usi.si.seart.dto.task.query.CodeQueryDto;
-import usi.si.seart.model.Language;
+import usi.si.seart.model.job.Job;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.Task_;
-import usi.si.seart.model.task.processing.CodeProcessing;
-import usi.si.seart.model.task.query.CodeQuery;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.User_;
@@ -43,7 +40,6 @@ import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.DownloadService;
 import usi.si.seart.service.FileSystemService;
-import usi.si.seart.service.LanguageService;
 import usi.si.seart.service.TaskService;
 import usi.si.seart.service.UserService;
 
@@ -64,7 +60,6 @@ public class TaskController {
 
     TaskService taskService;
     UserService userService;
-    LanguageService languageService;
     DownloadService downloadService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
@@ -92,30 +87,27 @@ public class TaskController {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @PostMapping("/create")
+    @PostMapping("/{dataset}/create")
     public ResponseEntity<?> create(
-            @Valid @RequestBody CodeTaskDto codeTaskDto, @AuthenticationPrincipal UserPrincipal principal
+            @PathVariable String dataset,
+            @Valid @RequestBody TaskDto taskDto,
+            @AuthenticationPrincipal UserPrincipal principal
     ) {
-        LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
         User requester = userService.getWithEmail(principal.getEmail());
+        return create(requester, Job.valueOf(dataset.toUpperCase()), taskDto.getQuery(), taskDto.getProcessing());
+    }
+
+    private ResponseEntity<?> create(User requester, Job dataset, JsonNode query, JsonNode processing) {
+        LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
 
         Integer taskLimit = configurationService.get("request_limit", Integer.class);
         if (!taskService.canCreateTask(requester, taskLimit))
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 
-        CodeQueryDto queryDto = codeTaskDto.getQuery();
-        CodeQuery query = conversionService.convert(queryDto, CodeQuery.class);
-
-        Language language = languageService.getWithName(queryDto.getLanguageName());
-        query.setLanguage(language);
-
-        CodeProcessingDto processingDto = codeTaskDto.getProcessing();
-        CodeProcessing processing = conversionService.convert(processingDto, CodeProcessing.class);
-
-        if (taskService.activeTaskExists(requester, query, processing))
+        if (taskService.activeTaskExists(requester, dataset, query, processing))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        taskService.create(requester, requestedAt, query, processing);
+        taskService.create(requester, dataset, query, processing, requestedAt);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 

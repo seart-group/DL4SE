@@ -1,5 +1,6 @@
 package usi.si.seart.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
@@ -14,13 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ConcurrentReferenceHashMap;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.exception.TaskNotFoundException;
-import usi.si.seart.model.task.CodeTask;
+import usi.si.seart.model.job.Job;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
-import usi.si.seart.model.task.processing.CodeProcessing;
-import usi.si.seart.model.task.processing.Processing;
-import usi.si.seart.model.task.query.CodeQuery;
-import usi.si.seart.model.task.query.Query;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
@@ -39,8 +36,8 @@ import java.util.stream.Stream;
 public interface TaskService {
 
     boolean canCreateTask(User user, Integer limit);
-    boolean activeTaskExists(User user, Query query, Processing processing);
-    void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing);
+    boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing);
+    void create(User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt);
     <T extends Task> T update(T task);
     <T extends Task> void cancel(T task);
     void registerException(TaskFailedException ex);
@@ -75,8 +72,8 @@ public interface TaskService {
         }
 
         @Override
-        public boolean activeTaskExists(User user, Query query, Processing processing) {
-            int taskHash = Objects.hash(user, query, processing);
+        public boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing) {
+            int taskHash = Objects.hash(user, dataset, query, processing);
             return taskRepository.findAllByUserAndStatusIn(user, Status.Category.ACTIVE)
                     .stream()
                     .mapToInt(Task::hashCode)
@@ -84,17 +81,18 @@ public interface TaskService {
         }
 
         @Override
-        public void create(User requester, LocalDateTime requestedAt, CodeQuery query, CodeProcessing processing) {
-            Task task = CodeTask.builder()
-                    .user(requester)
-                    .submitted(requestedAt)
-                    .query(query)
-                    .processing(processing)
-                    .build();
-
-            query.setTask(task);
-            processing.setTask(task);
-            taskRepository.save(task);
+        public void create(
+                User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt
+        ) {
+            taskRepository.save(
+                    Task.builder()
+                            .user(requester)
+                            .dataset(dataset)
+                            .query(query)
+                            .processing(processing)
+                            .submitted(requestedAt)
+                            .build()
+            );
         }
 
         @Override

@@ -1,30 +1,32 @@
-package usi.si.seart.dto.task.query;
+package usi.si.seart.dto.task;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Setter
-@SuperBuilder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionQueryDto extends CodeQueryDto {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class TaskDto {
 
     @NotNull
-    @JsonProperty(value = "exclude_boilerplate")
     @JsonSetter(nulls = Nulls.SKIP)
     @Builder.Default
-    Boolean excludeBoilerplate = false;
+    JsonNode query = JsonNodeFactory.instance.objectNode();
+
+    @NotNull
+    @JsonSetter(nulls = Nulls.SKIP)
+    @Builder.Default
+    JsonNode processing = JsonNodeFactory.instance.objectNode();
 }
