@@ -27,17 +27,10 @@ Content-Type: application/json
     "exclude_boilerplate" : true
   },
   "processing" : {
+    "include_ast" : false,
+    "include_symbolic_expression": false,
     "remove_docstring" : true,
-    "remove_inner_comments" : false,
-    "mask_token" : "<MASK>",
-    "mask_percentage" : 50,
-    "mask_contiguous_only" : true,
-    "abstract_code": true,
-    "abstract_idioms" : [
-      "App",
-      "main",
-      "String"
-    ]
+    "remove_inner_comments" : true
   }
 }
 
