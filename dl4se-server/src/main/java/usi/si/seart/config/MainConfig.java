@@ -7,8 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -39,8 +37,8 @@ public class MainConfig {
         jsonMapper.registerModules(
                 new JavaTimeModule(),
                 new SimpleModule("dl4se-spring-data-custom", Version.unknownVersion())
-                        .addSerializer(Sort.class, SortSerializer.INSTANCE)
-                        .addSerializer(PageImpl.class, PageSerializer.INSTANCE)
+                        .addSerializer(SortSerializer.INSTANCE)
+                        .addSerializer(PageSerializer.INSTANCE)
         );
         return jsonMapper;
     }

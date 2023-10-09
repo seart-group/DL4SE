@@ -1,15 +1,19 @@
 package usi.si.seart.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 
-public class SortSerializer extends JsonSerializer<Sort> {
+public class SortSerializer extends StdSerializer<Sort> {
 
     public static final SortSerializer INSTANCE = new SortSerializer();
+
+    public SortSerializer() {
+        super(Sort.class);
+    }
 
     @Override
     public void serialize(Sort value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
