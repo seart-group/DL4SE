@@ -17,6 +17,8 @@ import usi.si.seart.model.code.Function;
 import usi.si.seart.model.code.Function_;
 import usi.si.seart.model.job.Job;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.views.code.HashDistinct;
+import usi.si.seart.views.code.HashDistinct_;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
@@ -229,16 +231,15 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
                     .map(JsonNode::asBoolean)
                     .orElse(false);
             if (excludeIdentical || excludeDuplicates) {
-                Path<Long> path = root.get(Code_.id);
-                SingularAttribute<Code, String> distinct = excludeIdentical
-                        ? Code_.astHash
-                        : Code_.contentHash;
-                Subquery<Long> subselect = criteriaQuery.subquery(Long.class);
-                Root<? extends Code> subselectRoot = subselect.from(granularity);
-                subselect.select(criteriaBuilder.min(subselectRoot.get(Code_.id)));
-                subselect.groupBy(subselectRoot.get(distinct));
-                Expression<Long> expression = subselect.getSelection();
-                Predicate predicate = path.in(expression);
+                Class<? extends HashDistinct> distinct = getViewClass(granularity.getSimpleName(), excludeIdentical);
+                Subquery<Boolean> subquery = criteriaQuery.subquery(Boolean.class);
+                Root<? extends HashDistinct> subroot = subquery.from(distinct);
+                Path<Long> codePath = root.get(Code_.id);
+                Path<Long> hashPath = subroot.get(HashDistinct_.id);
+                Expression<Boolean> ignored = criteriaBuilder.literal(true);
+                Predicate equal = criteriaBuilder.equal(codePath, hashPath);
+                subquery.select(ignored).where(equal);
+                Predicate predicate = criteriaBuilder.exists(subquery);
                 predicates.add(predicate);
             }
 
@@ -285,5 +286,17 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             criteriaQuery.distinct(true);
             return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
         };
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends HashDistinct> getViewClass(String granularity, boolean identical) {
+        try {
+            String pkg = HashDistinct.class.getPackageName();
+            String category = identical ? "Ast" : "Content";
+            String name = String.format("%s.%s%sHashDistinct", pkg, granularity, category);
+            return (Class<? extends HashDistinct>) Class.forName(name);
+        } catch (ClassNotFoundException ignored) {
+            throw new IllegalArgumentException("No hash view for granularity: " + granularity);
+        }
     }
 }
