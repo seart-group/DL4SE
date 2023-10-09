@@ -1,47 +1,16 @@
 package usi.si.seart.repository;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import usi.si.seart.model.code.Code;
+import usi.si.seart.repository.specification.JpaStreamableSpecificationRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.Map;
-import java.util.stream.Stream;
-
-public interface CodeRepository {
-
+public interface CodeRepository extends
+        JpaRepository<Code, Long>,
+        JpaSpecificationExecutor<Code>,
+        JpaStreamableSpecificationRepository<Code>
+{
+    @Query(value = "SELECT size FROM code_size_in_bytes", nativeQuery = true)
     Long size();
-    Long count(String queryString, Map<String, ?> parameters);
-    <T extends Code> Stream<T> stream(String queryString, Map<String, ?> parameters, Class<T> codeClass);
-
-    @Repository
-    class CodeRepositoryImpl implements CodeRepository {
-
-        @PersistenceContext
-        EntityManager entityManager;
-
-        @Override
-        public Long size() {
-            Query query = entityManager.createNativeQuery("SELECT size FROM code_size_in_bytes");
-            return ((Number) query.getSingleResult()).longValue();
-        }
-
-        @Override
-        public Long count(String queryString, Map<String, ?> parameters) {
-            Query query = entityManager.createNativeQuery(queryString);
-            parameters.forEach(query::setParameter);
-            return ((Number) query.getSingleResult()).longValue();
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends Code> Stream<T> stream(
-                String queryString, Map<String, ?> parameters, Class<T> codeClass
-        ) {
-            Query query = entityManager.createNativeQuery(queryString, codeClass);
-            parameters.forEach(query::setParameter);
-            return query.getResultStream();
-        }
-    }
 }
