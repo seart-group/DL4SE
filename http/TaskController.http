@@ -1,5 +1,5 @@
-### POST /task/create
-POST https://localhost:8080/api/task/create
+### POST /task/{dataset}/create
+POST https://localhost:8080/api/task/code/create
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -13,7 +13,6 @@ Content-Type: application/json
     "min_contributors" : 10,
     "min_issues" : 5,
     "min_stars" : 20,
-    "include_ast" : true,
     "min_tokens" : 10,
     "max_tokens" : 5000,
     "min_lines" : 3,
@@ -24,6 +23,7 @@ Content-Type: application/json
     "exclude_identical" : true,
     "exclude_test" : false,
     "exclude_non_ascii" : true,
+    "exclude_errors": true,
     "exclude_boilerplate" : true
   },
   "processing" : {
