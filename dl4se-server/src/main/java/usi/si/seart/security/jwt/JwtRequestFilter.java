@@ -11,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-import usi.si.seart.exception.UserNotFoundException;
-import usi.si.seart.repository.UserRepository;
-import usi.si.seart.security.UserPrincipal;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,12 +20,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class JwtRequestFilter extends OncePerRequestFilter {
+public abstract class JwtRequestFilter extends OncePerRequestFilter {
 
     JwtTokenProvider tokenProvider;
-    UserRepository userRepository;
+
+    protected abstract UserDetails getUserDetails(Long id);
 
     @Override
     protected void doFilterInternal(
@@ -41,9 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 .filter(tokenProvider::validateToken)
                 .map(tokenProvider::getUserIdFromJWT);
         optional.ifPresent(id -> {
-            UserDetails userDetails = userRepository.findById(id)
-                    .map(UserPrincipal::of)
-                    .orElseThrow(() -> new UserNotFoundException("id", id));
+            UserDetails userDetails = getUserDetails(id);
             Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
             WebAuthenticationDetails details = new WebAuthenticationDetailsSource().buildDetails(request);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
