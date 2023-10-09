@@ -9,6 +9,7 @@ import usi.si.seart.exception.TokenExpiredException;
 import usi.si.seart.exception.TokenNotFoundException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.Token;
+import usi.si.seart.model.user.token.Token_;
 import usi.si.seart.model.user.token.VerificationToken;
 import usi.si.seart.repository.TokenRepository;
 import usi.si.seart.repository.UserRepository;
@@ -50,7 +51,7 @@ public interface VerificationService {
                         user.setVerified(true);
                         tokenRepository.delete(token);
                         return userRepository.save(user);
-                    }).orElseThrow(() -> new TokenNotFoundException("value", value));
+                    }).orElseThrow(() -> new TokenNotFoundException(Token_.value, value));
         }
 
         @Override
@@ -58,7 +59,7 @@ public interface VerificationService {
             return tokenRepository.findByValue(value).map(token -> {
                 token.setValue(UUID.randomUUID().toString());
                 return tokenRepository.save(token);
-            }).orElseThrow(() -> new TokenNotFoundException("value", value));
+            }).orElseThrow(() -> new TokenNotFoundException(Token_.value, value));
         }
     }
 }

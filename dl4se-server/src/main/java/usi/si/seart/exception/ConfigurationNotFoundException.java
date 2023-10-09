@@ -1,10 +1,12 @@
 package usi.si.seart.exception;
 
+import usi.si.seart.model.Configuration;
+
+import javax.persistence.metamodel.Attribute;
+
 public class ConfigurationNotFoundException extends EntityNotFoundException {
 
-    private static final String format = "Could not find Configuration with key: %s";
-
-    public ConfigurationNotFoundException(String key) {
-        super(String.format(format, key));
+    public <T> ConfigurationNotFoundException(Attribute<Configuration, T> attribute, T value) {
+        super(Configuration.class, attribute, value);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import usi.si.seart.exception.UserNotFoundException;
 import usi.si.seart.model.user.Role;
 import usi.si.seart.model.user.User;
+import usi.si.seart.model.user.User_;
 import usi.si.seart.repository.UserRepository;
 
 public interface UserService {
@@ -51,19 +52,19 @@ public interface UserService {
         @Override
         public User getWithId(Long id) {
             return userRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException("id", id));
+                    .orElseThrow(() -> new UserNotFoundException(User_.id, id));
         }
 
         @Override
         public User getWithUid(String uid) {
             return userRepository.findByUid(uid)
-                    .orElseThrow(() -> new UserNotFoundException("uid", uid));
+                    .orElseThrow(() -> new UserNotFoundException(User_.uid, uid));
         }
 
         @Override
         public User getWithEmail(String email) {
             return userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UserNotFoundException("email", email));
+                    .orElseThrow(() -> new UserNotFoundException(User_.email, email));
         }
     }
 }

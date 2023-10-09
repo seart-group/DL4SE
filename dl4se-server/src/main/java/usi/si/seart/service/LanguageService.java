@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import usi.si.seart.exception.LanguageNotFoundException;
 import usi.si.seart.model.Language;
+import usi.si.seart.model.Language_;
 import usi.si.seart.repository.LanguageRepository;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface LanguageService {
         @Override
         public Language getWithName(String name) {
             return languageRepository.findByName(name)
-                    .orElseThrow(() -> new LanguageNotFoundException("name", name));
+                    .orElseThrow(() -> new LanguageNotFoundException(Language_.name, name));
         }
 
         @Override

@@ -11,6 +11,7 @@ import usi.si.seart.exception.TokenNotFoundException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.PasswordResetToken;
 import usi.si.seart.model.user.token.Token;
+import usi.si.seart.model.user.token.Token_;
 import usi.si.seart.repository.TokenRepository;
 import usi.si.seart.repository.UserRepository;
 
@@ -62,7 +63,7 @@ public interface PasswordResetService {
                         user.setPassword(passwordEncoder.encode(newPass));
                         tokenRepository.delete(token);
                         return userRepository.save(user);
-                    }).orElseThrow(() -> new TokenNotFoundException("value", value));
+                    }).orElseThrow(() -> new TokenNotFoundException(Token_.value, value));
         }
     }
 }

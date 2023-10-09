@@ -18,6 +18,7 @@ import usi.si.seart.exception.TaskNotFoundException;
 import usi.si.seart.model.job.Job;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.task.Task;
+import usi.si.seart.model.task.Task_;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.TaskRepository;
 
@@ -171,7 +172,7 @@ public interface TaskService {
         @Override
         public Task getWithUUID(UUID uuid) {
             return taskRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new TaskNotFoundException("uuid", uuid));
+                    .orElseThrow(() -> new TaskNotFoundException(Task_.uuid, uuid));
         }
     }
 }

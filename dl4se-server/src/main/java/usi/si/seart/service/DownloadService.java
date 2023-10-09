@@ -10,6 +10,7 @@ import usi.si.seart.exception.TokenNotFoundException;
 import usi.si.seart.model.user.User;
 import usi.si.seart.model.user.token.DownloadToken;
 import usi.si.seart.model.user.token.Token;
+import usi.si.seart.model.user.token.Token_;
 import usi.si.seart.repository.TokenRepository;
 
 import java.util.UUID;
@@ -46,7 +47,7 @@ public interface DownloadService {
                             throw new TokenExpiredException(token);
 
                         return token;
-                    }).orElseThrow(() -> new TokenNotFoundException("value", value));
+                    }).orElseThrow(() -> new TokenNotFoundException(Token_.value, value));
         }
     }
 }

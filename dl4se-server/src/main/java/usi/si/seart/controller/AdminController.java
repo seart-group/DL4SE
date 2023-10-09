@@ -20,6 +20,7 @@ import usi.si.seart.dto.task.TaskSearchDto;
 import usi.si.seart.dto.user.UserSearchDto;
 import usi.si.seart.exception.ConfigurationNotFoundException;
 import usi.si.seart.model.Configuration;
+import usi.si.seart.model.Configuration_;
 import usi.si.seart.model.task.Task;
 import usi.si.seart.model.task.Task_;
 import usi.si.seart.model.user.Role;
@@ -126,7 +127,7 @@ public class AdminController {
 
         for (Configuration configuration: configurations) {
             boolean exists = configurationService.exists(configuration);
-            if (!exists) throw new ConfigurationNotFoundException(configuration.getKey());
+            if (!exists) throw new ConfigurationNotFoundException(Configuration_.key, configuration.getKey());
         }
 
         return ResponseEntity.ok(configurationService.update(configurations));

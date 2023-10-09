@@ -1,10 +1,12 @@
 package usi.si.seart.exception;
 
+import usi.si.seart.model.user.token.Token;
+
+import javax.persistence.metamodel.Attribute;
+
 public class TokenNotFoundException extends EntityNotFoundException {
 
-    private static final String format = "Could not find Token with: [%s = %s]";
-
-    public TokenNotFoundException(String field, Object value) {
-        super(String.format(format, field, value.toString()));
+    public <T> TokenNotFoundException(Attribute<Token, T> attribute, T value) {
+        super(Token.class, attribute, value);
     }
 }

@@ -1,10 +1,12 @@
 package usi.si.seart.exception;
 
+import usi.si.seart.model.task.Task;
+
+import javax.persistence.metamodel.Attribute;
+
 public class TaskNotFoundException extends EntityNotFoundException {
 
-    private static final String format = "Could not find Task with: [%s = %s]";
-
-    public TaskNotFoundException(String field, Object value) {
-        super(String.format(format, field, value.toString()));
+    public <T> TaskNotFoundException(Attribute<Task, T> attribute, T value) {
+        super(Task.class, attribute, value);
     }
 }

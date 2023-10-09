@@ -1,10 +1,12 @@
 package usi.si.seart.exception;
 
+import usi.si.seart.model.user.User;
+
+import javax.persistence.metamodel.Attribute;
+
 public class UserNotFoundException extends EntityNotFoundException {
 
-    private static final String format = "Could not find User with: [%s = %s]";
-
-    public UserNotFoundException(String field, Object value) {
-        super(String.format(format, field, value.toString()));
+    public <T> UserNotFoundException(Attribute<User, T> attribute, T value) {
+        super(User.class, attribute, value);
     }
 }
