@@ -14,7 +14,7 @@ import usi.si.seart.model.user.User;
 import java.util.Collection;
 import java.util.List;
 
-@Builder(access = AccessLevel.PRIVATE)
+@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserPrincipal implements UserDetails {

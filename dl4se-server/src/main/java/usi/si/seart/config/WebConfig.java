@@ -8,6 +8,7 @@ import usi.si.seart.converter.DtoToConfigurationConverter;
 import usi.si.seart.converter.DtoToUserConverter;
 import usi.si.seart.converter.TaskSearchDtoToSpecificationConverter;
 import usi.si.seart.converter.UserSearchDtoToSpecificationConverter;
+import usi.si.seart.converter.UserToUserPrincipalConverter;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -26,5 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new DtoToConfigurationConverter());
         registry.addConverter(new TaskSearchDtoToSpecificationConverter());
         registry.addConverter(new UserSearchDtoToSpecificationConverter());
+        registry.addConverter(new UserToUserPrincipalConverter());
     }
 }
