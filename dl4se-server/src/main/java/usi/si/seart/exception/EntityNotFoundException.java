@@ -1,8 +1,8 @@
 package usi.si.seart.exception;
 
-public abstract class EntityNotFoundException extends RuntimeException {
+import lombok.AccessLevel;
+import lombok.experimental.StandardException;
 
-    public EntityNotFoundException(String message) {
-        super(message);
-    }
+@StandardException(access = AccessLevel.PROTECTED)
+public abstract class EntityNotFoundException extends RuntimeException {
 }
