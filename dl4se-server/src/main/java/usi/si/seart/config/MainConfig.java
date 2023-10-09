@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +13,9 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import usi.si.seart.converter.DtoToCodeProcessingConverter;
 import usi.si.seart.converter.DtoToConfigurationConverter;
 import usi.si.seart.converter.DtoToUserConverter;
-import usi.si.seart.converter.GenericCodeQueryConverter;
 import usi.si.seart.converter.TaskSearchDtoToSpecificationConverter;
-import usi.si.seart.converter.TaskToProcessingPipelineConverter;
-import usi.si.seart.converter.TaskToQueriesConverter;
 import usi.si.seart.converter.UserSearchDtoToSpecificationConverter;
 import usi.si.seart.jackson.PageSerializer;
 import usi.si.seart.jackson.SortSerializer;
@@ -37,11 +30,6 @@ public class MainConfig {
     @Bean
     public Path fileStorageDirPath(@Value("${java.io.tmpdir}") String value) {
         return Path.of(value, "dl4se_storage");
-    }
-
-    @Bean
-    public DSLContext dslContext() {
-        return DSL.using(SQLDialect.POSTGRES);
     }
 
     @Bean
@@ -77,10 +65,6 @@ public class MainConfig {
             public void addFormatters(@NonNull final FormatterRegistry registry) {
                 registry.addConverter(new DtoToUserConverter());
                 registry.addConverter(new DtoToConfigurationConverter());
-                registry.addConverter(new GenericCodeQueryConverter());
-                registry.addConverter(new DtoToCodeProcessingConverter());
-                registry.addConverter(new TaskToProcessingPipelineConverter());
-                registry.addConverter(new TaskToQueriesConverter(dslContext()));
                 registry.addConverter(new TaskSearchDtoToSpecificationConverter());
                 registry.addConverter(new UserSearchDtoToSpecificationConverter());
             }
