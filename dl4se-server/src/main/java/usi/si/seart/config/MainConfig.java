@@ -1,6 +1,5 @@
 package usi.si.seart.config;
 
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,7 +27,7 @@ public class MainConfig {
         jsonMapper.setDateFormat(dateFormat());
         jsonMapper.registerModules(
                 new JavaTimeModule(),
-                new SimpleModule("dl4se-spring-data-custom", Version.unknownVersion())
+                new SimpleModule("dl4se-spring-data-custom")
                         .addSerializer(SortSerializer.INSTANCE)
                         .addSerializer(PageSerializer.INSTANCE)
         );
