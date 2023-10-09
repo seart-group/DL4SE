@@ -1,16 +1,10 @@
 package usi.si.seart.config;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -41,9 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     CustomUserDetailsService userDetailsService;
 
-    @NonFinal
-    @Value("${jwt.secret}")
-    String secret;
+    JwtRequestFilter jwtRequestFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -89,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -98,25 +90,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtRequestFilter jwtAuthenticationFilter() {
-        return new JwtRequestFilter();
-    }
-
-    @Bean
-    public Key secretKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
-    }
-
-    @Bean
-    public JwtBuilder jwtBuilder() {
-        return Jwts.builder().signWith(secretKey(), SignatureAlgorithm.HS512);
-    }
-
-    @Bean
-    public JwtParser jwtParser() {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey())
-                .build();
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> {
             int code = HttpServletResponse.SC_UNAUTHORIZED;

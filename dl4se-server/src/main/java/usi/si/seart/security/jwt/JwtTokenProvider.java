@@ -6,9 +6,7 @@ import io.jsonwebtoken.JwtParser;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import usi.si.seart.security.UserPrincipal;
 
 import java.time.ZoneOffset;
@@ -16,8 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 
-@Component
-@AllArgsConstructor(onConstructor_ = @Autowired)
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtTokenProvider {
 
