@@ -39,8 +39,8 @@ public interface TaskService {
     boolean canCreateTask(User user, Integer limit);
     boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing);
     void create(User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt);
-    <T extends Task> T update(T task);
-    <T extends Task> void cancel(T task);
+    Task update(Task task);
+    void cancel(Task task);
     void registerException(TaskFailedException ex);
     void forEachNonExpired(Consumer<Task> consumer);
     void forEachExecuting(Consumer<Task> consumer);
@@ -98,7 +98,7 @@ public interface TaskService {
 
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public <T extends Task> T update(T task) {
+        public Task update(Task task) {
             Lock taskLock = taskLockMap.getLock(task);
             try {
                 taskLock.lock();
@@ -110,7 +110,7 @@ public interface TaskService {
 
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public <T extends Task> void cancel(T task) {
+        public void cancel(Task task) {
             Lock taskLock = taskLockMap.getLock(task);
             try {
                 taskLock.lock();
