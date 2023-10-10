@@ -1,10 +1,6 @@
 package usi.si.seart.config;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.owasp.encoder.Encode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,8 +33,6 @@ import javax.servlet.http.HttpServletResponse;
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
 
     @Bean
