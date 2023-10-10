@@ -1,6 +1,7 @@
 package usi.si.seart.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,6 +12,7 @@ import usi.si.seart.converter.UserSearchDtoToSpecificationConverter;
 import usi.si.seart.converter.UserToUserPrincipalConverter;
 
 @Configuration
+@EnableSpringDataWebSupport
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
