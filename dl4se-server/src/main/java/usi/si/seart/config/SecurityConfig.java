@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,11 +16,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import usi.si.seart.repository.UserRepository;
+import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.security.jwt.JwtRequestFilter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -93,6 +97,13 @@ public class SecurityConfig {
             String message = Encode.forHtml(authException.getMessage());
             response.sendError(code, message);
         };
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository, ConversionService conversionService) {
+        return username -> userRepository.findByEmail(username)
+                .map(user -> conversionService.convert(user, UserPrincipal.class))
+                .orElseThrow(() -> new UsernameNotFoundException("No user registered with the email: " + username));
     }
 
     @Bean
