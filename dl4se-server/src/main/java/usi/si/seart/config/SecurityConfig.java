@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -121,11 +122,13 @@ public class SecurityConfig {
             String username = authentication.getName();
             String password = authentication.getCredentials().toString();
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            boolean enabled = userDetails.isEnabled();
+            if (!enabled)
+                throw new DisabledException("User is currently disabled!");
+            if (passwordEncoder.matches(password, userDetails.getPassword()))
                 return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            } else {
+            else
                 throw new BadCredentialsException("Incorrect password!");
-            }
         };
     }
 }
