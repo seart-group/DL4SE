@@ -22,9 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import usi.si.seart.repository.UserRepository;
+import usi.si.seart.exception.UserNotFoundException;
+import usi.si.seart.model.user.User;
 import usi.si.seart.security.UserPrincipal;
 import usi.si.seart.security.jwt.JwtRequestFilter;
+import usi.si.seart.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -100,10 +102,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository, ConversionService conversionService) {
-        return username -> userRepository.findByEmail(username)
-                .map(user -> conversionService.convert(user, UserPrincipal.class))
-                .orElseThrow(() -> new UsernameNotFoundException("No user registered with the email: " + username));
+    public UserDetailsService userDetailsService(UserService userService, ConversionService conversionService) {
+        return username -> {
+            try {
+                User user = userService.getWithEmail(username);
+                return conversionService.convert(user, UserPrincipal.class);
+            } catch (UserNotFoundException ex) {
+                throw new UsernameNotFoundException(ex.getMessage());
+            }
+        };
     }
 
     @Bean
