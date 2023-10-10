@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import usi.si.seart.model.user.Role;
-import usi.si.seart.model.user.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,18 +35,6 @@ public class UserPrincipal implements UserDetails {
     Boolean enabled;
 
     Role role;
-
-    public static UserPrincipal of(User user) {
-        return UserPrincipal.builder()
-                .id(user.getId())
-                .uid(user.getUid())
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .verified(user.getVerified())
-                .enabled(user.getEnabled())
-                .role(user.getRole())
-                .build();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
