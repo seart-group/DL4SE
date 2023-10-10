@@ -1,13 +1,11 @@
 package usi.si.seart.config;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import usi.si.seart.jackson.PageSerializer;
-import usi.si.seart.jackson.SortSerializer;
+import usi.si.seart.jackson.PaginationModule;
 
 import java.nio.file.Path;
 import java.text.DateFormat;
@@ -22,16 +20,14 @@ public class MainConfig {
     }
 
     @Bean
-    public JsonMapper jsonMapper() {
-        JsonMapper jsonMapper = new JsonMapper();
-        jsonMapper.setDateFormat(dateFormat());
-        jsonMapper.registerModules(
-                new JavaTimeModule(),
-                new SimpleModule("dl4se-spring-data-custom")
-                        .addSerializer(SortSerializer.INSTANCE)
-                        .addSerializer(PageSerializer.INSTANCE)
-        );
-        return jsonMapper;
+    public JsonMapper jsonMapper(DateFormat dateFormat) {
+        return JsonMapper.builder()
+                .defaultDateFormat(dateFormat)
+                .addModules(
+                        new JavaTimeModule(),
+                        new PaginationModule()
+                )
+                .build();
     }
 
     @Bean
