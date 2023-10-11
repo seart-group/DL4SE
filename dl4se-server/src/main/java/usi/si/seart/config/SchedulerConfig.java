@@ -29,7 +29,6 @@ import usi.si.seart.service.CodeService;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
-import usi.si.seart.service.GitRepoService;
 import usi.si.seart.service.TaskService;
 
 import javax.persistence.EntityManager;
@@ -54,7 +53,6 @@ public class SchedulerConfig {
 
     CodeService codeService;
     TaskService taskService;
-    GitRepoService gitRepoService;
     EmailService emailService;
     FileSystemService fileSystemService;
     ConversionService conversionService;
@@ -71,6 +69,9 @@ public class SchedulerConfig {
 
     @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler(
+            TaskCleaner taskCleaner,
+            RepoMaintainer repoMaintainer,
+            ViewMaintainer viewMaintainer,
             @Value("${scheduling.task.task-cleaner.cron}") CronTrigger taskCleanerTrigger,
             @Value("${scheduling.task.repo-maintainer.cron}") CronTrigger repoMaintainerTrigger,
             @Value("${scheduling.task.view-maintainer.cron}") CronTrigger viewMaintainerTrigger
@@ -107,25 +108,13 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), taskCleanerTrigger);
-        threadPoolTaskScheduler.schedule(getRepoMaintainer(), repoMaintainerTrigger);
-        threadPoolTaskScheduler.schedule(getViewMaintainer(), viewMaintainerTrigger);
+        threadPoolTaskScheduler.schedule(taskCleaner, taskCleanerTrigger);
+        threadPoolTaskScheduler.schedule(repoMaintainer, repoMaintainerTrigger);
+        threadPoolTaskScheduler.schedule(viewMaintainer, viewMaintainerTrigger);
         for (int i = 0; i < runners; i++)
             threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
 
         return threadPoolTaskScheduler;
-    }
-
-    private Runnable getRepoMaintainer() {
-        return new RepoMaintainer(gitRepoService);
-    }
-
-    private Runnable getTaskCleaner() {
-        return new TaskCleaner(taskService, fileSystemService);
-    }
-
-    private Runnable getViewMaintainer() {
-        return new ViewMaintainer(entityManager, transactionManager);
     }
 
     private Runnable getTaskRunner() {
