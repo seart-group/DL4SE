@@ -20,17 +20,17 @@ public class RepoMaintainer implements Runnable {
 
     @Override
     public void run() {
-        log.debug("Running repository maintenance...");
-        gitRepoService.forEach(this::checkExists);
-        log.debug("Repository maintenance complete!");
+        log.info("Running repository maintenance...");
+        gitRepoService.forEach(this::run);
+        log.info("Repository maintenance complete!");
     }
 
     @SneakyThrows({IOException.class, InterruptedException.class})
-    private void checkExists(GitRepo gitRepo) {
+    private void run(GitRepo gitRepo) {
         String name = gitRepo.getName();
         String url = String.format("https://github.com/%s", name);
 
-        log.trace("Checking if Git repository exists: [{}]", name);
+        log.debug("Checking if Git repository exists: [{}]", name);
 
         ProcessBuilder pb = new ProcessBuilder("git", "ls-remote", url);
         pb.environment().put("GIT_TERMINAL_PROMPT", "0");
@@ -42,9 +42,9 @@ public class RepoMaintainer implements Runnable {
         if (exited) {
             isUnavailable = process.exitValue() != 0;
         } else {
-            log.trace("Attempting to terminate timed-out process: [{}]", pid);
+            log.debug("Attempting to terminate timed-out process: [{}]", pid);
             while (process.isAlive()) process.destroyForcibly();
-            log.trace("Terminated timed-out process: [{}]", pid);
+            log.debug("Terminated timed-out process: [{}]", pid);
         }
 
         gitRepo.setIsUnavailable(isUnavailable);
