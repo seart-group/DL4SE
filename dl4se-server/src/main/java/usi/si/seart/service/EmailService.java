@@ -19,7 +19,6 @@ import usi.si.seart.util.unit.ReadableFileSize;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface EmailService {
@@ -65,15 +64,15 @@ public interface EmailService {
             String statusName = task.getStatus().name();
             String subject = String.format("Task [%s]: %s", uuidString, statusName);
             ReadableFileSize exportSize = new ReadableFileSize(task.getSize());
-
-            Map<String, Object> variables = new HashMap<>();
-            variables.put("uuid", uuidString);
-            variables.put("status", statusName);
-            variables.put("submitted", task.getSubmitted());
-            variables.put("started", task.getStarted());
-            variables.put("finished", task.getFinished());
-            variables.put("results", task.getProcessedResults());
-            variables.put("size", exportSize.toString());
+            Map<String, Object> variables = Map.ofEntries(
+                    Map.entry("uuid", uuidString),
+                    Map.entry("status", statusName),
+                    Map.entry("submitted", task.getSubmitted()),
+                    Map.entry("started", task.getStarted()),
+                    Map.entry("finished", task.getFinished()),
+                    Map.entry("results", task.getProcessedResults()),
+                    Map.entry("size", exportSize.toString())
+            );
 
             MimeMessage message = createMessage("task_notification", recipient, subject, variables);
             mailSender.send(message);
