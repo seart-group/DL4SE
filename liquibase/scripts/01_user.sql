@@ -57,12 +57,3 @@ CREATE INDEX "function_content_hash_idx" ON "function" (content_hash);
 CREATE INDEX "file_ast_hash_idx" ON "file" (ast_hash);
 CREATE INDEX "function_ast_hash_idx" ON "function" (ast_hash);
 CREATE INDEX "git_repo_stats_idx" ON "git_repo" (commits, contributors, issues, stars) INCLUDE (is_fork, license);
-
-INSERT INTO configuration(key, value, last_update)
-VALUES
-    ('request_limit', '3', now()),
-    ('max_page_size', '100', now()),
-    ('task_runner_count', '2', now()),
-    ('task_cleaner_cron', '0 */15 * * * *', now()),
-    ('repo_maintainer_cron', '0 0 0 * * SUN', now()),
-    ('view_maintainer_cron', '0 0 0 * * *', now());
