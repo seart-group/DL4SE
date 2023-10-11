@@ -1,11 +1,7 @@
 package usi.si.seart.config;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -40,8 +36,6 @@ import java.util.concurrent.ScheduledFuture;
         "DirectoryInitializationBean",
         "TaskRunnerRecoveryBean",
 })
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SchedulerConfig {
 
     @Bean(destroyMethod="shutdown")
