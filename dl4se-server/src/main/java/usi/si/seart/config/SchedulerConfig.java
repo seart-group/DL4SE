@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.Trigger;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -39,7 +40,11 @@ import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
 @Configuration
-@DependsOn({"TaskRunnerRecoveryBean", "DirectoryInitializationBean"})
+@DependsOn({
+        "ConfigurationInitializingBean",
+        "DirectoryInitializationBean",
+        "TaskRunnerRecoveryBean",
+})
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SchedulerConfig {
