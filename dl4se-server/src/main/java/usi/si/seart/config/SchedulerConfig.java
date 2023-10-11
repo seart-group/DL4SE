@@ -101,7 +101,6 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
         threadPoolTaskScheduler.setPoolSize(3 + runners);
-        threadPoolTaskScheduler.setThreadNamePrefix("DL4SEScheduler");
         threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
