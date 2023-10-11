@@ -3,8 +3,7 @@
 
 CREATE TABLE "configuration" (
     "key" text PRIMARY KEY NOT NULL,
-    "value" text NOT NULL,
-    "last_update" timestamp NOT NULL
+    "value" text NOT NULL
 );
 
 CREATE TABLE "user" (
