@@ -70,13 +70,14 @@ public class SchedulerConfig {
     Integer fetchSize;
 
     @Bean(destroyMethod="shutdown")
-    public ThreadPoolTaskScheduler taskScheduler() {
+    public ThreadPoolTaskScheduler taskScheduler(
+            @Value("${scheduling.task.task-cleaner.cron}") CronTrigger taskCleanerTrigger,
+            @Value("${scheduling.task.repo-maintainer.cron}") CronTrigger repoMaintainerTrigger,
+            @Value("${scheduling.task.view-maintainer.cron}") CronTrigger viewMaintainerTrigger
+    ) {
         Integer runners = configurationService.get("task_runner_count", Integer.class);
-        String taskCleanerCron = configurationService.get("task_cleaner_cron", String.class);
-        String repoMaintainerCron = configurationService.get("repo_maintainer_cron", String.class);
-        String viewMaintainerCron = configurationService.get("view_maintainer_cron", String.class);
-
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler() {
+
             private final Set<ScheduledFuture<?>> futures = new HashSet<>();
 
             @Override
@@ -106,9 +107,9 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
-        threadPoolTaskScheduler.schedule(getRepoMaintainer(), new CronTrigger(repoMaintainerCron));
-        threadPoolTaskScheduler.schedule(getTaskCleaner(), new CronTrigger(taskCleanerCron));
-        threadPoolTaskScheduler.schedule(getViewMaintainer(), new CronTrigger(viewMaintainerCron));
+        threadPoolTaskScheduler.schedule(getTaskCleaner(), taskCleanerTrigger);
+        threadPoolTaskScheduler.schedule(getRepoMaintainer(), repoMaintainerTrigger);
+        threadPoolTaskScheduler.schedule(getViewMaintainer(), viewMaintainerTrigger);
         for (int i = 0; i < runners; i++)
             threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
 
