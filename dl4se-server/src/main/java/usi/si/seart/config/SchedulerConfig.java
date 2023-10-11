@@ -69,6 +69,7 @@ public class SchedulerConfig {
 
     @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler(
+            ErrorHandler errorHandler,
             TaskCleaner taskCleaner,
             RepoMaintainer repoMaintainer,
             ViewMaintainer viewMaintainer,
@@ -105,7 +106,7 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setClock(Clock.systemUTC());
         threadPoolTaskScheduler.setPoolSize(3 + runners);
         threadPoolTaskScheduler.setThreadNamePrefix("scheduling-");
-        threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
+        threadPoolTaskScheduler.setErrorHandler(errorHandler);
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
@@ -132,25 +133,30 @@ public class SchedulerConfig {
         );
     }
 
-    private class SchedulerErrorHandler implements ErrorHandler {
+    @Bean
+    public ErrorHandler errorHandler(
+            TaskService taskService, EmailService emailService, FileSystemService fileSystemService
+    ) {
+        return new ErrorHandler() {
 
-        private final Logger log = LoggerFactory.getLogger(this.getClass());
+            private final Logger log = LoggerFactory.getLogger("usi.si.seart.config.SchedulerConfig$ErrorHandler");
 
-        @Override
-        public void handleError(Throwable t) {
-            if (t instanceof TaskFailedException) {
-                handleError((TaskFailedException) t);
-            } else {
-                log.error("Unhandled exception occurred while performing a scheduled job.", t);
+            @Override
+            public void handleError(Throwable t) {
+                if (t instanceof TaskFailedException) {
+                    handleError((TaskFailedException) t);
+                } else {
+                    log.error("Unhandled exception occurred while performing a scheduled job.", t);
+                }
             }
-        }
 
-        private void handleError(TaskFailedException ex) {
-            log.warn(ex.getMessage());
-            taskService.registerException(ex);
-            Task task = ex.getTask();
-            fileSystemService.cleanTaskFiles(task);
-            emailService.sendTaskNotificationEmail(task);
-        }
+            private void handleError(TaskFailedException ex) {
+                log.warn(ex.getMessage());
+                taskService.registerException(ex);
+                Task task = ex.getTask();
+                fileSystemService.cleanTaskFiles(task);
+                emailService.sendTaskNotificationEmail(task);
+            }
+        };
     }
 }
