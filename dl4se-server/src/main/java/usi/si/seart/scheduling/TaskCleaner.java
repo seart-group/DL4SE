@@ -18,13 +18,13 @@ public class TaskCleaner implements Runnable {
 
     @Override
     public void run() {
-        log.debug("Cleaning up expired task files...");
-        taskService.forEachNonExpired(this::cleanAndFlag);
-        log.debug("Task cleaning complete!");
+        log.info("Cleaning up expired task files...");
+        taskService.forEachNonExpired(this::run);
+        log.info("Task cleaning complete!");
     }
 
-    private void cleanAndFlag(Task task) {
-        log.trace("Deleting export file for task: [{}]", task.getUuid());
+    private void run(Task task) {
+        log.debug("Deleting export file for task: [{}]", task.getUuid());
         task.setExpired(true);
         fileSystemService.cleanTaskFiles(task);
     }
