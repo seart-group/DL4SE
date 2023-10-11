@@ -106,9 +106,7 @@ public interface EmailService {
                     StandardCharsets.UTF_8.name()
             );
 
-            Context context = new Context();
-            context.setVariables(variables);
-
+            Context context = new Context(null, variables);
             String html = templateEngine.process(template, context);
             helper.setFrom(sender);
             helper.setTo(recipient);
