@@ -1,4 +1,4 @@
-package usi.si.seart.beans;
+package usi.si.seart.bean;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

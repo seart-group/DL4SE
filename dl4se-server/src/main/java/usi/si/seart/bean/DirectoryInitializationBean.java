@@ -1,4 +1,4 @@
-package usi.si.seart.beans;
+package usi.si.seart.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
