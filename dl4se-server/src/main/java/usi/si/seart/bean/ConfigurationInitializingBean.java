@@ -14,8 +14,6 @@ import usi.si.seart.repository.ConfigurationRepository;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 @Component("ConfigurationInitializingBean")
 @AllArgsConstructor(onConstructor_ = @Autowired)
@@ -29,12 +27,16 @@ public class ConfigurationInitializingBean implements InitializingBean {
         Resource resource = new ClassPathResource("configurations.yaml");
         InputStream inputStream = resource.getInputStream();
         Map<String, String> map = new Yaml().load(inputStream);
-        map.forEach((key, value) -> {
-            Optional<Configuration> optional = configurationRepository.findById(key);
-            Supplier<Configuration> supplier = () -> new Configuration(key, value);
-            Configuration configuration = optional.orElseGet(supplier);
-            configuration.setValue(value);
-            configurationRepository.save(configuration);
-        });
+        map.entrySet().stream()
+                .filter(entry -> {
+                    String key = entry.getKey();
+                    return !configurationRepository.existsById(key);
+                })
+                .forEach(entry -> {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    Configuration configuration = new Configuration(key, value);
+                    configurationRepository.save(configuration);
+                });
     }
 }
