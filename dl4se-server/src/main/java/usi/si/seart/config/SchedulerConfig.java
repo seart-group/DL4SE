@@ -1,23 +1,21 @@
 package usi.si.seart.config;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ErrorHandler;
 import usi.si.seart.exception.TaskFailedException;
 import usi.si.seart.model.task.Task;
@@ -25,14 +23,11 @@ import usi.si.seart.scheduling.RepoMaintainer;
 import usi.si.seart.scheduling.TaskCleaner;
 import usi.si.seart.scheduling.TaskRunner;
 import usi.si.seart.scheduling.ViewMaintainer;
-import usi.si.seart.service.CodeService;
 import usi.si.seart.service.ConfigurationService;
 import usi.si.seart.service.EmailService;
 import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.Clock;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,34 +44,19 @@ import java.util.concurrent.ScheduledFuture;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SchedulerConfig {
 
-    JsonMapper jsonMapper;
-
-    CodeService codeService;
-    TaskService taskService;
-    EmailService emailService;
-    FileSystemService fileSystemService;
-    ConversionService conversionService;
-    ConfigurationService configurationService;
-
-    PlatformTransactionManager transactionManager;
-
-    @PersistenceContext
-    EntityManager entityManager;
-
-    @NonFinal
-    @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}")
-    Integer fetchSize;
-
     @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler(
+            ApplicationContext applicationContext,
             ErrorHandler errorHandler,
             TaskCleaner taskCleaner,
             RepoMaintainer repoMaintainer,
             ViewMaintainer viewMaintainer,
             @Value("${scheduling.task.task-cleaner.cron}") CronTrigger taskCleanerTrigger,
             @Value("${scheduling.task.repo-maintainer.cron}") CronTrigger repoMaintainerTrigger,
-            @Value("${scheduling.task.view-maintainer.cron}") CronTrigger viewMaintainerTrigger
+            @Value("${scheduling.task.view-maintainer.cron}") CronTrigger viewMaintainerTrigger,
+            ConfigurationService configurationService
     ) {
+        AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
         Integer runners = configurationService.get("task_runner_count", Integer.class);
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler() {
 
@@ -113,24 +93,13 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.schedule(taskCleaner, taskCleanerTrigger);
         threadPoolTaskScheduler.schedule(repoMaintainer, repoMaintainerTrigger);
         threadPoolTaskScheduler.schedule(viewMaintainer, viewMaintainerTrigger);
-        for (int i = 0; i < runners; i++)
-            threadPoolTaskScheduler.scheduleWithFixedDelay(getTaskRunner(), 500);
+
+        for (int i = 0; i < runners; i++) {
+            TaskRunner taskRunner = autowireCapableBeanFactory.createBean(TaskRunner.class);
+            threadPoolTaskScheduler.scheduleWithFixedDelay(taskRunner, 500);
+        }
 
         return threadPoolTaskScheduler;
-    }
-
-    private Runnable getTaskRunner() {
-        return new TaskRunner(
-                jsonMapper,
-                codeService,
-                taskService,
-                emailService,
-                fileSystemService,
-                conversionService,
-                transactionManager,
-                entityManager,
-                fetchSize
-        );
     }
 
     @Bean

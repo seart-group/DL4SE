@@ -8,9 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Iterable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -26,6 +31,7 @@ import usi.si.seart.service.FileSystemService;
 import usi.si.seart.service.TaskService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -37,7 +43,8 @@ import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
 @Slf4j
-@AllArgsConstructor
+@Component
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TaskRunner implements Runnable {
 
@@ -51,9 +58,33 @@ public class TaskRunner implements Runnable {
 
     PlatformTransactionManager transactionManager;
 
+    @PersistenceContext
     EntityManager entityManager;
 
     Integer fetchSize;
+
+    @Autowired
+    public TaskRunner(
+            JsonMapper jsonMapper,
+            CodeService codeService,
+            TaskService taskService,
+            EmailService emailService,
+            FileSystemService fileSystemService,
+            ConversionService conversionService,
+            PlatformTransactionManager transactionManager,
+            EntityManager entityManager,
+            @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}") Integer fetchSize
+    ) {
+        this.jsonMapper = jsonMapper;
+        this.codeService = codeService;
+        this.taskService = taskService;
+        this.emailService = emailService;
+        this.fileSystemService = fileSystemService;
+        this.conversionService = conversionService;
+        this.transactionManager = transactionManager;
+        this.entityManager = entityManager;
+        this.fetchSize = fetchSize;
+    }
 
     @Override
     public void run() {
