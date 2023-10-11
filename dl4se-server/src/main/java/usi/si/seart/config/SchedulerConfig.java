@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
 @Configuration
+@EnableScheduling
 @DependsOn({
         "ConfigurationInitializingBean",
         "DirectoryInitializationBean",
