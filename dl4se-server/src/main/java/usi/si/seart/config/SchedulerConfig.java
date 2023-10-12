@@ -102,7 +102,9 @@ public class SchedulerConfig {
     ) {
         return new ErrorHandler() {
 
-            private final Logger log = LoggerFactory.getLogger("usi.si.seart.config.SchedulerConfig$ErrorHandler");
+            private final Logger log = LoggerFactory.getLogger(
+                    SchedulerConfig.class.getCanonicalName() + "$" + ErrorHandler.class.getSimpleName()
+            );
 
             @Override
             public void handleError(Throwable t) {
