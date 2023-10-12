@@ -31,10 +31,6 @@ public class PostgresMaterializedView {
     @Column(name = "schemaname")
     String schema;
 
-    @NotBlank
-    @Column(name = "matviewowner")
-    String owner;
-
     @NotNull
     @Column(name = "hasindexes")
     Boolean indexed;
