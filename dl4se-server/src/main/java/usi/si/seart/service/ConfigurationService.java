@@ -50,8 +50,8 @@ public interface ConfigurationService {
 
         @Override
         public <T> T get(String key, Class<T> type) {
+            readLock.lock();
             try {
-                readLock.lock();
                 return configurableEnvironment.getRequiredProperty(key, type);
             } finally {
                 readLock.unlock();
@@ -60,8 +60,8 @@ public interface ConfigurationService {
 
         @Override
         public Map<String, String> get() {
+            readLock.lock();
             try {
-                readLock.lock();
                 return configurationRepository.findAll().stream()
                         .collect(Collectors.toMap(
                                 Configuration::getKey,
@@ -76,8 +76,8 @@ public interface ConfigurationService {
 
         @Override
         public Map<String, String> update(Collection<Configuration> configurations) {
+            writeLock.lock();
             try {
-                writeLock.lock();
                 configurationRepository.saveAll(configurations);
                 Map<String, Object> configurationMap = configurationRepository.findAll().stream()
                         .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
