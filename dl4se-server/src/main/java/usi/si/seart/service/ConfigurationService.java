@@ -1,7 +1,6 @@
 package usi.si.seart.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -29,17 +28,33 @@ public interface ConfigurationService {
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
     class ConfigurationServiceImpl implements ConfigurationService {
+
+        private static final String environmentName = "configurationEnvironment";
 
         ConfigurationRepository configurationRepository;
         ConfigurableEnvironment configurableEnvironment;
 
-        String environmentName = "dl4seEnvironment";
+        Lock readLock;
+        Lock writeLock;
 
-        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-        Lock readLock = readWriteLock.readLock();
-        Lock writeLock = readWriteLock.writeLock();
+        @Autowired
+        public ConfigurationServiceImpl(
+                ConfigurationRepository configurationRepository, ConfigurableEnvironment configurableEnvironment
+        ) {
+            this(configurationRepository, configurableEnvironment, new ReentrantReadWriteLock());
+        }
+
+        private ConfigurationServiceImpl(
+                ConfigurationRepository configurationRepository,
+                ConfigurableEnvironment configurableEnvironment,
+                ReadWriteLock readWriteLock
+        ) {
+            this.configurationRepository = configurationRepository;
+            this.configurableEnvironment = configurableEnvironment;
+            this.readLock = readWriteLock.readLock();
+            this.writeLock = readWriteLock.writeLock();
+        }
 
         @Override
         public PropertySource<?> getPropertySource() {
