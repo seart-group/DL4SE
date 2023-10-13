@@ -16,17 +16,23 @@ import java.util.Objects;
 @Entity
 @Immutable
 @Table(name = "table_row_count")
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TableRowCount {
+public class TableRowCount implements GroupedCount<String> {
 
     @Id
+    @Getter
     String table;
 
     @NotNull
+    @Getter(onMethod_ = @Override)
     Long count;
+
+    @Override
+    public String getKey() {
+        return table;
+    }
 
     @Override
     public boolean equals(Object obj) {

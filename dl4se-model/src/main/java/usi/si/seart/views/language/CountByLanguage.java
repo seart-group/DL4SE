@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Immutable;
 import usi.si.seart.model.Language;
+import usi.si.seart.views.GroupedCount;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,24 +20,30 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Getter
 @Immutable
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public abstract class CountByLanguage {
+public abstract class CountByLanguage implements GroupedCount<Language> {
 
     @Id
     @Column(name = "lang_id")
     Long id;
 
+    @Getter
     @OneToOne(optional = false)
     @PrimaryKeyJoinColumn(name = "lang_id", referencedColumnName = "id")
     Language language;
 
     @NotNull
+    @Getter(onMethod_ = @Override)
     Long count;
+
+    @Override
+    public Language getKey() {
+        return language;
+    }
 
     @Override
     public boolean equals(Object obj) {
