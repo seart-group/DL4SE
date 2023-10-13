@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import usi.si.seart.service.MetaService;
+import usi.si.seart.service.DatabaseService;
 
 @Slf4j
 @Component
@@ -14,12 +14,12 @@ import usi.si.seart.service.MetaService;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ViewMaintainer implements Runnable {
 
-    MetaService metaService;
+    DatabaseService databaseService;
 
     @Override
     public void run() {
-        log.info("Recomputing statistics...");
-        metaService.refreshMaterializedViews();
-        log.info("Finished updating statistics.");
+        log.info("Refreshing materialized views...");
+        databaseService.refreshMaterializedViews();
+        log.info("Finished refreshing views.");
     }
 }
