@@ -100,8 +100,8 @@ public interface TaskService {
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public Task update(Task task) {
             Lock taskLock = taskLockMap.getLock(task);
+            taskLock.lock();
             try {
-                taskLock.lock();
                 return taskRepository.saveAndFlush(task);
             } finally {
                 taskLock.unlock();
@@ -112,8 +112,8 @@ public interface TaskService {
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void cancel(Task task) {
             Lock taskLock = taskLockMap.getLock(task);
+            taskLock.lock();
             try {
-                taskLock.lock();
                 taskRepository.markForCancellation(task.getId());
             } finally {
                 taskLock.unlock();
