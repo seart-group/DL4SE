@@ -16,6 +16,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -36,4 +37,17 @@ public abstract class CountByLanguage {
 
     @NotNull
     Long count;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        CountByLanguage other = (CountByLanguage) obj;
+        return Objects.equals(language, other.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(language);
+    }
 }
