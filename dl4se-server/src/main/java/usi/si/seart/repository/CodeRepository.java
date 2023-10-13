@@ -11,6 +11,6 @@ public interface CodeRepository extends
         JpaSpecificationExecutor<Code>,
         JpaStreamableSpecificationRepository<Code>
 {
-    @Query(value = "SELECT size FROM code_size_in_bytes", nativeQuery = true)
+    @Query(value = "SELECT size FROM total_code_size_in_bytes", nativeQuery = true)
     Long size();
 }

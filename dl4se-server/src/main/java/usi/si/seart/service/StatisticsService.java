@@ -9,14 +9,14 @@ import usi.si.seart.model.Language;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.CodeRepository;
-import usi.si.seart.repository.FileLanguageCountRepository;
-import usi.si.seart.repository.FunctionLanguageCountRepository;
-import usi.si.seart.repository.GitRepoLanguageCountRepository;
+import usi.si.seart.repository.FileCountByLanguageRepository;
+import usi.si.seart.repository.FunctionCountByLanguageRepository;
+import usi.si.seart.repository.GitRepoCountByLanguageRepository;
 import usi.si.seart.repository.LanguageRepository;
-import usi.si.seart.repository.TableCountsRepository;
+import usi.si.seart.repository.TableRowsRepository;
 import usi.si.seart.repository.TaskRepository;
-import usi.si.seart.views.TableCount;
-import usi.si.seart.views.language.LanguageCount;
+import usi.si.seart.views.TableRows;
+import usi.si.seart.views.language.CountByLanguage;
 
 import javax.persistence.Tuple;
 import java.util.List;
@@ -47,11 +47,11 @@ public interface StatisticsService {
     @AllArgsConstructor(onConstructor_ = @Autowired)
     class StatisticsServiceImpl implements StatisticsService {
 
-        TableCountsRepository tableCountsRepository;
+        TableRowsRepository tableRowsRepository;
 
-        GitRepoLanguageCountRepository gitRepoLanguageCountRepository;
-        FileLanguageCountRepository fileLanguageCountRepository;
-        FunctionLanguageCountRepository functionLanguageCountRepository;
+        GitRepoCountByLanguageRepository gitRepoCountByLanguageRepository;
+        FileCountByLanguageRepository fileCountByLanguageRepository;
+        FunctionCountByLanguageRepository functionCountByLanguageRepository;
 
         CodeRepository codeRepository;
         LanguageRepository languageRepository;
@@ -64,48 +64,48 @@ public interface StatisticsService {
 
         @Override
         public Long countUsers() {
-            return tableCountsRepository.findById("user")
-                    .map(TableCount::getCount)
+            return tableRowsRepository.findById("user")
+                    .map(TableRows::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countGitRepos() {
-            return tableCountsRepository.findById("git_repo")
-                    .map(TableCount::getCount)
+            return tableRowsRepository.findById("git_repo")
+                    .map(TableRows::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countFiles() {
-            return tableCountsRepository.findById("file")
-                    .map(TableCount::getCount)
+            return tableRowsRepository.findById("file")
+                    .map(TableRows::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countFunctions() {
-            return tableCountsRepository.findById("function")
-                    .map(TableCount::getCount)
+            return tableRowsRepository.findById("function")
+                    .map(TableRows::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Map<Language, Long> countGitReposByLanguage() {
-            return getLanguageCount(gitRepoLanguageCountRepository::findAll);
+            return getLanguageCount(gitRepoCountByLanguageRepository::findAll);
         }
 
         @Override
         public Map<Language, Long> countFilesByLanguage() {
-            return getLanguageCount(fileLanguageCountRepository::findAll);
+            return getLanguageCount(fileCountByLanguageRepository::findAll);
         }
 
         @Override
         public Map<Language, Long> countFunctionsByLanguage() {
-            return getLanguageCount(functionLanguageCountRepository::findAll);
+            return getLanguageCount(functionCountByLanguageRepository::findAll);
         }
 
-        private Map<Language, Long> getLanguageCount(Supplier<List<? extends LanguageCount>> supplier) {
+        private Map<Language, Long> getLanguageCount(Supplier<List<? extends CountByLanguage>> supplier) {
             Stream<Map.Entry<Language, Long>> languagesEmpty = languageRepository.findAll().stream()
                     .map(language -> Map.entry(language, 0L));
             Stream<Map.Entry<Language, Long>> languagesData = supplier.get().stream()

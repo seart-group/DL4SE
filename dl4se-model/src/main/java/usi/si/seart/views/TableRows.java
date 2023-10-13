@@ -2,28 +2,24 @@ package usi.si.seart.views;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Subselect;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Subselect("SELECT * FROM table_counts")
+@Immutable
+@Table(name = "table_rows")
 @Getter
-@Setter
-@ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TableCount {
+public class TableRows {
 
     @Id
     String table;
