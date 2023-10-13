@@ -30,29 +30,29 @@ FROM function;
 CREATE MATERIALIZED VIEW git_repo_count_by_language AS
 SELECT
     language.id AS lang_id,
-    COUNT(language.id) AS count
-FROM git_repo
-INNER JOIN git_repo_language
+    COUNT(git_repo.id) AS count
+FROM language
+LEFT JOIN git_repo_language
+    ON git_repo_language.lang_id = language.id
+LEFT JOIN git_repo
     ON git_repo.id = git_repo_language.repo_id
-INNER JOIN language
-    ON language.id = git_repo_language.lang_id
 GROUP BY language.id;
 
 CREATE MATERIALIZED VIEW file_count_by_language AS
 SELECT
     language.id AS lang_id,
-    COUNT(language.id) AS count
-FROM file
-INNER JOIN language
+    COUNT(file.id) AS count
+FROM language
+LEFT JOIN file
     ON file.lang_id = language.id
 GROUP BY language.id;
 
 CREATE MATERIALIZED VIEW function_count_by_language AS
 SELECT
     language.id AS lang_id,
-    COUNT(language.id) AS count
-FROM function
-INNER JOIN language
+    COUNT(function.id) AS count
+FROM language
+LEFT JOIN function
     ON function.lang_id = language.id
 GROUP BY language.id;
 
