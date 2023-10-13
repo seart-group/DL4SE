@@ -13,9 +13,9 @@ import usi.si.seart.repository.FileCountByLanguageRepository;
 import usi.si.seart.repository.FunctionCountByLanguageRepository;
 import usi.si.seart.repository.GitRepoCountByLanguageRepository;
 import usi.si.seart.repository.LanguageRepository;
-import usi.si.seart.repository.TableRowsRepository;
+import usi.si.seart.repository.TableRowCountRepository;
 import usi.si.seart.repository.TaskRepository;
-import usi.si.seart.views.TableRows;
+import usi.si.seart.views.TableRowCount;
 import usi.si.seart.views.language.CountByLanguage;
 
 import javax.persistence.Tuple;
@@ -47,7 +47,7 @@ public interface StatisticsService {
     @AllArgsConstructor(onConstructor_ = @Autowired)
     class StatisticsServiceImpl implements StatisticsService {
 
-        TableRowsRepository tableRowsRepository;
+        TableRowCountRepository tableRowCountRepository;
 
         GitRepoCountByLanguageRepository gitRepoCountByLanguageRepository;
         FileCountByLanguageRepository fileCountByLanguageRepository;
@@ -64,29 +64,29 @@ public interface StatisticsService {
 
         @Override
         public Long countUsers() {
-            return tableRowsRepository.findById("user")
-                    .map(TableRows::getCount)
+            return tableRowCountRepository.findById("user")
+                    .map(TableRowCount::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countGitRepos() {
-            return tableRowsRepository.findById("git_repo")
-                    .map(TableRows::getCount)
+            return tableRowCountRepository.findById("git_repo")
+                    .map(TableRowCount::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countFiles() {
-            return tableRowsRepository.findById("file")
-                    .map(TableRows::getCount)
+            return tableRowCountRepository.findById("file")
+                    .map(TableRowCount::getCount)
                     .orElse(0L);
         }
 
         @Override
         public Long countFunctions() {
-            return tableRowsRepository.findById("function")
-                    .map(TableRows::getCount)
+            return tableRowCountRepository.findById("function")
+                    .map(TableRowCount::getCount)
                     .orElse(0L);
         }
 

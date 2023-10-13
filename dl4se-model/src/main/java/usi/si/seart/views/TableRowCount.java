@@ -15,12 +15,12 @@ import java.util.Objects;
 
 @Entity
 @Immutable
-@Table(name = "table_rows")
+@Table(name = "table_row_count")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TableRows {
+public class TableRowCount {
 
     @Id
     String table;
@@ -32,7 +32,7 @@ public class TableRows {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        TableRows other = (TableRows) obj;
+        TableRowCount other = (TableRowCount) obj;
         return Objects.equals(table, other.table);
     }
 

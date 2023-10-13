@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 -- changeset dabico:4
 
-CREATE MATERIALIZED VIEW table_rows AS
+CREATE MATERIALIZED VIEW table_row_count AS
 SELECT
     'user' AS "table",
     COUNT(id) AS "count"
@@ -59,7 +59,7 @@ GROUP BY language.id;
 CREATE MATERIALIZED VIEW total_code_size_in_bytes AS
 SELECT SUM(characters) AS size FROM file;
 
-CREATE UNIQUE INDEX ON table_rows("table");
+CREATE UNIQUE INDEX ON table_row_count("table");
 CREATE UNIQUE INDEX ON git_repo_count_by_language(lang_id);
 CREATE UNIQUE INDEX ON file_count_by_language(lang_id);
 CREATE UNIQUE INDEX ON function_count_by_language(lang_id);
