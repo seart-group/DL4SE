@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import usi.si.seart.model.GitRepo;
 import usi.si.seart.model.Language;
+import usi.si.seart.model.code.File;
+import usi.si.seart.model.code.Function;
 import usi.si.seart.model.task.Status;
 import usi.si.seart.model.user.User;
 import usi.si.seart.repository.CodeRepository;
@@ -18,6 +21,7 @@ import usi.si.seart.repository.TaskRepository;
 import usi.si.seart.views.TableRowCount;
 import usi.si.seart.views.language.CountByLanguage;
 
+import javax.persistence.Table;
 import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Map;
@@ -64,30 +68,31 @@ public interface StatisticsService {
 
         @Override
         public Long countUsers() {
-            return tableRowCountRepository.findById("user")
-                    .map(TableRowCount::getCount)
-                    .orElse(0L);
+            return count(User.class);
         }
 
         @Override
         public Long countGitRepos() {
-            return tableRowCountRepository.findById("git_repo")
-                    .map(TableRowCount::getCount)
-                    .orElse(0L);
+            return count(GitRepo.class);
         }
 
         @Override
         public Long countFiles() {
-            return tableRowCountRepository.findById("file")
-                    .map(TableRowCount::getCount)
-                    .orElse(0L);
+            return count(File.class);
         }
 
         @Override
         public Long countFunctions() {
-            return tableRowCountRepository.findById("function")
+            return count(Function.class);
+        }
+
+        private Long count(Class<?> type) {
+            Table table = type.getAnnotation(Table.class);
+            if (table == null) throw new IllegalArgumentException("Not an entity: " + type.getSimpleName());
+            String name = table.name().replaceAll("\"", "");
+            return tableRowCountRepository.findById(name)
                     .map(TableRowCount::getCount)
-                    .orElse(0L);
+                    .orElse(null);
         }
 
         @Override
