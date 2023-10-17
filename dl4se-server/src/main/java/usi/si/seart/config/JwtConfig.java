@@ -18,6 +18,7 @@ import usi.si.seart.security.jwt.JwtTokenProvider;
 import usi.si.seart.service.UserService;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 
 @Configuration
 public class JwtConfig {
@@ -38,8 +39,10 @@ public class JwtConfig {
     }
 
     @Bean
-    public JwtTokenProvider jwtTokenProvider(JwtBuilder builder, JwtParser parser) {
-        return new JwtTokenProvider(builder, parser);
+    public JwtTokenProvider jwtTokenProvider(
+            JwtBuilder builder, JwtParser parser, @Value("${jwt.token.valid-for}") Duration validFor
+    ) {
+        return new JwtTokenProvider(builder, parser, validFor);
     }
 
     @Bean

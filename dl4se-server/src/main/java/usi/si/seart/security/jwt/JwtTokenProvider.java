@@ -9,6 +9,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import usi.si.seart.security.UserPrincipal;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -21,16 +23,18 @@ public class JwtTokenProvider {
     JwtBuilder jwtBuilder;
     JwtParser jwtParser;
 
+    Duration validFor;
+
     public String generateToken(Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Long id = principal.getId();
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        Date issue = Date.from(now.toInstant());
-        Date expiry = Date.from(now.plusDays(7).toInstant());
+        Instant issued = now.toInstant();
+        Instant expires = now.plus(validFor).toInstant();
         return jwtBuilder
                 .subject(Long.toString(id))
-                .issuedAt(issue)
-                .expiration(expiry)
+                .issuedAt(Date.from(issued))
+                .expiration(Date.from(expires))
                 .compact();
     }
 
