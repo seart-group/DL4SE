@@ -23,11 +23,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>usi.si.seart</groupId>
-      <artifactId>dl4se-src2abs</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
       <version>${jjwt.version}</version>

@@ -5,7 +5,6 @@ COPY ./dl4se-analyzer /dl4se-analyzer
 COPY ./dl4se-crawler /dl4se-crawler
 COPY ./dl4se-model /dl4se-model
 COPY ./dl4se-server /dl4se-server
-COPY ./dl4se-src2abs /dl4se-src2abs
 
 RUN mvn -e \
         --no-transfer-progress \
