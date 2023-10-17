@@ -1,4 +1,4 @@
-FROM maven:3.8.4-jdk-11-slim AS build
+FROM maven:3.9.3-eclipse-temurin-11-alpine AS build
 
 COPY ./pom.xml /pom.xml
 COPY ./dl4se-analyzer /dl4se-analyzer
@@ -13,7 +13,7 @@ RUN mvn -e \
         -pl dl4se-server \
         -am -DskipTests
 
-FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+FROM eclipse-temurin:11.0.20_8-jre-alpine
 
 COPY --from=build /dl4se-server/target/dl4se-server-*.jar /server.jar
 
