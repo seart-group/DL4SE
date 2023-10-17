@@ -3,7 +3,6 @@ package usi.si.seart.config;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,24 +17,24 @@ import usi.si.seart.security.jwt.JwtRequestFilter;
 import usi.si.seart.security.jwt.JwtTokenProvider;
 import usi.si.seart.service.UserService;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 
 @Configuration
 public class JwtConfig {
 
     @Bean
-    public Key secretKey(@Value("${jwt.secret}") String value) {
+    public SecretKey secretKey(@Value("${jwt.secret}") String value) {
         return Keys.hmacShaKeyFor(value.getBytes());
     }
 
     @Bean
-    public JwtBuilder jwtBuilder(Key secretKey) {
-        return Jwts.builder().signWith(secretKey, SignatureAlgorithm.HS512);
+    public JwtBuilder jwtBuilder(SecretKey secretKey) {
+        return Jwts.builder().signWith(secretKey, Jwts.SIG.HS512);
     }
 
     @Bean
-    public JwtParser jwtParser(Key secretKey) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build();
+    public JwtParser jwtParser(SecretKey secretKey) {
+        return Jwts.parser().verifyWith(secretKey).build();
     }
 
     @Bean

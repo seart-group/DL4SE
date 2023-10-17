@@ -40,7 +40,7 @@
     <google.httpClient.version>1.43.3</google.httpClient.version>
     <janino.version>3.1.10</janino.version>
     <postgresql.version>42.6.0</postgresql.version>
-    <jjwt.version>0.11.5</jjwt.version>
+    <jjwt.version>0.12.3</jjwt.version>
     <jackson.version>2.15.2</jackson.version>
     <springframework.version>2.7.16</springframework.version>
     <springcloud.version>2021.0.8</springcloud.version>

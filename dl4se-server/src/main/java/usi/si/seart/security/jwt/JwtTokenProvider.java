@@ -28,20 +28,20 @@ public class JwtTokenProvider {
         Date issue = Date.from(now.toInstant());
         Date expiry = Date.from(now.plusDays(7).toInstant());
         return jwtBuilder
-                .setSubject(Long.toString(id))
-                .setIssuedAt(issue)
-                .setExpiration(expiry)
+                .subject(Long.toString(id))
+                .issuedAt(issue)
+                .expiration(expiry)
                 .compact();
     }
 
     public Long getUserIdFromJWT(String value) {
-        Claims claims = jwtParser.parseClaimsJws(value).getBody();
+        Claims claims = jwtParser.parseSignedClaims(value).getPayload();
         return Long.valueOf(claims.getSubject());
     }
 
     public boolean validateToken(String token) {
         try {
-            jwtParser.parseClaimsJws(token);
+            jwtParser.parseSignedClaims(token);
             return true;
         } catch (RuntimeException ignored) {
             return false;
