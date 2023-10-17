@@ -9,9 +9,10 @@ FROM install AS build
 ARG WEBSITE_PORT
 ARG SERVER_URL
 ARG NODE_ENV=production
-RUN apk update && apk add gettext
-RUN envsubst < .env.template > .env
-RUN npm run build
+RUN apk update --quiet && \
+    apk add --no-cache --quiet gettext && \
+    envsubst < .env.template > .env && \
+    npm run build
 
 FROM nginx:1.23-alpine AS production
 COPY --from=build /dist /usr/share/nginx/html
