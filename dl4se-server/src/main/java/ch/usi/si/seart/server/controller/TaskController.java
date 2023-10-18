@@ -80,7 +80,7 @@ public class TaskController {
     ) {
         Specification<Task> specification = conversionService.convert(taskSearchDto, Specification.class);
         specification = specification.and(
-                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(Task_.USER).get(User_.ID), principal.getId())
+                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(Task_.user).get(User_.id), principal.getId())
         );
         Page<Task> tasks = taskService.getAll(specification, pageable);
         return ResponseEntity.ok(tasks);
