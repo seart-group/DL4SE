@@ -7,6 +7,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
+import javax.persistence.criteria.Expression;
+
 public class TaskSearchDtoToSpecificationConverter implements Converter<TaskSearchDto, Specification<Task>> {
 
     @Override
@@ -21,6 +23,9 @@ public class TaskSearchDtoToSpecificationConverter implements Converter<TaskSear
     }
 
     private Specification<Task> withUuidContaining(String pattern) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Task_.UUID).as(String.class), "%" + pattern + "%");
+        return (root, query, criteriaBuilder) -> {
+            Expression<String> expression = root.get(Task_.UUID).as(String.class);
+            return criteriaBuilder.like(expression, "%" + pattern + "%");
+        };
     }
 }
