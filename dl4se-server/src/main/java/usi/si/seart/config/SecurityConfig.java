@@ -4,14 +4,14 @@ import org.owasp.encoder.Encode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -123,20 +123,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService
+    public AuthenticationProvider authenticationProvider(
+            PasswordEncoder passwordEncoder,
+            UserDetailsService userDetailsService,
+            UserDetailsPasswordService userDetailsPasswordService
     ) {
-        return authentication -> {
-            String username = authentication.getName();
-            String password = authentication.getCredentials().toString();
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            boolean enabled = userDetails.isEnabled();
-            if (!enabled)
-                throw new DisabledException("User is currently disabled!");
-            if (passwordEncoder.matches(password, userDetails.getPassword()))
-                return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            else
-                throw new BadCredentialsException("Incorrect password!");
-        };
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(userDetailsService);
+        provider.setUserDetailsPasswordService(userDetailsPasswordService);
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            ObjectPostProcessor<Object> objectPostProcessor, AuthenticationProvider authenticationProvider
+    ) throws Exception {
+        return new AuthenticationManagerBuilder(objectPostProcessor)
+                .authenticationProvider(authenticationProvider)
+                .build();
     }
 }
