@@ -1,6 +1,5 @@
 package ch.usi.si.seart.server.config;
 
-import ch.usi.si.seart.server.converter.DtoToConfigurationConverter;
 import ch.usi.si.seart.server.converter.RegisterDtoToUserConverter;
 import ch.usi.si.seart.server.converter.TaskSearchDtoToSpecificationConverter;
 import ch.usi.si.seart.server.converter.UserSearchDtoToSpecificationConverter;
@@ -25,7 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new DtoToConfigurationConverter());
         registry.addConverter(new RegisterDtoToUserConverter());
         registry.addConverter(new TaskSearchDtoToSpecificationConverter());
         registry.addConverter(new UserSearchDtoToSpecificationConverter());
