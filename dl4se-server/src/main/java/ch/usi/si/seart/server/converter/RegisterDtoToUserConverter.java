@@ -5,7 +5,7 @@ import ch.usi.si.seart.server.dto.RegisterDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 
-public class DtoToUserConverter implements Converter<RegisterDto, User> {
+public class RegisterDtoToUserConverter implements Converter<RegisterDto, User> {
 
     @Override
     @NonNull
