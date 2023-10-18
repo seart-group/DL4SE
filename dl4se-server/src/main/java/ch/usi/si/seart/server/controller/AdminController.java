@@ -59,7 +59,7 @@ public class AdminController {
             UserSearchDto userSearchDto,
             @SortDefault(sort = User_.REGISTERED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Specification<User> specification = (Specification<User>) conversionService.convert(userSearchDto, Specification.class);
+        Specification<User> specification = conversionService.convert(userSearchDto, Specification.class);
         Page<User> users = userService.getAll(specification, pageable);
         return ResponseEntity.ok(users);
     }
@@ -108,7 +108,7 @@ public class AdminController {
             TaskSearchDto taskSearchDto,
             @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Specification<Task> specification = (Specification<Task>) conversionService.convert(taskSearchDto, Specification.class);
+        Specification<Task> specification = conversionService.convert(taskSearchDto, Specification.class);
         Page<Task> tasks = taskService.getAll(specification, pageable);
         return ResponseEntity.ok(tasks);
     }

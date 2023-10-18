@@ -78,7 +78,7 @@ public class TaskController {
             @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
-        Specification<Task> specification = (Specification<Task>) conversionService.convert(taskSearchDto, Specification.class);
+        Specification<Task> specification = conversionService.convert(taskSearchDto, Specification.class);
         specification = specification.and(
                 (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(Task_.USER).get(User_.ID), principal.getId())
         );
