@@ -102,7 +102,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${springframework.version}</version>
         <configuration>
-          <mainClass>usi.si.seart.DL4SEApplication</mainClass>
+          <mainClass>usi.si.seart.Application</mainClass>
         </configuration>
         <executions>
           <execution>

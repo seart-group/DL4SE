@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DL4SEApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(DL4SEApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }
