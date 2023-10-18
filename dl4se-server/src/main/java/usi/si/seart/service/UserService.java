@@ -18,7 +18,7 @@ import usi.si.seart.repository.UserRepository;
 public interface UserService {
 
     User create(User user);
-    void update(User user);
+    User update(User user);
     Page<User> getAll(Specification<User> specification, Pageable pageable);
     User getWithId(Long id);
     User getWithUid(String uid);
@@ -40,8 +40,8 @@ public interface UserService {
         }
 
         @Override
-        public void update(User user) {
-            userRepository.save(user);
+        public User update(User user) {
+            return userRepository.save(user);
         }
 
         @Override
