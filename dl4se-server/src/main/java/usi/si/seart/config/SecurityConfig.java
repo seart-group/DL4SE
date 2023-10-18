@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -105,6 +106,19 @@ public class SecurityConfig {
             } catch (UserNotFoundException ex) {
                 throw new UsernameNotFoundException(ex.getMessage());
             }
+        };
+    }
+
+    @Bean
+    public UserDetailsPasswordService userDetailsPasswordService(
+            PasswordEncoder passwordEncoder, UserService userService, ConversionService conversionService
+    ) {
+        return (userDetails, newPassword) -> {
+            String email = userDetails.getUsername();
+            User user = userService.getWithEmail(email);
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user = userService.update(user);
+            return conversionService.convert(user, UserPrincipal.class);
         };
     }
 
