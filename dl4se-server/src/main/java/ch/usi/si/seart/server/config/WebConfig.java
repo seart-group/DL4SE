@@ -1,0 +1,34 @@
+package ch.usi.si.seart.server.config;
+
+import ch.usi.si.seart.server.converter.DtoToConfigurationConverter;
+import ch.usi.si.seart.server.converter.DtoToUserConverter;
+import ch.usi.si.seart.server.converter.TaskSearchDtoToSpecificationConverter;
+import ch.usi.si.seart.server.converter.UserSearchDtoToSpecificationConverter;
+import ch.usi.si.seart.server.converter.UserToUserPrincipalConverter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@EnableSpringDataWebSupport
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedMethods("*")
+                .allowedOrigins("*")
+                .exposedHeaders("Content-Type", "Content-Disposition", "Content-Length", "Date");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new DtoToUserConverter());
+        registry.addConverter(new DtoToConfigurationConverter());
+        registry.addConverter(new TaskSearchDtoToSpecificationConverter());
+        registry.addConverter(new UserSearchDtoToSpecificationConverter());
+        registry.addConverter(new UserToUserPrincipalConverter());
+    }
+}

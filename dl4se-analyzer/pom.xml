@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>dl4se</artifactId>
-    <groupId>usi.si.seart</groupId>
+    <groupId>ch.usi.si.seart</groupId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>usi.si.seart</groupId>
+      <groupId>ch.usi.si.seart</groupId>
       <artifactId>dl4se-model</artifactId>
       <version>${project.version}</version>
     </dependency>
