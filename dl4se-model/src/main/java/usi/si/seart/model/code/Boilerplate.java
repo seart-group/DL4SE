@@ -1,7 +1,5 @@
 package usi.si.seart.model.code;
 
-import java.util.Optional;
-
 /**
  * @see Comparable#compareTo(Object)
  * @see Object#clone()
@@ -127,13 +125,5 @@ public enum Boilerplate {
     /**
      * Methods that reverse serialization.
      */
-    DESERIALIZER,;
-
-    public static Boilerplate valueOfNullable(Object value) {
-        return Optional.ofNullable(value)
-                .filter(String.class::isInstance)
-                .map(String.class::cast)
-                .map(Boilerplate::valueOf)
-                .orElse(null);
-    }
+    DESERIALIZER
 }
