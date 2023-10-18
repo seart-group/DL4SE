@@ -13,7 +13,7 @@ import usi.si.seart.server.service.ConfigurationService;
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @Autowired)
-public class DL4SEEnvironment implements EnvironmentAware {
+public class ConfigurationEnvironment implements EnvironmentAware {
 
     ConfigurationService configurationService;
 
