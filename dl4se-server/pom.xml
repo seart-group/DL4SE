@@ -14,6 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.module.mainClass>usi.si.seart.server.Application</project.module.mainClass>
   </properties>
 
   <dependencies>
@@ -102,7 +103,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${springframework.version}</version>
         <configuration>
-          <mainClass>usi.si.seart.server.Application</mainClass>
+          <mainClass>${project.module.mainClass}</mainClass>
         </configuration>
         <executions>
           <execution>
