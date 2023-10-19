@@ -23,12 +23,35 @@
     </license>
   </licenses>
 
-  <modules>
-    <module>dl4se-crawler</module>
-    <module>dl4se-model</module>
-    <module>dl4se-server</module>
-    <module>dl4se-analyzer</module>
-  </modules>
+  <profiles>
+    <profile>
+      <id>crawler</id>
+      <modules>
+        <module>dl4se-model</module>
+        <module>dl4se-analyzer</module>
+        <module>dl4se-crawler</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>server</id>
+      <modules>
+        <module>dl4se-model</module>
+        <module>dl4se-server</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>dl4se-model</module>
+        <module>dl4se-analyzer</module>
+        <module>dl4se-crawler</module>
+        <module>dl4se-server</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <properties>
     <revision>1.0.0</revision>

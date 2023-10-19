@@ -10,6 +10,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-analyzer/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-crawler/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-model/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-server/pom.xml" />
       </list>
     </option>
   </component>
