@@ -10,7 +10,7 @@
 
   <artifactId>dl4se-server</artifactId>
 
-  <name>dl4se-server</name>
+  <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

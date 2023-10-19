@@ -7,7 +7,7 @@
   <version>${revision}</version>
   <packaging>pom</packaging>
     
-  <name>DL4SE Dataset Hub</name>
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>
     Building Training Datasets for Deep Learning Models in Software Engineering.
   </description>
