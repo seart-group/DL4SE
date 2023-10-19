@@ -64,7 +64,7 @@
     <janino.version>3.1.10</janino.version>
     <postgresql.version>42.6.0</postgresql.version>
     <jjwt.version>0.12.3</jjwt.version>
-    <jackson.version>2.15.2</jackson.version>
+    <jackson.version>2.15.3</jackson.version>
     <springframework.version>2.7.17</springframework.version>
     <springcloud.version>2021.0.8</springcloud.version>
   </properties>
