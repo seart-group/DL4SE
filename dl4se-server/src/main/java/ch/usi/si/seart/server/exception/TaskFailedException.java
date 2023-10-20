@@ -14,13 +14,13 @@ import javax.validation.constraints.NotNull;
  */
 public class TaskFailedException extends RuntimeException {
 
-    private static final String format = "%s occurred while executing task [%s]";
+    private static final String TEMPLATE = "%s occurred while executing task [%s]";
 
     @Getter
     private final transient Task task;
 
     public TaskFailedException(@NotNull Task task, @NotNull Throwable cause) {
-        super(String.format(format, cause.getClass().getSimpleName(), task.getUuid()), cause);
+        super(String.format(TEMPLATE, cause.getClass().getSimpleName(), task.getUuid()), cause);
         this.task = task;
     }
 }
