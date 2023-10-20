@@ -34,7 +34,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         log.error("Integrity constraint violation: {}", ex.getMessage());
         log.trace("", ex);
         Throwable cause = ex.getCause();
