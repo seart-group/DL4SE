@@ -28,13 +28,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MailException.class)
     @ResponseStatus(code = HttpStatus.SERVICE_UNAVAILABLE)
-    public void handleMailException(MailException ex){
+    public void handleMail(MailException ex){
         log.error("Mail service error: {}", ex.getMessage());
         log.trace("", ex);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         log.error("Integrity constraint violation: {}", ex.getMessage());
         log.trace("", ex);
         Throwable cause = ex.getCause();
@@ -47,28 +47,28 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleDataAccessException(DataAccessException ex) {
+    public void handleDataAccess(DataAccessException ex) {
         log.error("Unexpected JDBC exception: {}", ex.getMessage());
         log.trace("", ex);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public void handleEntityNotFoundException(EntityNotFoundException ex) {
+    public void handleEntityNotFound(EntityNotFoundException ex) {
         log.debug("Entity not found: {}", ex.getMessage());
         log.trace("", ex);
     }
 
     @ExceptionHandler(FileNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public void handleFileNotFoundException(FileNotFoundException ex) {
+    public void handleFileNotFound(FileNotFoundException ex) {
         log.debug("File not found: {}", ex.getMessage());
         log.trace("", ex);
     }
 
     @ExceptionHandler(TokenExpiredException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
-    public void handleTokenExpiredException(TokenExpiredException ex) {
+    public void handleTokenExpired(TokenExpiredException ex) {
         log.debug("Verification exception: {}", ex.getMessage());
         log.trace("", ex);
     }
