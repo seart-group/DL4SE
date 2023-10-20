@@ -71,7 +71,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    @SuppressWarnings({"unchecked", "DataFlowIssue"})
     @GetMapping
     public ResponseEntity<?> tasks(
             TaskSearchDto taskSearchDto,
