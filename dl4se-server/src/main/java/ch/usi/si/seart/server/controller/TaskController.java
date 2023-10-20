@@ -86,7 +86,6 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @PostMapping("/{dataset}/create")
     public ResponseEntity<?> create(
             @PathVariable String dataset,
