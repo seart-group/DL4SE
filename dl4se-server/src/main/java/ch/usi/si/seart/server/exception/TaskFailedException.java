@@ -12,11 +12,11 @@ import javax.validation.constraints.NotNull;
  *
  * @author dabico
  */
+@Getter
 public class TaskFailedException extends RuntimeException {
 
     private static final String TEMPLATE = "%s occurred while executing task [%s]";
 
-    @Getter
     private final transient Task task;
 
     public TaskFailedException(@NotNull Task task, @NotNull Throwable cause) {
