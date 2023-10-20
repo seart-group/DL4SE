@@ -1,22 +1,26 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="dl4se [clean install]" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="test" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
       <option name="myRunnerParameters">
         <MavenRunnerParameters>
+          <option name="cmdOptions" />
           <option name="profiles">
             <set />
           </option>
           <option name="goals">
             <list>
               <option value="clean" />
-              <option value="install" />
+              <option value="test" />
             </list>
           </option>
           <option name="pomFileName" />
           <option name="profilesMap">
             <map />
+          </option>
+          <option name="projectsCmdOptionValues">
+            <list />
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$" />
