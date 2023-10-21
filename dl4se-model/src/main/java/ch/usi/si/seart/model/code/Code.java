@@ -2,7 +2,7 @@ package ch.usi.si.seart.model.code;
 
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
-import ch.usi.si.seart.validation.constraints.Hash;
+import ch.usi.si.seart.validation.constraints.SHAHash;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AccessLevel;
@@ -53,7 +53,8 @@ public abstract class Code {
     @NotNull
     String content;
 
-    @Hash
+    @NotNull
+    @SHAHash
     @Column(name = "content_hash")
     @JsonProperty(value = "content_hash")
     String contentHash;
@@ -61,7 +62,8 @@ public abstract class Code {
     @NotNull
     String ast;
 
-    @Hash
+    @NotNull
+    @SHAHash
     @Column(name = "ast_hash")
     @JsonProperty(value = "ast_hash")
     String astHash;

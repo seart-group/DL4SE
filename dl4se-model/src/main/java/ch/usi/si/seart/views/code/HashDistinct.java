@@ -1,6 +1,6 @@
 package ch.usi.si.seart.views.code;
 
-import ch.usi.si.seart.validation.constraints.Hash;
+import ch.usi.si.seart.validation.constraints.SHAHash;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -26,7 +27,8 @@ public abstract class HashDistinct {
     @Id
     Long id;
 
-    @Hash
+    @NotNull
+    @SHAHash
     String hash;
 
     @Override

@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -16,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class LoginDto {
 
+    @NotNull
     @OWASPEmail
     String email;
 

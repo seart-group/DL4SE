@@ -3,6 +3,7 @@ package ch.usi.si.seart.model;
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
 import ch.usi.si.seart.validation.constraints.NullOrNotBlank;
+import ch.usi.si.seart.validation.constraints.SHAHash;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -87,8 +88,8 @@ public class GitRepo {
     @Builder.Default
     LocalDateTime lastCommit = LocalDateTime.of(2008, 1, 1, 0, 0);
 
-    @NotBlank
-    @Size(min = 7, max = 40)
+    @NotNull
+    @SHAHash
     @Column(name = "last_commit_sha")
     @JsonProperty(value = "last_commit_sha")
     @Builder.Default

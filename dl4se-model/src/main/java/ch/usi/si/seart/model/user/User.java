@@ -2,6 +2,7 @@ package ch.usi.si.seart.model.user;
 
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.type.StringEnumType;
+import ch.usi.si.seart.validation.constraints.BCryptHash;
 import ch.usi.si.seart.validation.constraints.OWASPEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
@@ -61,11 +62,13 @@ public class User {
     @Column(unique = true)
     String uid;
 
+    @NotNull
     @OWASPEmail
     @Column(unique = true)
     String email;
 
-    @NotBlank
+    @NotNull
+    @BCryptHash
     @ToString.Exclude
     @JsonIgnore
     String password;

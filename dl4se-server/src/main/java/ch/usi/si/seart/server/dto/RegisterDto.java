@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RegisterDto implements Serializable {
 
+    @NotNull
     @OWASPEmail
     String email;
 
