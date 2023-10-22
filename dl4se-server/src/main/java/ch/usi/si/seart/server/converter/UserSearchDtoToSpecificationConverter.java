@@ -7,6 +7,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 public class UserSearchDtoToSpecificationConverter implements Converter<UserSearchDto, Specification<User>> {
     
     @Override
@@ -29,14 +31,20 @@ public class UserSearchDtoToSpecificationConverter implements Converter<UserSear
     }
 
     private Specification<User> withUidContaining(String pattern) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(User_.UID), "%" + pattern + "%");
+        return withStringAttributeContaining(User_.uid, pattern);
     }
 
     private Specification<User> withEmailContaining(String pattern) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(User_.EMAIL), "%" + pattern + "%");
+        return withStringAttributeContaining(User_.email, pattern);
     }
 
     private Specification<User> withOrganisationContaining(String pattern) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(User_.ORGANISATION), "%" + pattern + "%");
+        return withStringAttributeContaining(User_.organisation, pattern);
+    }
+
+    private Specification<User> withStringAttributeContaining(
+            SingularAttribute<User, String> attribute, String pattern
+    ) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(attribute), "%" + pattern + "%");
     }
 }
