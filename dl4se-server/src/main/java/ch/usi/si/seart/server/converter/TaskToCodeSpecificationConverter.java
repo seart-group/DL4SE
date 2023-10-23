@@ -33,7 +33,7 @@ import java.util.Optional;
 @Component
 public class TaskToCodeSpecificationConverter implements Converter<Task, Specification<Code>> {
 
-    protected static final java.util.function.Predicate<Long> isPositive = value -> value > 0;
+    private static final java.util.function.Predicate<Long> IS_POSITIVE = value -> value > 0;
 
     @Override
     @NonNull
@@ -107,7 +107,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_commits"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.join(Code_.repo).get(GitRepo_.commits);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -118,7 +118,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_contributors"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.join(Code_.repo).get(GitRepo_.contributors);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -129,7 +129,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_issues"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.join(Code_.repo).get(GitRepo_.issues);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -140,7 +140,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_stars"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.join(Code_.repo).get(GitRepo_.stars);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -151,7 +151,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_characters"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(Code_.characters);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -162,7 +162,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("max_characters"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(Code_.characters);
                         Predicate predicate = criteriaBuilder.lessThanOrEqualTo(path, value);
@@ -183,7 +183,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_tokens"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(attribute);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -194,7 +194,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("max_tokens"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(attribute);
                         Predicate predicate = criteriaBuilder.lessThanOrEqualTo(path, value);
@@ -205,7 +205,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("min_lines"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(Code_.lines);
                         Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(path, value);
@@ -216,7 +216,7 @@ public class TaskToCodeSpecificationConverter implements Converter<Task, Specifi
             Optional.ofNullable(query.get("max_lines"))
                     .map(JsonNode::numberValue)
                     .map(Number::longValue)
-                    .filter(isPositive)
+                    .filter(IS_POSITIVE)
                     .ifPresent(value -> {
                         Path<Long> path = root.get(Code_.lines);
                         Predicate predicate = criteriaBuilder.lessThanOrEqualTo(path, value);
