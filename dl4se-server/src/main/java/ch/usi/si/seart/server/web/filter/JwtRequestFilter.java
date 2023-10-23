@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.security.jwt;
+package ch.usi.si.seart.server.web.filter;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
