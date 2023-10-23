@@ -6,8 +6,8 @@ import ch.usi.si.seart.server.dto.LoginDto;
 import ch.usi.si.seart.server.dto.RegisterDto;
 import ch.usi.si.seart.server.dto.user.EmailDto;
 import ch.usi.si.seart.server.dto.user.PasswordDto;
+import ch.usi.si.seart.server.security.TokenProvider;
 import ch.usi.si.seart.server.security.UserPrincipal;
-import ch.usi.si.seart.server.security.jwt.JwtTokenProvider;
 import ch.usi.si.seart.server.service.EmailService;
 import ch.usi.si.seart.server.service.PasswordResetService;
 import ch.usi.si.seart.server.service.UserService;
@@ -51,7 +51,7 @@ public class UserController {
 
     AuthenticationManager authenticationManager;
 
-    JwtTokenProvider tokenProvider;
+    TokenProvider tokenProvider;
 
     UserService userService;
     VerificationService verificationService;
@@ -86,7 +86,7 @@ public class UserController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = tokenProvider.generateToken(authentication);
+        String token = tokenProvider.generate(authentication);
         return ResponseEntity.ok("Bearer " + token);
     }
 

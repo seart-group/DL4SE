@@ -4,7 +4,6 @@ import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.server.exception.UserNotFoundException;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.security.jwt.JwtRequestFilter;
-import ch.usi.si.seart.server.security.jwt.JwtTokenProvider;
 import ch.usi.si.seart.server.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.crypto.SecretKey;
-import java.time.Duration;
 
 @Configuration
 public class JwtConfig {
@@ -37,13 +35,6 @@ public class JwtConfig {
     @Bean
     public JwtParser jwtParser(SecretKey secretKey) {
         return Jwts.parser().verifyWith(secretKey).build();
-    }
-
-    @Bean
-    public JwtTokenProvider jwtTokenProvider(
-            JwtBuilder builder, JwtParser parser, @Value("${jwt.token.valid-for}") Duration validFor
-    ) {
-        return new JwtTokenProvider(builder, parser, validFor);
     }
 
     @Bean
