@@ -19,7 +19,8 @@ abstract class TaskConverter<T> implements Converter<Task, T> {
     }
 
     @Override
-    public final T convert(Task source) {
+    @NonNull
+    public final T convert(@NonNull Task source) {
         validate(source);
         return convert(source.getQuery(), source.getProcessing());
     }
