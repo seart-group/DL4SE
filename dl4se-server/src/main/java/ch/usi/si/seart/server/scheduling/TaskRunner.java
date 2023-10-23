@@ -9,6 +9,7 @@ import ch.usi.si.seart.server.service.CodeService;
 import ch.usi.si.seart.server.service.EmailService;
 import ch.usi.si.seart.server.service.FileSystemService;
 import ch.usi.si.seart.server.service.TaskService;
+import ch.usi.si.seart.transformer.Transformer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -107,9 +108,10 @@ public class TaskRunner implements Runnable {
             throw new TaskFailedException(task, cause);
         }
         Specification<Code> specification = conversionService.convert(task, Specification.class);
+        Transformer transformer = conversionService.convert(task, Transformer.class);
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         transactionTemplate.setReadOnly(true);
-        transactionTemplate.execute(new TransactionCallback(task, specification));
+        transactionTemplate.execute(new TransactionCallback(task, specification, transformer));
     }
 
     @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -119,6 +121,8 @@ public class TaskRunner implements Runnable {
         Task task;
 
         Specification<Code> specification;
+
+        Transformer transformer;
 
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -143,7 +147,9 @@ public class TaskRunner implements Runnable {
                         task.setCheckpointId(id);
                         task.setProcessedResults(count);
 
-                        // TODO: 06.10.2023 Apply transformations here
+                        String original = code.getContent();
+                        String transformed = transformer.apply(original);
+                        code.setContent(transformed);
 
                         ObjectNode json = jsonMapper.valueToTree(code);
                         json.remove("id");
