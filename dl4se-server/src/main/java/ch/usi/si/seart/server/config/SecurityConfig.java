@@ -42,7 +42,7 @@ public class SecurityConfig {
             AuthenticationEntryPoint authenticationEntryPoint,
             JwtRequestFilter jwtRequestFilter
     ) throws Exception {
-        httpSecurity.cors()
+        return httpSecurity.cors()
                 .and()
                 .csrf()
                 .disable()
@@ -77,10 +77,10 @@ public class SecurityConfig {
                         "/task/download/**")
                 .permitAll()
                 .anyRequest()
-                .authenticated();
-
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        return httpSecurity.build();
+                .authenticated()
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
