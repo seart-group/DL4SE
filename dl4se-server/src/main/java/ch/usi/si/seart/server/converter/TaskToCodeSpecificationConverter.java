@@ -8,12 +8,10 @@ import ch.usi.si.seart.model.code.Code_;
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
 import ch.usi.si.seart.model.code.Function_;
-import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.views.code.HashDistinct;
 import ch.usi.si.seart.views.code.HashDistinct_;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -31,20 +29,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class TaskToCodeSpecificationConverter implements Converter<Task, Specification<Code>> {
+public class TaskToCodeSpecificationConverter extends TaskConverter<Specification<Code>> {
 
     private static final java.util.function.Predicate<Long> IS_POSITIVE = value -> value > 0;
 
     @Override
-    @NonNull
-    public Specification<Code> convert(@NonNull Task source) {
-        Job dataset = source.getDataset();
+    protected void validate(Task source) {
+        super.validate(source);
         JsonNode query = source.getQuery();
-        JsonNode processing = source.getProcessing();
-        Assert.isTrue(Job.CODE.equals(dataset), "Can not convert this type of dataset: " + dataset);
-        Assert.isTrue(query.isObject(), "Query must be a JSON object!");
-        Assert.isTrue(processing.isObject(), "Processing must be a JSON object!");
         Assert.isTrue(query.has("granularity"), "Query must have 'granularity' defined!");
+    }
+
+    @Override
+    protected Specification<Code> convert(JsonNode query, JsonNode processing) {
         String granularity = query.get("granularity").asText();
         return convert(query, processing, granularity);
     }
