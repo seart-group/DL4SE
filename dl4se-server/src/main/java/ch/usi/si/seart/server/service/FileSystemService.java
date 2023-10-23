@@ -16,10 +16,10 @@ import java.nio.file.Path;
 
 public interface FileSystemService {
 
-    Path getTaskArchive(Task task);
-    Path createTaskArchive(Task task);
-    void cleanTaskFiles(Task task);
-    Long getFileSize(Task task);
+    Path getArchive(Task task);
+    Path createArchive(Task task);
+    void cleanArchive(Task task);
+    Long getArchiveSize(Task task);
 
     @Slf4j
     @Service
@@ -30,12 +30,12 @@ public interface FileSystemService {
         Path fileStorageDirPath;
 
         @Override
-        public Path getTaskArchive(Task task) {
+        public Path getArchive(Task task) {
             return getPath(task);
         }
 
         @Override
-        public Path createTaskArchive(Task task) {
+        public Path createArchive(Task task) {
             Path path = getPath(task);
             if (Files.exists(path)) return path;
             try {
@@ -46,7 +46,7 @@ public interface FileSystemService {
         }
 
         @Override
-        public void cleanTaskFiles(Task task) {
+        public void cleanArchive(Task task) {
             Path path = getPath(task);
             if (Files.notExists(path)) return;
             try {
@@ -57,7 +57,7 @@ public interface FileSystemService {
         }
 
         @Override
-        public Long getFileSize(Task task) {
+        public Long getArchiveSize(Task task) {
             Path path = getPath(task);
             File file = path.toFile();
             return file.length();

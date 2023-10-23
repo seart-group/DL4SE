@@ -127,7 +127,7 @@ public class TaskRunner implements Runnable {
                 Long totalResults = codeService.count(specification);
                 task.setTotalResults(totalResults);
                 task = taskService.update(task);
-                Path exportPath = fileSystemService.createTaskArchive(task);
+                Path exportPath = fileSystemService.createArchive(task);
                 try (
                         Stream<Code> stream = codeService.streamAllDynamically(specification);
                         FileOutputStream fileOutputStream = new FileOutputStream(exportPath.toFile(), true);
@@ -161,7 +161,7 @@ public class TaskRunner implements Runnable {
                         bufferedWriter.newLine();
 
                         if (count % fetchSize == 0) {
-                            Long fileSize = fileSystemService.getFileSize(task);
+                            Long fileSize = fileSystemService.getArchiveSize(task);
                             task.setSize(fileSize);
                             task = taskService.update(task);
                             bufferedWriter.flush();
@@ -170,7 +170,7 @@ public class TaskRunner implements Runnable {
                     }
                 }
 
-                Long fileSize = fileSystemService.getFileSize(task);
+                Long fileSize = fileSystemService.getArchiveSize(task);
                 task.setSize(fileSize);
                 task.setStatus(Status.FINISHED);
                 task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
@@ -191,7 +191,7 @@ public class TaskRunner implements Runnable {
                  * just in case we run into other locking
                  * issues when we introduce new features...
                 */
-                fileSystemService.cleanTaskFiles(task);
+                fileSystemService.cleanArchive(task);
                 log.info("Cancelled task: [{}]", task.getUuid());
                 log.debug("", ex);
             } catch (Throwable thr) {

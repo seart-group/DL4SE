@@ -29,6 +29,6 @@ public class TaskCleaner implements Runnable {
     private void run(Task task) {
         log.debug("Deleting export file for task: [{}]", task.getUuid());
         task.setExpired(true);
-        fileSystemService.cleanTaskFiles(task);
+        fileSystemService.cleanArchive(task);
     }
 }

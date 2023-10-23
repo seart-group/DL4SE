@@ -153,7 +153,7 @@ public class TaskController {
         downloadService.consume(token);
         Task task = taskService.getWithUUID(uuid);
 
-        Path exportFilePath = fileSystemService.getTaskArchive(task);
+        Path exportFilePath = fileSystemService.getArchive(task);
         String exportFileName = exportFilePath.getFileName().toString();
         long exportFileSize = exportFilePath.toFile().length();
         InputStreamResource resource = new InputStreamResource(new FileInputStream(exportFilePath.toFile()));
