@@ -43,11 +43,9 @@ public abstract class QueryBasedTransformer extends NodeTransformer {
                 .collect(Collectors.toList());
         Collections.reverse(targets);
         for (Node target: targets) {
-            bytes = Bytes.concat(
-                    Arrays.copyOfRange(bytes, 0, target.getStartByte()),
-                    getTargetBytes(target),
-                    Arrays.copyOfRange(bytes, target.getEndByte(), bytes.length)
-            );
+            byte[] prefix = Arrays.copyOfRange(bytes, 0, target.getStartByte());
+            byte[] suffix = Arrays.copyOfRange(bytes, target.getEndByte(), bytes.length);
+            bytes = Bytes.concat(prefix, getTargetBytes(target), suffix);
         }
         return new String(bytes);
     }
