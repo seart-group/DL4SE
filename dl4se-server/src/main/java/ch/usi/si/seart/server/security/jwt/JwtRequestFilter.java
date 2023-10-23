@@ -22,7 +22,7 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public abstract class JwtRequestFilter extends OncePerRequestFilter {
 
-    JwtTokenProvider tokenProvider;
+    protected abstract Long getUserId(String value);
 
     protected abstract UserDetails getUserDetails(Long id);
 
@@ -34,8 +34,7 @@ public abstract class JwtRequestFilter extends OncePerRequestFilter {
         Optional.ofNullable(token)
                 .filter(value -> value.startsWith("Bearer "))
                 .map(value -> value.substring(7))
-                .filter(tokenProvider::validateToken)
-                .map(tokenProvider::getUserIdFromJWT)
+                .map(this::getUserId)
                 .map(this::getUserDetails)
                 .filter(UserDetails::isEnabled)
                 .ifPresent(userDetails -> {

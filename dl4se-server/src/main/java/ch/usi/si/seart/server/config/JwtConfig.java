@@ -6,6 +6,7 @@ import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.security.jwt.JwtRequestFilter;
 import ch.usi.si.seart.server.security.jwt.JwtTokenProvider;
 import ch.usi.si.seart.server.service.UserService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -47,9 +48,20 @@ public class JwtConfig {
 
     @Bean
     public JwtRequestFilter jwtRequestFilter(
-            JwtTokenProvider jwtTokenProvider, UserService userService, ConversionService conversionService
+            JwtParser parser, UserService userService, ConversionService conversionService
     ) {
-        return new JwtRequestFilter(jwtTokenProvider) {
+        return new JwtRequestFilter() {
+
+            @Override
+            protected Long getUserId(String value) {
+                try {
+                    Claims claims = parser.parseSignedClaims(value).getPayload();
+                    return Long.valueOf(claims.getSubject());
+                } catch (RuntimeException ignored) {
+                    return null;
+                }
+            }
+
             @Override
             protected UserDetails getUserDetails(Long id) {
                 try {
