@@ -5,7 +5,6 @@ import ch.usi.si.seart.model.Language_;
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.model.code.Code;
 import ch.usi.si.seart.model.code.Code_;
-import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
 import ch.usi.si.seart.model.code.Function_;
 import ch.usi.si.seart.model.task.Task;
@@ -51,14 +50,8 @@ public class TaskToCodeSpecificationConverter extends TaskConverter<Specificatio
     private Specification<Code> convert(
             @NonNull JsonNode query, @NonNull JsonNode processing, @NonNull String granularity
     ) {
-        switch (granularity) {
-            case "file":
-                return convert(query, processing, File.class);
-            case "function":
-                return convert(query, processing, Function.class);
-            default:
-                throw new IllegalArgumentException("Converter not implemented for granularity: " + granularity);
-        }
+        Class<? extends Code> granularityType = getCodeClass(granularity);
+        return convert(query, processing, granularityType);
     }
 
     private Specification<Code> convert(
@@ -285,6 +278,18 @@ public class TaskToCodeSpecificationConverter extends TaskConverter<Specificatio
             criteriaQuery.distinct(true);
             return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
         };
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends Code> getCodeClass(String granularity) {
+        try {
+            String pkg = Code.class.getPackageName();
+            String capitalized = StringUtils.capitalize(granularity);
+            String name = String.format("%s.%s", pkg, capitalized);
+            return (Class<? extends Code>) Class.forName(name);
+        } catch (ClassNotFoundException ignored) {
+            throw new IllegalArgumentException("Converter not implemented for granularity: " + granularity);
+        }
     }
 
     @SuppressWarnings("unchecked")
