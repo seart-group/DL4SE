@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
@@ -94,8 +95,9 @@ public class TaskRunner implements Runnable {
 
     @SuppressWarnings("unchecked")
     private void run(Task task) {
-        log.info("Executing task: [{}]", task.getUuid());
+        UUID uuid = task.getUuid();
         Job dataset = task.getDataset();
+        log.info("Executing task: [{}]", uuid);
         // FIXME: 06.10.2023 This will need to be changed later for other dataset types
         if (!Job.CODE.equals(dataset)) {
             String message = "Unsupported task type: " + dataset;
@@ -105,10 +107,11 @@ public class TaskRunner implements Runnable {
         Specification<Code> specification = conversionService.convert(task, Specification.class);
         Transformer transformer = conversionService.convert(task, Transformer.class);
         JsonMapper jsonMapper = conversionService.convert(task, JsonMapper.class);
-        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        TransactionTemplate template = new TransactionTemplate(transactionManager);
         TransactionCallback callback = new TransactionCallback(task, specification, transformer, jsonMapper);
-        transactionTemplate.setReadOnly(true);
-        transactionTemplate.execute(callback);
+        template.setName(uuid.toString());
+        template.setReadOnly(true);
+        template.execute(callback);
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
