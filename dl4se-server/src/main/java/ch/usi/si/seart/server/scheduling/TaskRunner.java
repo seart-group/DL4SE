@@ -10,9 +10,7 @@ import ch.usi.si.seart.server.service.EmailService;
 import ch.usi.si.seart.server.service.FileSystemService;
 import ch.usi.si.seart.server.service.TaskService;
 import ch.usi.si.seart.transformer.Transformer;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -50,8 +48,6 @@ import java.util.zip.GZIPOutputStream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TaskRunner implements Runnable {
 
-    JsonMapper jsonMapper;
-
     CodeService codeService;
     TaskService taskService;
     EmailService emailService;
@@ -67,7 +63,6 @@ public class TaskRunner implements Runnable {
 
     @Autowired
     public TaskRunner(
-            JsonMapper jsonMapper,
             CodeService codeService,
             TaskService taskService,
             EmailService emailService,
@@ -77,7 +72,6 @@ public class TaskRunner implements Runnable {
             EntityManager entityManager,
             @Value("${spring.jpa.properties.hibernate.jdbc.fetch_size}") Integer fetchSize
     ) {
-        this.jsonMapper = jsonMapper;
         this.codeService = codeService;
         this.taskService = taskService;
         this.emailService = emailService;
@@ -110,8 +104,9 @@ public class TaskRunner implements Runnable {
         }
         Specification<Code> specification = conversionService.convert(task, Specification.class);
         Transformer transformer = conversionService.convert(task, Transformer.class);
+        JsonMapper jsonMapper = conversionService.convert(task, JsonMapper.class);
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        TransactionCallback callback = new TransactionCallback(task, specification, transformer);
+        TransactionCallback callback = new TransactionCallback(task, specification, transformer, jsonMapper);
         transactionTemplate.setReadOnly(true);
         transactionTemplate.execute(callback);
     }
@@ -127,10 +122,11 @@ public class TaskRunner implements Runnable {
 
         Transformer transformer;
 
+        JsonMapper jsonMapper;
+
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
-                JsonNode processing = task.getProcessing();
                 Long totalResults = codeService.count(specification);
                 task.setTotalResults(totalResults);
                 task = taskService.update(task);
@@ -154,17 +150,7 @@ public class TaskRunner implements Runnable {
                         String transformed = transformer.apply(original);
                         code.setContent(transformed);
 
-                        ObjectNode json = jsonMapper.valueToTree(code);
-                        Optional.ofNullable(processing.get("include_ast"))
-                                .map(JsonNode::asBoolean)
-                                .filter(Boolean::booleanValue)
-                                .ifPresentOrElse(value -> {}, () -> json.remove("ast"));
-                        Optional.ofNullable(processing.get("include_symbolic_expression"))
-                                .map(JsonNode::asBoolean)
-                                .filter(Boolean::booleanValue)
-                                .ifPresentOrElse(value -> {}, () -> json.remove("symbolic_expression"));
-
-                        String serialized = jsonMapper.writeValueAsString(json);
+                        String serialized = jsonMapper.writeValueAsString(code);
                         bufferedWriter.write(serialized);
                         bufferedWriter.newLine();
 
