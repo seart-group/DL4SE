@@ -41,8 +41,10 @@ public class TaskToCodeSpecificationConverter extends TaskConverter<Specificatio
     }
 
     @Override
-    protected Specification<Code> convert(JsonNode query, JsonNode processing) {
+    protected Specification<Code> convertInternal(Task source) {
+        JsonNode query = source.getQuery();
         String granularity = query.get("granularity").asText();
+        JsonNode processing = source.getProcessing();
         return convert(query, processing, granularity);
     }
 

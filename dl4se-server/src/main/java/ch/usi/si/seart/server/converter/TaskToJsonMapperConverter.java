@@ -33,7 +33,8 @@ public class TaskToJsonMapperConverter extends TaskConverter<JsonMapper> {
     }
 
     @Override
-    protected JsonMapper convert(JsonNode ignored, JsonNode processing) {
+    protected JsonMapper convertInternal(Task source) {
+        JsonNode processing = source.getProcessing();
         return convert(processing);
     }
 

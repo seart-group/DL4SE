@@ -41,7 +41,13 @@ public class TaskToTransformerConverter extends TaskConverter<Transformer> {
     }
 
     @Override
-    protected Transformer convert(JsonNode query, JsonNode processing) {
+    protected Transformer convertInternal(Task source) {
+        JsonNode query = source.getQuery();
+        JsonNode processing = source.getProcessing();
+        return convert(query, processing);
+    }
+
+    private Transformer convert(JsonNode query, JsonNode processing) {
         String languageName = query.get("language_name").asText();
         String granularity = query.get("granularity").asText();
         return convert(processing, languageName, granularity);

@@ -20,10 +20,10 @@ abstract class TaskConverter<T> implements Converter<Task, T> {
 
     @Override
     @NonNull
-    public final T convert(@NonNull Task source) {
+    public T convert(@NonNull Task source) {
         validate(source);
-        return convert(source.getQuery(), source.getProcessing());
+        return convertInternal(source);
     }
 
-    protected abstract T convert(@NonNull JsonNode query, @NonNull JsonNode processing);
+    protected abstract T convertInternal(Task source);
 }
