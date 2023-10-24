@@ -110,8 +110,9 @@ public class TaskRunner implements Runnable {
         Specification<Code> specification = conversionService.convert(task, Specification.class);
         Transformer transformer = conversionService.convert(task, Transformer.class);
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        TransactionCallback callback = new TransactionCallback(task, specification, transformer);
         transactionTemplate.setReadOnly(true);
-        transactionTemplate.execute(new TransactionCallback(task, specification, transformer));
+        transactionTemplate.execute(callback);
     }
 
     @FieldDefaults(level = AccessLevel.PRIVATE)
