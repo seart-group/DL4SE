@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Iterable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,11 +113,10 @@ public class TaskRunner implements Runnable {
         template.execute(callback);
     }
 
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     private class TransactionCallback extends TransactionCallbackWithoutResult {
 
-        @NonFinal
         Task task;
 
         Specification<Code> specification;
