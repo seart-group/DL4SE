@@ -153,7 +153,6 @@ public class TaskRunner implements Runnable {
                         code.setContent(transformed);
 
                         ObjectNode json = jsonMapper.valueToTree(code);
-                        json.remove("id");
                         Optional.ofNullable(processing.get("include_ast"))
                                 .map(JsonNode::asBoolean)
                                 .filter(Boolean::booleanValue)
