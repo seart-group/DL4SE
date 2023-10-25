@@ -18,7 +18,7 @@ public interface CodeService {
 
     Future<Long> count(Specification<Code> specification);
 
-    Stream<Code> streamAllDynamically(Specification<Code> specification);
+    Stream<Code> stream(Specification<Code> specification);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,7 +35,7 @@ public interface CodeService {
         }
 
         @Override
-        public Stream<Code> streamAllDynamically(Specification<Code> specification) {
+        public Stream<Code> stream(Specification<Code> specification) {
             return codeRepository.stream(specification, Code.class);
         }
     }

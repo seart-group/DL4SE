@@ -139,7 +139,7 @@ public class TaskRunner implements Runnable {
                 });
                 Path exportPath = fileSystemService.createArchive(task);
                 try (
-                        Stream<Code> stream = codeService.streamAllDynamically(specification);
+                        Stream<Code> stream = codeService.stream(specification);
                         FileOutputStream fileOutputStream = new FileOutputStream(exportPath.toFile(), true);
                         GZIPOutputStream gzipOutputStream = new GZIPOutputStream(fileOutputStream);
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(gzipOutputStream);
