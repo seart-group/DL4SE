@@ -14,11 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
-public interface CodeService {
-
-    Future<Long> count(Specification<Code> specification);
-
-    Stream<Code> stream(Specification<Code> specification);
+public interface CodeService extends DatasetService<Code> {
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
