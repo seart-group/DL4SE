@@ -1,6 +1,7 @@
 package ch.usi.si.seart.server.scheduling;
 
 import ch.usi.si.seart.model.code.Code;
+import ch.usi.si.seart.model.code.Code_;
 import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.model.task.Status;
 import ch.usi.si.seart.model.task.Task;
@@ -31,6 +32,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.Expression;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -131,6 +133,11 @@ public class TaskRunner implements Runnable {
                 Long totalResults = codeService.count(specification);
                 task.setTotalResults(totalResults);
                 task = taskService.update(task);
+                Long checkpointId = Optional.ofNullable(task.getCheckpointId()).orElse(0L);
+                specification = specification.and((root, criteriaQuery, criteriaBuilder) -> {
+                    Expression<Long> expression = root.get(Code_.id);
+                    return criteriaBuilder.greaterThan(expression, checkpointId);
+                });
                 Path exportPath = fileSystemService.createArchive(task);
                 try (
                         Stream<Code> stream = codeService.streamAllDynamically(specification);
