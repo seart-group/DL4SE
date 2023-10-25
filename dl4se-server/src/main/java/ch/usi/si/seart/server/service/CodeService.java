@@ -7,13 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public interface CodeService {
 
-    Long count(Specification<Code> specification);
+    Future<Long> count(Specification<Code> specification);
 
     Stream<Code> streamAllDynamically(Specification<Code> specification);
 
@@ -25,8 +28,10 @@ public interface CodeService {
         CodeRepository codeRepository;
 
         @Override
-        public Long count(Specification<Code> specification) {
-            return codeRepository.count(specification);
+        @Async("AsyncExecutor")
+        public Future<Long> count(Specification<Code> specification) {
+            Long count = codeRepository.count(specification);
+            return CompletableFuture.completedFuture(count);
         }
 
         @Override

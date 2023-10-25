@@ -41,6 +41,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
@@ -130,9 +131,7 @@ public class TaskRunner implements Runnable {
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
-                Long totalResults = codeService.count(specification);
-                task.setTotalResults(totalResults);
-                task = taskService.update(task);
+                Future<Long> totalResultCount = codeService.count(specification);
                 Long checkpointId = Optional.ofNullable(task.getCheckpointId()).orElse(0L);
                 specification = specification.and((root, criteriaQuery, criteriaBuilder) -> {
                     Expression<Long> expression = root.get(Code_.id);
@@ -163,6 +162,10 @@ public class TaskRunner implements Runnable {
                         bufferedWriter.newLine();
 
                         if (count % fetchSize == 0) {
+                            if (totalResultCount.isDone()) {
+                                Long totalResults = totalResultCount.get();
+                                task.setTotalResults(totalResults);
+                            }
                             Long fileSize = fileSystemService.getArchiveSize(task);
                             task.setSize(fileSize);
                             task = taskService.update(task);
@@ -172,8 +175,10 @@ public class TaskRunner implements Runnable {
                     }
                 }
 
+                Long totalResults = totalResultCount.get();
                 Long fileSize = fileSystemService.getArchiveSize(task);
                 task.setSize(fileSize);
+                task.setTotalResults(totalResults);
                 task.setStatus(Status.FINISHED);
                 task.setFinished(LocalDateTime.now(ZoneOffset.UTC));
                 task = taskService.update(task);
