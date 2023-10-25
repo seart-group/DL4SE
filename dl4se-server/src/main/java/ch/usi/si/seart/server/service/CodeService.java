@@ -32,7 +32,7 @@ public interface CodeService extends DatasetService<Code> {
 
         @Override
         public Stream<Code> stream(Specification<Code> specification) {
-            return codeRepository.stream(specification, Code.class);
+            return codeRepository.streamAll(specification);
         }
     }
 }
