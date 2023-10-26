@@ -17,6 +17,8 @@ public class ExtendedJpaRepositoryImpl<T, ID>
         extends SimpleJpaRepository<T, ID>
         implements ExtendedJpaRepository<T, ID>
 {
+    private static final String SORT_MUST_NOT_BE_NULL = "Sort must not be null!";
+
     public ExtendedJpaRepositoryImpl(Class<T> domainClass, EntityManager em) {
         this(JpaEntityInformationSupport.getEntityInformation(domainClass, em), em);
     }
@@ -42,7 +44,7 @@ public class ExtendedJpaRepositoryImpl<T, ID>
 
     @Override
     public Stream<T> streamAll(@Nullable Specification<T> specification, @NonNull Sort sort) {
-        Assert.notNull(sort, "Sort must not be null!");
+        Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
         TypedQuery<T> typedQuery = getQuery(specification, sort);
         return typedQuery.getResultStream();
     }
