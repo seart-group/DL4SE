@@ -5,8 +5,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -43,7 +41,7 @@ public class ExtendedJpaRepositoryImpl<T, ID>
     }
 
     @Override
-    public Stream<T> streamAll(@Nullable Specification<T> specification, @NonNull Sort sort) {
+    public Stream<T> streamAll(Specification<T> specification, Sort sort) {
         Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
         return getQuery(specification, sort).getResultStream();
     }
