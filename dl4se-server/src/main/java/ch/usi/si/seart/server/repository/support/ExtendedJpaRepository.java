@@ -12,17 +12,11 @@ import java.util.stream.Stream;
 @NoRepositoryBean
 public interface ExtendedJpaRepository<T, ID> extends JpaRepositoryImplementation<T, ID> {
 
-    default Stream<T> streamAll() {
-        return streamAll(Sort.unsorted());
-    }
+    Stream<T> streamAll();
 
-    default Stream<T> streamAll(@NonNull Sort sort) {
-        return streamAll(null, sort);
-    }
+    Stream<T> streamAll(@NonNull Sort sort);
 
-    default Stream<T> streamAll(@Nullable Specification<T> specification) {
-        return streamAll(specification, Sort.unsorted());
-    }
+    Stream<T> streamAll(@Nullable Specification<T> specification);
 
     Stream<T> streamAll(@Nullable Specification<T> specification, @NonNull Sort sort);
 }

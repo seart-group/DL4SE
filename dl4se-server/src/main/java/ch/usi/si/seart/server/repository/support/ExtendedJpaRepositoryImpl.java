@@ -26,6 +26,21 @@ public class ExtendedJpaRepositoryImpl<T, ID>
     }
 
     @Override
+    public Stream<T> streamAll() {
+        return streamAll(Sort.unsorted());
+    }
+
+    @Override
+    public Stream<T> streamAll(Sort sort) {
+        return streamAll(null, sort);
+    }
+
+    @Override
+    public Stream<T> streamAll(Specification<T> specification) {
+        return streamAll(specification, Sort.unsorted());
+    }
+
+    @Override
     public Stream<T> streamAll(@Nullable Specification<T> specification, @NonNull Sort sort) {
         Assert.notNull(sort, "Sort must not be null!");
         TypedQuery<T> typedQuery = getQuery(specification, sort);
