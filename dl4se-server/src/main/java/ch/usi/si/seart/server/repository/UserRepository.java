@@ -1,12 +1,13 @@
 package ch.usi.si.seart.server.repository;
 
 import ch.usi.si.seart.model.user.User;
-import ch.usi.si.seart.server.repository.support.ExtendedJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
-public interface UserRepository extends ExtendedJpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(@NotBlank String email);
 

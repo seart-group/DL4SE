@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.repository;
 
 import ch.usi.si.seart.model.Configuration;
-import ch.usi.si.seart.server.repository.support.ExtendedJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ConfigurationRepository extends ExtendedJpaRepository<Configuration, String> {
+public interface ConfigurationRepository extends JpaRepository<Configuration, String> {
 }
