@@ -49,24 +49,24 @@ public class ExtendedJpaRepositoryImpl<T, ID>
     }
 
     @Override
-    public Stream<T> streamAll(Example<T> example) {
+    public <S extends T> Stream<S> streamAll(Example<S> example) {
         Assert.notNull(example, EXAMPLE_MUST_NOT_BE_NULL);
-        Specification<T> specification = (root, query, cb) -> {
+        Specification<S> specification = (root, query, cb) -> {
             Assert.notNull(escapeCharacter, ESCAPE_CHARACTER_MUST_NOT_BE_NULL);
             return QueryByExamplePredicateBuilder.getPredicate(root, cb, example, escapeCharacter);
         };
-        return getQuery(specification, Sort.unsorted()).getResultStream();
+        return getQuery(specification, example.getProbeType(), Sort.unsorted()).getResultStream();
     }
 
     @Override
-    public Stream<T> streamAll(Example<T> example, Sort sort) {
+    public <S extends T> Stream<S> streamAll(Example<S> example, Sort sort) {
         Assert.notNull(example, EXAMPLE_MUST_NOT_BE_NULL);
         Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
-        Specification<T> specification = (root, query, cb) -> {
+        Specification<S> specification = (root, query, cb) -> {
             Assert.notNull(escapeCharacter, ESCAPE_CHARACTER_MUST_NOT_BE_NULL);
             return QueryByExamplePredicateBuilder.getPredicate(root, cb, example, escapeCharacter);
         };
-        return getQuery(specification, sort).getResultStream();
+        return getQuery(specification, example.getProbeType(), sort).getResultStream();
     }
 
     @Override
