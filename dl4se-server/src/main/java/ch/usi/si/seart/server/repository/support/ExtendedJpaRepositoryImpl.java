@@ -1,7 +1,10 @@
 package ch.usi.si.seart.server.repository.support;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.query.EscapeCharacter;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -15,6 +18,10 @@ public class ExtendedJpaRepositoryImpl<T, ID>
         implements ExtendedJpaRepository<T, ID>
 {
     private static final String SORT_MUST_NOT_BE_NULL = "Sort must not be null!";
+    private static final String EXAMPLE_MUST_NOT_BE_NULL = "Example must not be null!";
+    private static final String ESCAPE_CHARACTER_MUST_NOT_BE_NULL = "EscapeCharacter must not be null!";
+
+    private EscapeCharacter escapeCharacter = EscapeCharacter.DEFAULT;
 
     public ExtendedJpaRepositoryImpl(Class<T> domainClass, EntityManager em) {
         this(JpaEntityInformationSupport.getEntityInformation(domainClass, em), em);
@@ -22,6 +29,12 @@ public class ExtendedJpaRepositoryImpl<T, ID>
 
     public ExtendedJpaRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
+    }
+
+    @Override
+    public void setEscapeCharacter(EscapeCharacter escapeCharacter) {
+        super.setEscapeCharacter(escapeCharacter);
+        this.escapeCharacter = escapeCharacter;
     }
 
     @Override
@@ -33,6 +46,27 @@ public class ExtendedJpaRepositoryImpl<T, ID>
     public Stream<T> streamAll(Sort sort) {
         Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
         return getQuery(null, sort).getResultStream();
+    }
+
+    @Override
+    public Stream<T> streamAll(Example<T> example) {
+        Assert.notNull(example, EXAMPLE_MUST_NOT_BE_NULL);
+        Specification<T> specification = (root, query, cb) -> {
+            Assert.notNull(escapeCharacter, ESCAPE_CHARACTER_MUST_NOT_BE_NULL);
+            return QueryByExamplePredicateBuilder.getPredicate(root, cb, example, escapeCharacter);
+        };
+        return getQuery(specification, Sort.unsorted()).getResultStream();
+    }
+
+    @Override
+    public Stream<T> streamAll(Example<T> example, Sort sort) {
+        Assert.notNull(example, EXAMPLE_MUST_NOT_BE_NULL);
+        Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
+        Specification<T> specification = (root, query, cb) -> {
+            Assert.notNull(escapeCharacter, ESCAPE_CHARACTER_MUST_NOT_BE_NULL);
+            return QueryByExamplePredicateBuilder.getPredicate(root, cb, example, escapeCharacter);
+        };
+        return getQuery(specification, sort).getResultStream();
     }
 
     @Override
