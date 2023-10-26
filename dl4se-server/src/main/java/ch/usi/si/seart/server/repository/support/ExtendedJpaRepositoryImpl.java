@@ -10,7 +10,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.stream.Stream;
 
 public class ExtendedJpaRepositoryImpl<T, ID>
@@ -29,23 +28,23 @@ public class ExtendedJpaRepositoryImpl<T, ID>
 
     @Override
     public Stream<T> streamAll() {
-        return streamAll(Sort.unsorted());
+        return getQuery(null, Sort.unsorted()).getResultStream();
     }
 
     @Override
     public Stream<T> streamAll(Sort sort) {
-        return streamAll(null, sort);
+        Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
+        return getQuery(null, sort).getResultStream();
     }
 
     @Override
     public Stream<T> streamAll(Specification<T> specification) {
-        return streamAll(specification, Sort.unsorted());
+        return getQuery(specification, Sort.unsorted()).getResultStream();
     }
 
     @Override
     public Stream<T> streamAll(@Nullable Specification<T> specification, @NonNull Sort sort) {
         Assert.notNull(sort, SORT_MUST_NOT_BE_NULL);
-        TypedQuery<T> typedQuery = getQuery(specification, sort);
-        return typedQuery.getResultStream();
+        return getQuery(specification, sort).getResultStream();
     }
 }
