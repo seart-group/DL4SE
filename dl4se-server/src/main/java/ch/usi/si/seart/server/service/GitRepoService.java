@@ -28,7 +28,7 @@ public interface GitRepoService {
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void forEach(Consumer<GitRepo> consumer) {
-            @Cleanup Stream<GitRepo> repoStream = gitRepoRepository.streamAllBy();
+            @Cleanup Stream<GitRepo> repoStream = gitRepoRepository.streamAll();
             repoStream.forEach(consumer);
         }
     }

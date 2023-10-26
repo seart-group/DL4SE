@@ -7,11 +7,8 @@ import ch.usi.si.seart.views.GroupedCount;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
-import java.util.stream.Stream;
 
 public interface GitRepoRepository extends ExtendedJpaRepository<GitRepo, Long> {
-
-    Stream<GitRepo> streamAllBy();
 
     @Query("SELECT _ FROM GitRepoCountByLanguage _")
     Collection<GroupedCount<Language>> countByLanguage();
