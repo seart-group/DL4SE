@@ -1,14 +1,14 @@
 package ch.usi.si.seart.crawler.service;
 
 import ch.usi.si.seart.crawler.repository.GitRepoRepository;
+import ch.usi.si.seart.exception.GitRepoNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
+import ch.usi.si.seart.model.GitRepo_;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 public interface GitRepoService {
 
@@ -24,7 +24,8 @@ public interface GitRepoService {
 
         @Override
         public GitRepo getByName(String name) {
-            return gitRepoRepository.findByNameIgnoreCaseFetchLanguages(name).orElseThrow(EntityNotFoundException::new);
+            return gitRepoRepository.findByNameIgnoreCaseFetchLanguages(name)
+                    .orElseThrow(() -> new GitRepoNotFoundException(GitRepo_.name, name));
         }
 
         @Override

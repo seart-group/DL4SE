@@ -11,6 +11,7 @@ import ch.usi.si.seart.crawler.service.CrawlJobService;
 import ch.usi.si.seart.crawler.service.FileService;
 import ch.usi.si.seart.crawler.service.GitRepoService;
 import ch.usi.si.seart.crawler.service.LanguageService;
+import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
 import ch.usi.si.seart.model.code.File;
@@ -34,7 +35,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
