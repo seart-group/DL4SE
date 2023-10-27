@@ -10,7 +10,6 @@ import ch.usi.si.seart.transformer.remover.PythonLineCommentRemover;
 import ch.usi.si.seart.transformer.wrapper.JavaDummyClassWrapper;
 import ch.usi.si.seart.treesitter.Language;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-@DependsOn("NativeLibraryLoaderBean")
 public class TaskToTransformerConverter extends TaskConverter<Transformer> {
 
     private static final Map<String, Language> LANGUAGE_NAME_LOOKUP = Stream.of(Language.values())

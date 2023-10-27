@@ -1,4 +1,4 @@
-package ch.usi.si.seart.crawler.repository;
+package ch.usi.si.seart.repository;
 
 import ch.usi.si.seart.model.job.CrawlJob;
 import ch.usi.si.seart.model.job.Job;

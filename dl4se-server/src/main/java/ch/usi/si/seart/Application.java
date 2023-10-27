@@ -1,4 +1,4 @@
-package ch.usi.si.seart.crawler;
+package ch.usi.si.seart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

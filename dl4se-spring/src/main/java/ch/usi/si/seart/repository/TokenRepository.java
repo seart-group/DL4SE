@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.repository;
+package ch.usi.si.seart.repository;
 
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.token.Token;

@@ -1,9 +1,9 @@
 package ch.usi.si.seart.crawler.service;
 
-import ch.usi.si.seart.crawler.repository.GitRepoRepository;
 import ch.usi.si.seart.exception.GitRepoNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.GitRepo_;
+import ch.usi.si.seart.repository.GitRepoRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

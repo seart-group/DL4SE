@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.repository.support;
+package ch.usi.si.seart.repository.support;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -30,6 +30,7 @@
         <module>dl4se-model</module>
         <module>dl4se-analyzer</module>
         <module>dl4se-crawler</module>
+        <module>dl4se-spring</module>
       </modules>
     </profile>
     <profile>
@@ -37,6 +38,7 @@
       <modules>
         <module>dl4se-model</module>
         <module>dl4se-server</module>
+        <module>dl4se-spring</module>
         <module>dl4se-transformer</module>
       </modules>
     </profile>
@@ -50,6 +52,7 @@
         <module>dl4se-analyzer</module>
         <module>dl4se-crawler</module>
         <module>dl4se-server</module>
+        <module>dl4se-spring</module>
         <module>dl4se-transformer</module>
       </modules>
     </profile>
@@ -58,6 +61,7 @@
   <properties>
     <revision>1.0.0</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.module.mainClass>ch.usi.si.seart.Application</project.module.mainClass>
     <junit.version>5.10.0</junit.version>
     <treesitter.version>1.7.0</treesitter.version>
     <lombok.version>1.18.30</lombok.version>

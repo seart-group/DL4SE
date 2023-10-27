@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.code.Code;
-import ch.usi.si.seart.server.repository.CodeRepository;
+import ch.usi.si.seart.repository.CodeRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

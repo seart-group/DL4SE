@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.bean;
 
 import ch.usi.si.seart.model.Configuration;
-import ch.usi.si.seart.server.repository.ConfigurationRepository;
+import ch.usi.si.seart.repository.ConfigurationRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

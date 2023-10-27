@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.repository;
+package ch.usi.si.seart.repository;
 
 import ch.usi.si.seart.model.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;

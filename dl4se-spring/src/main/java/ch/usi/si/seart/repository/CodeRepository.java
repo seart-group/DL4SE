@@ -1,7 +1,7 @@
-package ch.usi.si.seart.server.repository;
+package ch.usi.si.seart.repository;
 
 import ch.usi.si.seart.model.code.Code;
-import ch.usi.si.seart.server.repository.support.JpaStreamExecutor;
+import ch.usi.si.seart.repository.support.JpaStreamExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

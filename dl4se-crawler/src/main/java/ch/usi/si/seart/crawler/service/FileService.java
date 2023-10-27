@@ -1,8 +1,8 @@
 package ch.usi.si.seart.crawler.service;
 
-import ch.usi.si.seart.crawler.repository.FileRepository;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.code.File;
+import ch.usi.si.seart.repository.FileRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -1,6 +1,6 @@
-package ch.usi.si.seart.server.config;
+package ch.usi.si.seart.config;
 
-import ch.usi.si.seart.server.repository.support.ExtendedJpaRepositoryImpl;
+import ch.usi.si.seart.repository.support.ExtendedJpaRepositoryImpl;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "ch.usi.si.seart.views",
 })
 @EnableJpaRepositories(
-        value = "ch.usi.si.seart.server.repository",
+        value = "ch.usi.si.seart.repository",
         repositoryBaseClass = ExtendedJpaRepositoryImpl.class
 )
 public class JpaConfig {

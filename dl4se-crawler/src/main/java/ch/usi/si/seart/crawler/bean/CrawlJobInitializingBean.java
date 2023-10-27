@@ -1,8 +1,8 @@
 package ch.usi.si.seart.crawler.bean;
 
-import ch.usi.si.seart.crawler.repository.CrawlJobRepository;
 import ch.usi.si.seart.model.job.CrawlJob;
 import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.repository.CrawlJobRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

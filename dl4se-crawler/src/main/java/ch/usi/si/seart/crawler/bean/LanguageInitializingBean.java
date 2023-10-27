@@ -1,7 +1,7 @@
 package ch.usi.si.seart.crawler.bean;
 
-import ch.usi.si.seart.crawler.repository.LanguageRepository;
 import ch.usi.si.seart.model.Language;
+import ch.usi.si.seart.repository.LanguageRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

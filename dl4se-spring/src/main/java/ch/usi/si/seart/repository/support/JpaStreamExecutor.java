@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.repository.support;
+package ch.usi.si.seart.repository.support;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;

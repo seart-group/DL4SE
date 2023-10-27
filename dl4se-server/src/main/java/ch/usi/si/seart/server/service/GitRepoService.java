@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.GitRepo;
-import ch.usi.si.seart.server.repository.GitRepoRepository;
+import ch.usi.si.seart.repository.GitRepoRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
