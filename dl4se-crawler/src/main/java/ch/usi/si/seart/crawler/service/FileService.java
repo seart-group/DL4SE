@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public interface FileService {
 
-    List<File> getAllByRepo(GitRepo gitRepo);
+    Set<Path> getAllPathsByRepo(GitRepo gitRepo);
     void create(File file);
     void delete(GitRepo gitRepo, Path path);
     void rename(GitRepo gitRepo, Path oldPath, Path newPath);
@@ -28,8 +29,11 @@ public interface FileService {
         FileRepository fileRepository;
 
         @Override
-        public List<File> getAllByRepo(GitRepo gitRepo) {
-            return fileRepository.findAllByRepo(gitRepo);
+        public Set<Path> getAllPathsByRepo(GitRepo gitRepo) {
+            return fileRepository.findAllPathByRepo(gitRepo)
+                    .stream()
+                    .map(Path::of)
+                    .collect(Collectors.toSet());
         }
 
         @Override

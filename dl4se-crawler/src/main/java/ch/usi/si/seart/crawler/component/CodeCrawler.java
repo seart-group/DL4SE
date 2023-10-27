@@ -274,9 +274,7 @@ public class CodeCrawler implements Runnable {
         ExtensionBasedFileVisitor visitor = ExtensionBasedFileVisitor.forExtensions(extensions);
         Files.walkFileTree(localDirectory, visitor);
         Set<Path> candidates = new HashSet<>(visitor.getVisited());
-        Set<Path> analyzed = fileService.getAllByRepo(repo).stream()
-                .map(File::getPath)
-                .map(Path::of)
+        Set<Path> analyzed = fileService.getAllPathsByRepo(repo).stream()
                 .map(localDirectory::resolve)
                 .collect(Collectors.toSet());
         Set<Path> filtered = Sets.difference(candidates, analyzed).stream()

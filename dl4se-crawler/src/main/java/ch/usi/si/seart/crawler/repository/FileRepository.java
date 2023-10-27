@@ -9,11 +9,12 @@ import org.springframework.data.repository.query.Param;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Collection;
 
 public interface FileRepository extends JpaRepository<File, Long> {
 
-    List<File> findAllByRepo(@NotNull GitRepo repo);
+    @Query("SELECT path FROM File WHERE repo = :repo")
+    Collection<String> findAllPathByRepo(@Param(value = "repo") @NotNull GitRepo repo);
 
     @Modifying
     @Query("UPDATE File SET path = :new WHERE repo = :repo AND path = :old")
