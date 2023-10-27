@@ -4,6 +4,7 @@ COPY ./pom.xml /pom.xml
 COPY ./dl4se-model /dl4se-model
 COPY ./dl4se-server /dl4se-server
 COPY ./dl4se-spring /dl4se-spring
+COPY ./dl4se-transformer /dl4se-transformer
 
 RUN mvn -e \
         --no-transfer-progress \
