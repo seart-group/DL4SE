@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.controller;
 
 import ch.usi.si.seart.model.Language;
-import ch.usi.si.seart.server.service.LanguageService;
+import ch.usi.si.seart.service.LanguageService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;

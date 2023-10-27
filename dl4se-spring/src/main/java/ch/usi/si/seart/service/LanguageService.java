@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.service;
+package ch.usi.si.seart.service;
 
 import ch.usi.si.seart.model.Language;
 import ch.usi.si.seart.repository.LanguageRepository;
