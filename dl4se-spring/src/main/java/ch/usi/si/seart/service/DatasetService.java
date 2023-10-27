@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.service;
+package ch.usi.si.seart.service;
 
 import org.springframework.data.jpa.domain.Specification;
 
