@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.config;
 
+import ch.usi.si.seart.exception.UserNotFoundException;
 import ch.usi.si.seart.model.user.User;
-import ch.usi.si.seart.server.exception.UserNotFoundException;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.UserService;
 import ch.usi.si.seart.server.web.filter.JwtRequestFilter;

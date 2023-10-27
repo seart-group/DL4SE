@@ -1,8 +1,8 @@
 package ch.usi.si.seart.server.service;
 
+import ch.usi.si.seart.exception.LanguageNotFoundException;
 import ch.usi.si.seart.model.Language;
 import ch.usi.si.seart.model.Language_;
-import ch.usi.si.seart.server.exception.LanguageNotFoundException;
 import ch.usi.si.seart.server.repository.LanguageRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

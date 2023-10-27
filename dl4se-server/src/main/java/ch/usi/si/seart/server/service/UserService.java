@@ -1,9 +1,9 @@
 package ch.usi.si.seart.server.service;
 
+import ch.usi.si.seart.exception.UserNotFoundException;
 import ch.usi.si.seart.model.user.Role;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.User_;
-import ch.usi.si.seart.server.exception.UserNotFoundException;
 import ch.usi.si.seart.server.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

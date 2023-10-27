@@ -1,12 +1,12 @@
 package ch.usi.si.seart.server.service;
 
+import ch.usi.si.seart.exception.TaskNotFoundException;
 import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.model.task.Status;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.server.exception.TaskFailedException;
-import ch.usi.si.seart.server.exception.TaskNotFoundException;
 import ch.usi.si.seart.server.repository.TaskRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;

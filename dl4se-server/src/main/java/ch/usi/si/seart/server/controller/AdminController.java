@@ -1,5 +1,6 @@
 package ch.usi.si.seart.server.controller;
 
+import ch.usi.si.seart.exception.ConfigurationNotFoundException;
 import ch.usi.si.seart.model.Configuration;
 import ch.usi.si.seart.model.Configuration_;
 import ch.usi.si.seart.model.task.Task;
@@ -9,7 +10,6 @@ import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.User_;
 import ch.usi.si.seart.server.dto.task.TaskSearchDto;
 import ch.usi.si.seart.server.dto.user.UserSearchDto;
-import ch.usi.si.seart.server.exception.ConfigurationNotFoundException;
 import ch.usi.si.seart.server.security.annotation.AdminRestController;
 import ch.usi.si.seart.server.service.ConfigurationService;
 import ch.usi.si.seart.server.service.TaskService;

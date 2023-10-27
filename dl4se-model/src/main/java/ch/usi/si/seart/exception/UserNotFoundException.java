@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.exception;
+package ch.usi.si.seart.exception;
 
 import ch.usi.si.seart.model.user.User;
 

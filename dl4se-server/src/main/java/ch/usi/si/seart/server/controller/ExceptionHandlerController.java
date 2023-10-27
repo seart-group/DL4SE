@@ -1,6 +1,6 @@
 package ch.usi.si.seart.server.controller;
 
-import ch.usi.si.seart.server.exception.EntityNotFoundException;
+import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.server.exception.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;

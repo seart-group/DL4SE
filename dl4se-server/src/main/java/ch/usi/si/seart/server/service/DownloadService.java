@@ -1,11 +1,11 @@
 package ch.usi.si.seart.server.service;
 
+import ch.usi.si.seart.exception.TokenNotFoundException;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.token.DownloadToken;
 import ch.usi.si.seart.model.user.token.Token;
 import ch.usi.si.seart.model.user.token.Token_;
 import ch.usi.si.seart.server.exception.TokenExpiredException;
-import ch.usi.si.seart.server.exception.TokenNotFoundException;
 import ch.usi.si.seart.server.repository.TokenRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
