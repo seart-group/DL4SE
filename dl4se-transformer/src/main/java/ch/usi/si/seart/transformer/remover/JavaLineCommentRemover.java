@@ -3,7 +3,7 @@ package ch.usi.si.seart.transformer.remover;
 public class JavaLineCommentRemover extends JavaNodeRemover {
 
     @Override
-    protected String getQueryPattern() {
+    protected String getPattern() {
         return "(line_comment) @target";
     }
 }

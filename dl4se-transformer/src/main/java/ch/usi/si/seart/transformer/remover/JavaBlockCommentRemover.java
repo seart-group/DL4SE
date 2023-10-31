@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 public class JavaBlockCommentRemover extends JavaNodeRemover {
 
     @Override
-    protected String getQueryPattern() {
+    protected String getPattern() {
         return "((block_comment) @capture (#match? @capture \"^/\\\\*[^*]\"))";
     }
 

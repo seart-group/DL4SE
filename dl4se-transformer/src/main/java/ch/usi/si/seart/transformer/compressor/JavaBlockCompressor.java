@@ -11,7 +11,7 @@ public class JavaBlockCompressor extends NodeCompressor {
     }
 
     @Override
-    protected String getQueryPattern() {
+    protected String getPattern() {
         return "[" +
                     "(while_statement (block . (_) .) @block)" +
                     "(for_statement (block . (_) .) @block)" +

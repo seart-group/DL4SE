@@ -20,13 +20,9 @@ import java.util.stream.StreamSupport;
 
 public abstract class QueryBasedTransformer extends NodeTransformer {
 
-    protected abstract String getQueryPattern();
+    protected abstract String getPattern();
 
     protected abstract byte[] getTargetBytes(Node target);
-
-    protected final Query getQuery() {
-        return Query.getFor(getLanguage(), getQueryPattern());
-    }
 
     @Override
     public final String apply(String source) {
@@ -34,7 +30,10 @@ public abstract class QueryBasedTransformer extends NodeTransformer {
         byte[] bytes = source.getBytes();
         @Cleanup Parser parser = getParser();
         @Cleanup Tree tree = parser.parse(source);
-        @Cleanup Query query = getQuery();
+        @Cleanup Query query = Query.builder()
+                .language(getLanguage())
+                .pattern(getPattern())
+                .build();
         @Cleanup QueryCursor cursor = tree.getRootNode().walk(query);
         Stream<QueryMatch> matches = StreamSupport.stream(cursor.spliterator(), false);
         List<Node> targets = matches.map(QueryMatch::getNodes)
