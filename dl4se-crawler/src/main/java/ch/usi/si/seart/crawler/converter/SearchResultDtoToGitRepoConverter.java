@@ -3,11 +3,14 @@ package ch.usi.si.seart.crawler.converter;
 import ch.usi.si.seart.crawler.dto.SearchResultDto;
 import ch.usi.si.seart.model.GitRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@AllArgsConstructor
+@Component
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class SearchResultDtoToGitRepoConverter implements Converter<SearchResultDto, GitRepo> {
 
     DateToLocalDateTimeConverter dateToLocalDateTimeConverter;
