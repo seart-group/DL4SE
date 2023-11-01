@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.util.unit.DataSize;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,12 +19,14 @@ public class ConverterConfig {
     @Bean
     public ConversionService conversionService(
             Converter<Date, LocalDateTime> dateToLocalDateTimeConverter,
-            Converter<SearchResultDto, GitRepo> searchResultDtoToGitRepoConverter
+            Converter<SearchResultDto, GitRepo> searchResultDtoToGitRepoConverter,
+            Converter<String, DataSize> stringToDataSizeConverter
     ) {
         ConversionServiceFactoryBean factory = new ConversionServiceFactoryBean();
         Set<Converter<?, ?>> converters = Set.of(
                 dateToLocalDateTimeConverter,
-                searchResultDtoToGitRepoConverter
+                searchResultDtoToGitRepoConverter,
+                stringToDataSizeConverter
         );
         factory.setConverters(converters);
         factory.afterPropertiesSet();
