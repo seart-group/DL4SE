@@ -1,4 +1,4 @@
-package ch.usi.si.seart.analyzer.query.multi;
+package ch.usi.si.seart.analyzer.query;
 
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;

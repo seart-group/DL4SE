@@ -20,7 +20,7 @@ import ch.usi.si.seart.analyzer.printer.OffsetSyntaxTreePrinter;
 import ch.usi.si.seart.analyzer.printer.Printer;
 import ch.usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import ch.usi.si.seart.analyzer.printer.SyntaxTreePrinter;
-import ch.usi.si.seart.analyzer.query.multi.MultiCaptureQueries;
+import ch.usi.si.seart.analyzer.query.MultiCaptureQueries;
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
