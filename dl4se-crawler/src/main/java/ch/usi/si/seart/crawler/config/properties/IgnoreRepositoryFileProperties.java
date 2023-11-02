@@ -11,7 +11,7 @@ import org.springframework.util.unit.DataSize;
 import javax.validation.constraints.PositiveOrZero;
 
 @Getter
-@ConfigurationProperties(prefix = "app.crawl-job.ignore.repository.file")
+@ConfigurationProperties(prefix = "crawler.ignore.repository.file")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class IgnoreRepositoryFileProperties {

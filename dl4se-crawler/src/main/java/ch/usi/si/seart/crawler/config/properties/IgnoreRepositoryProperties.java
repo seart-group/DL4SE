@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@ConfigurationProperties(prefix = "app.crawl-job.ignore.repository")
+@ConfigurationProperties(prefix = "crawler.ignore.repository")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class IgnoreRepositoryProperties {
 

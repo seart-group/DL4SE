@@ -79,7 +79,7 @@ public class CodeCrawler implements Runnable {
 
     ApplicationContext applicationContext;
 
-    @Value("${app.crawl-job.tmp-dir-prefix}")
+    @Value("${crawler.tmp-dir-prefix}")
     String prefix;
 
     Set<String> languageNames = new HashSet<>();
@@ -97,7 +97,7 @@ public class CodeCrawler implements Runnable {
         });
     }
 
-    @Scheduled(fixedDelayString = "${app.crawl-job.next-run-delay}")
+    @Scheduled(fixedDelayString = "${crawler.next-run-delay}")
     public void run() {
         AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
         GenericUrl url = autowireCapableBeanFactory.createBean(GenericUrl.class);

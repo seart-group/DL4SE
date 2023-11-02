@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import java.time.Duration;
 
 @Getter
-@ConfigurationProperties(prefix = "app.crawl-job.analyzer")
+@ConfigurationProperties(prefix = "crawler.analyzer")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class AnalyzerProperties {
