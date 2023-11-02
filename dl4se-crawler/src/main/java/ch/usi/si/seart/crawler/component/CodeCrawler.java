@@ -27,10 +27,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -78,7 +77,7 @@ public class CodeCrawler implements Runnable {
 
     Duration nextRunDelay;
 
-    ApplicationContext applicationContext;
+    ObjectFactory<GenericUrl> baseUrlFactory;
 
     @Value("${crawler.tmp-dir-prefix}")
     String prefix;
@@ -100,8 +99,7 @@ public class CodeCrawler implements Runnable {
 
     @Scheduled(fixedDelayString = "${crawler.next-run-delay}")
     public void run() {
-        AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
-        GenericUrl url = autowireCapableBeanFactory.createBean(GenericUrl.class);
+        GenericUrl url = baseUrlFactory.getObject();
         LocalDate checkpoint = crawlJobService.getProgress(Job.CODE)
                 .getCheckpoint()
                 .toLocalDate();
