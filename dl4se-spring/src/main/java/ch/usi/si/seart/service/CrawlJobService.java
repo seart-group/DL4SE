@@ -1,4 +1,4 @@
-package ch.usi.si.seart.crawler.service;
+package ch.usi.si.seart.service;
 
 import ch.usi.si.seart.exception.CrawlJobNotFoundException;
 import ch.usi.si.seart.model.job.CrawlJob;
