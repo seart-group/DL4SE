@@ -46,14 +46,14 @@ public class HttpConfig {
     }
 
     @Bean
-    public HttpIOExceptionHandler ioExceptionHandler() {
+    public HttpIOExceptionHandler ioExceptionHandler(Sleeper sleeper, BackOff backOff) {
         return (request, supportsRetry) -> {
             if (!supportsRetry) {
                 return false;
             }
 
             try {
-                return BackOffUtils.next(sleeper(), backOff());
+                return BackOffUtils.next(sleeper, backOff);
             } catch (InterruptedException exception) {
                 Thread.currentThread().interrupt();
                 return false;
@@ -62,12 +62,12 @@ public class HttpConfig {
     }
 
     @Bean
-    public HttpRequestInitializer requestInitializer() {
+    public HttpRequestInitializer requestInitializer(HttpIOExceptionHandler ioExceptionHandler) {
         return request -> {
             int timeout = 60_000;
             request.setReadTimeout(timeout);
             request.setConnectTimeout(timeout);
-            request.setIOExceptionHandler(ioExceptionHandler());
+            request.setIOExceptionHandler(ioExceptionHandler);
         };
     }
 
@@ -77,7 +77,9 @@ public class HttpConfig {
     }
 
     @Bean
-    public HttpRequestFactory requestFactory() {
-        return netHttpTransport().createRequestFactory(requestInitializer());
+    public HttpRequestFactory requestFactory(
+            NetHttpTransport httpTransport, HttpRequestInitializer httpRequestInitializer
+    ) {
+        return httpTransport.createRequestFactory(httpRequestInitializer);
     }
 }
