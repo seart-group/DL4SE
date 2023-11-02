@@ -105,9 +105,8 @@ public class CodeCrawler implements Runnable {
                 .getCheckpoint()
                 .toLocalDate();
         log.info("Last mining checkpoint: {}", checkpoint);
-        do {
-            url = fetchSearchResults(url, checkpoint);
-        } while (url != null);
+        do url = fetchSearchResults(url, checkpoint);
+        while (url != null);
         LocalDateTime nextRun = LocalDateTime.now()
                 .plus(nextRunDelay)
                 .truncatedTo(ChronoUnit.SECONDS);
