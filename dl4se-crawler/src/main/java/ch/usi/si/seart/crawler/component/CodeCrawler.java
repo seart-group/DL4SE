@@ -14,6 +14,7 @@ import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
+import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.service.GitRepoService;
 import ch.usi.si.seart.service.LanguageService;
 import com.google.api.client.http.GenericUrl;
@@ -102,7 +103,7 @@ public class CodeCrawler implements Runnable {
     @Scheduled(fixedDelayString = "${app.crawl-job.next-run-delay}")
     public void run() {
         GenericUrl url = baseUrl.clone();
-        LocalDate checkpoint = crawlJobService.getProgress()
+        LocalDate checkpoint = crawlJobService.getProgress(Job.CODE)
                 .getCheckpoint()
                 .toLocalDate();
         log.info("Last mining checkpoint: {}", checkpoint);
@@ -132,7 +133,7 @@ public class CodeCrawler implements Runnable {
     private void saveCrawlProgress(LocalDateTime checkpoint) {
         if (checkpoint == null || checkpoint.isAfter(LocalDateTime.now())) return;
         log.debug("Saving progress... [Checkpoint: {}]", checkpoint);
-        crawlJobService.saveProgress(checkpoint);
+        crawlJobService.saveProgress(Job.CODE, checkpoint);
     }
 
     private void inspectSearchResult(SearchResultDto item) {
