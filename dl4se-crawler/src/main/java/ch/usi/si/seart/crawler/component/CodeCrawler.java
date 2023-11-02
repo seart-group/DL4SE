@@ -1,8 +1,8 @@
 package ch.usi.si.seart.crawler.component;
 
 import ch.usi.si.seart.analyzer.Analyzer;
+import ch.usi.si.seart.analyzer.AnalyzerCustomizer;
 import ch.usi.si.seart.analyzer.LocalClone;
-import ch.usi.si.seart.crawler.config.CrawlerConfig;
 import ch.usi.si.seart.crawler.dto.SearchResultDto;
 import ch.usi.si.seart.crawler.git.Git;
 import ch.usi.si.seart.crawler.git.GitException;
@@ -50,6 +50,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -61,9 +62,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CodeCrawler implements Runnable {
 
-    Duration nextRunDelay;
     HttpClient httpClient;
-    GenericUrl baseUrl;
 
     FileService fileService;
     GitRepoService gitRepoService;
@@ -71,13 +70,19 @@ public class CodeCrawler implements Runnable {
     LanguageService languageService;
     ConversionService conversionService;
 
-    CrawlerConfig.FileFilter fileFilter;
+    Predicate<String> nameFilter;
 
-    @Value("${app.general.tmp-dir-prefix}")
+    Predicate<Path> fileFilter;
+
+    AnalyzerCustomizer<Analyzer> analyzerCustomizer;
+
+    Duration nextRunDelay;
+
+    @Value("${app.crawl-job.base-url}")
+    GenericUrl baseUrl;
+
+    @Value("${app.crawl-job.tmp-dir-prefix}")
     String prefix;
-
-    @Value("${app.crawl-job.ignore.repository.names}")
-    List<String> ignoreProjects;
 
     Set<String> languageNames = new HashSet<>();
     Map<String, Language> nameToLanguage = new HashMap<>();
@@ -133,7 +138,7 @@ public class CodeCrawler implements Runnable {
     private void inspectSearchResult(SearchResultDto item) {
         String name = item.getName();
 
-        if (ignoreProjects.contains(name)) {
+        if (nameFilter.test(name)) {
             log.debug("Skipping: {}. Repository is set to be ignored by crawler!", name);
             return;
         }
@@ -286,7 +291,7 @@ public class CodeCrawler implements Runnable {
         String extension = com.google.common.io.Files.getFileExtension(path.toString());
         Language language = extensionToLanguage.get(extension);
         try (Analyzer analyzer = new Analyzer(localClone, path)) {
-            fileFilter.getMaxParseTime().ifPresent(analyzer::setParserTimeout);
+            analyzerCustomizer.customize(analyzer);
             Analyzer.Result result = analyzer.analyze();
             File file = result.getFile();
             List<Function> functions = result.getFunctions();
