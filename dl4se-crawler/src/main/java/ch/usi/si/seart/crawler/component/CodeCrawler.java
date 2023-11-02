@@ -8,6 +8,7 @@ import ch.usi.si.seart.crawler.git.Git;
 import ch.usi.si.seart.crawler.git.GitException;
 import ch.usi.si.seart.crawler.io.ExtensionBasedFileVisitor;
 import ch.usi.si.seart.crawler.service.FileService;
+import ch.usi.si.seart.crawler.service.FileSystemService;
 import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
@@ -22,21 +23,18 @@ import com.google.api.client.http.HttpResponse;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import lombok.AccessLevel;
-import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -68,6 +66,7 @@ public class CodeCrawler implements Runnable {
     CrawlJobService crawlJobService;
     LanguageService languageService;
     ConversionService conversionService;
+    FileSystemService fileSystemService;
 
     Predicate<String> nameFilter;
 
@@ -78,9 +77,6 @@ public class CodeCrawler implements Runnable {
     Duration nextRunDelay;
 
     ObjectFactory<GenericUrl> baseUrlFactory;
-
-    @Value("${crawler.tmp-dir-prefix}")
-    String prefix;
 
     Set<String> languageNames = new HashSet<>();
     Map<String, Language> nameToLanguage = new HashMap<>();
@@ -173,10 +169,9 @@ public class CodeCrawler implements Runnable {
         String name = repo.getName();
         LocalDateTime lastCommit = repo.getLastCommit();
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
-        try {
-            Path localDirectory = Files.createTempDirectory(prefix);
-            LocalClone localClone = new LocalClone(repo, localDirectory);
-            @Cleanup Git git = new Git(name, localDirectory, lastCommit);
+        Path localDirectory = fileSystemService.createTemporaryDirectory();
+        LocalClone localClone = new LocalClone(repo, localDirectory);
+        try (Git git = new Git(name, localDirectory, lastCommit)) {
             Set<Language> notMined = Sets.difference(repoLanguages, repo.getLanguages());
             if (!notMined.isEmpty()) {
                 mineRepoData(localClone, notMined);
@@ -222,10 +217,10 @@ public class CodeCrawler implements Runnable {
                     .forEach(value -> addFile(localClone, value));
 
             gitRepoService.createOrUpdate(repo);
-        } catch (IOException ex) {
-            log.error("Could not create temporary directory for: " + name, ex);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
+        } catch (IOException ex) {
+            log.error("Error occurred during cleanup of: " + name, ex.getCause());
         }
     }
     
@@ -245,20 +240,19 @@ public class CodeCrawler implements Runnable {
         String name = repo.getName();
         LocalDateTime lastUpdateGhs = repo.getLastCommit();
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
-        try {
-            Path localDirectory = Files.createTempDirectory(prefix);
-            LocalClone localClone = new LocalClone(repo, localDirectory);
-            @Cleanup Git git = new Git(name, localDirectory, true);
+        Path localDirectory = fileSystemService.createTemporaryDirectory();
+        LocalClone localClone = new LocalClone(repo, localDirectory);
+        try (Git git = new Git(name, localDirectory, true)) {
             Git.Commit latest = git.getLastCommitInfo();
             mineRepoData(localClone, languages);
             repo.setLanguages(languages);
             repo.setLastCommit(latest.getTimestamp());
             repo.setLastCommitSHA(latest.getSha());
             gitRepoService.createOrUpdate(repo);
-        } catch (IOException ex) {
-            log.error("Could not create temporary directory for: " + name, ex);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
+        } catch (IOException ex) {
+            log.error("Error occurred during cleanup of: " + name, ex.getCause());
         }
     }
 
