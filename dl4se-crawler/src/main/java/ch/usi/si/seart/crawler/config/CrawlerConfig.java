@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import java.time.Duration;
 
 @Configuration
+@ConfigurationPropertiesScan(basePackages = "ch.usi.si.seart.crawler.config.properties")
 public class CrawlerConfig {
 
     @Bean
