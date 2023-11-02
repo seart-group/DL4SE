@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.time.Duration;
+import java.time.LocalDate;
 
 @Getter
 @ConfigurationProperties(prefix = "crawler")
@@ -21,4 +22,6 @@ public class CrawlerProperties {
     Duration nextRunDelay;
 
     GenericUrl baseUrl;
+
+    LocalDate startDate;
 }
