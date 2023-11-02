@@ -37,6 +37,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -263,7 +264,6 @@ public class CodeCrawler implements Runnable {
         }
     }
 
-    @SneakyThrows(IOException.class)
     private void mineRepoData(LocalClone localClone, Set<Language> languages) {
         GitRepo repo = localClone.getGitRepo();
         Path localDirectory = localClone.getDiskPath();
@@ -272,15 +272,19 @@ public class CodeCrawler implements Runnable {
                 .flatMap(Collection::stream)
                 .toArray(String[]::new);
         ExtensionBasedFileVisitor visitor = ExtensionBasedFileVisitor.forExtensions(extensions);
-        Files.walkFileTree(localDirectory, visitor);
-        Set<Path> candidates = new HashSet<>(visitor.getVisited());
-        Set<Path> analyzed = fileService.getAllPathsByRepo(repo).stream()
-                .map(localDirectory::resolve)
-                .collect(Collectors.toSet());
-        Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
-                .filter(fileFilter)
-                .collect(Collectors.toSet());
-        filtered.forEach(target -> analyzeAndStore(localClone, target));
+        try {
+            Files.walkFileTree(localDirectory, visitor);
+            Set<Path> candidates = new HashSet<>(visitor.getVisited());
+            Set<Path> analyzed = fileService.getAllPathsByRepo(repo).stream()
+                    .map(localDirectory::resolve)
+                    .collect(Collectors.toSet());
+            Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
+                    .filter(fileFilter)
+                    .collect(Collectors.toSet());
+            filtered.forEach(target -> analyzeAndStore(localClone, target));
+        } catch (IOException ex) {
+            log.error("Could not walk file tree for: " + repo.getName(), ex);
+        }
     }
 
     private void analyzeAndStore(LocalClone localClone, Path path) {
