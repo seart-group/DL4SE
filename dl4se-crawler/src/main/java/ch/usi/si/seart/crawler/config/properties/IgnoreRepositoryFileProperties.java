@@ -7,9 +7,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.util.unit.DataSize;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.PositiveOrZero;
 
+@Validated
 @Getter
 @ConfigurationProperties(prefix = "crawler.ignore.repository.file")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
