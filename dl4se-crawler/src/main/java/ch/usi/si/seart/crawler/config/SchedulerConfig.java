@@ -2,10 +2,7 @@ package ch.usi.si.seart.crawler.config;
 
 import ch.usi.si.seart.crawler.component.CodeCrawler;
 import ch.usi.si.seart.crawler.config.properties.SchedulingProperties;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import ch.usi.si.seart.scheduling.concurrent.LoggingThreadPoolTaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +13,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ErrorHandler;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @EnableScheduling
@@ -28,14 +22,7 @@ public class SchedulerConfig {
     public TaskScheduler taskScheduler(
             CodeCrawler codeCrawler, ErrorHandler errorHandler, SchedulingProperties properties
     ) {
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler() {
-
-            @Override
-            public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long delay) {
-                Runnable decorated = new FixedDelayLoggingRunnable(task, delay);
-                return super.scheduleWithFixedDelay(decorated, delay);
-            }
-        };
+        ThreadPoolTaskScheduler taskScheduler = new LoggingThreadPoolTaskScheduler();
         taskScheduler.setThreadNamePrefix("scheduling-");
         taskScheduler.setPoolSize(1);
         taskScheduler.setClock(Clock.systemUTC());
@@ -60,29 +47,5 @@ public class SchedulerConfig {
                 log.error("Unhandled exception occurred while performing a scheduled job.", t);
             }
         };
-    }
-
-    @Slf4j
-    @AllArgsConstructor
-    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    private static class FixedDelayLoggingRunnable implements Runnable {
-
-        Runnable delegate;
-
-        long delay;
-
-        @Override
-        public void run() {
-            delegate.run();
-            LocalDateTime nextRun = LocalDateTime.now()
-                    .plus(delay, ChronoUnit.MILLIS)
-                    .truncatedTo(ChronoUnit.SECONDS);
-            log.info("Finished! Next run scheduled for: {}", nextRun);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + " for " + delegate;
-        }
     }
 }
