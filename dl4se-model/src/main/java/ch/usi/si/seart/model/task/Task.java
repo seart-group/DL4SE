@@ -1,8 +1,8 @@
 package ch.usi.si.seart.model.task;
 
 import ch.usi.si.seart.model.job.Job;
-import ch.usi.si.seart.model.type.StringEnumType;
 import ch.usi.si.seart.model.user.User;
+import ch.usi.si.seart.type.StringEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;

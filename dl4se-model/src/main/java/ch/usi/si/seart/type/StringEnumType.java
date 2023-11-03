@@ -1,4 +1,4 @@
-package ch.usi.si.seart.model.type;
+package ch.usi.si.seart.type;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

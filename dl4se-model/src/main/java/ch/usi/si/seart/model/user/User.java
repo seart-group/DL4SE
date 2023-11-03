@@ -1,7 +1,7 @@
 package ch.usi.si.seart.model.user;
 
 import ch.usi.si.seart.model.task.Task;
-import ch.usi.si.seart.model.type.StringEnumType;
+import ch.usi.si.seart.type.StringEnumType;
 import ch.usi.si.seart.validation.constraints.BCryptHash;
 import ch.usi.si.seart.validation.constraints.OWASPEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;

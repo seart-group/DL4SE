@@ -1,6 +1,6 @@
 package ch.usi.si.seart.model.job;
 
-import ch.usi.si.seart.model.type.StringEnumType;
+import ch.usi.si.seart.type.StringEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

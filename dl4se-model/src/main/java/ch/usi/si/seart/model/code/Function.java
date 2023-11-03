@@ -1,6 +1,6 @@
 package ch.usi.si.seart.model.code;
 
-import ch.usi.si.seart.model.type.StringEnumType;
+import ch.usi.si.seart.type.StringEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
