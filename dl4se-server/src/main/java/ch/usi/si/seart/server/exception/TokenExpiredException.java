@@ -4,9 +4,9 @@ import ch.usi.si.seart.model.user.token.Token;
 
 public class TokenExpiredException extends RuntimeException {
 
+    private static final String TEMPLATE = "Token [%s] has expired on [%s]";;
+
     public TokenExpiredException(Token token) {
-        super(
-                String.format("Token [%s] has expired on [%s]", token.getValue(), token.getExpires())
-        );
+        super(String.format(TEMPLATE, token.getValue(), token.getExpires()));
     }
 }
