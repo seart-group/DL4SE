@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Getter
-@ConfigurationProperties(prefix = "crawler.ignore")
+@ConfigurationProperties(prefix = "crawler.ignore", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class IgnoreProperties {

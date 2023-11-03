@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import java.time.Duration;
 
 @Getter
-@ConfigurationProperties(prefix = "crawler.analyzer")
+@ConfigurationProperties(prefix = "crawler.analyzer", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class AnalyzerProperties {

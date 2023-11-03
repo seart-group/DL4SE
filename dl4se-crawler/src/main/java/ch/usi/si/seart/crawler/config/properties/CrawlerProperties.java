@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "crawler")
+@ConfigurationProperties(prefix = "crawler", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class CrawlerProperties {

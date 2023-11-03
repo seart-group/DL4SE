@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "crawler.ignore.repository.files")
+@ConfigurationProperties(prefix = "crawler.ignore.repository.files", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class IgnoreRepositoryFilesProperties {

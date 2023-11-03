@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "crawler.ignore.repository")
+@ConfigurationProperties(prefix = "crawler.ignore.repository", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class IgnoreRepositoryProperties {
 
