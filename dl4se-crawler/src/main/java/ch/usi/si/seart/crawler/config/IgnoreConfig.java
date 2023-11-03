@@ -1,6 +1,6 @@
 package ch.usi.si.seart.crawler.config;
 
-import ch.usi.si.seart.crawler.config.properties.IgnoreRepositoryFileProperties;
+import ch.usi.si.seart.crawler.config.properties.IgnoreRepositoryFilesProperties;
 import ch.usi.si.seart.crawler.config.properties.IgnoreRepositoryProperties;
 import ch.usi.si.seart.crawler.io.DataSizePredicate;
 import ch.usi.si.seart.crawler.io.GlobPathMatcherPredicate;
@@ -36,7 +36,7 @@ public class IgnoreConfig {
     }
 
     @Bean
-    public Predicate<Path> fileFilter(IgnoreRepositoryFileProperties properties) {
+    public Predicate<Path> fileFilter(IgnoreRepositoryFilesProperties properties) {
         Collection<Predicate<Path>> predicates = new ArrayList<>();
         Optional.ofNullable(properties.getGlobPattern())
                 .filter(Predicate.not(ObjectUtils::isEmpty))

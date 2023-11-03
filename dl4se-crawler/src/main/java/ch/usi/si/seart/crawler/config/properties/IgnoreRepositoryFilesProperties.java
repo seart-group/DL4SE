@@ -13,10 +13,10 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "crawler.ignore.repository.file")
+@ConfigurationProperties(prefix = "crawler.ignore.repository.files")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
-public class IgnoreRepositoryFileProperties {
+public class IgnoreRepositoryFilesProperties {
 
     DataSize maxSize;
 

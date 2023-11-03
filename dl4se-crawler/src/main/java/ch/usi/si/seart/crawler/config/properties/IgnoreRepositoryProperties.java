@@ -23,14 +23,14 @@ public class IgnoreRepositoryProperties {
     Set<@NotBlank String> names;
 
     @NestedConfigurationProperty
-    IgnoreRepositoryFileProperties file;
+    IgnoreRepositoryFilesProperties files;
 
     @ConstructorBinding
-    public IgnoreRepositoryProperties(List<String> names, IgnoreRepositoryFileProperties file) {
+    public IgnoreRepositoryProperties(List<String> names, IgnoreRepositoryFilesProperties files) {
         this.names = names.stream().collect(Collectors.collectingAndThen(
                 Collectors.toSet(),
                 Collections::unmodifiableSet
         ));
-        this.file = file;
+        this.files = files;
     }
 }
