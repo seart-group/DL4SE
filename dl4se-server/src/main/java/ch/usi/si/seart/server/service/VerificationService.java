@@ -44,9 +44,7 @@ public interface VerificationService {
             tokenRepository.findByValue(value)
                     .filter(VerificationToken.class::isInstance)
                     .map(token -> {
-                        if (!token.isValid())
-                            throw new TokenExpiredException(token);
-
+                        if (token.isExpired()) throw new TokenExpiredException(token);
                         User user = token.getUser();
                         user.setVerified(true);
                         tokenRepository.delete(token);

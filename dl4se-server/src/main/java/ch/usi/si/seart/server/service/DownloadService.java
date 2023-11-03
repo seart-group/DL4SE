@@ -42,10 +42,7 @@ public interface DownloadService {
                     .filter(DownloadToken.class::isInstance)
                     .map(token -> {
                         tokenRepository.delete(token);
-
-                        if (!token.isValid())
-                            throw new TokenExpiredException(token);
-
+                        if (token.isExpired()) throw new TokenExpiredException(token);
                         return token;
                     }).orElseThrow(() -> new TokenNotFoundException(Token_.value, value));
         }

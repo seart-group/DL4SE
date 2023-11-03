@@ -64,7 +64,8 @@ public abstract class Token {
         expires = calculateExpiryDate();
     }
 
-    public boolean isValid() {
-        return expires.isAfter(LocalDateTime.now(ZoneOffset.UTC));
+    public boolean isExpired() {
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        return expires.isBefore(now);
     }
 }

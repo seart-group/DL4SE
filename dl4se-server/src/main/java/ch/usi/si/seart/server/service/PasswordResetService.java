@@ -56,9 +56,7 @@ public interface PasswordResetService {
             tokenRepository.findByValue(value)
                     .filter(PasswordResetToken.class::isInstance)
                     .map(token -> {
-                        if (!token.isValid())
-                            throw new TokenExpiredException(token);
-
+                        if (token.isExpired()) throw new TokenExpiredException(token);
                         User user = token.getUser();
                         user.setPassword(passwordEncoder.encode(newPass));
                         tokenRepository.delete(token);
