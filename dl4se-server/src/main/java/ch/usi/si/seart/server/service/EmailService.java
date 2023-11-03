@@ -1,7 +1,7 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.task.Task;
-import ch.usi.si.seart.server.util.unit.ReadableFileSize;
+import ch.usi.si.seart.util.unit.ReadableFileSize;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

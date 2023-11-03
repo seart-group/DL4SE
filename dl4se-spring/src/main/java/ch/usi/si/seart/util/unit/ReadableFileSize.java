@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.util.unit;
+package ch.usi.si.seart.util.unit;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
