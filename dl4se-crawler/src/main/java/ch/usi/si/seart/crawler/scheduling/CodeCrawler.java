@@ -1,4 +1,4 @@
-package ch.usi.si.seart.crawler.component;
+package ch.usi.si.seart.crawler.scheduling;
 
 import ch.usi.si.seart.analyzer.Analyzer;
 import ch.usi.si.seart.analyzer.AnalyzerCustomizer;

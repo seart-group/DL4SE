@@ -1,7 +1,7 @@
 package ch.usi.si.seart.crawler.config;
 
-import ch.usi.si.seart.crawler.component.CodeCrawler;
 import ch.usi.si.seart.crawler.config.properties.SchedulingProperties;
+import ch.usi.si.seart.crawler.scheduling.CodeCrawler;
 import ch.usi.si.seart.scheduling.concurrent.LoggingThreadPoolTaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
