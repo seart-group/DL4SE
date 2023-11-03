@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public abstract class CrawlJobInitializingBean implements InitializingBean {
+public final class CrawlJobInitializingBean implements InitializingBean {
 
     Job jobType;
 
@@ -25,12 +25,12 @@ public abstract class CrawlJobInitializingBean implements InitializingBean {
     CrawlJobRepository crawlJobRepository;
 
     @Autowired
-    public final void setCrawlJobRepository(CrawlJobRepository crawlJobRepository) {
+    public void setCrawlJobRepository(CrawlJobRepository crawlJobRepository) {
         this.crawlJobRepository = crawlJobRepository;
     }
 
     @Override
-    public final void afterPropertiesSet() {
+    public void afterPropertiesSet() {
         Optional<CrawlJob> optional = crawlJobRepository.findByJobType(jobType);
         CrawlJob crawlJob = optional.orElseGet(
                 () -> CrawlJob.builder()

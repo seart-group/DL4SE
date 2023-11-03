@@ -1,7 +1,9 @@
 package ch.usi.si.seart.crawler.config;
 
+import ch.usi.si.seart.bean.CrawlJobInitializingBean;
 import ch.usi.si.seart.crawler.config.properties.CrawlerProperties;
 import ch.usi.si.seart.crawler.service.FileSystemService;
+import ch.usi.si.seart.model.job.Job;
 import com.google.api.client.http.GenericUrl;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -39,5 +41,10 @@ public class CrawlerConfig {
                 throw new UncheckedIOException(ex);
             }
         };
+    }
+
+    @Bean
+    public CrawlJobInitializingBean crawlJobInitializingBean(CrawlerProperties properties) {
+        return new CrawlJobInitializingBean(Job.CODE, properties.getStartDate().atStartOfDay());
     }
 }
