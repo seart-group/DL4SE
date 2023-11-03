@@ -6,6 +6,7 @@ import ch.usi.si.seart.analyzer.LocalClone;
 import ch.usi.si.seart.crawler.dto.SearchResultDto;
 import ch.usi.si.seart.crawler.git.Git;
 import ch.usi.si.seart.crawler.git.GitException;
+import ch.usi.si.seart.crawler.http.HttpClient;
 import ch.usi.si.seart.crawler.io.ExtensionBasedFileVisitor;
 import ch.usi.si.seart.crawler.service.FileService;
 import ch.usi.si.seart.crawler.service.FileSystemService;

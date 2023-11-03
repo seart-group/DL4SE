@@ -1,4 +1,4 @@
-package ch.usi.si.seart.crawler.component;
+package ch.usi.si.seart.crawler.http;
 
 import ch.usi.si.seart.crawler.dto.SearchResultDto;
 import com.google.api.client.http.GenericUrl;
