@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -21,11 +22,15 @@ public class IgnoreRepositoryProperties {
 
     Set<@NotBlank String> names;
 
+    @NestedConfigurationProperty
+    IgnoreRepositoryFileProperties file;
+
     @ConstructorBinding
-    public IgnoreRepositoryProperties(List<String> names) {
+    public IgnoreRepositoryProperties(List<String> names, IgnoreRepositoryFileProperties file) {
         this.names = names.stream().collect(Collectors.collectingAndThen(
                 Collectors.toSet(),
                 Collections::unmodifiableSet
         ));
+        this.file = file;
     }
 }
