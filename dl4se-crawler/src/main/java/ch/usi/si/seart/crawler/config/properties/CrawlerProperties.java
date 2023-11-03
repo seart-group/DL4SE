@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Validated
@@ -25,12 +24,13 @@ public class CrawlerProperties {
     @NotNull
     String tmpDirPrefix;
 
-    Duration nextRunDelay;
-
     GenericUrl baseUrl;
 
     @Past
     LocalDate startDate;
+
+    @NestedConfigurationProperty
+    SchedulingProperties scheduling;
 
     @NestedConfigurationProperty
     AnalyzerProperties analyzer;

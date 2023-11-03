@@ -15,17 +15,11 @@ import org.springframework.context.annotation.Scope;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
-import java.time.Duration;
 
 @Configuration
 @ConfigurationPropertiesScan(basePackages = "ch.usi.si.seart.crawler.config.properties")
 @PropertySource("classpath:crawler.properties")
 public class CrawlerConfig {
-
-    @Bean
-    public Duration nextRunDelay(CrawlerProperties properties) {
-        return properties.getNextRunDelay();
-    }
 
     @Bean
     @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
