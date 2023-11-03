@@ -1,27 +1,43 @@
 package ch.usi.si.seart.crawler.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.task.TaskSchedulerCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ErrorHandler;
 
+import java.time.Clock;
+
 @Configuration
 @EnableScheduling
-public class SchedulerConfig implements TaskSchedulerCustomizer {
+public class SchedulerConfig {
 
-    @Override
-    public void customize(ThreadPoolTaskScheduler taskScheduler) {
-        taskScheduler.setErrorHandler(new SchedulerErrorHandler());
+    @Bean
+    public TaskScheduler taskScheduler(ErrorHandler errorHandler) {
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        taskScheduler.setThreadNamePrefix("scheduling-");
+        taskScheduler.setPoolSize(1);
+        taskScheduler.setClock(Clock.systemUTC());
+        taskScheduler.setErrorHandler(errorHandler);
+        taskScheduler.initialize();
+        return taskScheduler;
     }
 
-    @Slf4j
-    private static class SchedulerErrorHandler implements ErrorHandler {
+    @Bean
+    public ErrorHandler errorHandler() {
+        return new ErrorHandler() {
 
-        @Override
-        public void handleError(Throwable throwable) {
-            log.error("Unhandled exception occurred while performing a scheduled job.", throwable);
-        }
+            private final Logger log = LoggerFactory.getLogger(
+                    SchedulerConfig.class.getCanonicalName() + "$" + ErrorHandler.class.getSimpleName()
+            );
+
+            @Override
+            public void handleError(Throwable t) {
+                log.error("Unhandled exception occurred while performing a scheduled job.", t);
+            }
+        };
     }
 }
