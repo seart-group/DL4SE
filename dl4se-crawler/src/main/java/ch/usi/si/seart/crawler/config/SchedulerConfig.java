@@ -1,5 +1,7 @@
 package ch.usi.si.seart.crawler.config;
 
+import ch.usi.si.seart.crawler.component.CodeCrawler;
+import ch.usi.si.seart.crawler.config.properties.SchedulingProperties;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,19 +18,32 @@ import org.springframework.util.ErrorHandler;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @EnableScheduling
 public class SchedulerConfig {
 
     @Bean
-    public TaskScheduler taskScheduler(ErrorHandler errorHandler) {
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+    public TaskScheduler taskScheduler(
+            CodeCrawler codeCrawler, ErrorHandler errorHandler, SchedulingProperties properties
+    ) {
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler() {
+
+            @Override
+            public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long delay) {
+                Runnable decorated = new FixedDelayLoggingRunnable(task, delay);
+                return super.scheduleWithFixedDelay(decorated, delay);
+            }
+        };
         taskScheduler.setThreadNamePrefix("scheduling-");
         taskScheduler.setPoolSize(1);
         taskScheduler.setClock(Clock.systemUTC());
         taskScheduler.setErrorHandler(errorHandler);
         taskScheduler.initialize();
+
+        taskScheduler.scheduleWithFixedDelay(codeCrawler, properties.getNextRunDelay());
+
         return taskScheduler;
     }
 

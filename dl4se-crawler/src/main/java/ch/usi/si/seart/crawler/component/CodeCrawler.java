@@ -29,19 +29,15 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,9 +71,6 @@ public class CodeCrawler implements Runnable {
 
     AnalyzerCustomizer<Analyzer> analyzerCustomizer;
 
-    @Value("${crawler.scheduling.next-run-delay}")
-    Duration nextRunDelay;
-
     ObjectFactory<GenericUrl> baseUrlFactory;
 
     Set<String> languageNames = new HashSet<>();
@@ -95,7 +88,6 @@ public class CodeCrawler implements Runnable {
         });
     }
 
-    @Scheduled(fixedDelayString = "${crawler.scheduling.next-run-delay}")
     public void run() {
         GenericUrl url = baseUrlFactory.getObject();
         LocalDate checkpoint = crawlJobService.getProgress(Job.CODE)
@@ -104,10 +96,6 @@ public class CodeCrawler implements Runnable {
         log.info("Last mining checkpoint: {}", checkpoint);
         do url = fetchSearchResults(url, checkpoint);
         while (url != null);
-        LocalDateTime nextRun = LocalDateTime.now()
-                .plus(nextRunDelay)
-                .truncatedTo(ChronoUnit.SECONDS);
-        log.info("Finished! Next run scheduled for: {}", nextRun);
     }
 
     @SneakyThrows(IOException.class)
