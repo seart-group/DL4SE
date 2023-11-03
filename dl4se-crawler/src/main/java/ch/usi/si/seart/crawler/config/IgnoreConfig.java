@@ -8,6 +8,7 @@ import ch.usi.si.seart.crawler.io.LineCountPredicate;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.unit.DataSize;
 
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
 
 @Configuration
 @ConfigurationPropertiesScan(basePackages = "ch.usi.si.seart.crawler.config.properties")
+@PropertySource("classpath:crawler.properties")
 public class IgnoreConfig {
 
     @Bean
