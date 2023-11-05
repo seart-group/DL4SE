@@ -6,10 +6,8 @@ import ch.usi.si.seart.crawler.service.FileSystemService;
 import ch.usi.si.seart.model.job.Job;
 import com.google.api.client.http.GenericUrl;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 import java.io.IOException;
@@ -17,8 +15,6 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 
 @Configuration
-@ConfigurationPropertiesScan(basePackages = "ch.usi.si.seart.crawler.config.properties")
-@PropertySource("classpath:crawler.properties")
 public class CrawlerConfig {
 
     @Bean
