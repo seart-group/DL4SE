@@ -1,6 +1,7 @@
 package ch.usi.si.seart.crawler.config;
 
 import ch.usi.si.seart.bean.CrawlJobInitializingBean;
+import ch.usi.si.seart.crawler.bean.LanguageInitializingBean;
 import ch.usi.si.seart.crawler.config.properties.CrawlerProperties;
 import ch.usi.si.seart.crawler.service.FileSystemService;
 import ch.usi.si.seart.model.job.Job;
@@ -38,5 +39,10 @@ public class CrawlerConfig {
     @Bean
     public CrawlJobInitializingBean crawlJobInitializingBean(CrawlerProperties properties) {
         return new CrawlJobInitializingBean(Job.CODE, properties.getStartDate().atStartOfDay());
+    }
+
+    @Bean
+    public LanguageInitializingBean languageInitializingBean(CrawlerProperties properties) {
+        return new LanguageInitializingBean(properties.getLanguages());
     }
 }
