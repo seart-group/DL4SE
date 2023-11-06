@@ -76,7 +76,6 @@ public class CodeCrawler implements Runnable {
 
     Set<String> languageNames = new HashSet<>();
     Map<String, Language> nameToLanguage = new HashMap<>();
-    Map<String, Language> extensionToLanguage = new HashMap<>();
 
     @PostConstruct
     private void postConstruct() {
@@ -85,7 +84,6 @@ public class CodeCrawler implements Runnable {
             List<String> extensions = language.getExtensions();
             languageNames.add(name);
             nameToLanguage.put(name, language);
-            extensions.forEach(extension -> extensionToLanguage.put(extension, language));
         });
     }
 
@@ -273,8 +271,7 @@ public class CodeCrawler implements Runnable {
     private void analyzeAndStore(LocalClone localClone, Path path) {
         Path relative = localClone.relativePathOf(path);
         log.debug("Analyzing file: {}", relative);
-        String extension = com.google.common.io.Files.getFileExtension(path.toString());
-        Language language = extensionToLanguage.get(extension);
+        Language language = languageService.getAssociatedWith(path);
         try (Analyzer analyzer = new Analyzer(localClone, path)) {
             analyzerCustomizer.customize(analyzer);
             Analyzer.Result result = analyzer.analyze();
