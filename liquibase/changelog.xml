@@ -5,6 +5,4 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
     <include file="scripts/00_init.sql" relativeToChangelogFile="true" />
-    <include file="scripts/01_user.sql" relativeToChangelogFile="true" />
-    <include file="scripts/02_view.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
