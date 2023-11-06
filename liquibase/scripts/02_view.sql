@@ -1,6 +1,12 @@
 -- liquibase formatted sql
 -- changeset dabico:3
 
+CREATE OR REPLACE VIEW language_extension AS
+SELECT
+    id AS lang_id,
+    UNNEST(extensions) AS extension
+FROM language;
+
 CREATE OR REPLACE VIEW file_content_hash_distinct AS
 SELECT
     MIN(id) AS id,
