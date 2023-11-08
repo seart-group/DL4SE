@@ -13,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public interface LanguageService {
 
     List<Language> getAll();
+
+    List<Language> getByNamesIn(Collection<String> names);
 
     Language getAssociatedWith(Path path);
 
@@ -33,6 +36,11 @@ public interface LanguageService {
         @Override
         public List<Language> getAll() {
             return languageRepository.findAll();
+        }
+
+        @Override
+        public List<Language> getByNamesIn(Collection<String> names) {
+            return languageRepository.findAllByNameIn(names);
         }
 
         @Override
