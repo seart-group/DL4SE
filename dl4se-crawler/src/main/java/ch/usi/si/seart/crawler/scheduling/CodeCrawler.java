@@ -33,18 +33,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -73,19 +70,6 @@ public class CodeCrawler implements Runnable {
     AnalyzerCustomizer<Analyzer> analyzerCustomizer;
 
     ObjectFactory<GenericUrl> baseUrlFactory;
-
-    Set<String> languageNames = new HashSet<>();
-    Map<String, Language> nameToLanguage = new HashMap<>();
-
-    @PostConstruct
-    private void postConstruct() {
-        languageService.getAll().forEach(language -> {
-            String name = language.getName();
-            List<String> extensions = language.getExtensions();
-            languageNames.add(name);
-            nameToLanguage.put(name, language);
-        });
-    }
 
     public void run() {
         GenericUrl url = baseUrlFactory.getObject();
@@ -126,14 +110,10 @@ public class CodeCrawler implements Runnable {
         }
 
         LocalDateTime lastUpdateGhs = conversionService.convert(item.getLastCommit(), LocalDateTime.class);
+        Set<Language> languages = languageService.getByNamesIn(item.getAllLanguages()).stream()
+                .collect(Collectors.toUnmodifiableSet());
 
-        Set<String> repoLanguageNames = Sets.intersection(languageNames, item.getAllLanguages());
-        Set<Language> repoLanguages = repoLanguageNames.stream()
-                .map(nameToLanguage::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        if (repoLanguages.isEmpty()) {
+        if (languages.isEmpty()) {
             log.debug("Skipping: {}. No files of interest found!", name);
             return;
         }
@@ -150,37 +130,37 @@ public class CodeCrawler implements Runnable {
             operation = this::mineRepoData;
         }
 
-        operation.accept(repo, repoLanguages);
+        operation.accept(repo, languages);
         saveCrawlProgress(lastUpdateGhs);
     }
 
-    private void updateRepoData(GitRepo repo, Set<Language> repoLanguages) {
-        String name = repo.getName();
-        LocalDateTime lastCommit = repo.getLastCommit();
+    private void updateRepoData(GitRepo gitRepo, Set<Language> languages) {
+        String name = gitRepo.getName();
+        LocalDateTime lastCommit = gitRepo.getLastCommit();
         log.info("Updating repository: {} [Last Commit: {}]", name, lastCommit);
         Path localDirectory = fileSystemService.createTemporaryDirectory();
-        LocalClone localClone = new LocalClone(repo, localDirectory);
+        LocalClone localClone = new LocalClone(gitRepo, localDirectory);
         try (Git git = new Git(name, localDirectory, lastCommit)) {
-            Set<Language> notMined = Sets.difference(repoLanguages, repo.getLanguages());
+            Set<Language> notMined = Sets.difference(languages, gitRepo.getLanguages());
             if (!notMined.isEmpty()) {
                 mineRepoData(localClone, notMined);
-                repo.setLanguages(repoLanguages);
-                gitRepoService.createOrUpdate(repo);
+                gitRepo.setLanguages(languages);
+                gitRepoService.createOrUpdate(gitRepo);
             }
 
             Git.Commit latest = git.getLastCommitInfo();
-            repo.setLastCommit(latest.getTimestamp());
-            repo.setLastCommitSHA(latest.getSha());
+            gitRepo.setLastCommit(latest.getTimestamp());
+            gitRepo.setLastCommitSHA(latest.getSha());
 
-            Git.Diff diff = git.getDiff(repo.getLastCommitSHA(), repo.getLanguages());
+            Git.Diff diff = git.getDiff(gitRepo.getLastCommitSHA(), gitRepo.getLanguages());
             if (!Strings.isNullOrEmpty(diff.toString()))
                 log.debug("Diff since last update:\n{}", diff);
             diff.getAdded().stream()
                     .filter(fileFilter)
                     .forEach(path -> addFile(localClone, path));
-            diff.getDeleted().forEach(path -> deleteFile(repo, path));
+            diff.getDeleted().forEach(path -> deleteFile(gitRepo, path));
             diff.getModified().forEach(path -> {
-                deleteFile(repo, path);
+                deleteFile(gitRepo, path);
                 if (fileFilter.test(path))
                     addFile(localClone, path);
             });
@@ -188,14 +168,14 @@ public class CodeCrawler implements Runnable {
                 boolean validOld = fileFilter.test(key);
                 boolean validNew = fileFilter.test(value);
                 if (validOld && validNew)
-                    renameFile(repo, key, value);
+                    renameFile(gitRepo, key, value);
                 else if (validOld)
-                    deleteFile(repo, key);
+                    deleteFile(gitRepo, key);
                 else if (validNew)
                     addFile(localClone, value);
             });
             diff.getEdited().forEach((key, value) -> {
-                deleteFile(repo, key);
+                deleteFile(gitRepo, key);
                 if (fileFilter.test(value))
                     addFile(localClone, value);
             });
@@ -205,7 +185,7 @@ public class CodeCrawler implements Runnable {
                     .filter(fileFilter)
                     .forEach(value -> addFile(localClone, value));
 
-            gitRepoService.createOrUpdate(repo);
+            gitRepoService.createOrUpdate(gitRepo);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
         } catch (IOException ex) {
@@ -225,19 +205,19 @@ public class CodeCrawler implements Runnable {
         fileService.rename(repo, oldPath, newPath);
     }
 
-    private void mineRepoData(GitRepo repo, Set<Language> languages) {
-        String name = repo.getName();
-        LocalDateTime lastUpdateGhs = repo.getLastCommit();
+    private void mineRepoData(GitRepo gitRepo, Set<Language> languages) {
+        String name = gitRepo.getName();
+        LocalDateTime lastUpdateGhs = gitRepo.getLastCommit();
         log.info("Mining repository: {} [Last Commit: {}]", name, lastUpdateGhs);
         Path localDirectory = fileSystemService.createTemporaryDirectory();
-        LocalClone localClone = new LocalClone(repo, localDirectory);
+        LocalClone localClone = new LocalClone(gitRepo, localDirectory);
         try (Git git = new Git(name, localDirectory, true)) {
             Git.Commit latest = git.getLastCommitInfo();
             mineRepoData(localClone, languages);
-            repo.setLanguages(languages);
-            repo.setLastCommit(latest.getTimestamp());
-            repo.setLastCommitSHA(latest.getSha());
-            gitRepoService.createOrUpdate(repo);
+            gitRepo.setLanguages(languages);
+            gitRepo.setLastCommit(latest.getTimestamp());
+            gitRepo.setLastCommitSHA(latest.getSha());
+            gitRepoService.createOrUpdate(gitRepo);
         } catch (GitException ex) {
             log.error("Git operation error for: " + name, ex);
         } catch (IOException ex) {
