@@ -7,6 +7,8 @@ import ch.usi.si.seart.analyzer.count.LineCounter;
 import ch.usi.si.seart.analyzer.count.TokenCounter;
 import ch.usi.si.seart.analyzer.enumerator.BoilerplateEnumerator;
 import ch.usi.si.seart.analyzer.enumerator.Enumerator;
+import ch.usi.si.seart.analyzer.extract.Extractor;
+import ch.usi.si.seart.analyzer.extract.FunctionExtractorFactory;
 import ch.usi.si.seart.analyzer.hash.ContentHasher;
 import ch.usi.si.seart.analyzer.hash.Hasher;
 import ch.usi.si.seart.analyzer.hash.SyntaxTreeHasher;
@@ -20,7 +22,6 @@ import ch.usi.si.seart.analyzer.printer.OffsetSyntaxTreePrinter;
 import ch.usi.si.seart.analyzer.printer.Printer;
 import ch.usi.si.seart.analyzer.printer.SymbolicExpressionPrinter;
 import ch.usi.si.seart.analyzer.printer.SyntaxTreePrinter;
-import ch.usi.si.seart.analyzer.query.MultiCaptureQueries;
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.model.code.Function;
@@ -35,14 +36,12 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -75,7 +74,7 @@ public class Analyzer implements AutoCloseable {
     Printer syntaxTreePrinter;
     Printer expressionPrinter;
 
-    MultiCaptureQueries multiCaptureQueries;
+    Extractor functionExtractor;
 
     Enumerator<Boilerplate> boilerplateEnumerator;
 
@@ -108,7 +107,7 @@ public class Analyzer implements AutoCloseable {
         this.nodePrinter = new NodePrinter();
         this.syntaxTreePrinter = new SyntaxTreePrinter();
         this.expressionPrinter = new SymbolicExpressionPrinter();
-        this.multiCaptureQueries = MultiCaptureQueries.getInstance(language);
+        this.functionExtractor = FunctionExtractorFactory.getInstance(language);
         this.boilerplateEnumerator = BoilerplateEnumerator.getInstance(language);
     }
 
@@ -158,29 +157,22 @@ public class Analyzer implements AutoCloseable {
     }
 
     private List<Function> extractFunctionEntities(File file) {
-        List<List<Pair<String, Node>>> matches = multiCaptureQueries.getCallableDeclarations(tree.getRootNode());
-        List<Function> functions = new ArrayList<>(matches.size());
-        for (List<Pair<String, Node>> match: matches) {
-            Function function = extractFunctionEntity(match);
+        List<Extractor.Match> matches = functionExtractor.extract(tree);
+        List<Function> functions = matches.stream()
+                .map(this::extractFunctionEntity)
+                .collect(Collectors.toUnmodifiableList());
+        functions.forEach(function -> {
             // These operations are invariant by
             // nature and should not be overridden
             function.setFile(file);
             function.setIsTest(file.getIsTest());
-            functions.add(function);
-        }
+        });
         return functions;
     }
 
-    private Function extractFunctionEntity(List<Pair<String, Node>> match) {
-        List<Node> nodes = match.stream()
-                .map(Pair::getValue)
-                .collect(Collectors.toList());
-        Node function = match.stream()
-                .filter(tuple -> tuple.getKey().equals("target"))
-                .map(Pair::getValue)
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
-
+    private Function extractFunctionEntity(Extractor.Match match) {
+        List<Node> nodes = match.getNodes();
+        Node function = match.getTarget();
         Printer standalone = getStandalonePrinter(language);
         String ast = standalone.print(nodes);
 
