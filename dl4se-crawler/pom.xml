@@ -75,7 +75,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${springframework.version}</version>
+        <version>${spring-boot.version}</version>
         <configuration>
           <mainClass>${project.module.mainClass}</mainClass>
         </configuration>
