@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset dabico:3
+-- changeset dabico:2
 
 CREATE OR REPLACE VIEW language_extension AS
 SELECT
