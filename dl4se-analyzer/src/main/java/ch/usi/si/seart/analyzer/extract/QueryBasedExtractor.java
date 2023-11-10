@@ -35,9 +35,9 @@ public abstract class QueryBasedExtractor implements Extractor {
                 .map(Capture::getName)
                 .collect(Collectors.toUnmodifiableSet());
         if (!captures.contains("target"))
-            throw new AssertionError("Query must have a 'target' capture defined!");
+            throw new IllegalStateException("Query must have a 'target' capture defined!");
         if (captures.size() > 1 && !captures.contains("additional"))
-            throw new AssertionError("Only an 'additional' capture is supported!");
+            throw new IllegalStateException("Only an 'additional' capture is supported!");
     }
 
     @Override
