@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public abstract class QueryBasedExtractor implements Extractor {
 
     protected abstract Language getLanguage();
 
-    protected abstract Collection<String> getPatterns();
+    protected abstract List<String> getPatterns();
 
     protected Node getStartingNode(Tree tree) {
         return tree.getRootNode();

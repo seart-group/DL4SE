@@ -1,7 +1,7 @@
 package ch.usi.si.seart.analyzer.extract;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @see
@@ -13,7 +13,7 @@ import java.util.Collections;
 public class PythonFunctionExtractor extends PythonExtractor {
 
     @Override
-    protected Collection<String> getPatterns() {
+    protected List<String> getPatterns() {
         return Collections.singletonList("(_ (decorator)* @additional (function_definition) @target)");
     }
 }

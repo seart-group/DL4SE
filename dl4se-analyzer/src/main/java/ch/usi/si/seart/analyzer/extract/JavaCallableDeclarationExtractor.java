@@ -3,7 +3,6 @@ package ch.usi.si.seart.analyzer.extract;
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Tree;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public class JavaCallableDeclarationExtractor extends JavaExtractor {
     }
 
     @Override
-    protected Collection<String> getPatterns() {
+    protected List<String> getPatterns() {
         return Stream.of("method_declaration", "constructor_declaration")
                 .map(JavaCallableDeclarationExtractor::substitute)
                 .collect(Collectors.toUnmodifiableList());
