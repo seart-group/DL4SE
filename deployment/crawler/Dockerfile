@@ -34,4 +34,4 @@ RUN keytool \
     -storepass changeit \
     -noprompt
 
-ENTRYPOINT java -jar crawler.jar
+ENTRYPOINT java $JAVA_OPTS -jar crawler.jar
