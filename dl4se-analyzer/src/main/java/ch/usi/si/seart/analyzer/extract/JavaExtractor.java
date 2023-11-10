@@ -4,7 +4,8 @@ import ch.usi.si.seart.treesitter.Language;
 
 public abstract class JavaExtractor extends QueryBasedExtractor {
 
-    protected JavaExtractor() {
-        super(Language.JAVA);
+    @Override
+    protected Language getLanguage() {
+        return Language.JAVA;
     }
 }

@@ -4,7 +4,8 @@ import ch.usi.si.seart.treesitter.Language;
 
 public abstract class PythonExtractor extends QueryBasedExtractor {
 
-    protected PythonExtractor() {
-        super(Language.PYTHON);
+    @Override
+    protected Language getLanguage() {
+        return Language.PYTHON;
     }
 }

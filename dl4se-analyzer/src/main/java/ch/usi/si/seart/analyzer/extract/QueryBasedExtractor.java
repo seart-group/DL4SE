@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public abstract class QueryBasedExtractor implements Extractor {
 
-    private final Language language;
+    protected abstract Language getLanguage();
 
     protected abstract Collection<String> getPatterns();
 
@@ -43,7 +43,7 @@ public abstract class QueryBasedExtractor implements Extractor {
 
     @Override
     public List<Match> extract(Tree tree) {
-        @Cleanup Query query = Query.getFor(language, getPatterns().toArray(String[]::new));
+        @Cleanup Query query = Query.getFor(getLanguage(), getPatterns().toArray(String[]::new));
         validate(query);
         Node node = getStartingNode(tree);
         @Cleanup QueryCursor cursor = node.walk(query);
