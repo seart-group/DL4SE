@@ -31,7 +31,8 @@ public class CrawlerProperties {
     @NotNull
     String tmpDirPrefix;
 
-    GenericUrl baseUrl;
+    @Pattern(regexp = "^https://[\\w-]+\\.(?:[\\w-]+\\.)*[\\w/-]+$")
+    String baseUrl;
 
     @Past
     LocalDate startDate;
@@ -47,6 +48,10 @@ public class CrawlerProperties {
 
     @NotEmpty
     Map<@Pattern(regexp = "[\\w\\s#+-]+") String, @NotEmpty List<@Pattern(regexp = "\\w+") String>> languages;
+
+    public GenericUrl getBaseUrl() {
+        return new GenericUrl(baseUrl);
+    }
 
     public MultiValueMap<String, String> getLanguages() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>(languages);
