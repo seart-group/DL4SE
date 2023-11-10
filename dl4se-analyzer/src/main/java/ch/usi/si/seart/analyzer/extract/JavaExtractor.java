@@ -3,10 +3,9 @@ package ch.usi.si.seart.analyzer.extract;
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
 import ch.usi.si.seart.treesitter.Tree;
-import com.google.common.collect.MoreCollectors;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class JavaExtractor extends QueryBasedExtractor {
 
@@ -20,7 +19,7 @@ public abstract class JavaExtractor extends QueryBasedExtractor {
             default:
                 return false;
         }
-    };
+    }
 
     protected JavaExtractor() {
         super(Language.JAVA);
@@ -29,10 +28,9 @@ public abstract class JavaExtractor extends QueryBasedExtractor {
     @Override
     protected Node getStartingNode(Tree tree) {
         Node root = tree.getRootNode();
-        List<Node> children = root.getNamedChildren();
-        Optional<Node> specific = children.stream()
+        List<Node> declarations = root.getNamedChildren().stream()
                 .filter(JavaExtractor::isDeclaration)
-                .collect(MoreCollectors.toOptional());
-        return specific.orElse(root);
+                .collect(Collectors.toUnmodifiableList());
+        return declarations.size() == 1 ? declarations.get(0) : root;
     }
 }
