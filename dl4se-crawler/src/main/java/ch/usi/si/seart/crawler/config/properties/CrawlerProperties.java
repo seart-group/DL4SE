@@ -13,10 +13,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class CrawlerProperties {
     IgnoreProperties ignore;
 
     @NotEmpty
-    Map<@NotBlank String, @NotEmpty List<@NotBlank String>> languages;
+    Map<@Pattern(regexp = "[\\w\\s#+-]+") String, @NotEmpty List<@Pattern(regexp = "\\w+") String>> languages;
 
     public MultiValueMap<String, String> getLanguages() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>(languages);
