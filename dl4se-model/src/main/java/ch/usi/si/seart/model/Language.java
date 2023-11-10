@@ -22,7 +22,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -50,14 +49,13 @@ public class Language {
     @Column(unique = true)
     String name;
 
-    @NotNull
     @NotEmpty
     @Type(type = "list-array")
     @Column(columnDefinition = "text[]")
     @Builder.Default
     @ToString.Exclude
     @JsonIgnore
-    List<@NotNull String> extensions = new ArrayList<>();
+    List<@NotBlank String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")
     @Builder.Default
