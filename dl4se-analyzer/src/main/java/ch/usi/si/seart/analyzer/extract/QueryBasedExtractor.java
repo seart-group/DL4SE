@@ -42,7 +42,10 @@ public abstract class QueryBasedExtractor implements Extractor {
 
     @Override
     public List<Match> extract(Tree tree) {
-        @Cleanup Query query = Query.getFor(getLanguage(), getPatterns().toArray(String[]::new));
+        @Cleanup Query query = Query.builder()
+                .language(getLanguage())
+                .patterns(getPatterns())
+                .build();
         validate(query);
         Node node = getStartingNode(tree);
         @Cleanup QueryCursor cursor = node.walk(query);
