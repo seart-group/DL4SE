@@ -1,6 +1,10 @@
 package ch.usi.si.seart.analyzer.extract;
 
+import ch.usi.si.seart.treesitter.Node;
+import ch.usi.si.seart.treesitter.Tree;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,10 +24,31 @@ public class JavaCallableDeclarationExtractor extends JavaExtractor {
         return String.format("([(line_comment)(block_comment)]* @additional . (%s) @target)", type);
     }
 
+    private static boolean isDeclaration(Node node) {
+        switch (node.getType()) {
+            case "annotation_type_declaration":
+            case "class_declaration":
+            case "enum_declaration":
+            case "interface_declaration":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     protected Collection<String> getPatterns() {
         return Stream.of("method_declaration", "constructor_declaration")
                 .map(JavaCallableDeclarationExtractor::substitute)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    protected Node getStartingNode(Tree tree) {
+        Node root = tree.getRootNode();
+        List<Node> declarations = root.getNamedChildren().stream()
+                .filter(JavaCallableDeclarationExtractor::isDeclaration)
+                .collect(Collectors.toUnmodifiableList());
+        return declarations.size() == 1 ? declarations.get(0) : root;
     }
 }
