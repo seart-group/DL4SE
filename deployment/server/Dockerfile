@@ -22,4 +22,4 @@ RUN apk update --quiet && \
             git \
             libstdc++
 
-ENTRYPOINT java -jar server.jar
+ENTRYPOINT java $JAVA_OPTS -jar server.jar
