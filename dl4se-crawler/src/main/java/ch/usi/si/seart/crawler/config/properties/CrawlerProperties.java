@@ -1,5 +1,7 @@
 package ch.usi.si.seart.crawler.config.properties;
 
+import ch.usi.si.seart.validation.constraints.FileExtension;
+import ch.usi.si.seart.validation.constraints.LanguageName;
 import com.google.api.client.http.GenericUrl;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -47,7 +49,7 @@ public class CrawlerProperties {
     IgnoreProperties ignore;
 
     @NotEmpty
-    Map<@Pattern(regexp = "[\\w\\s#+-]+") String, @NotEmpty List<@Pattern(regexp = "\\w+") String>> languages;
+    Map<@LanguageName String, @NotEmpty List<@FileExtension String>> languages;
 
     public GenericUrl getBaseUrl() {
         return new GenericUrl(baseUrl);

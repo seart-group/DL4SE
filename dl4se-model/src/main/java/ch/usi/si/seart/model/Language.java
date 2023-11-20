@@ -1,5 +1,7 @@
 package ch.usi.si.seart.model;
 
+import ch.usi.si.seart.validation.constraints.FileExtension;
+import ch.usi.si.seart.validation.constraints.LanguageName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
@@ -20,7 +22,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +46,7 @@ public class Language {
     @JsonIgnore
     Long id;
 
-    @NotBlank
+    @LanguageName
     @Column(unique = true)
     String name;
 
@@ -55,7 +56,7 @@ public class Language {
     @Builder.Default
     @ToString.Exclude
     @JsonIgnore
-    List<@NotBlank String> extensions = new ArrayList<>();
+    List<@FileExtension String> extensions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "languages")
     @Builder.Default
