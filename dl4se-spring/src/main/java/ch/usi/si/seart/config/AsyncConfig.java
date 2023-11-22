@@ -1,4 +1,4 @@
-package ch.usi.si.seart.server.config;
+package ch.usi.si.seart.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
