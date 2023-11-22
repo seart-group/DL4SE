@@ -172,7 +172,7 @@ public class Analyzer implements AutoCloseable {
     private Function extractFunctionEntity(Extractor.Match match) {
         List<Node> nodes = match.getNodes();
         Node function = match.getTarget();
-        Printer standalone = getStandalonePrinter(language);
+        Printer standalone = getStandalonePrinter();
         String ast = standalone.print(nodes);
 
         return Function.builder()
@@ -192,7 +192,7 @@ public class Analyzer implements AutoCloseable {
                 .build();
     }
 
-    private FunctionSyntaxTreePrinter getStandalonePrinter(Language language) {
+    private FunctionSyntaxTreePrinter getStandalonePrinter() {
         if (Language.JAVA.equals(language)) {
             return new FunctionSyntaxTreePrinter() {
 
