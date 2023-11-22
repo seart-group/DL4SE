@@ -23,7 +23,7 @@ import javax.crypto.SecretKey;
 public class JwtConfig {
 
     @Bean
-    public SecretKey secretKey(JwtProperties properties) {
+    SecretKey secretKey(JwtProperties properties) {
         return Keys.hmacShaKeyFor(properties.getSecret().getBytes());
     }
 
