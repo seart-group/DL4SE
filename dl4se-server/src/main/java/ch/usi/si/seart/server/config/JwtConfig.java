@@ -2,6 +2,7 @@ package ch.usi.si.seart.server.config;
 
 import ch.usi.si.seart.exception.UserNotFoundException;
 import ch.usi.si.seart.model.user.User;
+import ch.usi.si.seart.server.config.properties.JwtProperties;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.UserService;
 import ch.usi.si.seart.server.web.filter.JwtRequestFilter;
@@ -10,7 +11,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -23,8 +23,8 @@ import javax.crypto.SecretKey;
 public class JwtConfig {
 
     @Bean
-    public SecretKey secretKey(@Value("${jwt.secret}") String value) {
-        return Keys.hmacShaKeyFor(value.getBytes());
+    public SecretKey secretKey(JwtProperties properties) {
+        return Keys.hmacShaKeyFor(properties.getSecret().getBytes());
     }
 
     @Bean

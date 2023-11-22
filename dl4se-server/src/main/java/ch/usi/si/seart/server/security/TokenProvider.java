@@ -1,10 +1,10 @@
 package ch.usi.si.seart.server.security;
 
+import ch.usi.si.seart.server.config.properties.JwtProperties;
 import io.jsonwebtoken.JwtBuilder;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +27,9 @@ public interface TokenProvider {
         Duration validFor;
 
         @Autowired
-        public JwtTokenProvider(JwtBuilder jwtBuilder, @Value("${jwt.token.valid-for}") Duration validFor) {
+        public JwtTokenProvider(JwtBuilder jwtBuilder, JwtProperties properties) {
             this.jwtBuilder = jwtBuilder;
-            this.validFor = validFor;
+            this.validFor = properties.getTokenProperties().getValidFor();
         }
 
         @Override
