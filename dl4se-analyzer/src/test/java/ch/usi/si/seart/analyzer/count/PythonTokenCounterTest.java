@@ -1,6 +1,6 @@
 package ch.usi.si.seart.analyzer.count;
 
-import ch.usi.si.seart.analyzer.test.PythonBaseTest;
+import ch.usi.si.seart.analyzer.PythonBaseTest;
 import ch.usi.si.seart.treesitter.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

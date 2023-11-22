@@ -1,4 +1,4 @@
-package ch.usi.si.seart.analyzer.test;
+package ch.usi.si.seart.analyzer;
 
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.LibraryLoader;

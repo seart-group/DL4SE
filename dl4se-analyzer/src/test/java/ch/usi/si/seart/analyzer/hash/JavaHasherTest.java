@@ -1,6 +1,6 @@
 package ch.usi.si.seart.analyzer.hash;
 
-import ch.usi.si.seart.analyzer.test.JavaBaseTest;
+import ch.usi.si.seart.analyzer.JavaBaseTest;
 import lombok.SneakyThrows;
 
 import java.security.MessageDigest;
