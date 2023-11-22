@@ -12,7 +12,6 @@ import ch.usi.si.seart.analyzer.extract.FunctionExtractorFactory;
 import ch.usi.si.seart.analyzer.hash.ContentHasher;
 import ch.usi.si.seart.analyzer.hash.Hasher;
 import ch.usi.si.seart.analyzer.hash.SyntaxTreeHasher;
-import ch.usi.si.seart.analyzer.io.NullFilteredReader;
 import ch.usi.si.seart.analyzer.predicate.node.ContainsErrorPredicate;
 import ch.usi.si.seart.analyzer.predicate.node.ContainsNonAsciiPredicate;
 import ch.usi.si.seart.analyzer.predicate.node.NodePredicate;

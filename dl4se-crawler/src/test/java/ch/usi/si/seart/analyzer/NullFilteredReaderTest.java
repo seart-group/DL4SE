@@ -1,4 +1,4 @@
-package ch.usi.si.seart.analyzer.io;
+package ch.usi.si.seart.analyzer;
 
 import java.io.Reader;
 

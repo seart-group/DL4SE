@@ -1,4 +1,4 @@
-package ch.usi.si.seart.analyzer.io;
+package ch.usi.si.seart.analyzer;
 
 import com.google.common.io.CharStreams;
 import lombok.Cleanup;

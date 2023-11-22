@@ -1,12 +1,12 @@
-package ch.usi.si.seart.analyzer.io;
+package ch.usi.si.seart.analyzer;
 
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
 
-public class NullFilteredReader extends FilterReader {
+class NullFilteredReader extends FilterReader {
 
-    public NullFilteredReader(Reader in) {
+    NullFilteredReader(Reader in) {
         super(in);
     }
 
