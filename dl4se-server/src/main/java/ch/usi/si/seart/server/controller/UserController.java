@@ -6,6 +6,7 @@ import ch.usi.si.seart.server.dto.LoginDto;
 import ch.usi.si.seart.server.dto.RegisterDto;
 import ch.usi.si.seart.server.dto.user.EmailDto;
 import ch.usi.si.seart.server.dto.user.PasswordDto;
+import ch.usi.si.seart.server.hateoas.LinkGenerator;
 import ch.usi.si.seart.server.security.TokenProvider;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.EmailService;
@@ -14,12 +15,9 @@ import ch.usi.si.seart.server.service.UserService;
 import ch.usi.si.seart.server.service.VerificationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +34,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.net.MalformedURLException;
 
 @Slf4j
 @RestController
@@ -59,9 +55,8 @@ public class UserController {
     EmailService emailService;
     ConversionService conversionService;
 
-    @NonFinal
-    @Value("${website.url}")
-    String websiteUrl;
+    LinkGenerator<Token> verificationLinkGenerator;
+    LinkGenerator<Token> passwordResetLinkGenerator;
 
     @GetMapping
     public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
@@ -94,7 +89,7 @@ public class UserController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDto dto) {
         User created = userService.create(conversionService.convert(dto, User.class));
         Token token = verificationService.generate(created);
-        String link = getVerificationURL(token);
+        String link = verificationLinkGenerator.generate(token);
         emailService.sendVerificationEmail(dto.getEmail(), link);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -108,7 +103,7 @@ public class UserController {
     @GetMapping("/verify/resend")
     public ResponseEntity<?> resendVerification(@RequestParam @NotBlank String token) {
         Token refreshed = verificationService.refresh(token);
-        String link = getVerificationURL(refreshed);
+        String link = verificationLinkGenerator.generate(refreshed);
         emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
         return ResponseEntity.ok().build();
     }
@@ -117,7 +112,7 @@ public class UserController {
     public ResponseEntity<?> forgottenPassword(@Valid @RequestBody EmailDto dto) {
         User requester = userService.getWithEmail(dto.getEmail());
         Token token = passwordResetService.generate(requester);
-        String link = getPasswordResetUrl(token);
+        String link = passwordResetLinkGenerator.generate(token);
         emailService.sendPasswordResetEmail(dto.getEmail(), link);
         return ResponseEntity.ok().build();
     }
@@ -128,25 +123,5 @@ public class UserController {
     ) {
         passwordResetService.verify(token, dto.getPassword());
         return ResponseEntity.ok().build();
-    }
-
-    @SneakyThrows(MalformedURLException.class)
-    private String getVerificationURL(Token token) {
-        return UriComponentsBuilder.fromHttpUrl(websiteUrl)
-                .path("/verify/" + token.getValue())
-                .build()
-                .toUri()
-                .toURL()
-                .toString();
-    }
-
-    @SneakyThrows(MalformedURLException.class)
-    private String getPasswordResetUrl(Token token) {
-        return UriComponentsBuilder.fromHttpUrl(websiteUrl)
-                .path("/password/reset/" + token.getValue())
-                .build()
-                .toUri()
-                .toURL()
-                .toString();
     }
 }
