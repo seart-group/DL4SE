@@ -1,6 +1,7 @@
 package ch.usi.si.seart.server.config;
 
 import ch.usi.si.seart.model.task.Task;
+import ch.usi.si.seart.server.config.properties.SchedulingProperties;
 import ch.usi.si.seart.server.exception.TaskFailedException;
 import ch.usi.si.seart.server.scheduling.RepoMaintainer;
 import ch.usi.si.seart.server.scheduling.TaskCleaner;
@@ -12,7 +13,6 @@ import ch.usi.si.seart.server.service.FileSystemService;
 import ch.usi.si.seart.server.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.util.ErrorHandler;
 
 import java.time.Clock;
@@ -45,9 +44,7 @@ public class SchedulerConfig {
             TaskCleaner taskCleaner,
             RepoMaintainer repoMaintainer,
             ViewMaintainer viewMaintainer,
-            @Value("${scheduling.task.task-cleaner.cron}") CronTrigger taskCleanerTrigger,
-            @Value("${scheduling.task.repo-maintainer.cron}") CronTrigger repoMaintainerTrigger,
-            @Value("${scheduling.task.view-maintainer.cron}") CronTrigger viewMaintainerTrigger,
+            SchedulingProperties properties,
             ConfigurationService configurationService
     ) {
         AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
@@ -84,9 +81,9 @@ public class SchedulerConfig {
         threadPoolTaskScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         threadPoolTaskScheduler.initialize();
 
-        threadPoolTaskScheduler.schedule(taskCleaner, taskCleanerTrigger);
-        threadPoolTaskScheduler.schedule(repoMaintainer, repoMaintainerTrigger);
-        threadPoolTaskScheduler.schedule(viewMaintainer, viewMaintainerTrigger);
+        threadPoolTaskScheduler.schedule(taskCleaner, properties.getTaskCleanerCron());
+        threadPoolTaskScheduler.schedule(repoMaintainer, properties.getRepoMaintainerCron());
+        threadPoolTaskScheduler.schedule(viewMaintainer, properties.getViewMaintainerCron());
 
         for (int i = 0; i < runners; i++) {
             TaskRunner taskRunner = autowireCapableBeanFactory.createBean(TaskRunner.class);
