@@ -25,7 +25,7 @@ public interface CodeService extends DatasetService<Code> {
         CodeRepository codeRepository;
 
         @Override
-        @Async("AsyncExecutor")
+        @Async
         public Future<Long> count(Specification<Code> specification) {
             Long count = codeRepository.count(specification);
             return CompletableFuture.completedFuture(count);
