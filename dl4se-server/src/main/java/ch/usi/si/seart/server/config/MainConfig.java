@@ -31,7 +31,7 @@ public class MainConfig {
     }
 
     @Bean
-    public DateFormat dateFormat() {
+    DateFormat dateFormat() {
         return new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
     }
 }
