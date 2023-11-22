@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +31,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ResponseStatus(code = HttpStatus.SERVICE_UNAVAILABLE)
     public void handleMail(MailException ex){
         log.error("Unexpected mail service error", ex);
+    }
+
+    @ExceptionHandler(MalformedURLException.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public void handleMalformedURL(MalformedURLException ex) {
+        log.error("Unexpected URL construction exception", ex);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
