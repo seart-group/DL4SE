@@ -1,31 +1,33 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.task.Task;
+import ch.usi.si.seart.model.user.token.Token;
+import ch.usi.si.seart.server.hateoas.LinkGenerator;
+import ch.usi.si.seart.server.mail.AbstractMimeMessageSubjectSetter;
+import ch.usi.si.seart.server.mail.AbstractMimeMessageTextSetter;
+import ch.usi.si.seart.server.mail.MessageTemplate;
+import ch.usi.si.seart.server.mail.MimeMessagePreparatorPipeline;
+import ch.usi.si.seart.server.mail.MimeMessagePropertySetter;
+import ch.usi.si.seart.server.mail.MimeMessageRecipientSetter;
+import ch.usi.si.seart.server.mail.MimeMessageSubjectSetter;
 import ch.usi.si.seart.util.unit.ReadableFileSize;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public interface EmailService {
 
     void sendTaskNotificationEmail(Task task);
-    void sendVerificationEmail(String recipient, String link);
-    void sendPasswordResetEmail(String recipient, String link);
+    void sendVerificationEmail(Token token);
+    void sendPasswordResetEmail(Token token);
 
     @Service
     @ConditionalOnProperty(value = "spring.mail.enabled", havingValue = "false")
@@ -36,82 +38,123 @@ public interface EmailService {
         }
 
         @Override
-        public void sendVerificationEmail(String recipient, String link) {
+        public void sendVerificationEmail(Token token) {
         }
 
         @Override
-        public void sendPasswordResetEmail(String recipient, String link) {
+        public void sendPasswordResetEmail(Token token) {
         }
     }
 
+    @Async
     @Service
     @ConditionalOnProperty(value = "spring.mail.enabled", havingValue = "true")
+    @AllArgsConstructor(onConstructor_ = @Autowired)
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @RequiredArgsConstructor(onConstructor_ = @Autowired)
-    class EmailServiceImpl implements EmailService {
-
-        @NonFinal
-        @Value("${spring.mail.username}")
-        String sender;
+    class AsyncEmailService implements EmailService {
 
         JavaMailSender mailSender;
-        SpringTemplateEngine templateEngine;
+
+        TemplateEngine templateEngine;
+        
+        MimeMessagePropertySetter messageSenderSetter;
+
+        LinkGenerator<Token> verificationLinkGenerator;
+        LinkGenerator<Token> passwordResetLinkGenerator;
 
         @Override
         public void sendTaskNotificationEmail(Task task) {
-            String recipient = task.getUser().getEmail();
-            String uuidString = task.getUuid().toString();
-            String statusName = task.getStatus().name();
-            String subject = String.format("Task [%s]: %s", uuidString, statusName);
-            ReadableFileSize exportSize = new ReadableFileSize(task.getSize());
-            Map<String, Object> variables = Map.ofEntries(
-                    Map.entry("uuid", uuidString),
-                    Map.entry("status", statusName),
-                    Map.entry("submitted", task.getSubmitted()),
-                    Map.entry("started", task.getStarted()),
-                    Map.entry("finished", task.getFinished()),
-                    Map.entry("results", task.getProcessedResults()),
-                    Map.entry("size", exportSize.toString())
+            String email = task.getUser().getEmail();
+            MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
+            MimeMessagePropertySetter messageSubjectSetter = new MimeMessageTaskSubjectSetter(task);
+            MimeMessagePropertySetter messageTextSetter = new MimeMessageTaskTextSetter(task);
+            MimeMessagePreparator preparator = new MimeMessagePreparatorPipeline(
+                    messageSenderSetter,
+                    messageRecipientSetter,
+                    messageSubjectSetter,
+                    messageTextSetter
             );
-
-            MimeMessage message = createMessage("task_notification", recipient, subject, variables);
-            mailSender.send(message);
+            mailSender.send(preparator);
         }
 
         @Override
-        public void sendVerificationEmail(String recipient, String link) {
-            MimeMessage message = createMessage(
-                    "verification", recipient, "Complete your DL4SE registration", Map.of("link", link)
+        public void sendVerificationEmail(Token token) {
+            String email = token.getUser().getEmail();
+            MessageTemplate template = MessageTemplate.VERIFICATION;
+            String link = verificationLinkGenerator.generate(token);
+            MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
+            MimeMessagePropertySetter messageSubjectSetter = new MimeMessageSubjectSetter("Complete your registration");
+            MimeMessagePropertySetter messageTextSetter = new MimeMessageLinkTextSetter(template, link);
+            MimeMessagePreparator preparator = new MimeMessagePreparatorPipeline(
+                    messageSenderSetter,
+                    messageRecipientSetter,
+                    messageSubjectSetter,
+                    messageTextSetter
             );
-            mailSender.send(message);
+            mailSender.send(preparator);
         }
 
         @Override
-        public void sendPasswordResetEmail(String recipient, String link) {
-            MimeMessage message = createMessage(
-                    "password_reset", recipient, "Reset your password", Map.of("link", link)
+        public void sendPasswordResetEmail(Token token) {
+            String email = token.getUser().getEmail();
+            MessageTemplate template = MessageTemplate.PASSWORD_RESET;
+            String link = passwordResetLinkGenerator.generate(token);
+            MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
+            MimeMessagePropertySetter messageSubjectSetter = new MimeMessageSubjectSetter("Reset your password");
+            MimeMessagePropertySetter messageTextSetter = new MimeMessageLinkTextSetter(template, link);
+            MimeMessagePreparator preparator = new MimeMessagePreparatorPipeline(
+                    messageSenderSetter,
+                    messageRecipientSetter,
+                    messageSubjectSetter,
+                    messageTextSetter
             );
-            mailSender.send(message);
+            mailSender.send(preparator);
         }
 
-        @SneakyThrows(MessagingException.class)
-        private MimeMessage createMessage(
-                String template, String recipient, String subject, Map<String, Object> variables
-        ) {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(
-                    message,
-                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name()
-            );
+        private static final class MimeMessageTaskSubjectSetter extends AbstractMimeMessageSubjectSetter<Task> {
 
-            Context context = new Context(null, variables);
-            String html = templateEngine.process(template, context);
-            helper.setFrom(sender);
-            helper.setTo(recipient);
-            helper.setSubject(subject);
-            helper.setText(html, true);
-            return message;
+            private MimeMessageTaskSubjectSetter(Task payload) {
+                super(payload);
+            }
+
+            @Override
+            protected String asSubject(Task payload) {
+                return String.format("Task [%s]: %s", payload.getUuid(), payload.getStatus());
+            }
+        }
+
+        private final class MimeMessageTaskTextSetter extends AbstractMimeMessageTextSetter<Task> {
+
+            private MimeMessageTaskTextSetter(Task payload) {
+                super(MessageTemplate.TASK_NOTIFICATION, templateEngine, payload);
+            }
+
+            @Override
+            protected Context asContext(Task payload) {
+                Context context = super.defaultContext();
+                context.setVariable("uuid", payload.getUuid());
+                context.setVariable("status", payload.getStatus());
+                context.setVariable("submitted", payload.getSubmitted());
+                context.setVariable("started", payload.getStarted());
+                context.setVariable("finished", payload.getFinished());
+                context.setVariable("results", payload.getProcessedResults());
+                context.setVariable("size", new ReadableFileSize(payload.getSize()));
+                return context;
+            }
+        }
+
+        private final class MimeMessageLinkTextSetter extends AbstractMimeMessageTextSetter<String> {
+
+            private MimeMessageLinkTextSetter(MessageTemplate template, String payload) {
+                super(template, templateEngine, payload);
+            }
+
+            @Override
+            protected Context asContext(String payload) {
+                Context context = super.defaultContext();
+                context.setVariable("link", payload);
+                return context;
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ import ch.usi.si.seart.server.dto.LoginDto;
 import ch.usi.si.seart.server.dto.RegisterDto;
 import ch.usi.si.seart.server.dto.user.EmailDto;
 import ch.usi.si.seart.server.dto.user.PasswordDto;
-import ch.usi.si.seart.server.hateoas.LinkGenerator;
 import ch.usi.si.seart.server.security.TokenProvider;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.EmailService;
@@ -53,9 +52,6 @@ public class UserController {
     EmailService emailService;
     ConversionService conversionService;
 
-    LinkGenerator<Token> verificationLinkGenerator;
-    LinkGenerator<Token> passwordResetLinkGenerator;
-
     @GetMapping
     public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithId(principal.getId());
@@ -87,8 +83,7 @@ public class UserController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDto dto) {
         User created = userService.create(conversionService.convert(dto, User.class));
         Token token = verificationService.generate(created);
-        String link = verificationLinkGenerator.generate(token);
-        emailService.sendVerificationEmail(dto.getEmail(), link);
+        emailService.sendVerificationEmail(token);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -101,8 +96,7 @@ public class UserController {
     @GetMapping("/verify/resend")
     public ResponseEntity<?> resendVerification(@RequestParam @NotBlank String token) {
         Token refreshed = verificationService.refresh(token);
-        String link = verificationLinkGenerator.generate(refreshed);
-        emailService.sendVerificationEmail(refreshed.getUser().getEmail(), link);
+        emailService.sendVerificationEmail(refreshed);
         return ResponseEntity.ok().build();
     }
 
@@ -110,8 +104,7 @@ public class UserController {
     public ResponseEntity<?> forgottenPassword(@Valid @RequestBody EmailDto dto) {
         User requester = userService.getWithEmail(dto.getEmail());
         Token token = passwordResetService.generate(requester);
-        String link = passwordResetLinkGenerator.generate(token);
-        emailService.sendPasswordResetEmail(dto.getEmail(), link);
+        emailService.sendPasswordResetEmail(token);
         return ResponseEntity.ok().build();
     }
 
