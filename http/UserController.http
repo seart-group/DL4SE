@@ -28,6 +28,9 @@ Content-Type: application/json
 ### GET /user/verify
 GET https://localhost:8080/api/user/verify?token={{verify_token}}
 
+### GET /user/verify/resend
+GET https://localhost:8080/api/user/verify/resend?token={{verify_token}}
+
 ### POST /user/password/forgotten
 POST https://localhost:8080/api/user/password/forgotten
 Content-Type: application/json
