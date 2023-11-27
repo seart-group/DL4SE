@@ -19,7 +19,6 @@ import ch.usi.si.seart.server.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -149,9 +148,10 @@ public class TaskController {
         return ResponseEntity.ok(token.getValue());
     }
 
-    @SneakyThrows({FileNotFoundException.class})
     @GetMapping(value = "/download/{uuid}")
-    public ResponseEntity<?> download(@PathVariable UUID uuid, @RequestParam @NotBlank String token) {
+    public ResponseEntity<?> download(
+            @PathVariable UUID uuid, @RequestParam @NotBlank String token
+    ) throws FileNotFoundException {
         downloadService.verify(token);
         Task task = taskService.getWithUUID(uuid);
 
