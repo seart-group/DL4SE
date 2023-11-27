@@ -1,7 +1,8 @@
 package ch.usi.si.seart.server.controller;
 
 import ch.usi.si.seart.model.user.User;
-import ch.usi.si.seart.model.user.token.Token;
+import ch.usi.si.seart.model.user.token.PasswordResetToken;
+import ch.usi.si.seart.model.user.token.VerificationToken;
 import ch.usi.si.seart.server.dto.LoginDto;
 import ch.usi.si.seart.server.dto.RegisterDto;
 import ch.usi.si.seart.server.dto.user.EmailDto;
@@ -9,9 +10,8 @@ import ch.usi.si.seart.server.dto.user.PasswordDto;
 import ch.usi.si.seart.server.security.TokenProvider;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.EmailService;
-import ch.usi.si.seart.server.service.PasswordResetService;
+import ch.usi.si.seart.server.service.TokenService;
 import ch.usi.si.seart.server.service.UserService;
-import ch.usi.si.seart.server.service.VerificationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,10 +48,13 @@ public class UserController {
     TokenProvider tokenProvider;
 
     UserService userService;
-    VerificationService verificationService;
-    PasswordResetService passwordResetService;
+
+    TokenService<VerificationToken> verificationService;
+    TokenService<PasswordResetToken> passwordResetService;
+
     EmailService emailService;
     ConversionService conversionService;
+    UserDetailsPasswordService userDetailsPasswordService;
 
     @GetMapping
     public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserPrincipal principal) {
@@ -82,20 +86,23 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDto dto) {
         User created = userService.create(conversionService.convert(dto, User.class));
-        Token token = verificationService.generate(created);
+        VerificationToken token = verificationService.generate(created);
         emailService.sendVerificationEmail(token);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/verify")
     public ResponseEntity<?> verify(@RequestParam @NotBlank String token) {
+        User requester = verificationService.getOwner(token);
         verificationService.verify(token);
+        requester.setVerified(true);
+        userService.update(requester);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/verify/resend")
     public ResponseEntity<?> resendVerification(@RequestParam @NotBlank String token) {
-        Token refreshed = verificationService.refresh(token);
+        VerificationToken refreshed = verificationService.refresh(token);
         emailService.sendVerificationEmail(refreshed);
         return ResponseEntity.ok().build();
     }
@@ -103,16 +110,17 @@ public class UserController {
     @PostMapping("/password/forgotten")
     public ResponseEntity<?> forgottenPassword(@Valid @RequestBody EmailDto dto) {
         User requester = userService.getWithEmail(dto.getEmail());
-        Token token = passwordResetService.generate(requester);
+        PasswordResetToken token = passwordResetService.generate(requester);
         emailService.sendPasswordResetEmail(token);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/password/reset")
-    public ResponseEntity<?> resetPassword(
-            @RequestParam @NotBlank String token, @Valid @RequestBody PasswordDto dto
-    ) {
-        passwordResetService.verify(token, dto.getPassword());
+    public ResponseEntity<?> resetPassword(@RequestParam @NotBlank String token, @Valid @RequestBody PasswordDto dto) {
+        User requester = verificationService.getOwner(token);
+        passwordResetService.verify(token);
+        UserPrincipal principal = conversionService.convert(requester, UserPrincipal.class);
+        userDetailsPasswordService.updatePassword(principal, dto.getPassword());
         return ResponseEntity.ok().build();
     }
 }

@@ -3,13 +3,14 @@ package ch.usi.si.seart.repository;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface TokenRepository extends JpaRepository<Token, Long> {
+@NoRepositoryBean
+public interface TokenRepository<T extends Token> extends JpaRepository<T, Long> {
 
-    Optional<Token> findByValue(String value);
+    Optional<T> findByValue(String value);
 
-    List<Token> findAllByUser(User user);
+    Optional<T> findFirstByUser(User user);
 }

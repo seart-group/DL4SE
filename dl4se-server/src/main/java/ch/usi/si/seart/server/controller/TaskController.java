@@ -7,14 +7,14 @@ import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.Role;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.User_;
-import ch.usi.si.seart.model.user.token.Token;
+import ch.usi.si.seart.model.user.token.DownloadToken;
 import ch.usi.si.seart.server.dto.task.TaskDto;
 import ch.usi.si.seart.server.dto.task.TaskSearchDto;
 import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.ConfigurationService;
-import ch.usi.si.seart.server.service.DownloadService;
 import ch.usi.si.seart.server.service.FileSystemService;
 import ch.usi.si.seart.server.service.TaskService;
+import ch.usi.si.seart.server.service.TokenService;
 import ch.usi.si.seart.server.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
@@ -60,7 +60,9 @@ public class TaskController {
 
     TaskService taskService;
     UserService userService;
-    DownloadService downloadService;
+
+    TokenService<DownloadToken> downloadService;
+
     FileSystemService fileSystemService;
     ConversionService conversionService;
     ConfigurationService configurationService;
@@ -143,14 +145,14 @@ public class TaskController {
         boolean canDownload = isFinished && (isOwner || isAdmin);
         if (!canDownload) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
-        Token token = downloadService.generate(requester);
+        DownloadToken token = downloadService.generate(requester);
         return ResponseEntity.ok(token.getValue());
     }
 
     @SneakyThrows({FileNotFoundException.class})
     @GetMapping(value = "/download/{uuid}")
     public ResponseEntity<?> download(@PathVariable UUID uuid, @RequestParam @NotBlank String token) {
-        downloadService.consume(token);
+        downloadService.verify(token);
         Task task = taskService.getWithUUID(uuid);
 
         Path exportFilePath = fileSystemService.getArchive(task);
