@@ -1,7 +1,9 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.task.Task;
+import ch.usi.si.seart.model.user.token.PasswordResetToken;
 import ch.usi.si.seart.model.user.token.Token;
+import ch.usi.si.seart.model.user.token.VerificationToken;
 import ch.usi.si.seart.server.hateoas.LinkGenerator;
 import ch.usi.si.seart.server.mail.AbstractMimeMessageSubjectSetter;
 import ch.usi.si.seart.server.mail.AbstractMimeMessageTextSetter;
@@ -26,8 +28,8 @@ import org.thymeleaf.context.Context;
 public interface EmailService {
 
     void sendTaskNotificationEmail(Task task);
-    void sendVerificationEmail(Token token);
-    void sendPasswordResetEmail(Token token);
+    void sendVerificationEmail(VerificationToken token);
+    void sendPasswordResetEmail(PasswordResetToken token);
 
     @Service
     @ConditionalOnProperty(value = "spring.mail.enabled", havingValue = "false")
@@ -38,11 +40,11 @@ public interface EmailService {
         }
 
         @Override
-        public void sendVerificationEmail(Token token) {
+        public void sendVerificationEmail(VerificationToken token) {
         }
 
         @Override
-        public void sendPasswordResetEmail(Token token) {
+        public void sendPasswordResetEmail(PasswordResetToken token) {
         }
     }
 
@@ -78,7 +80,7 @@ public interface EmailService {
         }
 
         @Override
-        public void sendVerificationEmail(Token token) {
+        public void sendVerificationEmail(VerificationToken token) {
             String email = token.getUser().getEmail();
             MessageTemplate template = MessageTemplate.VERIFICATION;
             String link = verificationLinkGenerator.generate(token);
@@ -95,7 +97,7 @@ public interface EmailService {
         }
 
         @Override
-        public void sendPasswordResetEmail(Token token) {
+        public void sendPasswordResetEmail(PasswordResetToken token) {
             String email = token.getUser().getEmail();
             MessageTemplate template = MessageTemplate.PASSWORD_RESET;
             String link = passwordResetLinkGenerator.generate(token);
