@@ -44,8 +44,8 @@ public class LineCounter extends AbstractCounter {
         List<Span> result = new ArrayList<>();
         spans.stream().reduce((left, right) -> {
             int leftRow = left.getEnd().getRow();
-            int rightTow = right.getStart().getRow();
-            if (leftRow == rightTow)
+            int rightRow = right.getStart().getRow();
+            if (leftRow == rightRow)
                 return new Span(left.getStart(), right.getEnd());
             result.add(left);
             return right;
