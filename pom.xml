@@ -71,7 +71,7 @@
     <postgresql.version>42.6.0</postgresql.version>
     <jjwt.version>0.12.3</jjwt.version>
     <jackson.version>2.15.3</jackson.version>
-    <spring-boot.version>2.7.17</spring-boot.version>
+    <spring-boot.version>2.7.18</spring-boot.version>
     <spring-cloud.version>2021.0.8</spring-cloud.version>
   </properties>
 
