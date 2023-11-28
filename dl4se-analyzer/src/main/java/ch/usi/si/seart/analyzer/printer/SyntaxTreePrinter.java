@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 public class SyntaxTreePrinter extends AbstractPrinter {
 
     private static final int BEGIN_INDEX = XMLPrinter.PROLOG.length();
+
     public static final String TAG_OPEN = "<ast>";
     public static final String TAG_CLOSE = "</ast>";
 
