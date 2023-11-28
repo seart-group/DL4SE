@@ -2,7 +2,6 @@ package ch.usi.si.seart.analyzer.util.stream;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collections;
@@ -15,12 +14,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DelimiterSuffixedStringCollector implements Collector<String, StringJoiner, String> {
 
-    final String delimiter;
-    String empty = "";
+    String delimiter;
+    String empty;
+
+    public DelimiterSuffixedStringCollector(String delimiter) {
+        this(delimiter, "");
+    }
 
     @Override
     public Supplier<StringJoiner> supplier() {
