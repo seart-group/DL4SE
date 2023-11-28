@@ -9,8 +9,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 public abstract class TraverseCounter extends AbstractCounter {
 
     AtomicLong count = new AtomicLong();
