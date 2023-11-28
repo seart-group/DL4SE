@@ -45,6 +45,7 @@ public class PythonBoilerplateEnumerator extends BoilerplateEnumerator {
             case "__delattr__":
                 return Boilerplate.FINALIZER;
             case "__eq__":
+            case "__ne__":
             case "__lt__":
             case "__le__":
             case "__gt__":
