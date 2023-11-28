@@ -44,7 +44,6 @@ public class DelimiterSuffixedStringCollector implements Collector<String, Strin
 
     @Override
     public Set<Characteristics> characteristics() {
-        // TODO: 18.01.23 Define optimization characteristics...
         return Collections.emptySet();
     }
 }
