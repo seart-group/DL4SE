@@ -6,10 +6,6 @@ import lombok.Cleanup;
 
 public class SyntaxTreeHasher extends SHA256Hasher {
 
-    public SyntaxTreeHasher() {
-        super();
-    }
-
     protected void update(Node node) {
         @Cleanup TreeCursor cursor = node.walk();
         cursor.preorderTraversal(current -> {
