@@ -43,7 +43,11 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -76,6 +80,8 @@ public class Analyzer implements AutoCloseable {
     Extractor functionExtractor;
 
     Enumerator<Boilerplate> boilerplateEnumerator;
+
+    ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public Analyzer(LocalClone localClone, Path path) throws IOException {
         this(
@@ -114,6 +120,7 @@ public class Analyzer implements AutoCloseable {
     public void close() {
         tree.close();
         parser.close();
+        executorService.shutdown();
     }
 
     public void setParserTimeout(Duration duration) {
@@ -137,22 +144,24 @@ public class Analyzer implements AutoCloseable {
 
     private File extractFileEntity() {
         Node node = tree.getRootNode();
-        return File.builder()
+        File.FileBuilder<?, ?> builder = File.builder()
                 .repo(localClone.getGitRepo())
-                .path(localClone.relativePathOf(path).toString())
-                .content(nodePrinter.print(node))
-                .contentHash(contentHasher.hash(node))
-                .ast(syntaxTreePrinter.print(node))
-                .astHash(syntaxTreeHasher.hash(node))
-                .symbolicExpression(expressionPrinter.print(node))
-                .totalTokens(totalTokenCounter.count(node))
-                .codeTokens(codeTokenCounter.count(node))
-                .lines(lineCounter.count(node))
-                .characters(characterCounter.count(node))
-                .containsNonAscii(containsNonAscii.test(node))
-                .containsError(containsError.test(node))
-                .isTest(testFilePredicate.test(path))
-                .build();
+                .path(localClone.relativePathOf(path).toString());
+        CompletableFuture.allOf(
+                supplyAsync(() -> nodePrinter.print(node)).thenAcceptAsync(builder::content),
+                supplyAsync(() -> syntaxTreePrinter.print(node)).thenAcceptAsync(builder::ast),
+                supplyAsync(() -> expressionPrinter.print(node)).thenAcceptAsync(builder::symbolicExpression),
+                supplyAsync(() -> contentHasher.hash(node)).thenAcceptAsync(builder::contentHash),
+                supplyAsync(() -> syntaxTreeHasher.hash(node)).thenAcceptAsync(builder::astHash),
+                supplyAsync(() -> totalTokenCounter.count(node)).thenAcceptAsync(builder::totalTokens),
+                supplyAsync(() -> codeTokenCounter.count(node)).thenAcceptAsync(builder::codeTokens),
+                supplyAsync(() -> lineCounter.count(node)).thenAcceptAsync(builder::lines),
+                supplyAsync(() -> characterCounter.count(node)).thenAcceptAsync(builder::characters),
+                supplyAsync(() -> containsNonAscii.test(node)).thenAcceptAsync(builder::containsNonAscii),
+                supplyAsync(() -> containsError.test(node)).thenAcceptAsync(builder::containsError),
+                supplyAsync(() -> testFilePredicate.test(path)).thenAcceptAsync(builder::isTest)
+        ).join();
+        return builder.build();
     }
 
     private List<Function> extractFunctionEntities(File file) {
@@ -173,23 +182,27 @@ public class Analyzer implements AutoCloseable {
         List<Node> nodes = match.getNodes();
         Node function = match.getTarget();
         Printer standalone = getStandalonePrinter();
-        String ast = standalone.print(nodes);
+        Function.FunctionBuilder<?, ?> builder = Function.builder()
+                .repo(localClone.getGitRepo());
+        CompletableFuture.allOf(
+                supplyAsync(() -> nodePrinter.print(nodes)).thenAcceptAsync(builder::content),
+                supplyAsync(() -> standalone.print(nodes)).thenAcceptAsync(builder::ast),
+                supplyAsync(() -> expressionPrinter.print(nodes)).thenAcceptAsync(builder::symbolicExpression),
+                supplyAsync(() -> contentHasher.hash(nodes)).thenAcceptAsync(builder::contentHash),
+                supplyAsync(() -> syntaxTreeHasher.hash(nodes)).thenAcceptAsync(builder::astHash),
+                supplyAsync(() -> totalTokenCounter.count(nodes)).thenAcceptAsync(builder::totalTokens),
+                supplyAsync(() -> codeTokenCounter.count(nodes)).thenAcceptAsync(builder::codeTokens),
+                supplyAsync(() -> lineCounter.count(nodes)).thenAcceptAsync(builder::lines),
+                supplyAsync(() -> characterCounter.count(nodes)).thenAcceptAsync(builder::characters),
+                supplyAsync(() -> containsNonAscii.test(nodes)).thenAcceptAsync(builder::containsNonAscii),
+                supplyAsync(() -> containsError.test(nodes)).thenAcceptAsync(builder::containsError),
+                supplyAsync(() -> boilerplateEnumerator.asEnum(function)).thenAcceptAsync(builder::boilerplateType)
+        ).join();
+        return builder.build();
+    }
 
-        return Function.builder()
-                .repo(localClone.getGitRepo())
-                .ast(ast)
-                .content(nodePrinter.print(nodes))
-                .astHash(syntaxTreeHasher.hash(nodes))
-                .contentHash(contentHasher.hash(nodes))
-                .symbolicExpression(expressionPrinter.print(nodes))
-                .totalTokens(totalTokenCounter.count(nodes))
-                .codeTokens(codeTokenCounter.count(nodes))
-                .lines(lineCounter.count(nodes))
-                .characters(characterCounter.count(nodes))
-                .containsNonAscii(containsNonAscii.test(nodes))
-                .containsError(containsError.test(nodes))
-                .boilerplateType(boilerplateEnumerator.asEnum(function))
-                .build();
+    private <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier) {
+        return CompletableFuture.supplyAsync(supplier, executorService);
     }
 
     private FunctionSyntaxTreePrinter getStandalonePrinter() {
