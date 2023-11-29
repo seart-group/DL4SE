@@ -2,9 +2,8 @@ package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.user.token.PasswordResetToken;
-import ch.usi.si.seart.model.user.token.Token;
 import ch.usi.si.seart.model.user.token.VerificationToken;
-import ch.usi.si.seart.server.hateoas.LinkGenerator;
+import ch.usi.si.seart.server.hateoas.URLGenerator;
 import ch.usi.si.seart.server.mail.AbstractMimeMessageSubjectSetter;
 import ch.usi.si.seart.server.mail.AbstractMimeMessageTextSetter;
 import ch.usi.si.seart.server.mail.MessageTemplate;
@@ -24,6 +23,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.net.URL;
 
 public interface EmailService {
 
@@ -61,8 +62,8 @@ public interface EmailService {
         
         MimeMessagePropertySetter messageSenderSetter;
 
-        LinkGenerator<Token> verificationLinkGenerator;
-        LinkGenerator<Token> passwordResetLinkGenerator;
+        URLGenerator<VerificationToken> verificationURLGenerator;
+        URLGenerator<PasswordResetToken> passwordResetURLGenerator;
 
         @Override
         public void sendTaskNotificationEmail(Task task) {
@@ -83,10 +84,10 @@ public interface EmailService {
         public void sendVerificationEmail(VerificationToken token) {
             String email = token.getUser().getEmail();
             MessageTemplate template = MessageTemplate.VERIFICATION;
-            String link = verificationLinkGenerator.generate(token);
+            URL url = verificationURLGenerator.generate(token);
             MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
             MimeMessagePropertySetter messageSubjectSetter = new MimeMessageSubjectSetter("Complete your registration");
-            MimeMessagePropertySetter messageTextSetter = new MimeMessageLinkTextSetter(template, link);
+            MimeMessagePropertySetter messageTextSetter = new MimeMessageURLTextSetter(template, url);
             MimeMessagePreparator preparator = new MimeMessagePreparatorPipeline(
                     messageSenderSetter,
                     messageRecipientSetter,
@@ -100,10 +101,10 @@ public interface EmailService {
         public void sendPasswordResetEmail(PasswordResetToken token) {
             String email = token.getUser().getEmail();
             MessageTemplate template = MessageTemplate.PASSWORD_RESET;
-            String link = passwordResetLinkGenerator.generate(token);
+            URL url = passwordResetURLGenerator.generate(token);
             MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
             MimeMessagePropertySetter messageSubjectSetter = new MimeMessageSubjectSetter("Reset your password");
-            MimeMessagePropertySetter messageTextSetter = new MimeMessageLinkTextSetter(template, link);
+            MimeMessagePropertySetter messageTextSetter = new MimeMessageURLTextSetter(template, url);
             MimeMessagePreparator preparator = new MimeMessagePreparatorPipeline(
                     messageSenderSetter,
                     messageRecipientSetter,
@@ -145,14 +146,14 @@ public interface EmailService {
             }
         }
 
-        private final class MimeMessageLinkTextSetter extends AbstractMimeMessageTextSetter<String> {
+        private final class MimeMessageURLTextSetter extends AbstractMimeMessageTextSetter<URL> {
 
-            private MimeMessageLinkTextSetter(MessageTemplate template, String payload) {
+            private MimeMessageURLTextSetter(MessageTemplate template, URL payload) {
                 super(template, templateEngine, payload);
             }
 
             @Override
-            protected Context asContext(String payload) {
+            protected Context asContext(URL payload) {
                 Context context = super.defaultContext();
                 context.setVariable("link", payload);
                 return context;
