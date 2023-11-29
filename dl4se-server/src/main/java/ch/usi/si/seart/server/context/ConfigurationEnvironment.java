@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +21,9 @@ public class ConfigurationEnvironment implements EnvironmentAware {
     @Override
     public void setEnvironment(Environment environment) {
         ConfigurableEnvironment configurableEnvironment = (ConfigurableEnvironment) environment;
-        configurableEnvironment.getPropertySources()
-                .addAfter("systemEnvironment", configurationService.getPropertySource());
+        configurableEnvironment.getPropertySources().addAfter(
+                StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
+                configurationService.getPropertySource()
+        );
     }
 }
