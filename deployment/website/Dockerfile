@@ -1,4 +1,4 @@
-FROM node:18.7-alpine AS install
+FROM node:18.18.2-alpine AS install
 ARG WEBSITE_PORT
 ARG SERVER_URL
 COPY ./dl4se-website/package*.json ./
