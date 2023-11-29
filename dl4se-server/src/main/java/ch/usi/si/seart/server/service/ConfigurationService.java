@@ -48,7 +48,7 @@ public interface ConfigurationService extends EnvironmentAware {
                     .collect(Collectors.toMap(
                             Configuration::getKey,
                             Configuration::getValue,
-                            (value1, value2) -> value2,
+                            (ignored, value) -> value,
                             TreeMap::new
                     ));
         }
@@ -68,7 +68,7 @@ public interface ConfigurationService extends EnvironmentAware {
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
                             entry -> entry.getValue().toString(),
-                            (value1, value2) -> value2,
+                            (ignored, value) -> value,
                             TreeMap::new
                     ));
         }
