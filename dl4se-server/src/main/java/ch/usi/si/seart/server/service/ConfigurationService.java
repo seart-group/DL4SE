@@ -29,7 +29,7 @@ public interface ConfigurationService {
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     class ConfigurationServiceImpl implements ConfigurationService {
 
-        private static final String environmentName = "configurationEnvironment";
+        private static final String CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME = "configurationEnvironment";
 
         ConfigurationRepository configurationRepository;
         ConfigurableEnvironment configurableEnvironment;
@@ -38,7 +38,7 @@ public interface ConfigurationService {
         public PropertySource<?> getPropertySource() {
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
                     .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
-            return new MapPropertySource(environmentName, configurationMap);
+            return new MapPropertySource(CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap);
         }
 
         @Override
@@ -62,8 +62,12 @@ public interface ConfigurationService {
             configurationRepository.saveAll(configurations);
             Map<String, Object> configurationMap = configurationRepository.findAll().stream()
                     .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
-            PropertySource<?> propertySource = new MapPropertySource(environmentName, configurationMap);
-            configurableEnvironment.getPropertySources().replace(environmentName, propertySource);
+            PropertySource<?> propertySource = new MapPropertySource(
+                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap
+            );
+            configurableEnvironment.getPropertySources().replace(
+                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource
+            );
             return configurationMap.entrySet().stream()
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
