@@ -5,6 +5,8 @@ import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.repository.CrawlJobRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,12 +24,9 @@ public final class CrawlJobInitializingBean implements InitializingBean {
     LocalDateTime startDateTime;
 
     @NonFinal
+    @Accessors(makeFinal = true)
+    @Setter(onMethod_ = @Autowired)
     CrawlJobRepository crawlJobRepository;
-
-    @Autowired
-    public void setCrawlJobRepository(CrawlJobRepository crawlJobRepository) {
-        this.crawlJobRepository = crawlJobRepository;
-    }
 
     @Override
     public void afterPropertiesSet() {
