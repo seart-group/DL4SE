@@ -1,20 +1,17 @@
 package ch.usi.si.seart.crawler.scheduling;
 
-import ch.usi.si.seart.analyzer.Analyzer;
-import ch.usi.si.seart.analyzer.AnalyzerCustomizer;
 import ch.usi.si.seart.analyzer.LocalClone;
 import ch.usi.si.seart.crawler.dto.SearchResultDto;
 import ch.usi.si.seart.crawler.git.Git;
 import ch.usi.si.seart.crawler.git.GitException;
 import ch.usi.si.seart.crawler.http.HttpClient;
 import ch.usi.si.seart.crawler.io.ExtensionBasedFileVisitor;
+import ch.usi.si.seart.crawler.service.AnalyzerService;
 import ch.usi.si.seart.crawler.service.FileService;
 import ch.usi.si.seart.crawler.service.FileSystemService;
 import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
-import ch.usi.si.seart.model.code.File;
-import ch.usi.si.seart.model.code.Function;
 import ch.usi.si.seart.model.job.Job;
 import ch.usi.si.seart.service.CrawlJobService;
 import ch.usi.si.seart.service.GitRepoService;
@@ -44,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -62,12 +61,11 @@ public class CodeCrawler implements Runnable {
     LanguageService languageService;
     ConversionService conversionService;
     FileSystemService fileSystemService;
+    AnalyzerService analyzerService;
 
     Predicate<String> nameFilter;
 
     Predicate<Path> fileFilter;
-
-    AnalyzerCustomizer<Analyzer> analyzerCustomizer;
 
     ObjectFactory<GenericUrl> baseUrlFactory;
 
@@ -192,9 +190,13 @@ public class CodeCrawler implements Runnable {
             log.error("Error occurred during cleanup of: " + name, ex.getCause());
         }
     }
-    
+
     private void addFile(LocalClone localClone, Path path) {
-        analyzeAndStore(localClone, path);
+        try {
+            analyzerService.analyze(localClone, path)
+                    .thenAcceptAsync(fileService::create)
+                    .join();
+        } catch (CompletionException ignored) {}
     }
 
     private void deleteFile(GitRepo repo, Path path) {
@@ -242,26 +244,20 @@ public class CodeCrawler implements Runnable {
             Set<Path> filtered = Sets.difference(candidates, analyzed).stream()
                     .filter(fileFilter)
                     .collect(Collectors.toSet());
-            filtered.forEach(target -> analyzeAndStore(localClone, target));
+            addFile(localClone, filtered);
         } catch (IOException ex) {
             log.error("Could not walk file tree for: " + repo.getName(), ex);
         }
     }
 
-    private void analyzeAndStore(LocalClone localClone, Path path) {
-        Path relative = localClone.relativePathOf(path);
-        log.debug("Analyzing file: {}", relative);
-        Language language = languageService.getAssociatedWith(path);
-        try (Analyzer analyzer = new Analyzer(localClone, path)) {
-            analyzerCustomizer.customize(analyzer);
-            Analyzer.Result result = analyzer.analyze();
-            File file = result.getFile();
-            List<Function> functions = result.getFunctions();
-            file.setLanguage(language);
-            functions.forEach(function -> function.setLanguage(language));
-            fileService.create(file);
-        } catch (Exception ex) {
-            log.error("Exception occurred while analyzing: {}", relative, ex);
-        }
+    private void addFile(LocalClone localClone, Set<Path> paths) {
+        try {
+            CompletableFuture.allOf(
+                    paths.stream()
+                            .map(path -> analyzerService.analyze(localClone, path))
+                            .map(future -> future.thenAcceptAsync(fileService::create))
+                            .toArray(CompletableFuture[]::new)
+            ).join();
+        } catch (CompletionException ignored) {}
     }
 }
