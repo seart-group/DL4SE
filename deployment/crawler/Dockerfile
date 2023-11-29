@@ -12,7 +12,7 @@ RUN mvn -e \
         -Pcrawler \
         -am -DskipTests
 
-FROM eclipse-temurin:11.0.20_8-jre-alpine
+FROM eclipse-temurin:11.0.21_9-jre-alpine
 
 COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
