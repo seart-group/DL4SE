@@ -6,9 +6,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,9 +20,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-public interface ConfigurationService {
+public interface ConfigurationService extends EnvironmentAware {
 
-    PropertySource<?> getPropertySource();
     <T> T get(String key, Class<T> type);
     Map<String, String> get();
     Map<String, String> update(Collection<Configuration> configurations);
@@ -33,13 +36,6 @@ public interface ConfigurationService {
 
         ConfigurationRepository configurationRepository;
         ConfigurableEnvironment configurableEnvironment;
-
-        @Override
-        public PropertySource<?> getPropertySource() {
-            Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
-            return new MapPropertySource(CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap);
-        }
 
         @Override
         public <T> T get(String key, Class<T> type) {
@@ -80,6 +76,17 @@ public interface ConfigurationService {
         @Override
         public boolean exists(Configuration configuration) {
             return configurableEnvironment.containsProperty(configuration.getKey());
+        }
+
+        @Override
+        public void setEnvironment(Environment ignored) {
+            Map<String, Object> configurationMap = configurationRepository.findAll().stream()
+                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
+            PropertySource<?> propertySource = new MapPropertySource(
+                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap
+            );
+            MutablePropertySources propertySources = configurableEnvironment.getPropertySources();
+            propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource);
         }
     }
 }
