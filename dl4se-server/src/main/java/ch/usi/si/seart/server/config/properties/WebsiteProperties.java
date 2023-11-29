@@ -14,7 +14,7 @@ import java.net.URL;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "website", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "platform.website", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class WebsiteProperties {

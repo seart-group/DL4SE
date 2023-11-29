@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "scheduling", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "platform.scheduling", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class SchedulingProperties {

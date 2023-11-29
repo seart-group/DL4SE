@@ -14,7 +14,7 @@ import java.time.Duration;
 
 @Validated
 @Getter
-@ConfigurationProperties(prefix = "jwt", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "platform.jwt", ignoreUnknownFields = false)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @AllArgsConstructor(onConstructor_ = @ConstructorBinding)
 public class JwtProperties {
