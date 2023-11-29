@@ -33,7 +33,6 @@ import java.util.concurrent.ScheduledFuture;
 @DependsOn({
         "ConfigurationInitializingBean",
         "directoryInitializationBean",
-        "TaskRunnerRecoveryBean",
 })
 public class SchedulerConfig {
 

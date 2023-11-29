@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,15 +46,15 @@ public interface TaskService {
     void cancel(Task task);
     void registerException(TaskFailedException ex);
     void forEachNonExpired(Consumer<Task> consumer);
-    void forEachExecuting(Consumer<Task> consumer);
     Optional<Task> getNext();
     Page<Task> getAll(Specification<Task> specification, Pageable pageable);
     Task getWithUUID(UUID uuid);
 
+    @Slf4j
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor(onConstructor_ = @Autowired)
-    class TaskServiceImpl implements TaskService {
+    class TaskServiceImpl implements TaskService, InitializingBean {
 
         TaskRepository taskRepository;
 
@@ -64,6 +67,15 @@ public interface TaskService {
             private Lock getLock(Task task) {
                 return this.taskLocks.compute(task.getId(), (k, v) -> v == null ? new ReentrantLock() : v);
             }
+        }
+
+        @Override
+        public void afterPropertiesSet() {
+            List<Task> tasks = taskRepository.findAllByStatus(Status.EXECUTING);
+            if (tasks.isEmpty()) return;
+            log.info("Returning {} interrupted tasks back to queue...", tasks.size());
+            tasks.forEach(task -> task.setStatus(Status.QUEUED));
+            taskRepository.saveAllAndFlush(tasks);
         }
 
         @Override
@@ -145,12 +157,6 @@ public interface TaskService {
             LocalDateTime oneWeekAgo = LocalDateTime.now(ZoneOffset.UTC).minusWeeks(1);
             @Cleanup Stream<Task> taskStream = taskRepository.findAllByFinishedLessThanAndExpired(oneWeekAgo, false);
             taskStream.forEach(consumer);
-        }
-
-        @Override
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void forEachExecuting(Consumer<Task> consumer) {
-            taskRepository.findAllByStatus(Status.EXECUTING).forEach(consumer);
         }
 
         @Override
