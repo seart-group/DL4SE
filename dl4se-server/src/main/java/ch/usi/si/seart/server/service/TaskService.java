@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 
 public interface TaskService {
 
-    boolean canCreateTask(User user, Integer limit);
+    long countActiveTasks(User user);
     boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing);
     void create(User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt);
     Task update(Task task);
@@ -79,9 +79,8 @@ public interface TaskService {
         }
 
         @Override
-        public boolean canCreateTask(User user, Integer limit) {
-            Long activeTasks = taskRepository.countAllByUserAndStatusIn(user, Status.Category.ACTIVE);
-            return activeTasks < limit;
+        public long countActiveTasks(User user) {
+            return taskRepository.countAllByUserAndStatusIn(user, Status.Category.ACTIVE);
         }
 
         @Override

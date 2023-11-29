@@ -100,8 +100,9 @@ public class TaskController {
     private ResponseEntity<?> create(User requester, Job dataset, JsonNode query, JsonNode processing) {
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
 
-        Integer taskLimit = configurationService.get("request_limit", Integer.class);
-        if (!taskService.canCreateTask(requester, taskLimit))
+        long limit = configurationService.get("request_limit", Long.class);
+        long active = taskService.countActiveTasks(requester);
+        if (active >= limit)
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 
         if (taskService.activeTaskExists(requester, dataset, query, processing))
