@@ -11,13 +11,14 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public interface ConfigurationService extends EnvironmentAware {
@@ -33,6 +34,10 @@ public interface ConfigurationService extends EnvironmentAware {
     class ConfigurationServiceImpl implements ConfigurationService {
 
         private static final String CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME = "configurationEnvironment";
+
+        private static final Collector<Configuration, ?, Map<String, Object>> DEFAULT_COLLECTOR = Collectors.toMap(
+                Configuration::getKey, Configuration::getValue
+        );
 
         ConfigurationRepository configurationRepository;
         ConfigurableEnvironment configurableEnvironment;
@@ -56,15 +61,14 @@ public interface ConfigurationService extends EnvironmentAware {
         @Override
         public Map<String, String> update(Collection<Configuration> configurations) {
             configurationRepository.saveAll(configurations);
-            Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
-            PropertySource<?> propertySource = new MapPropertySource(
-                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap
+            configurations = configurationRepository.findAll();
+            Map<String, Object> map = configurations.stream().collect(DEFAULT_COLLECTOR);
+            MutablePropertySources propertySources = configurableEnvironment.getPropertySources();
+            propertySources.replace(
+                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME,
+                    new MapPropertySource(CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, map)
             );
-            configurableEnvironment.getPropertySources().replace(
-                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource
-            );
-            return configurationMap.entrySet().stream()
+            return map.entrySet().stream()
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
                             entry -> entry.getValue().toString(),
@@ -80,13 +84,13 @@ public interface ConfigurationService extends EnvironmentAware {
 
         @Override
         public void setEnvironment(Environment ignored) {
-            Map<String, Object> configurationMap = configurationRepository.findAll().stream()
-                    .collect(Collectors.toMap(Configuration::getKey, Configuration::getValue));
-            PropertySource<?> propertySource = new MapPropertySource(
-                    CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, configurationMap
-            );
+            List<Configuration> configurations = configurationRepository.findAll();
+            Map<String, Object> map = configurations.stream().collect(DEFAULT_COLLECTOR);
             MutablePropertySources propertySources = configurableEnvironment.getPropertySources();
-            propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, propertySource);
+            propertySources.addAfter(
+                    StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
+                    new MapPropertySource(CONFIGURATION_ENVIRONMENT_PROPERTY_SOURCE_NAME, map)
+            );
         }
     }
 }
