@@ -1,28 +1,28 @@
 package ch.usi.si.seart.server.bean;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Slf4j
-@Component("DirectoryInitializationBean")
-@AllArgsConstructor(onConstructor_ = @Autowired)
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DirectoryInitializationBean implements InitializingBean {
 
-    Path fileStorageDirPath;
+    Path path;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (Files.notExists(fileStorageDirPath)) {
-            log.info("File storage directory: '{}' not found! Initializing new one...", fileStorageDirPath);
-            Files.createDirectory(fileStorageDirPath);
+        if (Files.notExists(path)) {
+            log.info("File storage directory: '{}' not found! Initializing new one...", path);
+            Files.createDirectory(path);
         } else {
-            log.info("File storage directory: '{}'", fileStorageDirPath);
+            log.info("File storage directory: '{}'", path);
         }
     }
 }
