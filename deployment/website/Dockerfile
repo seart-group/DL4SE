@@ -14,7 +14,7 @@ RUN apk update --quiet && \
     envsubst < .env.template > .env && \
     npm run build
 
-FROM nginx:1.23-alpine AS production
+FROM nginx:1.25.3-alpine AS production
 COPY --from=build /dist /usr/share/nginx/html
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 CMD ["nginx", "-g", "daemon off;"]
