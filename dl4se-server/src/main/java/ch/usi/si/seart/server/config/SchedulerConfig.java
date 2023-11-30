@@ -30,10 +30,7 @@ import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @EnableScheduling
-@DependsOn({
-        "ConfigurationInitializingBean",
-        "directoryInitializationBean",
-})
+@DependsOn("directoryInitializationBean")
 public class SchedulerConfig {
 
     @Bean(destroyMethod="shutdown")
