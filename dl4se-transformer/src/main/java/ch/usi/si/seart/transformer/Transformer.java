@@ -36,7 +36,7 @@ public interface Transformer extends UnaryOperator<String> {
     }
 
     private static boolean canChain(Collection<Transformer> transformers) {
-        return 1 == transformers.stream()
+        return 2 > transformers.stream()
                 .map(Transformer::getLanguage)
                 .filter(Objects::nonNull)
                 .distinct()
