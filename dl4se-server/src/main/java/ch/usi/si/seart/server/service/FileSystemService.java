@@ -29,7 +29,7 @@ public interface FileSystemService {
     @AllArgsConstructor(onConstructor_ = @Autowired)
     class FileSystemServiceImpl implements FileSystemService, InitializingBean {
 
-        Path fileStorageDirPath;
+        Path basedir;
 
         @Override
         public Path getArchive(Task task) {
