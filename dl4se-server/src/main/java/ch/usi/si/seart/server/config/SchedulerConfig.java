@@ -17,7 +17,6 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -30,7 +29,6 @@ import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @EnableScheduling
-@DependsOn("directoryInitializationBean")
 public class SchedulerConfig {
 
     @Bean(destroyMethod="shutdown")

@@ -5,12 +5,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -25,7 +27,7 @@ public interface FileSystemService {
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor(onConstructor_ = @Autowired)
-    class FileSystemServiceImpl implements FileSystemService {
+    class FileSystemServiceImpl implements FileSystemService, InitializingBean {
 
         Path fileStorageDirPath;
 
@@ -64,8 +66,17 @@ public interface FileSystemService {
         }
 
         private Path getPath(Task task) {
-            String name = task.getUuid().toString();
-            return Path.of(fileStorageDirPath.toString(), name + ".jsonl.gz");
+            return Path.of(basedir.toString(), task.getUuid() + ".jsonl.gz");
+        }
+
+        @Override
+        public void afterPropertiesSet() throws IOException {
+            try {
+                Files.createDirectory(basedir);
+            } catch (FileAlreadyExistsException ignored) {
+            } finally {
+                log.info("File storage directory: '{}'", basedir);
+            }
         }
     }
 }
