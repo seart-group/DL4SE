@@ -10,8 +10,8 @@ import ch.usi.si.seart.repository.TaskRepository;
 import ch.usi.si.seart.server.exception.TaskFailedException;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Cleanup;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -52,20 +53,25 @@ public interface TaskService {
 
     @Slf4j
     @Service
+    @RequiredArgsConstructor(onConstructor_ = @Autowired)
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    @AllArgsConstructor(onConstructor_ = @Autowired)
     class TaskServiceImpl implements TaskService, InitializingBean {
 
         TaskRepository taskRepository;
 
-        TaskLockMap taskLockMap = new TaskLockMap();
+        TaskLockProvider locks = new TaskLockProvider();
 
-        private static class TaskLockMap {
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        private static final class TaskLockProvider {
 
-            private final ConcurrentReferenceHashMap<Long, Lock> taskLocks = new ConcurrentReferenceHashMap<>();
+            ConcurrentMap<Long, Lock> map = new ConcurrentReferenceHashMap<>();
 
             private Lock getLock(Task task) {
-                return this.taskLocks.compute(task.getId(), (k, v) -> v == null ? new ReentrantLock() : v);
+                return map.compute(task.getId(), TaskLockProvider::getLock);
+            }
+
+            private static Lock getLock(Long id, Lock lock) {
+                return Objects.requireNonNullElse(lock, new ReentrantLock());
             }
         }
 
@@ -110,7 +116,7 @@ public interface TaskService {
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public Task update(Task task) {
-            Lock taskLock = taskLockMap.getLock(task);
+            Lock taskLock = locks.getLock(task);
             taskLock.lock();
             try {
                 return taskRepository.saveAndFlush(task);
@@ -122,7 +128,7 @@ public interface TaskService {
         @Override
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void cancel(Task task) {
-            Lock taskLock = taskLockMap.getLock(task);
+            Lock taskLock = locks.getLock(task);
             taskLock.lock();
             try {
                 taskRepository.markForCancellation(task.getId());
