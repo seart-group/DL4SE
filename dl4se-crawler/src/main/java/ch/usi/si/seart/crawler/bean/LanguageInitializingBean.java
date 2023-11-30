@@ -4,6 +4,8 @@ import ch.usi.si.seart.model.Language;
 import ch.usi.si.seart.repository.LanguageRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.InitializingBean;
@@ -20,12 +22,9 @@ public final class LanguageInitializingBean implements InitializingBean {
     MultiValueMap<String, String> languages;
 
     @NonFinal
+    @Accessors(makeFinal = true)
+    @Setter(onMethod_ = @Autowired)
     LanguageRepository languageRepository;
-
-    @Autowired
-    public void setLanguageRepository(LanguageRepository languageRepository) {
-        this.languageRepository = languageRepository;
-    }
 
     @Override
     public void afterPropertiesSet() {
