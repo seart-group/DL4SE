@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CrawlJobRepository extends JpaRepository<CrawlJob, Long> {
 
-    Optional<CrawlJob> findByJobType(@NotNull Job jobType);
+    Optional<CrawlJob> findByJob(@NotNull Job job);
 }

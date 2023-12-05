@@ -17,14 +17,12 @@ import java.util.Optional;
 
 public interface CrawlJobService {
 
-    CrawlJob getProgress(Job jobType);
-    void saveProgress(Job jobType, LocalDateTime checkpoint);
+    CrawlJob getProgress(Job job);
+    void saveProgress(Job job, LocalDateTime checkpoint);
 
     @Service
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     class CrawlJobServiceImpl implements CrawlJobService, InitializingBean {
-
-        private static final Job JOB_TYPE = Job.CODE;
 
         LocalDateTime startDateTime;
 
@@ -37,14 +35,14 @@ public interface CrawlJobService {
         }
 
         @Override
-        public CrawlJob getProgress(Job jobType) {
-            Optional<CrawlJob> optional = crawlJobRepository.findByJobType(jobType);
-            return optional.orElseThrow(() -> new CrawlJobNotFoundException(CrawlJob_.jobType, jobType));
+        public CrawlJob getProgress(Job job) {
+            Optional<CrawlJob> optional = crawlJobRepository.findByJob(job);
+            return optional.orElseThrow(() -> new CrawlJobNotFoundException(CrawlJob_.job, job));
         }
 
         @Override
-        public void saveProgress(Job jobType, LocalDateTime checkpoint) {
-            Optional<CrawlJob> optional = crawlJobRepository.findByJobType(jobType);
+        public void saveProgress(Job job, LocalDateTime checkpoint) {
+            Optional<CrawlJob> optional = crawlJobRepository.findByJob(job);
             CrawlJob crawlJob = optional.orElseThrow(IllegalStateException::new);
             crawlJob.setCheckpoint(checkpoint);
             crawlJobRepository.save(crawlJob);
@@ -52,7 +50,7 @@ public interface CrawlJobService {
 
         @Override
         public void afterPropertiesSet() {
-            Optional<CrawlJob> optional = crawlJobRepository.findByJobType(JOB_TYPE);
+            Optional<CrawlJob> optional = crawlJobRepository.findByJob(Job.CODE);
             CrawlJob crawlJob = optional.orElseGet(this::initialize);
             crawlJobRepository.save(crawlJob);
         }
@@ -60,7 +58,7 @@ public interface CrawlJobService {
         private CrawlJob initialize() {
             return CrawlJob.builder()
                     .checkpoint(startDateTime)
-                    .jobType(JOB_TYPE)
+                    .job(Job.CODE)
                     .build();
         }
     }

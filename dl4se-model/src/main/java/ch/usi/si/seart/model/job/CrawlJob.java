@@ -51,5 +51,5 @@ public class CrawlJob {
     @Enumerated(EnumType.STRING)
     @Type(type = "string-enum")
     @Column(name = "job_type")
-    Job jobType;
+    Job job;
 }
