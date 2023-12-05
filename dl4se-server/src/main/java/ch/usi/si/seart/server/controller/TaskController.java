@@ -90,15 +90,13 @@ public class TaskController {
 
     @PostMapping("/{dataset}/create")
     public ResponseEntity<?> create(
-            @PathVariable String dataset,
+            @PathVariable Dataset dataset,
             @Valid @RequestBody TaskDto taskDto,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithEmail(principal.getEmail());
-        return create(requester, Dataset.valueOf(dataset.toUpperCase()), taskDto.getQuery(), taskDto.getProcessing());
-    }
-
-    private ResponseEntity<?> create(User requester, Dataset dataset, JsonNode query, JsonNode processing) {
+        JsonNode query = taskDto.getQuery();
+        JsonNode processing = taskDto.getProcessing();
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
 
         long limit = configurationService.get("request_limit", Long.class);
