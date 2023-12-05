@@ -1,12 +1,12 @@
 package ch.usi.si.seart.model.task;
 
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.model.dataset.Dataset;
 import ch.usi.si.seart.model.user.User;
-import ch.usi.si.seart.type.StringEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -47,8 +47,8 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @TypeDefs({
-        @TypeDef(name = "string-enum", typeClass = StringEnumType.class),
-        @TypeDef(name = "json", typeClass = JsonType.class)
+        @TypeDef(name = "json", typeClass = JsonType.class),
+        @TypeDef(name = "postgres-enum", typeClass = PostgreSQLEnumType.class)
 })
 public class Task {
 
@@ -69,8 +69,8 @@ public class Task {
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
-    @Type(type = "string-enum")
-    Job dataset;
+    @Type(type = "postgres-enum")
+    Dataset dataset;
 
     @NotNull
     @Type(type = "json")
@@ -84,7 +84,7 @@ public class Task {
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
-    @Type(type = "string-enum")
+    @Type(type = "postgres-enum")
     @Builder.Default
     Status status = Status.QUEUED;
 

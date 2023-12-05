@@ -1,7 +1,8 @@
 package ch.usi.si.seart.server.controller;
 
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.model.dataset.Dataset;
 import ch.usi.si.seart.model.task.Status;
+import ch.usi.si.seart.model.task.Statuses;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.Role;
@@ -94,10 +95,10 @@ public class TaskController {
             @AuthenticationPrincipal UserPrincipal principal
     ) {
         User requester = userService.getWithEmail(principal.getEmail());
-        return create(requester, Job.valueOf(dataset.toUpperCase()), taskDto.getQuery(), taskDto.getProcessing());
+        return create(requester, Dataset.valueOf(dataset.toUpperCase()), taskDto.getQuery(), taskDto.getProcessing());
     }
 
-    private ResponseEntity<?> create(User requester, Job dataset, JsonNode query, JsonNode processing) {
+    private ResponseEntity<?> create(User requester, Dataset dataset, JsonNode query, JsonNode processing) {
         LocalDateTime requestedAt = LocalDateTime.now(ZoneOffset.UTC);
 
         long limit = configurationService.get("request_limit", Long.class);
@@ -118,7 +119,7 @@ public class TaskController {
         Task task = taskService.getWithUUID(uuid);
 
         Status status = task.getStatus();
-        if (Status.Category.INACTIVE.contains(status))
+        if (Statuses.INACTIVE.contains(status))
             return ResponseEntity.badRequest().build();
 
         User owner = task.getUser();

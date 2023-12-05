@@ -7,13 +7,12 @@ import ch.usi.si.seart.crawler.git.GitException;
 import ch.usi.si.seart.crawler.http.HttpClient;
 import ch.usi.si.seart.crawler.io.ExtensionBasedFileVisitor;
 import ch.usi.si.seart.crawler.service.AnalyzerService;
-import ch.usi.si.seart.crawler.service.CrawlJobService;
 import ch.usi.si.seart.crawler.service.FileService;
 import ch.usi.si.seart.crawler.service.FileSystemService;
 import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.model.GitRepo;
 import ch.usi.si.seart.model.Language;
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.service.DatasetProgressService;
 import ch.usi.si.seart.service.GitRepoService;
 import ch.usi.si.seart.service.LanguageService;
 import com.google.api.client.http.GenericUrl;
@@ -57,7 +56,7 @@ public class CodeCrawler implements Runnable {
 
     FileService fileService;
     GitRepoService gitRepoService;
-    CrawlJobService crawlJobService;
+    DatasetProgressService datasetProgressService;
     LanguageService languageService;
     ConversionService conversionService;
     FileSystemService fileSystemService;
@@ -71,7 +70,7 @@ public class CodeCrawler implements Runnable {
 
     public void run() {
         GenericUrl url = baseUrlFactory.getObject();
-        LocalDate checkpoint = crawlJobService.getProgress(Job.CODE)
+        LocalDate checkpoint = datasetProgressService.getProgress()
                 .getCheckpoint()
                 .toLocalDate();
         log.info("Last mining checkpoint: {}", checkpoint);
@@ -95,8 +94,8 @@ public class CodeCrawler implements Runnable {
 
     private void saveCrawlProgress(LocalDateTime checkpoint) {
         if (checkpoint == null || checkpoint.isAfter(LocalDateTime.now())) return;
-        log.debug("Saving progress... [Checkpoint: {}]", checkpoint);
-        crawlJobService.saveProgress(Job.CODE, checkpoint);
+        log.debug("Updating progress... [Checkpoint: {}]", checkpoint);
+        datasetProgressService.updateProgress(checkpoint);
     }
 
     private void inspectSearchResult(SearchResultDto item) {

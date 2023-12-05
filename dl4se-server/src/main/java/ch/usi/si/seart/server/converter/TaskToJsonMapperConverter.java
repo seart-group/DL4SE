@@ -1,6 +1,6 @@
 package ch.usi.si.seart.server.converter;
 
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.model.dataset.Dataset;
 import ch.usi.si.seart.model.task.Task;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,9 +26,9 @@ public class TaskToJsonMapperConverter extends TaskConverter<JsonMapper> {
 
     @Override
     protected void validate(Task source) {
-        Job dataset = source.getDataset();
+        Dataset dataset = source.getDataset();
         JsonNode processing = source.getProcessing();
-        Assert.isTrue(Job.CODE.equals(dataset), "Can not convert this type of dataset: " + dataset);
+        Assert.isTrue(Dataset.CODE.equals(dataset), "Can not convert this type of dataset: " + dataset);
         Assert.isTrue(processing.isObject(), "Processing must be a JSON object!");
     }
 

@@ -2,7 +2,7 @@ package ch.usi.si.seart.server.scheduling;
 
 import ch.usi.si.seart.model.code.Code;
 import ch.usi.si.seart.model.code.Code_;
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.model.dataset.Dataset;
 import ch.usi.si.seart.model.task.Status;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.server.exception.TaskFailedException;
@@ -98,10 +98,10 @@ public class TaskRunner implements Runnable {
     @SuppressWarnings("unchecked")
     private void run(Task task) {
         UUID uuid = task.getUuid();
-        Job dataset = task.getDataset();
+        Dataset dataset = task.getDataset();
         log.info("Executing task: [{}]", uuid);
         // FIXME: 06.10.2023 This will need to be changed later for other dataset types
-        if (!Job.CODE.equals(dataset)) {
+        if (!Dataset.CODE.equals(dataset)) {
             String message = "Unsupported task type: " + dataset;
             UnsupportedOperationException cause = new UnsupportedOperationException(message);
             throw new TaskFailedException(task, cause);

@@ -1,8 +1,9 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.exception.TaskNotFoundException;
-import ch.usi.si.seart.model.job.Job;
+import ch.usi.si.seart.model.dataset.Dataset;
 import ch.usi.si.seart.model.task.Status;
+import ch.usi.si.seart.model.task.Statuses;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.User;
@@ -41,8 +42,8 @@ import java.util.stream.Stream;
 public interface TaskService {
 
     long countActiveTasks(User user);
-    boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing);
-    void create(User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt);
+    boolean activeTaskExists(User user, Dataset dataset, JsonNode query, JsonNode processing);
+    void create(User requester, Dataset dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt);
     Task update(Task task);
     void cancel(Task task);
     void registerException(TaskFailedException ex);
@@ -86,13 +87,13 @@ public interface TaskService {
 
         @Override
         public long countActiveTasks(User user) {
-            return taskRepository.countAllByUserAndStatusIn(user, Status.Category.ACTIVE);
+            return taskRepository.countAllByUserAndStatusIn(user, Statuses.ACTIVE);
         }
 
         @Override
-        public boolean activeTaskExists(User user, Job dataset, JsonNode query, JsonNode processing) {
+        public boolean activeTaskExists(User user, Dataset dataset, JsonNode query, JsonNode processing) {
             int taskHash = Objects.hash(user, dataset, query, processing);
-            return taskRepository.findAllByUserAndStatusIn(user, Status.Category.ACTIVE)
+            return taskRepository.findAllByUserAndStatusIn(user, Statuses.ACTIVE)
                     .stream()
                     .mapToInt(Task::hashCode)
                     .anyMatch(hash -> hash == taskHash);
@@ -100,7 +101,7 @@ public interface TaskService {
 
         @Override
         public void create(
-                User requester, Job dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt
+                User requester, Dataset dataset, JsonNode query, JsonNode processing, LocalDateTime requestedAt
         ) {
             taskRepository.save(
                     Task.builder()
