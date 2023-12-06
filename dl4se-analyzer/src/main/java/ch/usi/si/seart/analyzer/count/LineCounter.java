@@ -54,7 +54,7 @@ public class LineCounter extends AbstractCounter {
     }
 
     @Getter
-    @AllArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     private static class Span {
 
