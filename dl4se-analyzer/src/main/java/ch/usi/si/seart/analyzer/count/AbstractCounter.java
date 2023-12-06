@@ -7,10 +7,12 @@ import java.util.stream.Stream;
 
 public abstract class AbstractCounter implements Counter {
 
+    @Override
     public Long count(Node... nodes) {
         return count(Stream.of(nodes));
     }
 
+    @Override
     public Long count(Collection<Node> nodes) {
         return count(nodes.stream());
     }
