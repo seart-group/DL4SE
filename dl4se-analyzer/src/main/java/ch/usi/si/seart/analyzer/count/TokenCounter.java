@@ -22,12 +22,9 @@ public abstract class TokenCounter extends TraverseCounter {
 
     public static TokenCounter getInstance(Language language) {
         switch (language) {
-            case JAVA:
-                return new JavaTokenCounter();
-            case PYTHON:
-                return new PythonTokenCounter();
-            default:
-                return new TokenCounter() {};
+            case JAVA: return new JavaTokenCounter();
+            case PYTHON: return new PythonTokenCounter();
+            default: return new TokenCounter() {};
         }
     }
 }

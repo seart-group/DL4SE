@@ -7,12 +7,9 @@ public abstract class BoilerplateEnumerator implements Enumerator<Boilerplate> {
 
     public static Enumerator<Boilerplate> getInstance(Language language) {
         switch (language) {
-            case JAVA:
-                return new JavaBoilerplateEnumerator();
-            case PYTHON:
-                return new PythonBoilerplateEnumerator();
-            default:
-                return node -> null;
+            case JAVA: return new JavaBoilerplateEnumerator();
+            case PYTHON: return new PythonBoilerplateEnumerator();
+            default: return node -> null;
         }
     }
 }

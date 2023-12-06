@@ -18,12 +18,9 @@ public abstract class TestFilePredicate implements Predicate<Path> {
 
     public static Predicate<Path> getInstance(Language language) {
         switch (language) {
-            case JAVA:
-                return new JavaTestFilePredicate();
-            case PYTHON:
-                return new PythonTestFilePredicate();
-            default:
-                return new TestFilePredicate() {};
+            case JAVA: return new JavaTestFilePredicate();
+            case PYTHON: return new PythonTestFilePredicate();
+            default: return new TestFilePredicate() {};
         }
     }
 }
