@@ -1,4 +1,4 @@
-package ch.usi.si.seart.analyzer.enumerator;
+package ch.usi.si.seart.analyzer.enumerate;
 
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.treesitter.Language;
