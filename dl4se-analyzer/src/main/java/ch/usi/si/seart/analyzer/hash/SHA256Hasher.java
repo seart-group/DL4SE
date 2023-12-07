@@ -2,11 +2,10 @@ package ch.usi.si.seart.analyzer.hash;
 
 import ch.usi.si.seart.treesitter.Node;
 import lombok.AccessLevel;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
@@ -14,9 +13,8 @@ public abstract class SHA256Hasher implements Hasher {
 
     MessageDigest md;
 
-    @SneakyThrows(NoSuchAlgorithmException.class)
     protected SHA256Hasher() {
-        this.md = MessageDigest.getInstance("SHA-256");
+        this.md = DigestUtils.getSha256Digest();
     }
 
     protected abstract void update(Node node);
