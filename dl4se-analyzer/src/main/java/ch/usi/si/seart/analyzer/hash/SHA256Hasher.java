@@ -12,11 +12,7 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 public abstract class SHA256Hasher implements Hasher {
 
-    MessageDigest md;
-
-    protected SHA256Hasher() {
-        this.md = DigestUtils.getSha256Digest();
-    }
+    MessageDigest md = DigestUtils.getSha256Digest();
 
     protected abstract void update(Node node);
 
