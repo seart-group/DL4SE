@@ -88,11 +88,17 @@ public abstract class JavaHasherTest extends JavaBaseTest {
         );
     }
 
-    @SneakyThrows({NoSuchAlgorithmException.class})
+    @SneakyThrows(NoSuchAlgorithmException.class)
     protected String sha256(String input) {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] bytes = input.getBytes(getCharset());
         byte[] hash = md.digest(bytes);
-        return SHA256Hasher.bytesToHex(hash);
+        StringBuilder hexBuilder = new StringBuilder(2 * hash.length);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexBuilder.append('0');
+            hexBuilder.append(hex);
+        }
+        return hexBuilder.toString();
     }
 }

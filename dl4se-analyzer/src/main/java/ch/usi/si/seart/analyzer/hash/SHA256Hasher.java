@@ -3,6 +3,7 @@ package ch.usi.si.seart.analyzer.hash;
 import ch.usi.si.seart.treesitter.Node;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.security.MessageDigest;
@@ -33,16 +34,6 @@ public abstract class SHA256Hasher implements Hasher {
     public String hash(Node... nodes) {
         for (Node node: nodes) update(node);
         byte[] hash = md.digest();
-        return bytesToHex(hash);
-    }
-
-    static String bytesToHex(byte[] bytes) {
-        StringBuilder hexBuilder = new StringBuilder(2 * bytes.length);
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexBuilder.append('0');
-            hexBuilder.append(hex);
-        }
-        return hexBuilder.toString();
+        return Hex.encodeHexString(hash);
     }
 }
