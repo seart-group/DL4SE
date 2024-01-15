@@ -47,6 +47,13 @@ public class Function extends Code {
     @JsonProperty(value = "boilerplate_type")
     Boilerplate boilerplateType;
 
+    @JsonProperty(value = "file_path")
+    String getFilePath() {
+        return file != null
+                ? file.getPath()
+                : null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
