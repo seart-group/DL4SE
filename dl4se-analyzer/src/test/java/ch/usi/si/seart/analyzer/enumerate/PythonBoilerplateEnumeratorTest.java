@@ -1,5 +1,6 @@
 package ch.usi.si.seart.analyzer.enumerate;
 
+import ch.usi.si.seart.analyzer.JavaBaseTest;
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.treesitter.Language;
 import ch.usi.si.seart.treesitter.Node;
@@ -16,7 +17,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-class PythonBoilerplateEnumeratorTest {
+class PythonBoilerplateEnumeratorTest extends JavaBaseTest {
 
     private static class PythonCodeProvider implements ArgumentsProvider {
 
