@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.expression.ThymeleafEvaluationContext;
 
 import java.net.URL;
 
@@ -60,6 +61,8 @@ public interface EmailService {
         JavaMailSender mailSender;
 
         TemplateEngine templateEngine;
+
+        ThymeleafEvaluationContext evaluationContext;
         
         MimeMessagePropertySetter messageSenderSetter;
 
@@ -143,6 +146,10 @@ public interface EmailService {
                 context.setVariable(Task_.FINISHED, payload.getFinished());
                 context.setVariable(Task_.PROCESSED_RESULTS, payload.getProcessedResults());
                 context.setVariable(Task_.SIZE, new ReadableFileSize(payload.getSize()));
+                context.setVariable(
+                        ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME,
+                        evaluationContext
+                );
                 return context;
             }
         }
@@ -157,6 +164,10 @@ public interface EmailService {
             protected Context asContext(URL payload) {
                 Context context = super.defaultContext();
                 context.setVariable("link", payload);
+                context.setVariable(
+                        ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME,
+                        evaluationContext
+                );
                 return context;
             }
         }
