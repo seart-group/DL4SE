@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.mail.enabled",
+      "type": "java.lang.String",
+      "description": "Enable mail messaging."
+    }
+  ]
+}
