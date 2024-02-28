@@ -56,38 +56,40 @@
         </style>
     </head>
     <body>
-        <p>Task execution digest:</p>
-        <table class="tg">
-            <tbody>
-            <tr>
-                <td class="tg-4lcc">Task</td>
-                <td class="tg-qxrv" th:text="${uuid}"/>
-            </tr>
-            <tr>
-                <td class="tg-4lcc">Status</td>
-                <td class="tg-qxrv" th:text="${status}"/>
-            </tr>
-            <tr>
-                <td class="tg-4lcc">Submitted</td>
-                <td class="tg-qxrv" th:text="${submitted}"/>
-            </tr>
-            <tr>
-                <td class="tg-4lcc">Started</td>
-                <td class="tg-qxrv" th:text="${started}"/>
-            </tr>
-            <tr th:if="${finished != null}">
-                <td class="tg-4lcc">Finished</td>
-                <td class="tg-qxrv" th:text="${finished}"/>
-            </tr>
-            <tr>
-                <td class="tg-4lcc">Results</td>
-                <td class="tg-qxrv" th:text="${processedResults}"/>
-            </tr>
-            <tr th:if="${size != null}">
-                <td class="tg-4lcc">Size</td>
-                <td class="tg-qxrv" th:text="${size}"/>
-            </tr>
-            </tbody>
-        </table>
+        <main>
+            <h3>Task execution digest:</h3>
+            <table class="tg">
+                <tbody>
+                <tr>
+                    <td class="tg-4lcc">Task</td>
+                    <td class="tg-qxrv" th:text="${uuid}"/>
+                </tr>
+                <tr>
+                    <td class="tg-4lcc">Status</td>
+                    <td class="tg-qxrv" th:text="${status}"/>
+                </tr>
+                <tr>
+                    <td class="tg-4lcc">Submitted</td>
+                    <td class="tg-qxrv" th:text="${submitted}"/>
+                </tr>
+                <tr>
+                    <td class="tg-4lcc">Started</td>
+                    <td class="tg-qxrv" th:text="${started}"/>
+                </tr>
+                <tr th:if="${finished != null}">
+                    <td class="tg-4lcc">Finished</td>
+                    <td class="tg-qxrv" th:text="${finished}"/>
+                </tr>
+                <tr>
+                    <td class="tg-4lcc">Results</td>
+                    <td class="tg-qxrv" th:text="${processedResults}"/>
+                </tr>
+                <tr th:if="${size != null}">
+                    <td class="tg-4lcc">Size</td>
+                    <td class="tg-qxrv" th:text="${size}"/>
+                </tr>
+                </tbody>
+            </table>
+        </main>
     </body>
 </html>
