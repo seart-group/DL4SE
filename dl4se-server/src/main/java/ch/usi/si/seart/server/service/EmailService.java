@@ -1,6 +1,7 @@
 package ch.usi.si.seart.server.service;
 
 import ch.usi.si.seart.model.task.Task;
+import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.token.PasswordResetToken;
 import ch.usi.si.seart.model.user.token.VerificationToken;
 import ch.usi.si.seart.server.hateoas.URLGenerator;
@@ -135,13 +136,13 @@ public interface EmailService {
             @Override
             protected Context asContext(Task payload) {
                 Context context = super.defaultContext();
-                context.setVariable("uuid", payload.getUuid());
-                context.setVariable("status", payload.getStatus());
-                context.setVariable("submitted", payload.getSubmitted());
-                context.setVariable("started", payload.getStarted());
-                context.setVariable("finished", payload.getFinished());
-                context.setVariable("results", payload.getProcessedResults());
-                context.setVariable("size", new ReadableFileSize(payload.getSize()));
+                context.setVariable(Task_.UUID, payload.getUuid());
+                context.setVariable(Task_.STATUS, payload.getStatus());
+                context.setVariable(Task_.SUBMITTED, payload.getSubmitted());
+                context.setVariable(Task_.STARTED, payload.getStarted());
+                context.setVariable(Task_.FINISHED, payload.getFinished());
+                context.setVariable(Task_.PROCESSED_RESULTS, payload.getProcessedResults());
+                context.setVariable(Task_.SIZE, new ReadableFileSize(payload.getSize()));
                 return context;
             }
         }
