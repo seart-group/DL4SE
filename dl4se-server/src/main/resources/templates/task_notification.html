@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" th:href="@{table.css}" />
-</head>
-<body>
-<p>Task execution digest:</p>
-<table class="tg">
-    <tbody>
-    <tr>
-        <td class="tg-4lcc">Task</td>
-        <td class="tg-qxrv" th:text="${uuid}"/>
-    </tr>
-    <tr>
-        <td class="tg-4lcc">Status</td>
-        <td class="tg-qxrv" th:text="${status}"/>
-    </tr>
-    <tr>
-        <td class="tg-4lcc">Submitted</td>
-        <td class="tg-qxrv" th:text="${submitted}"/>
-    </tr>
-    <tr>
-        <td class="tg-4lcc">Started</td>
-        <td class="tg-qxrv" th:text="${started}"/>
-    </tr>
-    <tr th:if="${finished != null}">
-        <td class="tg-4lcc">Finished</td>
-        <td class="tg-qxrv" th:text="${finished}"/>
-    </tr>
-    <tr>
-        <td class="tg-4lcc">Results</td>
-        <td class="tg-qxrv" th:text="${results}"/>
-    </tr>
-    <tr th:if="${size != null}">
-        <td class="tg-4lcc">Size</td>
-        <td class="tg-qxrv" th:text="${size}"/>
-    </tr>
-    </tbody>
-</table>
-</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" th:href="@{table.css}" />
+    </head>
+    <body>
+        <p>Task execution digest:</p>
+        <table class="tg">
+            <tbody>
+            <tr>
+                <td class="tg-4lcc">Task</td>
+                <td class="tg-qxrv" th:text="${uuid}"/>
+            </tr>
+            <tr>
+                <td class="tg-4lcc">Status</td>
+                <td class="tg-qxrv" th:text="${status}"/>
+            </tr>
+            <tr>
+                <td class="tg-4lcc">Submitted</td>
+                <td class="tg-qxrv" th:text="${submitted}"/>
+            </tr>
+            <tr>
+                <td class="tg-4lcc">Started</td>
+                <td class="tg-qxrv" th:text="${started}"/>
+            </tr>
+            <tr th:if="${finished != null}">
+                <td class="tg-4lcc">Finished</td>
+                <td class="tg-qxrv" th:text="${finished}"/>
+            </tr>
+            <tr>
+                <td class="tg-4lcc">Results</td>
+                <td class="tg-qxrv" th:text="${results}"/>
+            </tr>
+            <tr th:if="${size != null}">
+                <td class="tg-4lcc">Size</td>
+                <td class="tg-qxrv" th:text="${size}"/>
+            </tr>
+            </tbody>
+        </table>
+    </body>
 </html>
