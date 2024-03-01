@@ -1,8 +1,9 @@
 package ch.usi.si.seart.model.code;
 
 import ch.usi.si.seart.type.StringEnumType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,23 @@ public class Function extends Code {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name="file_id")
-    @JsonIgnore
+    @JsonUnwrapped(prefix = "file_")
+    @JsonIgnoreProperties({
+            "repo",
+            "language",
+            "content",
+            "content_hash",
+            "ast",
+            "ast_hash",
+            "symbolic_expression",
+            "total_tokens",
+            "code_tokens",
+            "lines",
+            "characters",
+            "is_test",
+            "contains_non_ascii",
+            "contains_error",
+    })
     File file;
 
     @Basic
