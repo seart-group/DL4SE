@@ -29,11 +29,11 @@ CREATE TABLE "token" (
 CREATE TABLE "task" (
     "id" bigint PRIMARY KEY NOT NULL,
     "uuid" uuid UNIQUE NOT NULL,
-    "dataset" text NOT NULL,
+    "dataset" dataset NOT NULL,
     "user_id" bigint NOT NULL,
     "query" json NOT NULL,
     "processing" json NOT NULL,
-    "status" text NOT NULL,
+    "status" status NOT NULL,
     "version" bigint NOT NULL,
     "checkpoint_id" bigint,
     "processed_results" bigint NOT NULL,

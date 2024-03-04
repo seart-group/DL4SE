@@ -10,7 +10,4 @@ SELECT job_type::dataset, checkpoint FROM crawl_job;
 
 ALTER TABLE dataset_progress ADD PRIMARY KEY (dataset);
 
-ALTER TABLE task ALTER COLUMN dataset TYPE dataset USING dataset::dataset;
-ALTER TABLE task ALTER COLUMN status TYPE status USING status::status;
-
 DROP TABLE crawl_job;
