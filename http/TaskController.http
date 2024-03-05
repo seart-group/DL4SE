@@ -29,8 +29,9 @@ Content-Type: application/json
   "processing" : {
     "include_ast" : false,
     "include_symbolic_expression": false,
-    "remove_regular_comments" : true,
-    "remove_documentation_comments" : true
+    "include_metadata" : false,
+    "remove_regular_comments" : false,
+    "remove_documentation_comments" : false
   }
 }
 

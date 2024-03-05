@@ -53,11 +53,13 @@ public class TaskToJsonMapperConverter extends TaskConverter<JsonMapper> {
 
         boolean includeAst;
         boolean includeSymbolicExpression;
+        boolean includeMetadata;
 
         private DynamicCodeSerializerModifier(JsonNode processing) {
             this(
                     getBooleanValue(processing, "include_ast"),
-                    getBooleanValue(processing, "include_symbolic_expression")
+                    getBooleanValue(processing, "include_symbolic_expression"),
+                    getBooleanValue(processing, "include_metadata")
             );
         }
 
@@ -73,6 +75,8 @@ public class TaskToJsonMapperConverter extends TaskConverter<JsonMapper> {
                 beanProperties.removeIf(propertyWriter -> propertyWriter.getName().equals("ast"));
             if (!includeSymbolicExpression)
                 beanProperties.removeIf(propertyWriter -> propertyWriter.getName().equals("symbolic_expression"));
+            if (!includeMetadata)
+                beanProperties.removeIf(propertyWriter -> propertyWriter.getName().endsWith("metadata"));
             return beanProperties;
         }
     }
