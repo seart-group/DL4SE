@@ -7,4 +7,5 @@
     <include file="scripts/00_init.sql" relativeToChangelogFile="true" />
     <include file="scripts/01_view.sql" relativeToChangelogFile="true" />
     <include file="scripts/02_enum.sql" relativeToChangelogFile="true" />
+    <include file="scripts/03_meta.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
