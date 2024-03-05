@@ -62,7 +62,7 @@
     <revision>1.0.0</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.module.mainClass>ch.usi.si.seart.Application</project.module.mainClass>
-    <java-tree-sitter.version>1.10.0</java-tree-sitter.version>
+    <java-tree-sitter.version>1.12.0</java-tree-sitter.version>
     <junit.version>5.10.2</junit.version>
     <lombok.version>1.18.30</lombok.version>
     <google.guava.version>33.0.0-jre</google.guava.version>
