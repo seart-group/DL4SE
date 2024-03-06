@@ -1,7 +1,8 @@
 package ch.usi.si.seart.model.code;
 
-import ch.usi.si.seart.model.meta.Metadata;
+import ch.usi.si.seart.model.meta.TreeSitterVersion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,8 +42,9 @@ public class File extends Code {
 
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="meta_id")
-    Metadata metadata;
+    @JoinColumn(name="version_id")
+    @JsonProperty(value = "tree_sitter_version")
+    TreeSitterVersion treeSitterVersion;
 
     @OneToMany(mappedBy = "file", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default

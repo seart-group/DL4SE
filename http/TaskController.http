@@ -29,7 +29,7 @@ Content-Type: application/json
   "processing" : {
     "include_ast" : false,
     "include_symbolic_expression": false,
-    "include_metadata" : false,
+    "include_tree_sitter_version" : false,
     "remove_regular_comments" : false,
     "remove_documentation_comments" : false
   }

@@ -1,5 +1,6 @@
 package ch.usi.si.seart.model.code;
 
+import ch.usi.si.seart.model.meta.TreeSitterVersion;
 import ch.usi.si.seart.type.StringEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -55,6 +56,7 @@ public class Function extends Code {
             "is_test",
             "contains_non_ascii",
             "contains_error",
+            "tree_sitter_version",
     })
     File file;
 
@@ -64,6 +66,11 @@ public class Function extends Code {
     @Column(name = "boilerplate_type")
     @JsonProperty(value = "boilerplate_type")
     Boilerplate boilerplateType;
+
+    @JsonProperty(value = "tree_sitter_version")
+    public TreeSitterVersion getTreeSitterVersion() {
+        return file != null ? file.getTreeSitterVersion() : null;
+    }
 
     @Override
     public boolean equals(Object o) {
