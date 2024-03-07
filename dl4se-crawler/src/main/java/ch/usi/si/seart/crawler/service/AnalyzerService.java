@@ -30,6 +30,7 @@ public interface AnalyzerService {
     class AnalysisServiceImpl implements AnalyzerService {
 
         LanguageService languageService;
+        TreeSitterVersionService treeSitterVersionService;
 
         AnalyzerCustomizer<Analyzer> analyzerCustomizer;
 
@@ -45,6 +46,7 @@ public interface AnalyzerService {
                 File file = result.getFile();
                 List<Function> functions = result.getFunctions();
                 file.setLanguage(language);
+                file.setTreeSitterVersion(treeSitterVersionService.getCurrentVersion());
                 functions.forEach(function -> function.setLanguage(language));
                 return CompletableFuture.completedFuture(file);
             } catch (Exception ex) {
