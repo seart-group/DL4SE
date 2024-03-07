@@ -2,6 +2,7 @@ package ch.usi.si.seart.model.meta;
 
 import ch.usi.si.seart.model.code.File;
 import ch.usi.si.seart.validation.constraints.SHAHash;
+import ch.usi.si.seart.validation.constraints.SemanticVersion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,7 @@ public class TreeSitterVersion {
     String sha;
 
     @NotNull
+    @SemanticVersion
     String tag;
 
     @OneToMany(mappedBy = "treeSitterVersion", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
