@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset dabico:6
+-- changeset dabico:7
 
 CREATE MATERIALIZED VIEW table_row_count AS
 SELECT
