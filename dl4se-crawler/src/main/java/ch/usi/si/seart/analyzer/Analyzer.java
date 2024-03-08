@@ -169,12 +169,7 @@ public class Analyzer implements AutoCloseable {
         List<Function> functions = matches.stream()
                 .map(this::extractFunctionEntity)
                 .collect(Collectors.toUnmodifiableList());
-        functions.forEach(function -> {
-            // These operations are invariant by
-            // nature and should not be overridden
-            function.setFile(file);
-            function.setIsTest(file.getIsTest());
-        });
+        functions.forEach(function -> function.setFile(file));
         return functions;
     }
 
