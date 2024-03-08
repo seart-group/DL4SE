@@ -53,7 +53,6 @@ public class Function extends Code {
             "code_tokens",
             "lines",
             "characters",
-            "is_test",
             "contains_non_ascii",
             "contains_error",
             "tree_sitter_version",
