@@ -5,6 +5,7 @@ import ch.usi.si.seart.model.Language_;
 import ch.usi.si.seart.model.code.Boilerplate;
 import ch.usi.si.seart.model.code.Code;
 import ch.usi.si.seart.model.code.Code_;
+import ch.usi.si.seart.model.code.File_;
 import ch.usi.si.seart.model.code.Function;
 import ch.usi.si.seart.model.code.Function_;
 import ch.usi.si.seart.model.task.Task;
@@ -240,7 +241,9 @@ public class TaskToCodeSpecificationConverter extends TaskConverter<Specificatio
                     .map(JsonNode::asBoolean)
                     .filter(Boolean::booleanValue)
                     .ifPresent(ignored -> {
-                        Path<Boolean> path = root.get(Code_.isTest);
+                        Path<Boolean> path = Function.class.equals(granularity)
+                                ? root.join(Function_.FILE).get(File_.IS_TEST)
+                                : root.get(File_.IS_TEST);
                         Predicate predicate = criteriaBuilder.isFalse(path);
                         predicates.add(predicate);
                     });
