@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -92,12 +91,6 @@ public abstract class Code {
     @NotNull
     @PositiveOrZero
     Long characters;
-
-    @NotNull
-    @Column(name = "is_test")
-    @JsonProperty(value = "is_test")
-    @Builder.Default
-    Boolean isTest = false;
 
     @NotNull
     @Column(name = "contains_non_ascii")

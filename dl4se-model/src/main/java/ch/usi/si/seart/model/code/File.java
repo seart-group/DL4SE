@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -39,6 +40,12 @@ public class File extends Code {
 
     @NotBlank
     String path;
+
+    @NotNull
+    @Column(name = "is_test")
+    @JsonProperty(value = "is_test")
+    @Builder.Default
+    Boolean isTest = false;
 
     @NotNull
     @ManyToOne(optional = false)
