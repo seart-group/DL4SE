@@ -83,6 +83,7 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
      *
      * If the file extension matches the visitor pattern,
      * then it is recorded in the list of visited files.
+     * Will not record symbolic links.
      *
      * @param path  a reference to the file.
      * @param attrs the file's basic attributes.
@@ -90,9 +91,8 @@ public class ExtensionBasedFileVisitor extends SimpleFileVisitor<Path> {
      */
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-        if (matcher.matches(path.getFileName())) {
-            visited.add(path);
-        }
+        boolean matches = matcher.matches(path.getFileName());
+        if (!attrs.isSymbolicLink() && matches) visited.add(path);
         return FileVisitResult.CONTINUE;
     }
 
