@@ -26,10 +26,6 @@ Authorization: Bearer {{token}}
 POST https://localhost:8080/api/admin/user/{{target_uid}}/demote
 Authorization: Bearer {{token}}
 
-### GET /admin/task
-GET https://localhost:8080/api/admin/task
-Authorization: Bearer {{token}}
-
 ### GET /admin/task/stats
 GET https://localhost:8080/api/admin/task/stats
 Authorization: Bearer {{token}}

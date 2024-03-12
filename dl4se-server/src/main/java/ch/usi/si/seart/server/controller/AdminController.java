@@ -3,16 +3,12 @@ package ch.usi.si.seart.server.controller;
 import ch.usi.si.seart.exception.ConfigurationNotFoundException;
 import ch.usi.si.seart.model.Configuration;
 import ch.usi.si.seart.model.Configuration_;
-import ch.usi.si.seart.model.task.Task;
-import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.Role;
 import ch.usi.si.seart.model.user.User;
 import ch.usi.si.seart.model.user.User_;
-import ch.usi.si.seart.server.dto.task.TaskSearchDto;
 import ch.usi.si.seart.server.dto.user.UserSearchDto;
 import ch.usi.si.seart.server.security.annotation.AdminRestController;
 import ch.usi.si.seart.server.service.ConfigurationService;
-import ch.usi.si.seart.server.service.TaskService;
 import ch.usi.si.seart.server.service.UserService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,7 +40,6 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     UserService userService;
-    TaskService taskService;
     ConfigurationService configurationService;
     ConversionService conversionService;
 
@@ -100,17 +95,6 @@ public class AdminController {
         user.setRole(Role.USER);
         userService.update(user);
         return ResponseEntity.ok().build();
-    }
-
-    @SuppressWarnings("unchecked")
-    @GetMapping("/task")
-    public ResponseEntity<?> listTasks(
-            TaskSearchDto taskSearchDto,
-            @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable
-    ) {
-        Specification<Task> specification = conversionService.convert(taskSearchDto, Specification.class);
-        Page<Task> tasks = taskService.getAll(specification, pageable);
-        return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/configuration")

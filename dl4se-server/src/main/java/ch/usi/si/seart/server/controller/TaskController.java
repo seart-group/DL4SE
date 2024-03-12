@@ -7,7 +7,6 @@ import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.model.user.Role;
 import ch.usi.si.seart.model.user.User;
-import ch.usi.si.seart.model.user.User_;
 import ch.usi.si.seart.model.user.token.DownloadToken;
 import ch.usi.si.seart.server.dto.task.TaskDto;
 import ch.usi.si.seart.server.dto.task.TaskSearchDto;
@@ -80,11 +79,10 @@ public class TaskController {
             @SortDefault(sort = Task_.SUBMITTED, direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserPrincipal principal
     ) {
-        Specification<Task> specification = conversionService.convert(taskSearchDto, Specification.class);
-        specification = specification.and(
-                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(Task_.user).get(User_.id), principal.getId())
-        );
-        Page<Task> tasks = taskService.getAll(specification, pageable);
+        User requester = userService.getWithEmail(principal.getEmail());
+        Specification<Task> query = conversionService.convert(taskSearchDto, Specification.class);
+        Specification<Task> authorities = conversionService.convert(requester, Specification.class);
+        Page<Task> tasks = taskService.getAll(query.and(authorities), pageable);
         return ResponseEntity.ok(tasks);
     }
 
