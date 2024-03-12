@@ -4,6 +4,7 @@ import ch.usi.si.seart.server.converter.RegisterDtoToUserConverter;
 import ch.usi.si.seart.server.converter.StringToDatasetConverter;
 import ch.usi.si.seart.server.converter.TaskSearchDtoToTaskSpecificationConverter;
 import ch.usi.si.seart.server.converter.UserSearchDtoToSpecificationConverter;
+import ch.usi.si.seart.server.converter.UserToTaskSpecificationConverter;
 import ch.usi.si.seart.server.converter.UserToUserPrincipalConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -29,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToDatasetConverter());
         registry.addConverter(new TaskSearchDtoToTaskSpecificationConverter());
         registry.addConverter(new UserSearchDtoToSpecificationConverter());
+        registry.addConverter(new UserToTaskSpecificationConverter());
         registry.addConverter(new UserToUserPrincipalConverter());
     }
 }
