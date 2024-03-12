@@ -13,7 +13,7 @@ public class TaskSearchDtoToSpecificationConverter implements Converter<TaskSear
 
     @Override
     @NonNull
-    public Specification<Task> convert(TaskSearchDto source) {
+    public Specification<Task> convert(@NonNull TaskSearchDto source) {
         Specification<Task> specification = Specification.where(null);
         if (source.hasUuid()) {
             Specification<Task> other = withUuidContaining(source.getUuid());
