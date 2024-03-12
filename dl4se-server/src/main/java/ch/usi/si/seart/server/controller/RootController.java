@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RootController {
 
+    @GetMapping(value = "favicon.ico")
+    public void favicon() {
+    }
+
     @GetMapping
-    public ResponseEntity<?> api() {
+    public ResponseEntity<?> root() {
         return ResponseEntity.ok().build();
     }
 }
