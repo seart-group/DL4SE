@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.Expression;
 
-public class TaskSearchDtoToSpecificationConverter implements Converter<TaskSearchDto, Specification<Task>> {
+public class TaskSearchDtoToTaskSpecificationConverter implements Converter<TaskSearchDto, Specification<Task>> {
 
     @Override
     @NonNull

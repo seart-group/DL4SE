@@ -2,7 +2,7 @@ package ch.usi.si.seart.server.config;
 
 import ch.usi.si.seart.server.converter.RegisterDtoToUserConverter;
 import ch.usi.si.seart.server.converter.StringToDatasetConverter;
-import ch.usi.si.seart.server.converter.TaskSearchDtoToSpecificationConverter;
+import ch.usi.si.seart.server.converter.TaskSearchDtoToTaskSpecificationConverter;
 import ch.usi.si.seart.server.converter.UserSearchDtoToSpecificationConverter;
 import ch.usi.si.seart.server.converter.UserToUserPrincipalConverter;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new RegisterDtoToUserConverter());
         registry.addConverter(new StringToDatasetConverter());
-        registry.addConverter(new TaskSearchDtoToSpecificationConverter());
+        registry.addConverter(new TaskSearchDtoToTaskSpecificationConverter());
         registry.addConverter(new UserSearchDtoToSpecificationConverter());
         registry.addConverter(new UserToUserPrincipalConverter());
     }
