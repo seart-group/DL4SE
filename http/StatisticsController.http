@@ -1,44 +1,44 @@
 ### GET /statistics/code
-GET https://localhost:8080/api/statistics/code
+GET localhost:8080/api/statistics/code
 
 ### GET /statistics/users
-GET https://localhost:8080/api/statistics/users
+GET localhost:8080/api/statistics/users
 
 ### GET /statistics/repos
-GET https://localhost:8080/api/statistics/repos
+GET localhost:8080/api/statistics/repos
 
 ### GET /statistics/files
-GET https://localhost:8080/api/statistics/files
+GET localhost:8080/api/statistics/files
 
 ### GET /statistics/functions
-GET https://localhost:8080/api/statistics/functions
+GET localhost:8080/api/statistics/functions
 
 ### GET /statistics/languages/repos
-GET https://localhost:8080/api/statistics/languages/repos
+GET localhost:8080/api/statistics/languages/repos
 
 ### GET /statistics/languages/files
-GET https://localhost:8080/api/statistics/languages/files
+GET localhost:8080/api/statistics/languages/files
 
 ### GET /statistics/languages/functions
-GET https://localhost:8080/api/statistics/languages/functions
+GET localhost:8080/api/statistics/languages/functions
 
 ### GET /statistics/tasks
-GET https://localhost:8080/api/statistics/tasks
+GET localhost:8080/api/statistics/tasks
 
 ### GET /statistics/tasks/status
-GET https://localhost:8080/api/statistics/tasks/status
+GET localhost:8080/api/statistics/tasks/status
 
 ### GET /statistics/tasks/size
-GET https://localhost:8080/api/statistics/tasks/size
+GET localhost:8080/api/statistics/tasks/size
 
 ### GET /statistics/user/tasks
-GET https://localhost:8080/api/statistics/user/tasks
+GET localhost:8080/api/statistics/user/tasks
 Authorization: Bearer {{token}}
 
 ### GET /statistics/user/tasks/status
-GET https://localhost:8080/api/statistics/user/tasks/status
+GET localhost:8080/api/statistics/user/tasks/status
 Authorization: Bearer {{token}}
 
 ### GET /statistics/user/tasks/size
-GET https://localhost:8080/api/statistics/user/tasks/size
+GET localhost:8080/api/statistics/user/tasks/size
 Authorization: Bearer {{token}}

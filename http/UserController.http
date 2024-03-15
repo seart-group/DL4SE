@@ -1,13 +1,13 @@
 ### GET /user
-GET https://localhost:8080/api/user
+GET localhost:8080/api/user
 Authorization: Bearer {{token}}
 
 ### GET /user/{uid}
-GET https://localhost:8080/api/user/{{target_uid}}
+GET localhost:8080/api/user/{{target_uid}}
 Authorization: Bearer {{token}}
 
 ### POST /user/register
-POST https://localhost:8080/api/user/register
+POST localhost:8080/api/user/register
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### POST /user/login
-POST https://localhost:8080/api/user/login
+POST localhost:8080/api/user/login
 Content-Type: application/json
 
 {
@@ -26,13 +26,13 @@ Content-Type: application/json
 }
 
 ### GET /user/verify
-GET https://localhost:8080/api/user/verify?token={{verify_token}}
+GET localhost:8080/api/user/verify?token={{verify_token}}
 
 ### GET /user/verify/resend
-GET https://localhost:8080/api/user/verify/resend?token={{verify_token}}
+GET localhost:8080/api/user/verify/resend?token={{verify_token}}
 
 ### POST /user/password/forgotten
-POST https://localhost:8080/api/user/password/forgotten
+POST localhost:8080/api/user/password/forgotten
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
 }
 
 ### POST /user/password/reset
-POST https://localhost:8080/api/user/password/reset?token={{pass_reset_token}}
+POST localhost:8080/api/user/password/reset?token={{pass_reset_token}}
 Content-Type: application/json
 
 {

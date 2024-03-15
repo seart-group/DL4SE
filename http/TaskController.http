@@ -1,5 +1,5 @@
 ### POST /task/{dataset}/create
-POST https://localhost:8080/api/task/code/create
+POST localhost:8080/api/task/code/create
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -36,25 +36,25 @@ Content-Type: application/json
 }
 
 ### POST /task/cancel
-POST https://localhost:8080/api/task/cancel/{{uuid}}
+POST localhost:8080/api/task/cancel/{{uuid}}
 Authorization: Bearer {{token}}
 
 ### GET /task
-GET https://localhost:8080/api/task
+GET localhost:8080/api/task
 Authorization: Bearer {{token}}
 
 ### GET /task/{uuid}
-GET https://localhost:8080/api/task/{{uuid}}
+GET localhost:8080/api/task/{{uuid}}
 Authorization: Bearer {{token}}
 
 ### GET /task/stats
-GET https://localhost:8080/api/task/stats
+GET localhost:8080/api/task/stats
 Authorization: Bearer {{token}}
 
 ### GET /task/token
-GET https://localhost:8080/api/task/token/{{uuid}}
+GET localhost:8080/api/task/token/{{uuid}}
 Authorization: Bearer {{token}}
 
 ### GET /task/download
-GET https://localhost:8080/api/task/download/{{uuid}}?token={{task_token}}
+GET localhost:8080/api/task/download/{{uuid}}?token={{task_token}}
 Content-Type: application/gzip
