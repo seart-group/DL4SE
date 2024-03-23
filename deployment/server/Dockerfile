@@ -20,6 +20,7 @@ RUN apk update --quiet && \
     apk add --no-cache \
             --quiet \
             git \
-            libstdc++
+            libstdc++ \
+            ruby
 
 ENTRYPOINT java $JAVA_OPTS -jar server.jar
