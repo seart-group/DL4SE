@@ -2,9 +2,7 @@ package ch.usi.si.seart.server.mail;
 
 public enum MessageTemplate {
 
-    PASSWORD_RESET,
-    TASK_NOTIFICATION,
-    VERIFICATION;
+    PASSWORD, TASK, VERIFICATION;
 
     @Override
     public String toString() {

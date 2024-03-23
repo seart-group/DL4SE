@@ -104,7 +104,7 @@ public interface EmailService {
         @Override
         public void sendPasswordResetEmail(PasswordResetToken token) {
             String email = token.getUser().getEmail();
-            MessageTemplate template = MessageTemplate.PASSWORD_RESET;
+            MessageTemplate template = MessageTemplate.PASSWORD;
             URL url = passwordResetURLGenerator.generate(token);
             MimeMessagePropertySetter messageRecipientSetter = new MimeMessageRecipientSetter(email);
             MimeMessagePropertySetter messageSubjectSetter = new MimeMessageSubjectSetter("Reset your password");
@@ -133,7 +133,7 @@ public interface EmailService {
         private final class MimeMessageTaskTextSetter extends AbstractMimeMessageTextSetter<Task> {
 
             private MimeMessageTaskTextSetter(Task payload) {
-                super(MessageTemplate.TASK_NOTIFICATION, templateEngine, payload);
+                super(MessageTemplate.TASK, templateEngine, payload);
             }
 
             @Override
