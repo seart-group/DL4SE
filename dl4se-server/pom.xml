@@ -14,6 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <emailTemplateDirectory>${project.basedir}/src/main/email</emailTemplateDirectory>
   </properties>
 
   <dependencies>
@@ -111,6 +112,43 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>install-ruby-gems</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>gem</executable>
+              <arguments>
+                <argument>install</argument>
+                <argument>bootstrap-email</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>compile-email-templates</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>bootstrap-email</executable>
+              <arguments>
+                <argument>-p</argument>
+                <argument>${emailTemplateDirectory}/*</argument>
+                <argument>-d</argument>
+                <argument>${project.build.outputDirectory}/templates/*</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
