@@ -363,3 +363,9 @@ dkms.conf
 *.exe
 *.out
 *.app
+
+### Sass template
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
