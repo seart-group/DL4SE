@@ -61,20 +61,11 @@ public class SecurityConfig {
                         "/user/register",
                         "/user/verify",
                         "/user/verify/resend",
-                        "/user/password/forgotten",
-                        "/user/password/reset",
-                        "/statistics/code",
-                        "/statistics/users",
-                        "/statistics/repos",
-                        "/statistics/files",
-                        "/statistics/functions",
-                        "/statistics/languages/repos",
-                        "/statistics/languages/files",
-                        "/statistics/languages/functions",
-                        "/statistics/tasks",
-                        "/statistics/tasks/status",
-                        "/statistics/tasks/size",
-                        "/task/download/**")
+                        "/user/password/*",
+                        "/statistics/*",
+                        "/statistics/tasks/*",
+                        "/statistics/languages/*",
+                        "/task/download/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
