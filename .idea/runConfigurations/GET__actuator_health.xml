@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GET /actuator/health" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/actuator" path="$PROJECT_DIR$/http/Actuator.http" index="2" requestIdentifier="GET /actuator/health" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>

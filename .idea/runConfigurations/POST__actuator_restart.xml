@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="POST /actuator/restart" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/actuator" path="$PROJECT_DIR$/http/Actuator.http" index="7" requestIdentifier="POST /actuator/restart" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>
