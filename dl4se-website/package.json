@@ -24,7 +24,7 @@
     "bootstrap-vue": "^2.23.1",
     "chart.js": "^3.9.1",
     "core-js": "^3.8.3",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "identicon.js": "^2.3.3",
     "lodash": "^4.17.21",
     "sass": "~1.64.2",
