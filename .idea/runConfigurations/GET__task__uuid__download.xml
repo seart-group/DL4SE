@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GET /task/{uuid}/download" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/task" path="$PROJECT_DIR$/http/TaskController.http" index="7" requestIdentifier="GET /task/{uuid}/download" runType="Run single request">
+    <method v="2" />
+  </configuration>
+</component>

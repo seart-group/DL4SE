@@ -65,7 +65,7 @@ public class SecurityConfig {
                         "/statistics/*",
                         "/statistics/tasks/*",
                         "/statistics/languages/*",
-                        "/task/download/*")
+                        "/task/*/download")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

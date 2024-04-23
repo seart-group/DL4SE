@@ -109,7 +109,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
-    @PostMapping(value = "/cancel/{uuid}")
+    @PostMapping(value = "/{uuid}/cancel")
     public ResponseEntity<?> cancel(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
@@ -129,7 +129,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
-    @GetMapping(value = "/token/{uuid}")
+    @GetMapping(value = "/{uuid}/token")
     public ResponseEntity<?> requestAccess(@PathVariable UUID uuid, @AuthenticationPrincipal UserPrincipal principal) {
         User requester = userService.getWithEmail(principal.getEmail());
         Task task = taskService.getWithUUID(uuid);
@@ -146,7 +146,7 @@ public class TaskController {
         return ResponseEntity.ok(token.getValue());
     }
 
-    @GetMapping(value = "/download/{uuid}")
+    @GetMapping(value = "/{uuid}/download")
     public ResponseEntity<?> download(
             @PathVariable UUID uuid, @RequestParam @NotBlank String token
     ) throws FileNotFoundException {
