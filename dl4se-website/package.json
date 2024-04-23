@@ -19,7 +19,7 @@
     "@vuelidate/validators": "^2.0.0-alpha.30",
     "aos": "^2.3.4",
     "autoprefixer": "10.4.5",
-    "axios": "^0.27.2",
+    "axios": "^1.6.8",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.23.1",
     "chart.js": "^3.9.1",
