@@ -1,5 +1,5 @@
 <script>
-import {BLink} from "bootstrap-vue";
+import { BLink } from "bootstrap-vue";
 
 export default {
   name: "b-logo",

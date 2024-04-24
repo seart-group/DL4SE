@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueCompositionAPI from "@vue/composition-api";
-import {Fragment} from "vue-frag";
-import {Chart} from "chart.js";
+import { Fragment } from "vue-frag";
+import { Chart } from "chart.js";
 import AOS from "aos";
 import App from "@/App";
 import router from "@/router";
@@ -11,7 +11,7 @@ import VueAxios from "vue-axios";
 import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
 import _ from "lodash";
-import {BootstrapVue, BootstrapVueIcons} from "bootstrap-vue";
+import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import "aos/dist/aos.css";
 import "@/assets/styles/style.sass";
 
