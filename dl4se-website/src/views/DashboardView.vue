@@ -385,7 +385,7 @@ export default {
       }
     },
     async taskProvider(ctx) {
-      const params = { page: ctx.currentPage, size: ctx.perPage }
+      const params = { page: ctx.currentPage - 1, size: ctx.perPage }
       if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
       const filters = this.taskTable.filters
       if (filters.uuid) params.uuid = filters.uuid
@@ -402,7 +402,7 @@ export default {
           })
     },
     async userProvider(ctx) {
-      const params = { page: ctx.currentPage, size: ctx.perPage }
+      const params = { page: ctx.currentPage - 1, size: ctx.perPage }
       if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
       const filters = this.userTable.filters
       if (filters.uid) params.uid = filters.uid
