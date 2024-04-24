@@ -1,0 +1,36 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Application [dl4se-crawler]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="crawler.languages.Java" />
+        <option name="value" value="java" />
+      </param>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="crawler.languages.Python" />
+        <option name="value" value="py" />
+      </param>
+      <param>
+        <option name="name" value="crawler.languages.C" />
+        <option name="value" value="c,h" />
+      </param>
+      <param>
+        <option name="name" value="crawler.languages.[C++]" />
+        <option name="value" value="cc,cpp" />
+      </param>
+    </additionalParameters>
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/.env" />
+    </option>
+    <option name="HIDE_BANNER" value="true" />
+    <module name="dl4se-crawler" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.usi.si.seart.Application" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
