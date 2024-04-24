@@ -5,7 +5,7 @@
       <template #footer>
         <b-form-row>
           <b-form-group class="text-input-group-center">
-            <b-link :to=" { name: 'forgot' } " class="text-secondary">Forgotten password?</b-link>
+            <b-link :to="{ name: 'forgot' }" class="text-secondary">Forgotten password?</b-link>
           </b-form-group>
         </b-form-row>
       </template>
@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators"
-import bootstrapMixin from '@/mixins/bootstrapMixin'
-import BTextInputForm from '@/components/TextInputForm'
+import { email, helpers, required } from "@vuelidate/validators"
+import bootstrapMixin from "@/mixins/bootstrapMixin"
+import BTextInputForm from "@/components/TextInputForm"
 
 export default {
   components: { BTextInputForm },
-  mixins: [ bootstrapMixin ],
+  mixins: [bootstrapMixin],
   computed: {
     target() {
       return this.$route.query.target || "home"
@@ -29,46 +29,40 @@ export default {
   methods: {
     async login() {
       const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-      await this.$http.post("/user/login", payload)
-          .then((response) => {
-            const token = response.data
-            this.$store.commit("setToken", token)
-            this.$router.replace({ name: this.target })
-          })
-          .catch((err) => {
-            const status = err.response.status
-            const handler = this.errorHandlers[status]
-            handler()
-          })
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      await this.$http
+        .post("/user/login", payload)
+        .then((response) => {
+          const token = response.data
+          this.$store.commit("setToken", token)
+          this.$router.replace({ name: this.target })
+        })
+        .catch((err) => {
+          const status = err.response.status
+          const handler = this.errorHandlers[status]
+          handler()
+        })
     }
   },
   beforeRouteEnter(_to, _from, next) {
-    next(vm => {
+    next((vm) => {
       const token = vm.$store.getters.getToken
       if (token) vm.$router.replace({ name: vm.target })
     })
   },
-  data () {
+  data() {
     return {
       errorHandlers: {
-        0: () => this.appendToast(
+        0: () =>
+          this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
             "danger"
-        ),
-        400: () => this.appendToast(
-            "Form Error",
-            "Invalid form inputs.",
-            "warning"
-        ),
-        401: () => this.appendToast(
-            "Form Error",
-            "Invalid login credentials.",
-            "warning"
-        )
+          ),
+        400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
+        401: () => this.appendToast("Form Error", "Invalid login credentials.", "warning")
       },
-      inputs : {
+      inputs: {
         email: {
           label: "Email",
           type: "email",

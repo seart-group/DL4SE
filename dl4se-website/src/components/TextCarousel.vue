@@ -1,6 +1,10 @@
 <template>
   <b-carousel :interval="currentInterval" fade no-hover-pause no-touch class="text-carousel">
-    <b-carousel-slide v-for="([title, content], idx) in Object.entries(slides)" :key="idx" class="text-carousel-slide">
+    <b-carousel-slide
+      v-for="([title, content], idx) in Object.entries(slides)"
+      :key="idx"
+      class="text-carousel-slide"
+    >
       <b-card no-body class="text-carousel-card">
         <b-card-body>
           <b-card-title>{{ title }}</b-card-title>
@@ -33,21 +37,18 @@ export default {
   },
   methods: {
     intersectionObserverCallback(entries) {
-      entries.forEach(entry => {
-        this.visible = entry.isIntersecting;
+      entries.forEach((entry) => {
+        this.visible = entry.isIntersecting
       })
     }
   },
   mounted() {
     if (IntersectionObserver !== undefined) {
-      this.observer = new IntersectionObserver(
-          this.intersectionObserverCallback,
-          {
-            root: null,
-            rootMargin: '-20px 0px',
-            threshold: 0
-          }
-      )
+      this.observer = new IntersectionObserver(this.intersectionObserverCallback, {
+        root: null,
+        rootMargin: "-20px 0px",
+        threshold: 0
+      })
       this.observer.observe(this.$el)
     }
   },

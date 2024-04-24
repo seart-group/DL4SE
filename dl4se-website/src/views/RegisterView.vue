@@ -6,57 +6,51 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators"
+import { email, helpers, required } from "@vuelidate/validators"
 import routerMixin from "@/mixins/routerMixin"
-import bootstrapMixin from '@/mixins/bootstrapMixin'
-import BTextInputForm from '@/components/TextInputForm'
+import bootstrapMixin from "@/mixins/bootstrapMixin"
+import BTextInputForm from "@/components/TextInputForm"
 
 export default {
   components: { BTextInputForm },
-  mixins: [ routerMixin, bootstrapMixin ],
+  mixins: [routerMixin, bootstrapMixin],
   methods: {
     async register() {
       const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => payload[key] = data.value)
-      await this.$http.post("/user/register", payload)
-          .then(() => {
-            this.redirectHomeAndToast(
-                "Account Created",
-                "Your account has been created. We have sent you a verification link. Please check your email.",
-                "secondary"
-            )
-          })
-          .catch((err) => {
-            const status = err.response.status
-            const handler = this.errorHandlers[status]
-            handler()
-          })
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      await this.$http
+        .post("/user/register", payload)
+        .then(() => {
+          this.redirectHomeAndToast(
+            "Account Created",
+            "Your account has been created. We have sent you a verification link. Please check your email.",
+            "secondary"
+          )
+        })
+        .catch((err) => {
+          const status = err.response.status
+          const handler = this.errorHandlers[status]
+          handler()
+        })
     }
   },
   beforeRouteEnter(_to, _from, next) {
-    next(vm => {
+    next((vm) => {
       const token = vm.$store.getters.getToken
-      if (token) vm.$router.replace({ name: 'home' })
+      if (token) vm.$router.replace({ name: "home" })
     })
   },
-  data () {
+  data() {
     return {
       errorHandlers: {
-        0: () => this.appendToast(
+        0: () =>
+          this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
             "danger"
-        ),
-        400: () => this.appendToast(
-            "Form Error",
-            "Invalid form inputs.",
-            "warning"
-        ),
-        409: () => this.appendToast(
-            "Form Error",
-            "Email already in use.",
-            "warning"
-        )
+          ),
+        400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
+        409: () => this.appendToast("Form Error", "Email already in use.", "warning")
       },
       inputs: {
         email: {
@@ -82,8 +76,8 @@ export default {
             $autoDirty: true,
             required: helpers.withMessage("", required),
             format: helpers.withMessage(
-                "Password must be between 6 and 20 characters, and contain one uppercase letter and number.",
-                helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
+              "Password must be between 6 and 20 characters, and contain one uppercase letter and number.",
+              helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
             )
           }
         },

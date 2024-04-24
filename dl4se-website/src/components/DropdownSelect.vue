@@ -1,17 +1,22 @@
 <template>
-  <b-dropdown :id="id" no-caret block
-              toggle-class="dropdown-select-toggle"
-              menu-class="dropdown-select-menu"
-              :disabled="disabled"
+  <b-dropdown
+    :id="id"
+    no-caret
+    block
+    toggle-class="dropdown-select-toggle"
+    menu-class="dropdown-select-menu"
+    :disabled="disabled"
   >
     <template #button-content>
       {{ toggleContent }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-    <b-dropdown-item v-for="option in options"
-                     :key="option" :value="option"
-                     @click="selected = option"
-                     class="dropdown-select-item"
+    <b-dropdown-item
+      v-for="option in options"
+      :key="option"
+      :value="option"
+      @click="selected = option"
+      class="dropdown-select-item"
     >
       {{ option }}
     </b-dropdown-item>
@@ -20,7 +25,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import {requiredIf} from "@vuelidate/validators"
+import { requiredIf } from "@vuelidate/validators"
 
 export default {
   name: "b-dropdown-select",
@@ -46,16 +51,16 @@ export default {
   },
   computed: {
     toggleContent() {
-      return (this.selected) ? this.selected : this.placeholder
+      return this.selected ? this.selected : this.placeholder
     }
   },
   watch: {
     selected() {
-      this.$emit('input', this.selected)
+      this.$emit("input", this.selected)
     }
   },
   setup(props) {
-    const globalConfig = (props.id !== undefined) ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
       v$: useVuelidate(globalConfig)
     }
