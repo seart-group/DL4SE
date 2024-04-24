@@ -86,18 +86,6 @@ const routes = [
     }
   },
   {
-    path: '/generic/code/:uuid?',
-    name: 'code-generic',
-    component: TaskCreateView,
-    props: (route) => ({
-      generic: true,
-      ...route.params
-    }),
-    meta: {
-      public: false
-    }
-  },
-  {
     path: '/download/:uuid',
     name: 'download',
     component: DownloadView,

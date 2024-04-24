@@ -119,12 +119,6 @@ export default {
       },
       cards: [
         {
-          title: "Generic Code Dataset",
-          description: "Use this form to create large-scale code datasets to be used for any sort of MSR study or to train DL models.",
-          linksTo: { name: "code-generic" },
-          needsConnection: true
-        },
-        {
           title: "Code Completion Dataset",
           description: "Use this form to build a dataset aimed at training code completion models.",
           linksTo: { name: "code-regular" },
