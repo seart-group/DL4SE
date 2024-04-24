@@ -3,10 +3,7 @@
     <header>
       <b-smart-navbar>
         <template #brand>
-          <b-link :to="{ name: 'home' }" :active="isOnPage('home')" class="brand">
-            <span class="brand-negative">DL</span>
-            <span class="brand-positive">4SE</span>
-          </b-link>
+          <b-logo />
         </template>
         <template #nav-items-left>
           <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">
@@ -48,10 +45,11 @@
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFooter from "@/components/Footer";
+import BLogo from "@/components/Logo";
 import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
-  components: { BFooter, BSmartNavbar },
+  components: { BLogo, BFooter, BSmartNavbar },
   mixins: [bootstrapMixin],
   computed: {
     currentPage() {
