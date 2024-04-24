@@ -83,13 +83,26 @@
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
-              <b-form-checkbox id="ast-checkbox" v-model="task.query.include_ast">
+              <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
+                Pair each instance with its Symbolic Expression representation
+              </b-form-checkbox>
+              <b-form-text v-show="task.processing.include_symbolic_expression" class="pl-4">
+                Choosing to include S-Expressions in your dataset will increase the size of the exported file.
+              </b-form-text>
+              <b-form-checkbox id="ast-checkbox" v-model="task.processing.include_ast">
                 Pair each instance with its AST-based representation
               </b-form-checkbox>
-              <b-form-text v-show="task.query.include_ast" class="pl-4">
+              <b-form-text v-show="task.processing.include_ast" class="pl-4">
                 Choosing to include ASTs in your dataset will <strong>drastically</strong> increase the size of the
-                exported file, and may increase the amount of time needed to export individual instances if processing
-                is applied.
+                exported file.
+              </b-form-text>
+              <b-form-checkbox id="ts-checkbox" v-model="task.processing.include_tree_sitter_version">
+                Pair each instance with <code>tree-sitter</code> parser metadata
+              </b-form-checkbox>
+              <b-form-text v-show="task.processing.include_tree_sitter_version" class="pl-4">
+                Enabling this will include the version of the <code>tree-sitter</code> parser which was used to compute
+                all the instance information. This meta-information is used primarily for troubleshooting, and as such
+                is unlikely to benefit the average user. For this reason we recommend keeping it turned off.
               </b-form-text>
             </b-form-group>
           </b-col>
@@ -120,10 +133,9 @@
                 Boilerplate code
               </b-checkbox>
               <b-checkbox id="unparsable-code-checkbox"
-                          v-if="task.query.granularity === 'file'"
-                          v-model="task.query.exclude_unparsable"
+                          v-model="task.query.exclude_errors"
               >
-                Unparsable code
+                Instances with syntax errors
               </b-checkbox>
               <b-checkbox id="non-ascii-checkbox" v-model="task.query.exclude_non_ascii">
                 Instances with non-ASCII characters
@@ -159,54 +171,21 @@
             <h5 class="task-create-form-section-title">Instance Processing</h5>
           </b-col>
         </b-row>
-        <b-row align-h="between">
-          <b-col xl="7" lg="7" md="6" sm="6" cols="12">
-            <b-row no-gutters>
-              <b-col xl="3" lg="4" md="12" sm="12" cols="12">
-                <b-form-group label-class="font-weight-bold">
-                  <template #label>
-                    Remove
-                    <b-link :to="{ name: 'docs', hash: '#comment-removal' }" target="_blank" class="text-dark" tabindex="-1">
-                      <b-icon-question-circle-fill />
-                    </b-link>
-                  </template>
-                  <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_docstring" inline>
-                    Docstrings
-                  </b-checkbox>
-                  <b-checkbox id="comments-checkbox" v-model="task.processing.remove_inner_comments" inline>
-                    Inner comments
-                  </b-checkbox>
-                </b-form-group>
-              </b-col>
-              <b-col xl="6" lg="7" md="12" sm="12" cols="12" offset-lg="1" offset-xl="2">
-                <b-form-group label-class="font-weight-bold" v-if="!generic">
-                  <template #label>
-                    Mask
-                    <b-link :to="{ name: 'docs', hash: '#masking' }" target="_blank" class="text-dark" tabindex="-1">
-                      <b-icon-question-circle-fill />
-                    </b-link>
-                  </template>
-                  <b-masking id="token-mask" v-model="masking" />
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col xl="5" lg="5" md="6" sm="6" cols="12">
-            <b-form-group label-class="font-weight-bold" v-if="!generic">
+        <b-row>
+          <b-col>
+            <b-form-group label-class="font-weight-bold">
               <template #label>
-                Abstract
-                <b-link :to="{ name: 'docs', hash: '#abstraction' }" target="_blank" class="text-dark" tabindex="-1">
+                Remove
+                <b-link :to="{ name: 'docs', hash: '#comment-removal' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
-              <b-form-checkbox id="abstract-enabled" v-model="task.processing.abstract_code">
-                Abstract instances using the following idioms:
-              </b-form-checkbox>
-              <b-tag-select id="abstract-idioms"
-                            placeholder="Idiom..."
-                            v-model="task.processing.abstract_idioms"
-                            :disabled="!task.processing.abstract_code"
-              />
+              <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_documentation_comments">
+                Documentation comments
+              </b-checkbox>
+              <b-checkbox id="comments-checkbox" v-model="task.processing.remove_regular_comments">
+                Regular comments
+              </b-checkbox>
             </b-form-group>
           </b-col>
         </b-row>
@@ -227,16 +206,12 @@ import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import useVuelidate from "@vuelidate/core"
 import BDropdownSelect from "@/components/DropdownSelect"
-import BMasking from "@/components/Masking"
 import BRange from "@/components/Range"
-import BTagSelect from "@/components/TagSelect"
 
 export default {
   components: {
     BDropdownSelect,
-    BMasking,
     BRange,
-    BTagSelect
   },
   mixins: [ routerMixin, bootstrapMixin ],
   props: {
@@ -315,20 +290,6 @@ export default {
         this.task.query.min_lines = value.lower
         this.task.query.max_lines = value.upper
       }
-    },
-    masking: {
-      get() {
-        return {
-          token: this.task.processing.mask_token,
-          percentage: this.task.processing.mask_percentage,
-          contiguousOnly: this.task.processing.mask_contiguous_only
-        }
-      },
-      set(value) {
-        this.task.processing.mask_token = value.token
-        this.task.processing.mask_percentage = value.percentage
-        this.task.processing.mask_contiguous_only = value.contiguousOnly
-      }
     }
   },
   watch: {
@@ -392,23 +353,14 @@ export default {
       }
     },
     async submit() {
-      const endpoint = "/task/create"
-      const payload = this.task
-      await this.$http.post(endpoint, payload)
-          .then(this.submitSuccess)
-          .catch(this.submitFailure)
+      await this.$http.post("/task/code/create", this.task).then(this.submitSuccess).catch(this.submitFailure);
     },
     async getLanguages() {
-      const endpoint = "/language"
-      await this.$http.get(endpoint)
-          .then((res) => {
-            this.options.languages = res.data
-          })
+      await this.$http.get("/language").then(res => this.options.languages = res.data);
     },
     async getParameters() {
       if (this.uuid) {
-        const endpoint = `/task/${this.uuid}`;
-        await this.$http(endpoint)
+        await this.$http(`/task/${this.uuid}`)
             .then((res) => {
               const task = res.data
               Object.assign(this.task.query, task.query)
@@ -432,6 +384,8 @@ export default {
                     )
                   })
                   break
+                case 403:
+                  break;
                 case 404:
                   this.redirectDashboardAndToast("Task Not Found", "The specified task could not be found.", "warning")
                   break
@@ -471,23 +425,20 @@ export default {
           max_lines: null,
           min_characters: null,
           max_characters: null,
-          include_ast: false,
           exclude_forks: false,
           exclude_duplicates: false,
           exclude_identical: false,
           exclude_test: false,
           exclude_non_ascii: false,
-          exclude_unparsable: false,
+          exclude_errors: false,
           exclude_boilerplate: false
         },
         processing: {
-          remove_docstring: false,
-          remove_inner_comments: false,
-          mask_token: null,
-          mask_percentage: null,
-          mask_contiguous_only: null,
-          abstract_code: false,
-          abstract_idioms : []
+          include_ast: false,
+          include_symbolic_expression: false,
+          include_tree_sitter_version: false,
+          remove_documentation_comments: false,
+          remove_regular_comments: false
         }
       },
       options: {
