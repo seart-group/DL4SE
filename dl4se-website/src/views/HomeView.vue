@@ -1,12 +1,12 @@
 <template>
   <div id="home" class="home">
-    <div id="logo" class="logo fullscreen" v-if="!loggedIn">
+    <div id="logo" class="branding fullscreen" v-if="!loggedIn">
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="logo-image">
-              <span class="logo-image-negative">DL</span>
-              <span class="logo-image-positive">4SE</span>
+            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding-image">
+              <span class="branding-image-negative">DL</span>
+              <span class="branding-image-positive">4SE</span>
             </div>
           </b-col>
         </b-row>
