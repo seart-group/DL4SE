@@ -121,7 +121,7 @@ export default {
         {
           title: "Code Completion Dataset",
           description: "Use this form to build a dataset aimed at training code completion models.",
-          linksTo: { name: "code-regular" },
+          linksTo: { name: "code" },
           needsConnection: true
         }
       ]

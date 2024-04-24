@@ -78,7 +78,7 @@ const routes = [
   },
   {
     path: '/code/:uuid?',
-    name: 'code-regular',
+    name: 'code',
     component: TaskCreateView,
     props: true,
     meta: {
