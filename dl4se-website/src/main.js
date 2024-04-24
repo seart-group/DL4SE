@@ -12,8 +12,6 @@ import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
 import _ from "lodash";
 import {BootstrapVue, BootstrapVueIcons} from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import "aos/dist/aos.css";
 import "@/assets/styles/style.sass";
 
