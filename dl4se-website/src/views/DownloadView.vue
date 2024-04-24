@@ -37,26 +37,14 @@ export default {
             break;
           case 401:
             this.$store.dispatch("logOut").then(() => {
-              this.appendToast(
-                "Login Required",
-                "Your session has expired. Please log in again.",
-                "secondary",
-              );
+              this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
             });
             break;
           case 403:
-            this.redirectDashboardAndToast(
-              "Task Download Refused",
-              "This task can not be downloaded.",
-              "warning",
-            );
+            this.redirectDashboardAndToast("Task Download Refused", "This task can not be downloaded.", "warning");
             break;
           case 404:
-            this.redirectDashboardAndToast(
-              "Task Not Found",
-              "The specified task could not be found.",
-              "warning",
-            );
+            this.redirectDashboardAndToast("Task Not Found", "The specified task could not be found.", "warning");
             break;
           case 410:
             this.redirectDashboardAndToast(

@@ -22,22 +22,16 @@
             <template #default>
               <p class="text-justify">
                 DL4SE is host to
-                <strong v-b-tooltip="count.funcs.toLocaleString()">{{
-                  formatNatural(count.funcs)
-                }}</strong>
+                <strong v-b-tooltip="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</strong>
                 functions, sourced from
-                <strong v-b-tooltip="count.files.toLocaleString()">{{
-                  formatNatural(count.files)
-                }}</strong>
+                <strong v-b-tooltip="count.files.toLocaleString()">{{ formatNatural(count.files) }}</strong>
                 files, originating from
-                <strong v-b-tooltip="count.repos.toLocaleString()">{{
-                  formatNatural(count.repos)
-                }}</strong>
+                <strong v-b-tooltip="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</strong>
                 repositories. In total, we have mined
-                <strong>{{ formatBytes(size.code) }}</strong> of source code. The platform currently
-                has <strong>{{ count.users }}</strong> registered users, and since its inception
-                <strong>{{ count.tasks }}</strong> datasets have been constructed. This amounts to
-                roughly <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
+                <strong>{{ formatBytes(size.code) }}</strong> of source code. The platform currently has
+                <strong>{{ count.users }}</strong> registered users, and since its inception
+                <strong>{{ count.tasks }}</strong> datasets have been constructed. This amounts to roughly
+                <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
               </p>
             </template>
           </b-skeleton-wrapper>
@@ -112,28 +106,18 @@ export default {
       this.totalCodeSize(),
       this.totalTasksSize(),
     ])
-      .then(
-        ([
-          totalUsers,
-          totalRepos,
-          totalFiles,
-          totalFunctions,
-          totalTasks,
-          totalCodeSize,
-          totalTaskSize,
-        ]) => {
-          this.count.users = totalUsers;
-          this.count.repos = totalRepos;
-          this.count.files = totalFiles;
-          this.count.funcs = totalFunctions;
-          this.count.tasks = totalTasks;
+      .then(([totalUsers, totalRepos, totalFiles, totalFunctions, totalTasks, totalCodeSize, totalTaskSize]) => {
+        this.count.users = totalUsers;
+        this.count.repos = totalRepos;
+        this.count.files = totalFiles;
+        this.count.funcs = totalFunctions;
+        this.count.tasks = totalTasks;
 
-          this.size.code = totalCodeSize;
-          this.size.tasks = totalTaskSize;
+        this.size.code = totalCodeSize;
+        this.size.tasks = totalTaskSize;
 
-          this.loading = false;
-        },
-      )
+        this.loading = false;
+      })
       .catch(() => {
         // TODO 03.11.22: Migrate this to a router guard?
         this.$router.replace({ name: "home" });

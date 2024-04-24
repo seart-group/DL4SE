@@ -44,16 +44,8 @@
         <b-form-text v-if="isDuplicate" class="tag-select-feedback-text">
           {{ duplicateTagText }}
         </b-form-text>
-        <div
-          :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'"
-        >
-          <b-form-tag
-            v-for="tag in tags"
-            :key="tag"
-            ref="tags-values"
-            class="tag-select-tag"
-            @remove="removeTag(tag)"
-          >
+        <div :class="!!tags.length ? 'tag-select-tags-container' : 'tag-select-tags-container-hidden'">
+          <b-form-tag v-for="tag in tags" :key="tag" ref="tags-values" class="tag-select-tag" @remove="removeTag(tag)">
             {{ tag }}
           </b-form-tag>
         </div>

@@ -19,9 +19,7 @@ export default {
     // https://bootstrap-vue.org/docs/icons#component-reference
   },
   render(createElement, { props, data }) {
-    const hash = props.identifier
-      ? Base64.stringify(sha256(props.identifier))
-      : "FFFFFFFFFFFFFFFFF"; // no image
+    const hash = props.identifier ? Base64.stringify(sha256(props.identifier)) : "FFFFFFFFFFFFFFFFF"; // no image
     const options = {
       format: "svg",
       margin: 0,
@@ -34,10 +32,7 @@ export default {
     const g = element.body.children[0].children[0];
     g.removeAttribute("style");
     if (props.scale !== 1)
-      g.setAttribute(
-        "transform",
-        `translate(8 8) scale(${props.scale} ${props.scale}) translate(-8 -8)`,
-      );
+      g.setAttribute("transform", `translate(8 8) scale(${props.scale} ${props.scale}) translate(-8 -8)`);
 
     return createElement(
       "svg",

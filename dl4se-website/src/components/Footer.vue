@@ -21,8 +21,7 @@ export default {
   },
   render(createElement, { props, data }) {
     const showAuthors = props.authors?.length;
-    const showOrganisation =
-      props.organisation?.name !== undefined && props.organisation?.url !== undefined;
+    const showOrganisation = props.organisation?.name !== undefined && props.organisation?.url !== undefined;
     return createElement(
       BContainer,
       {

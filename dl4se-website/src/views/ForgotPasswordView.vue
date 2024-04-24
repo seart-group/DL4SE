@@ -45,11 +45,7 @@ export default {
           ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         404: () =>
-          this.appendToast(
-            "Account Not Found",
-            "No account is associated to the specified email address.",
-            "warning",
-          ),
+          this.appendToast("Account Not Found", "No account is associated to the specified email address.", "warning"),
       },
       inputs: {
         email: {

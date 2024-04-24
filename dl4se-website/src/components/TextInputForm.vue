@@ -10,12 +10,7 @@
       >
         <template #label v-if="data.label">
           {{ data.label }}
-          <b-icon-asterisk
-            v-if="entryRequired(key)"
-            font-scale="0.35"
-            shift-v="32"
-            class="text-input-icon"
-          />
+          <b-icon-asterisk v-if="entryRequired(key)" font-scale="0.35" shift-v="32" class="text-input-icon" />
         </template>
         <b-form-input
           :id="`input-${key}`"
@@ -46,9 +41,7 @@
     </b-form-row>
     <b-form-row>
       <b-form-group class="text-input-group-center">
-        <b-button type="submit" :disabled="submitDisabled" class="btn-secondary-border-2">
-          Submit
-        </b-button>
+        <b-button type="submit" :disabled="submitDisabled" class="btn-secondary-border-2"> Submit </b-button>
       </b-form-group>
     </b-form-row>
     <slot name="footer" />
@@ -99,9 +92,7 @@ export default {
       return this.entryDirty(key) ? this.entryValid(key) : null;
     },
     entryErrors(key) {
-      return this.v$.inputs[key].$errors
-        .map((error) => error.$message)
-        .filter((message) => message);
+      return this.v$.inputs[key].$errors.map((error) => error.$message).filter((message) => message);
     },
     entryFeedback(key) {
       return this.inputs[key].feedback && !!this.entryErrors(key).length;

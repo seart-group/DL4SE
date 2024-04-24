@@ -1,11 +1,5 @@
 <template>
-  <b-dialog-page
-    id="verify"
-    v-cloak
-    v-if="showHtml"
-    title="The verification link has expired."
-    :actions="actions"
-  />
+  <b-dialog-page id="verify" v-cloak v-if="showHtml" title="The verification link has expired." :actions="actions" />
 </template>
 
 <script>
@@ -66,8 +60,7 @@ export default {
             break;
           case 404:
             title = "Invalid Token";
-            message =
-              "The specified token does not exist. Check the link for errors and try again.";
+            message = "The specified token does not exist. Check the link for errors and try again.";
             variant = "warning";
             action = () => {
               this.redirectHomeAndToast(title, message, variant);

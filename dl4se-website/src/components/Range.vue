@@ -53,14 +53,10 @@ export default {
   },
   computed: {
     lowerMax() {
-      return this.count.upper !== null && this.count.upper <= this.max
-        ? this.count.upper
-        : this.max;
+      return this.count.upper !== null && this.count.upper <= this.max ? this.count.upper : this.max;
     },
     upperMin() {
-      return this.count.lower !== null && this.min <= this.count.lower
-        ? this.count.lower
-        : this.min;
+      return this.count.lower !== null && this.min <= this.count.lower ? this.count.lower : this.min;
     },
   },
   watch: {

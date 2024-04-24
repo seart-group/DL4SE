@@ -139,10 +139,7 @@ export default {
     if (this.hasMappings) {
       const rules = { $autoDirty: true, required };
       return {
-        mappings: Object.keys(this.mappings).reduce(
-          (acc, key) => Object.assign(acc, { [key]: rules }),
-          {},
-        ),
+        mappings: Object.keys(this.mappings).reduce((acc, key) => Object.assign(acc, { [key]: rules }), {}),
       };
     } else {
       return {};

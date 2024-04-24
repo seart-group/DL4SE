@@ -12,10 +12,7 @@
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div
-              v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }"
-              class="logo-tagline"
-            >
+            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="logo-tagline">
               Deep Learning For Software Engineering
             </div>
           </b-col>
@@ -72,11 +69,7 @@
       >
         <b-card-body>
           <b-card-title>
-            <b-link
-              :to="linksTo"
-              :disabled="needsConnection && !connected"
-              class="card-link text-secondary"
-            >
+            <b-link :to="linksTo" :disabled="needsConnection && !connected" class="card-link text-secondary">
               {{ title }}
             </b-link>
           </b-card-title>

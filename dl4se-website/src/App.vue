@@ -16,11 +16,7 @@
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
-            <b-nav-item
-              :to="{ name: 'dashboard' }"
-              :active="isOnPage('dashboard')"
-              :disabled="!connected"
-            >
+            <b-nav-item :to="{ name: 'dashboard' }" :active="isOnPage('dashboard')" :disabled="!connected">
               Dashboard
             </b-nav-item>
             <b-nav-item @click="showLogOutModal" :disabled="!connected"> Log Out </b-nav-item>
@@ -33,11 +29,7 @@
             >
               Log In
             </b-nav-item>
-            <b-nav-item
-              :to="{ name: 'register' }"
-              :active="isOnPage('register')"
-              :disabled="!connected"
-            >
+            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')" :disabled="!connected">
               Register
             </b-nav-item>
           </template>
@@ -80,12 +72,11 @@ export default {
       return this.currentPage === name;
     },
     showLogOutModal() {
-      this.showConfirmModal(
-        "Log Out",
-        "Any unsaved changes will be lost. Are you sure you want to continue?",
-      ).then((confirmed) => {
-        if (confirmed) this.$store.dispatch("logOut");
-      });
+      this.showConfirmModal("Log Out", "Any unsaved changes will be lost. Are you sure you want to continue?").then(
+        (confirmed) => {
+          if (confirmed) this.$store.dispatch("logOut");
+        },
+      );
     },
   },
   async beforeMount() {

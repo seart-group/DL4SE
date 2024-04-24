@@ -27,19 +27,11 @@
               </b-button>
             </template>
             <template #cell(uuid)="row">
-              <b-abbreviation
-                v-if="!$screen.md"
-                :value="row.value"
-                :formatter="(val) => val.split('-')[0]"
-              />
+              <b-abbreviation v-if="!$screen.md" :value="row.value" :formatter="(val) => val.split('-')[0]" />
               <span v-html="row.value" v-else />
             </template>
             <template #cell(status)="row">
-              <b-icon
-                :icon="statusToSquareIcon(row.value)"
-                v-b-tooltip="toTitle(row.value)"
-                font-scale="1.25"
-              />
+              <b-icon :icon="statusToSquareIcon(row.value)" v-b-tooltip="toTitle(row.value)" font-scale="1.25" />
             </template>
             <template #cell(submitted)="row">
               <div class="d-inline-flex align-items-center">
@@ -64,9 +56,7 @@
                   <b-icon-dash-lg shift-v="-1" />
                   <component
                     :is="statusToCalendarIcon(row.item.status)"
-                    v-b-tooltip.html="
-                      `${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`
-                    "
+                    v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
                     font-scale="1.35"
                   />
                 </template>
@@ -149,13 +139,7 @@
                 >
                   <b-icon-pencil-square />
                 </b-button>
-                <template
-                  v-if="
-                    row.item.status !== 'FINISHED' ||
-                    row.item.expired ||
-                    row.item.total_results === 0
-                  "
-                >
+                <template v-if="row.item.status !== 'FINISHED' || row.item.expired || row.item.total_results === 0">
                   <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
                     <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-download />
@@ -201,10 +185,7 @@
               <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
             </template>
             <template #cell(registered)="row">
-              <b-abbreviation
-                :value="row.value.toISOString()"
-                :formatter="(iso) => iso.split('T')[0]"
-              />
+              <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
               <b-icon
@@ -213,10 +194,7 @@
                 class="mr-2"
                 scale="1.35"
               />
-              <b-iconstack
-                v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)"
-                scale="1.35"
-              >
+              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
                 <b-icon
                   :icon="row.item.role === 'ADMIN' ? 'person-plus-fill' : 'person-fill'"
                   :shift-h="row.item.role === 'ADMIN' ? 2 : 0"
@@ -239,9 +217,7 @@
                   class="btn-secondary-border-2"
                   size="sm"
                   v-b-tooltip="row.item.role === 'ADMIN' ? 'Demote' : 'Promote'"
-                  @click="
-                    userAction(row.item.uid, row.item.role === 'ADMIN' ? 'demote' : 'promote')
-                  "
+                  @click="userAction(row.item.uid, row.item.role === 'ADMIN' ? 'demote' : 'promote')"
                 >
                   <b-icon :icon="`person-${row.item.role === 'ADMIN' ? 'dash' : 'plus'}-fill`" />
                 </b-button>
@@ -300,12 +276,7 @@
       @hide="$root.$emit('bv::refresh::table', userTable.id)"
     >
       <label for="user-filter-uid"> Filter by UID: </label>
-      <b-clearable-input
-        id="user-filter-uid"
-        placeholder="XXXXXXXXXXX"
-        v-model="userTable.filters.uid"
-        class="mb-3"
-      />
+      <b-clearable-input id="user-filter-uid" placeholder="XXXXXXXXXXX" v-model="userTable.filters.uid" class="mb-3" />
       <label for="user-filter-email"> Filter by Email: </label>
       <b-clearable-input
         id="user-filter-email"
@@ -314,11 +285,7 @@
         class="mb-3"
       />
       <label for="user-filter-organisation"> Filter by Organisation: </label>
-      <b-clearable-input
-        id="user-filter-organisation"
-        placeholder=""
-        v-model="userTable.filters.organisation"
-      />
+      <b-clearable-input id="user-filter-organisation" placeholder="" v-model="userTable.filters.organisation" />
     </b-dialog-modal>
   </div>
 </template>
@@ -493,11 +460,7 @@ export default {
             break;
           case 401:
             this.$store.dispatch("logOut").then(() => {
-              this.appendToast(
-                "Login Required",
-                "Your session has expired. Please log in again.",
-                "secondary",
-              );
+              this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
             });
             break;
           case 403:
@@ -523,11 +486,7 @@ export default {
         switch (status) {
           case 401:
             this.$store.dispatch("logOut").then(() => {
-              this.appendToast(
-                "Login Required",
-                "Your session has expired. Please log in again.",
-                "secondary",
-              );
+              this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
             });
             break;
           case 403:
@@ -549,8 +508,7 @@ export default {
     // TODO 21.10.22: Not what I would call "full-proof" but it will work for now
     cleanLog(str) {
       const lines = this.$_.split(str, /[\n\r]/);
-      const regex =
-        /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/;
+      const regex = /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/;
       if (!regex.test(lines[0])) lines.shift();
       return lines.join("\n");
     },
@@ -586,11 +544,7 @@ export default {
           }
         })
         .then(() => {
-          this.redirectHomeAndToast(
-            "Shutting Down Server",
-            "The server has been successfully shut down.",
-            "secondary",
-          );
+          this.redirectHomeAndToast("Shutting Down Server", "The server has been successfully shut down.", "secondary");
         })
         .catch(() => {});
       // TODO 20.10.22: Display failure toast
@@ -629,11 +583,7 @@ export default {
           .get("/")
           .then(() => {
             clearInterval(check);
-            that.appendToast(
-              "Server Connection Restored",
-              "The DL4SE server is back online.",
-              "secondary",
-            );
+            that.appendToast("Server Connection Restored", "The DL4SE server is back online.", "secondary");
           })
           .catch(() => {});
       }, 500);
@@ -707,10 +657,7 @@ export default {
               let percentage;
               if (item.total_results === 0) {
                 percentage = "0.00%";
-              } else if (
-                item.status === "FINISHED" ||
-                item.processed_results > item.total_results
-              ) {
+              } else if (item.status === "FINISHED" || item.processed_results > item.total_results) {
                 percentage = "100.00%";
               } else {
                 percentage = `${((item.processed_results / item.total_results) * 100).toFixed(2)}%`;

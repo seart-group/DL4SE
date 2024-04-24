@@ -28,9 +28,7 @@
                   <b-checkbox id="license-checkbox" v-model="task.query.has_license" inline>
                     Has Open-source License
                   </b-checkbox>
-                  <b-checkbox id="forks-checkbox" v-model="task.query.exclude_forks" inline>
-                    Exclude Forks
-                  </b-checkbox>
+                  <b-checkbox id="forks-checkbox" v-model="task.query.exclude_forks" inline> Exclude Forks </b-checkbox>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -38,31 +36,13 @@
           <b-col xl="7" lg="8" md="6" sm="12">
             <b-row no-gutters class="justify-content-lg-around">
               <b-col lg="6" md="12">
-                <b-range
-                  id="commits-range"
-                  field="commits"
-                  v-model="commits"
-                  lower-bound
-                  :min="0"
-                />
+                <b-range id="commits-range" field="commits" v-model="commits" lower-bound :min="0" />
               </b-col>
               <b-col lg="6" md="12">
-                <b-range
-                  id="issues-range"
-                  field="issues"
-                  v-model="contributors"
-                  lower-bound
-                  :min="0"
-                />
+                <b-range id="issues-range" field="issues" v-model="contributors" lower-bound :min="0" />
               </b-col>
               <b-col lg="6" md="12">
-                <b-range
-                  id="contributors-range"
-                  field="contributors"
-                  v-model="issues"
-                  lower-bound
-                  :min="0"
-                />
+                <b-range id="contributors-range" field="contributors" v-model="issues" lower-bound :min="0" />
               </b-col>
               <b-col lg="6" md="12">
                 <b-range id="stars-range" field="stars" v-model="stars" lower-bound :min="0" />
@@ -82,12 +62,7 @@
             <b-form-group label-class="font-weight-bold" class="m-0 pb-2 pb-md-0">
               <template #label>
                 Granularity
-                <b-link
-                  :to="{ name: 'docs', hash: '#granularity' }"
-                  target="_blank"
-                  class="text-dark"
-                  tabindex="-1"
-                >
+                <b-link :to="{ name: 'docs', hash: '#granularity' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
@@ -103,43 +78,30 @@
             <b-form-group label-class="font-weight-bold" class="m-0">
               <template #label>
                 AST
-                <b-link
-                  :to="{ name: 'docs', hash: '#ast' }"
-                  target="_blank"
-                  class="text-dark"
-                  tabindex="-1"
-                >
+                <b-link :to="{ name: 'docs', hash: '#ast' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
-              <b-form-checkbox
-                id="sex-checkbox"
-                v-model="task.processing.include_symbolic_expression"
-              >
+              <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
                 Pair each instance with its Symbolic Expression representation
               </b-form-checkbox>
               <b-form-text v-show="task.processing.include_symbolic_expression" class="pl-4">
-                Choosing to include S-Expressions in your dataset will increase the size of the
-                exported file.
+                Choosing to include S-Expressions in your dataset will increase the size of the exported file.
               </b-form-text>
               <b-form-checkbox id="ast-checkbox" v-model="task.processing.include_ast">
                 Pair each instance with its AST-based representation
               </b-form-checkbox>
               <b-form-text v-show="task.processing.include_ast" class="pl-4">
-                Choosing to include ASTs in your dataset will <strong>drastically</strong> increase
-                the size of the exported file.
+                Choosing to include ASTs in your dataset will <strong>drastically</strong> increase the size of the
+                exported file.
               </b-form-text>
-              <b-form-checkbox
-                id="ts-checkbox"
-                v-model="task.processing.include_tree_sitter_version"
-              >
+              <b-form-checkbox id="ts-checkbox" v-model="task.processing.include_tree_sitter_version">
                 Pair each instance with <code>tree-sitter</code> parser metadata
               </b-form-checkbox>
               <b-form-text v-show="task.processing.include_tree_sitter_version" class="pl-4">
-                Enabling this will include the version of the <code>tree-sitter</code> parser which
-                was used to compute all the instance information. This meta-information is used
-                primarily for troubleshooting, and as such is unlikely to benefit the average user.
-                For this reason we recommend keeping it turned off.
+                Enabling this will include the version of the <code>tree-sitter</code> parser which was used to compute
+                all the instance information. This meta-information is used primarily for troubleshooting, and as such
+                is unlikely to benefit the average user. For this reason we recommend keeping it turned off.
               </b-form-text>
             </b-form-group>
           </b-col>
@@ -156,18 +118,11 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Exclude
-                <b-link
-                  :to="{ name: 'docs', hash: '#exclusion' }"
-                  target="_blank"
-                  class="text-dark"
-                  tabindex="-1"
-                >
+                <b-link :to="{ name: 'docs', hash: '#exclusion' }" target="_blank" class="text-dark" tabindex="-1">
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
-              <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test">
-                Test code
-              </b-checkbox>
+              <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test"> Test code </b-checkbox>
               <b-checkbox
                 id="boilerplate-code-checkbox"
                 v-if="task.query.granularity === 'function'"
@@ -199,36 +154,13 @@
               <b-checkbox id="duplicates-checkbox" v-model="task.query.exclude_duplicates" inline>
                 Duplicates
               </b-checkbox>
-              <b-checkbox id="clones-checkbox" v-model="task.query.exclude_identical" inline>
-                Near-clones
-              </b-checkbox>
+              <b-checkbox id="clones-checkbox" v-model="task.query.exclude_identical" inline> Near-clones </b-checkbox>
             </b-form-group>
           </b-col>
           <b-col lg="7" md="9" sm="12">
-            <b-range
-              id="characters-range"
-              field="characters"
-              lower-bound
-              upper-bound
-              :min="0"
-              v-model="characters"
-            />
-            <b-range
-              id="tokens-range"
-              field="tokens"
-              lower-bound
-              upper-bound
-              :min="0"
-              v-model="tokens"
-            />
-            <b-range
-              id="lines-range"
-              field="lines"
-              lower-bound
-              upper-bound
-              :min="0"
-              v-model="lines"
-            />
+            <b-range id="characters-range" field="characters" lower-bound upper-bound :min="0" v-model="characters" />
+            <b-range id="tokens-range" field="tokens" lower-bound upper-bound :min="0" v-model="tokens" />
+            <b-range id="lines-range" field="lines" lower-bound upper-bound :min="0" v-model="lines" />
           </b-col>
         </b-row>
       </b-container>
@@ -252,10 +184,7 @@
                   <b-icon-question-circle-fill />
                 </b-link>
               </template>
-              <b-checkbox
-                id="docstring-checkbox"
-                v-model="task.processing.remove_documentation_comments"
-              >
+              <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_documentation_comments">
                 Documentation comments
               </b-checkbox>
               <b-checkbox id="comments-checkbox" v-model="task.processing.remove_regular_comments">
@@ -268,9 +197,7 @@
       <b-container class="py-4 task-create-form-section-bottom">
         <b-row align-h="center">
           <b-col cols="auto">
-            <b-button :disabled="v$.$invalid" @click="submit" class="btn-secondary-border-2"
-              >Generate Dataset</b-button
-            >
+            <b-button :disabled="v$.$invalid" @click="submit" class="btn-secondary-border-2">Generate Dataset</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -401,18 +328,13 @@ export default {
           break;
         case 401:
           this.$store.dispatch("logOut").then(() => {
-            this.appendToast(
-              "Login Required",
-              "Your session has expired. Please log in again.",
-              "secondary",
-            );
+            this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
           });
           break;
         case 409:
           this.redirectDashboardAndToast(
             "Task Exists",
-            "A similar task is already queued or executing." +
-              " Please wait for it to finish before submitting again.",
+            "A similar task is already queued or executing." + " Please wait for it to finish before submitting again.",
             "warning",
           );
           break;
@@ -434,10 +356,7 @@ export default {
       }
     },
     async submit() {
-      await this.$http
-        .post("/task/code/create", this.task)
-        .then(this.submitSuccess)
-        .catch(this.submitFailure);
+      await this.$http.post("/task/code/create", this.task).then(this.submitSuccess).catch(this.submitFailure);
     },
     async getLanguages() {
       await this.$http.get("/language").then((res) => (this.options.languages = res.data));
@@ -462,21 +381,13 @@ export default {
                 break;
               case 401:
                 this.$store.dispatch("logOut").then(() => {
-                  this.appendToast(
-                    "Login Required",
-                    "Your session has expired. Please log in again.",
-                    "secondary",
-                  );
+                  this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
                 });
                 break;
               case 403:
                 break;
               case 404:
-                this.redirectDashboardAndToast(
-                  "Task Not Found",
-                  "The specified task could not be found.",
-                  "warning",
-                );
+                this.redirectDashboardAndToast("Task Not Found", "The specified task could not be found.", "warning");
                 break;
               default:
                 this.$router.push({ name: "home" });
