@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import BTextInputForm from "@/components/TextInputForm"
-import routerMixin from "@/mixins/routerMixin"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import {helpers, required} from "@vuelidate/validators"
+import BTextInputForm from "@/components/TextInputForm";
+import routerMixin from "@/mixins/routerMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import {helpers, required} from "@vuelidate/validators";
 
 export default {
   components: { BTextInputForm },
@@ -19,8 +19,8 @@ export default {
   },
   methods: {
     async reset() {
-      const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      const payload = {};
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value));
       await this.$http
         .post("/user/password/reset", payload, { params: { token: this.token } })
         .then(() => {
@@ -28,13 +28,13 @@ export default {
             "Password Reset Successful",
             "Your password has been reset successfully. You can now log into your account with the new password.",
             "secondary",
-          )
+          );
         })
         .catch((err) => {
-          const status = err.response.status
-          const handler = this.errorHandlers[status]
-          handler()
-        })
+          const status = err.response.status;
+          const handler = this.errorHandlers[status];
+          handler();
+        });
     },
   },
   data() {
@@ -74,7 +74,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

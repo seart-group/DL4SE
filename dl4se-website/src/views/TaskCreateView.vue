@@ -279,11 +279,11 @@
 </template>
 
 <script>
-import routerMixin from "@/mixins/routerMixin"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import useVuelidate from "@vuelidate/core"
-import BDropdownSelect from "@/components/DropdownSelect"
-import BRange from "@/components/Range"
+import routerMixin from "@/mixins/routerMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import useVuelidate from "@vuelidate/core";
+import BDropdownSelect from "@/components/DropdownSelect";
+import BRange from "@/components/Range";
 
 export default {
   components: {
@@ -297,39 +297,39 @@ export default {
   },
   computed: {
     dropdownState() {
-      const child$ = this.v$.$getResultsForChild("language-select")
-      return child$ ? !child$.$invalid : null
+      const child$ = this.v$.$getResultsForChild("language-select");
+      return child$ ? !child$.$invalid : null;
     },
     commits: {
       get() {
-        return { lower: this.task.query.min_commits }
+        return { lower: this.task.query.min_commits };
       },
       set(value) {
-        this.task.query.min_commits = value.lower
+        this.task.query.min_commits = value.lower;
       },
     },
     contributors: {
       get() {
-        return { lower: this.task.query.min_contributors }
+        return { lower: this.task.query.min_contributors };
       },
       set(value) {
-        this.task.query.min_contributors = value.lower
+        this.task.query.min_contributors = value.lower;
       },
     },
     issues: {
       get() {
-        return { lower: this.task.query.min_issues }
+        return { lower: this.task.query.min_issues };
       },
       set(value) {
-        this.task.query.min_issues = value.lower
+        this.task.query.min_issues = value.lower;
       },
     },
     stars: {
       get() {
-        return { lower: this.task.query.min_stars }
+        return { lower: this.task.query.min_stars };
       },
       set(value) {
-        this.task.query.min_stars = value.lower
+        this.task.query.min_stars = value.lower;
       },
     },
     characters: {
@@ -337,11 +337,11 @@ export default {
         return {
           lower: this.task.query.min_characters,
           upper: this.task.query.max_characters,
-        }
+        };
       },
       set(value) {
-        this.task.query.min_characters = value.lower
-        this.task.query.max_characters = value.upper
+        this.task.query.min_characters = value.lower;
+        this.task.query.max_characters = value.upper;
       },
     },
     tokens: {
@@ -349,11 +349,11 @@ export default {
         return {
           lower: this.task.query.min_tokens,
           upper: this.task.query.max_tokens,
-        }
+        };
       },
       set(value) {
-        this.task.query.min_tokens = value.lower
-        this.task.query.max_tokens = value.upper
+        this.task.query.min_tokens = value.lower;
+        this.task.query.max_tokens = value.upper;
       },
     },
     lines: {
@@ -361,11 +361,11 @@ export default {
         return {
           lower: this.task.query.min_lines,
           upper: this.task.query.max_lines,
-        }
+        };
       },
       set(value) {
-        this.task.query.min_lines = value.lower
-        this.task.query.max_lines = value.upper
+        this.task.query.min_lines = value.lower;
+        this.task.query.max_lines = value.upper;
       },
     },
   },
@@ -373,13 +373,13 @@ export default {
     "task.query.exclude_duplicates": {
       handler() {
         if (this.task.query.exclude_duplicates && this.task.query.exclude_identical)
-          this.task.query.exclude_identical = false
+          this.task.query.exclude_identical = false;
       },
     },
     "task.query.exclude_identical": {
       handler() {
         if (this.task.query.exclude_identical && this.task.query.exclude_duplicates)
-          this.task.query.exclude_duplicates = false
+          this.task.query.exclude_duplicates = false;
       },
     },
   },
@@ -391,110 +391,110 @@ export default {
           "Please note that it may take some time until it begins executing. " +
           "You will receive an email notification once the dataset is compiled.",
         "secondary",
-      )
+      );
     },
     submitFailure(err) {
-      const status = err.response.status
+      const status = err.response.status;
       switch (status) {
         case 400:
-          this.appendToast("Form Error", "Invalid form inputs.", "warning")
-          break
+          this.appendToast("Form Error", "Invalid form inputs.", "warning");
+          break;
         case 401:
           this.$store.dispatch("logOut").then(() => {
             this.appendToast(
               "Login Required",
               "Your session has expired. Please log in again.",
               "secondary",
-            )
-          })
-          break
+            );
+          });
+          break;
         case 409:
           this.redirectDashboardAndToast(
             "Task Exists",
             "A similar task is already queued or executing." +
               " Please wait for it to finish before submitting again.",
             "warning",
-          )
-          break
+          );
+          break;
         case 429:
           this.redirectDashboardAndToast(
             "Too Many Active Tasks",
             "You have already reached your limit on the number of active tasks." +
               " Try again later once one of them finishes.",
             "warning",
-          )
-          break
+          );
+          break;
         default:
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
             "danger",
-          )
-          break
+          );
+          break;
       }
     },
     async submit() {
       await this.$http
         .post("/task/code/create", this.task)
         .then(this.submitSuccess)
-        .catch(this.submitFailure)
+        .catch(this.submitFailure);
     },
     async getLanguages() {
-      await this.$http.get("/language").then((res) => (this.options.languages = res.data))
+      await this.$http.get("/language").then((res) => (this.options.languages = res.data));
     },
     async getParameters() {
       if (this.uuid) {
         await this.$http(`/task/${this.uuid}`)
           .then((res) => {
-            const task = res.data
-            Object.assign(this.task.query, task.query)
-            Object.assign(this.task.processing, task.processing)
+            const task = res.data;
+            Object.assign(this.task.query, task.query);
+            Object.assign(this.task.processing, task.processing);
           })
           .catch((err) => {
-            const status = err.response.status
+            const status = err.response.status;
             switch (status) {
               case 400:
                 this.redirectDashboardAndToast(
                   "Invalid UUID",
                   "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
                   "warning",
-                )
-                break
+                );
+                break;
               case 401:
                 this.$store.dispatch("logOut").then(() => {
                   this.appendToast(
                     "Login Required",
                     "Your session has expired. Please log in again.",
                     "secondary",
-                  )
-                })
-                break
+                  );
+                });
+                break;
               case 403:
-                break
+                break;
               case 404:
                 this.redirectDashboardAndToast(
                   "Task Not Found",
                   "The specified task could not be found.",
                   "warning",
-                )
-                break
+                );
+                break;
               default:
-                this.$router.push({ name: "home" })
-                break
+                this.$router.push({ name: "home" });
+                break;
             }
-          })
+          });
       }
     },
   },
   setup() {
     return {
       v$: useVuelidate(),
-    }
+    };
   },
   async mounted() {
-    await this.getLanguages()
-    await this.getParameters()
-    this.show = true
+    await this.getLanguages();
+    await this.getParameters();
+    this.show = true;
   },
   data() {
     return {
@@ -543,7 +543,7 @@ export default {
         ],
         languages: [],
       },
-    }
+    };
   },
-}
+};
 </script>

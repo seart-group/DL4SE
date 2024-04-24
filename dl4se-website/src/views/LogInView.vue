@@ -14,41 +14,41 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import BTextInputForm from "@/components/TextInputForm"
+import {email, helpers, required} from "@vuelidate/validators";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BTextInputForm from "@/components/TextInputForm";
 
 export default {
   components: { BTextInputForm },
   mixins: [bootstrapMixin],
   computed: {
     target() {
-      return this.$route.query.target || "home"
+      return this.$route.query.target || "home";
     },
   },
   methods: {
     async login() {
-      const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      const payload = {};
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value));
       await this.$http
         .post("/user/login", payload)
         .then((response) => {
-          const token = response.data
-          this.$store.commit("setToken", token)
-          this.$router.replace({ name: this.target })
+          const token = response.data;
+          this.$store.commit("setToken", token);
+          this.$router.replace({ name: this.target });
         })
         .catch((err) => {
-          const status = err.response.status
-          const handler = this.errorHandlers[status]
-          handler()
-        })
+          const status = err.response.status;
+          const handler = this.errorHandlers[status];
+          handler();
+        });
     },
   },
   beforeRouteEnter(_to, _from, next) {
     next((vm) => {
-      const token = vm.$store.getters.getToken
-      if (token) vm.$router.replace({ name: vm.target })
-    })
+      const token = vm.$store.getters.getToken;
+      if (token) vm.$router.replace({ name: vm.target });
+    });
   },
   data() {
     return {
@@ -89,7 +89,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

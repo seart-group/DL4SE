@@ -278,8 +278,8 @@
       :content="detailsModal.content"
       :formatters="detailsModal.formatters"
       @reset="
-        detailsModal.title = ''
-        detailsModal.content = {}
+        detailsModal.title = '';
+        detailsModal.content = {};
       "
     />
     <b-dialog-modal
@@ -324,21 +324,21 @@
 </template>
 
 <script>
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import formatterMixin from "@/mixins/formatterMixin"
-import routerMixin from "@/mixins/routerMixin"
-import BAbbreviation from "@/components/Abbreviation"
-import BClearableInput from "@/components/ClearableInput"
-import BConfigTable from "@/components/ConfigTable"
-import BContentArea from "@/components/ContentArea"
-import BDetailsModal from "@/components/DetailsModal"
-import BDialogModal from "@/components/DialogModal"
-import BIconCalendarExclamation from "@/components/IconCalendarExclamation"
-import BIconCalendarPlay from "@/components/IconCalendarPlay"
-import BIconCalendarQuestion from "@/components/IconCalendarQuestion"
-import BIconIdenticon from "@/components/IconIdenticon"
-import BMonitor from "@/components/Monitor"
-import BPaginatedTable from "@/components/PaginatedTable"
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import formatterMixin from "@/mixins/formatterMixin";
+import routerMixin from "@/mixins/routerMixin";
+import BAbbreviation from "@/components/Abbreviation";
+import BClearableInput from "@/components/ClearableInput";
+import BConfigTable from "@/components/ConfigTable";
+import BContentArea from "@/components/ContentArea";
+import BDetailsModal from "@/components/DetailsModal";
+import BDialogModal from "@/components/DialogModal";
+import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
+import BIconCalendarPlay from "@/components/IconCalendarPlay";
+import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
+import BIconIdenticon from "@/components/IconIdenticon";
+import BMonitor from "@/components/Monitor";
+import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
   components: {
@@ -358,12 +358,12 @@ export default {
   mixins: [bootstrapMixin, formatterMixin, routerMixin],
   computed: {
     tableHeight() {
-      return `${this.$screen.xl ? 370 : 380}px`
+      return `${this.$screen.xl ? 370 : 380}px`;
     },
   },
   methods: {
     toTitle(value) {
-      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")))
+      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
     },
     plaintextFormatter(item) {
       return Object.entries(item)
@@ -371,155 +371,155 @@ export default {
           switch (typeof value) {
             case "string":
             case "object":
-              return value?.length
+              return value?.length;
             default:
-              return Boolean(value)
+              return Boolean(value);
           }
         })
         .sort(([key1, value1], [key2, value2]) => {
-          const order = ["boolean", "number", "string", "object"]
-          const type1 = this.$_.indexOf(order, typeof value1)
-          const type2 = this.$_.indexOf(order, typeof value2)
-          if (type1 < type2) return 1
-          if (type1 > type2) return -1
-          else return key2.localeCompare(key1)
+          const order = ["boolean", "number", "string", "object"];
+          const type1 = this.$_.indexOf(order, typeof value1);
+          const type2 = this.$_.indexOf(order, typeof value2);
+          if (type1 < type2) return 1;
+          if (type1 > type2) return -1;
+          else return key2.localeCompare(key1);
         })
         .map(([key, value]) => {
-          const label = this.$_.startCase(key)
+          const label = this.$_.startCase(key);
           switch (typeof value) {
             case "boolean":
-              return `- ${label}`
+              return `- ${label}`;
             case "object":
               if (value instanceof Array) {
-                const array = value.map((v) => `  - ${v}`).join("\n")
-                return `- ${label}:\n${array}`
+                const array = value.map((v) => `  - ${v}`).join("\n");
+                return `- ${label}:\n${array}`;
               } else {
-                const object = this.plaintextFormatter(value)
+                const object = this.plaintextFormatter(value);
                 const indented = object
                   .split("\n")
                   .map((line) => `  ${line}`)
-                  .join("\n")
-                return `- ${label}:\n${indented}`
+                  .join("\n");
+                return `- ${label}:\n${indented}`;
               }
             default:
-              return `- ${label}: ${value}`
+              return `- ${label}: ${value}`;
           }
         })
-        .join("\n")
+        .join("\n");
     },
     statusToSquareIcon(status) {
       switch (status) {
         case "QUEUED":
-          return "plus-square-fill"
+          return "plus-square-fill";
         case "EXECUTING":
-          return "caret-right-square-fill"
+          return "caret-right-square-fill";
         case "FINISHED":
-          return "check-square-fill"
+          return "check-square-fill";
         case "CANCELLED":
-          return "x-square-fill"
+          return "x-square-fill";
         case "ERROR":
-          return "exclamation-square-fill"
+          return "exclamation-square-fill";
         default:
-          return "question-square-fill"
+          return "question-square-fill";
       }
     },
     statusToCalendarIcon(status) {
       switch (status) {
         case "QUEUED":
-          return "b-icon-calendar-plus"
+          return "b-icon-calendar-plus";
         case "EXECUTING":
-          return "b-icon-calendar-play"
+          return "b-icon-calendar-play";
         case "FINISHED":
-          return "b-icon-calendar-check"
+          return "b-icon-calendar-check";
         case "CANCELLED":
-          return "b-icon-calendar-x"
+          return "b-icon-calendar-x";
         case "ERROR":
-          return "b-icon-calendar-exclamation"
+          return "b-icon-calendar-exclamation";
         default:
-          return "b-icon-calendar-question"
+          return "b-icon-calendar-question";
       }
     },
     async taskProvider(ctx) {
-      const params = { page: ctx.currentPage - 1, size: ctx.perPage }
-      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
-      const filters = this.taskTable.filters
-      if (filters.uuid) params.uuid = filters.uuid
+      const params = { page: ctx.currentPage - 1, size: ctx.perPage };
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`;
+      const filters = this.taskTable.filters;
+      if (filters.uuid) params.uuid = filters.uuid;
       return this.$http
         .get("/task", { params: params })
         .then((res) => {
-          this.taskTable.totalItems = res.data.total_items
-          return res.data.items
+          this.taskTable.totalItems = res.data.total_items;
+          return res.data.items;
         })
         .catch(() => {
           this.appendToast(
             "Error Fetching Task Data",
             "There was a problem retrieving the task data. Refresh the page and try again.",
             "warning",
-          )
-        })
+          );
+        });
     },
     async userProvider(ctx) {
-      const params = { page: ctx.currentPage - 1, size: ctx.perPage }
-      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
-      const filters = this.userTable.filters
-      if (filters.uid) params.uid = filters.uid
-      if (filters.email) params.email = filters.email
-      if (filters.organisation) params.organisation = filters.organisation
+      const params = { page: ctx.currentPage - 1, size: ctx.perPage };
+      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`;
+      const filters = this.userTable.filters;
+      if (filters.uid) params.uid = filters.uid;
+      if (filters.email) params.email = filters.email;
+      if (filters.organisation) params.organisation = filters.organisation;
       return this.$http
         .get("/admin/user", { params: params })
         .then((res) => {
-          this.userTable.totalItems = res.data.total_items
-          return res.data.items
+          this.userTable.totalItems = res.data.total_items;
+          return res.data.items;
         })
         .catch(() => {
           this.appendToast(
             "Error Fetching User Data",
             "There was a problem retrieving the user data. Refresh the page and try again.",
             "warning",
-          )
-        })
+          );
+        });
     },
     async taskCancel(uuid) {
-      const endpoint = `/task/${uuid}/cancel`
+      const endpoint = `/task/${uuid}/cancel`;
       await this.$http.post(endpoint).catch((err) => {
-        const status = err.response.status
+        const status = err.response.status;
         switch (status) {
           case 400:
             this.appendToast(
               "Cannot cancel task",
               "The task has already finished executing and can not be cancelled.",
               "secondary",
-            )
-            break
+            );
+            break;
           case 401:
             this.$store.dispatch("logOut").then(() => {
               this.appendToast(
                 "Login Required",
                 "Your session has expired. Please log in again.",
                 "secondary",
-              )
-            })
-            break
+              );
+            });
+            break;
           case 403:
             this.$store.dispatch("logOut").then(() => {
               this.appendToast(
                 "Access Restricted",
                 "You do not have the necessary authorization to modify the requested resource.",
                 "secondary",
-              )
-            })
-            break
+              );
+            });
+            break;
           default:
-            this.$router.push({ name: "home" })
-            break
+            this.$router.push({ name: "home" });
+            break;
         }
-      })
-      this.$root.$emit("bv::refresh::table", this.taskTable.id)
+      });
+      this.$root.$emit("bv::refresh::table", this.taskTable.id);
     },
     async userAction(uid, action) {
-      const endpoint = `/admin/user/${uid}/${action}`
+      const endpoint = `/admin/user/${uid}/${action}`;
       await this.$http.post(endpoint).catch((err) => {
-        const status = err.response.status
+        const status = err.response.status;
         switch (status) {
           case 401:
             this.$store.dispatch("logOut").then(() => {
@@ -527,48 +527,48 @@ export default {
                 "Login Required",
                 "Your session has expired. Please log in again.",
                 "secondary",
-              )
-            })
-            break
+              );
+            });
+            break;
           case 403:
             this.$store.dispatch("logOut").then(() => {
               this.appendToast(
                 "Access Restricted",
                 "You do not have the necessary authorization to modify the requested resource.",
                 "secondary",
-              )
-            })
-            break
+              );
+            });
+            break;
           default:
-            this.$router.push({ name: "home" })
-            break
+            this.$router.push({ name: "home" });
+            break;
         }
-      })
-      this.$root.$emit("bv::refresh::table", this.userTable.id)
+      });
+      this.$root.$emit("bv::refresh::table", this.userTable.id);
     },
     // TODO 21.10.22: Not what I would call "full-proof" but it will work for now
     cleanLog(str) {
-      const lines = this.$_.split(str, /[\n\r]/)
+      const lines = this.$_.split(str, /[\n\r]/);
       const regex =
-        /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/
-      if (!regex.test(lines[0])) lines.shift()
-      return lines.join("\n")
+        /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/;
+      if (!regex.test(lines[0])) lines.shift();
+      return lines.join("\n");
     },
     async getLog() {
-      const endpoint = "/actuator/logfile"
-      const config = { headers: { Range: "bytes=-1048576" } }
+      const endpoint = "/actuator/logfile";
+      const config = { headers: { Range: "bytes=-1048576" } };
       return this.$http
         .get(endpoint, config)
         .then((res) => res.data)
-        .then(this.cleanLog)
+        .then(this.cleanLog);
     },
     async getConfiguration() {
-      const endpoint = "/admin/configuration"
-      return this.$http.get(endpoint).then((res) => res.data)
+      const endpoint = "/admin/configuration";
+      return this.$http.get(endpoint).then((res) => res.data);
     },
     async updateConfiguration(configuration) {
-      const endpoint = "/admin/configuration"
-      return this.$http.post(endpoint, configuration).then((res) => res.data)
+      const endpoint = "/admin/configuration";
+      return this.$http.post(endpoint, configuration).then((res) => res.data);
     },
     async shutdownServer() {
       this.showConfirmModal(
@@ -580,9 +580,9 @@ export default {
       )
         .then((confirmed) => {
           if (confirmed) {
-            return this.$http.post("/actuator/shutdown")
+            return this.$http.post("/actuator/shutdown");
           } else {
-            return Promise.reject()
+            return Promise.reject();
           }
         })
         .then(() => {
@@ -590,9 +590,9 @@ export default {
             "Shutting Down Server",
             "The server has been successfully shut down.",
             "secondary",
-          )
+          );
         })
-        .catch(() => {})
+        .catch(() => {});
       // TODO 20.10.22: Display failure toast
     },
     async restartServer() {
@@ -605,9 +605,9 @@ export default {
       )
         .then((confirmed) => {
           if (confirmed) {
-            return this.$http.post("/actuator/restart")
+            return this.$http.post("/actuator/restart");
           } else {
-            return Promise.reject(false)
+            return Promise.reject(false);
           }
         })
         .then(() => {
@@ -615,41 +615,41 @@ export default {
             "Restarting Server",
             "Server restart has been initiated. It may take a moment before it becomes available again.",
             "secondary",
-          )
-          return true
+          );
+          return true;
         })
         .catch(() => {
-          return false
-        })
+          return false;
+        });
 
-      if (!restarted) return
-      const that = this
+      if (!restarted) return;
+      const that = this;
       const check = setInterval(async function () {
         await that.$http
           .get("/")
           .then(() => {
-            clearInterval(check)
+            clearInterval(check);
             that.appendToast(
               "Server Connection Restored",
               "The DL4SE server is back online.",
               "secondary",
-            )
+            );
           })
-          .catch(() => {})
-      }, 500)
+          .catch(() => {});
+      }, 500);
     },
     display(title, item, button) {
-      this.detailsModal.title = title
-      this.detailsModal.content = item
-      this.$root.$emit("bv::show::modal", this.detailsModal.id, button)
+      this.detailsModal.title = title;
+      this.detailsModal.content = item;
+      this.$root.$emit("bv::show::modal", this.detailsModal.id, button);
     },
   },
   async beforeMount() {
     this.isAdmin = await this.$http
       .get("/admin")
       .then(() => true)
-      .catch(() => false)
-    this.show = true
+      .catch(() => false);
+    this.show = true;
   },
   data() {
     return {
@@ -696,7 +696,7 @@ export default {
                 submitted: item.submitted ? new Date(Date.parse(item.submitted + "Z")) : null,
                 started: item.started ? new Date(Date.parse(item.started + "Z")) : null,
                 finished: item.finished ? new Date(Date.parse(item.finished + "Z")) : null,
-              }
+              };
             },
             tdClass: ["text-center"],
           },
@@ -704,16 +704,16 @@ export default {
             key: "progress",
             sortable: false,
             formatter: (_value, _key, item) => {
-              let percentage
+              let percentage;
               if (item.total_results === 0) {
-                percentage = "0.00%"
+                percentage = "0.00%";
               } else if (
                 item.status === "FINISHED" ||
                 item.processed_results > item.total_results
               ) {
-                percentage = "100.00%"
+                percentage = "100.00%";
               } else {
-                percentage = `${((item.processed_results / item.total_results) * 100).toFixed(2)}%`
+                percentage = `${((item.processed_results / item.total_results) * 100).toFixed(2)}%`;
               }
 
               return {
@@ -721,7 +721,7 @@ export default {
                 percentage: percentage,
                 processed: item.processed_results,
                 total: item.total_results,
-              }
+              };
             },
           },
           {
@@ -779,7 +779,7 @@ export default {
         ],
         totalItems: 0,
       },
-    }
+    };
   },
-}
+};
 </script>

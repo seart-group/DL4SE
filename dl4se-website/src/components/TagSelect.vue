@@ -83,52 +83,52 @@ export default {
     validator: {
       type: Function,
       default(tag) {
-        return /^\w*$/.test(tag)
+        return /^\w*$/.test(tag);
       },
     },
   },
   methods: {
     read(ev) {
-      const file = ev.target.files[0]
-      const reader = new FileReader()
+      const file = ev.target.files[0];
+      const reader = new FileReader();
       reader.onload = (event) => {
-        const contents = event.target.result
-        const lines = contents.split(this.separator)
-        this.tags = lines.filter(this.validator)
-      }
-      reader.readAsText(file)
+        const contents = event.target.result;
+        const lines = contents.split(this.separator);
+        this.tags = lines.filter(this.validator);
+      };
+      reader.readAsText(file);
     },
     upload() {
-      this.$refs["tags-file"].click()
+      this.$refs["tags-file"].click();
     },
     reset() {
-      this.tags = []
-      this.$refs["tags-file"].value = null
+      this.tags = [];
+      this.$refs["tags-file"].value = null;
     },
   },
   watch: {
     disabled: {
       handler() {
-        this.reset()
+        this.reset();
       },
     },
     tags: {
       handler() {
-        this.$emit("input", this.tags)
+        this.$emit("input", this.tags);
       },
     },
   },
   updated() {
-    const tags = this.$refs["tags-values"]
+    const tags = this.$refs["tags-values"];
     tags
       ?.map((tag) => tag.$el.children[1])
       .filter((button) => !button.hasAttribute("tabindex"))
-      .forEach((button) => button.setAttribute("tabindex", "-1"))
+      .forEach((button) => button.setAttribute("tabindex", "-1"));
   },
   data() {
     return {
       tags: this.value,
-    }
+    };
   },
-}
+};
 </script>

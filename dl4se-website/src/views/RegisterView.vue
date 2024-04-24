@@ -6,18 +6,18 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators"
-import routerMixin from "@/mixins/routerMixin"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import BTextInputForm from "@/components/TextInputForm"
+import {email, helpers, required} from "@vuelidate/validators";
+import routerMixin from "@/mixins/routerMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BTextInputForm from "@/components/TextInputForm";
 
 export default {
   components: { BTextInputForm },
   mixins: [routerMixin, bootstrapMixin],
   methods: {
     async register() {
-      const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      const payload = {};
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value));
       await this.$http
         .post("/user/register", payload)
         .then(() => {
@@ -25,20 +25,20 @@ export default {
             "Account Created",
             "Your account has been created. We have sent you a verification link. Please check your email.",
             "secondary",
-          )
+          );
         })
         .catch((err) => {
-          const status = err.response.status
-          const handler = this.errorHandlers[status]
-          handler()
-        })
+          const status = err.response.status;
+          const handler = this.errorHandlers[status];
+          handler();
+        });
     },
   },
   beforeRouteEnter(_to, _from, next) {
     next((vm) => {
-      const token = vm.$store.getters.getToken
-      if (token) vm.$router.replace({ name: "home" })
-    })
+      const token = vm.$store.getters.getToken;
+      if (token) vm.$router.replace({ name: "home" });
+    });
   },
   data() {
     return {
@@ -93,7 +93,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

@@ -6,18 +6,18 @@
 </template>
 
 <script>
-import {email, required} from "@vuelidate/validators"
-import BTextInputForm from "@/components/TextInputForm"
-import routerMixin from "@/mixins/routerMixin"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
+import {email, required} from "@vuelidate/validators";
+import BTextInputForm from "@/components/TextInputForm";
+import routerMixin from "@/mixins/routerMixin";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
 
 export default {
   components: { BTextInputForm },
   mixins: [routerMixin, bootstrapMixin],
   methods: {
     async request() {
-      const payload = {}
-      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value))
+      const payload = {};
+      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value));
       await this.$http
         .post("/user/password/forgotten", payload)
         .then(() => {
@@ -25,13 +25,13 @@ export default {
             "Password Reset Requested",
             "We have initiated a password reset procedure for your account. Please check the specified email for further instructions.",
             "secondary",
-          )
+          );
         })
         .catch((err) => {
-          const status = err.response.status
-          const handler = this.errorHandlers[status]
-          handler()
-        })
+          const status = err.response.status;
+          const handler = this.errorHandlers[status];
+          handler();
+        });
     },
   },
   data() {
@@ -66,7 +66,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

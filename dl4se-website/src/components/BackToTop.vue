@@ -1,5 +1,5 @@
 <script>
-import {BButton, BIconChevronDoubleUp} from "bootstrap-vue"
+import {BButton, BIconChevronDoubleUp} from "bootstrap-vue";
 
 export default {
   name: "BackToTop",
@@ -9,7 +9,7 @@ export default {
       type: String,
       required: true,
       validator(value) {
-        return /#\S+/.test(value)
+        return /#\S+/.test(value);
       },
     },
     offset: {
@@ -50,7 +50,7 @@ export default {
           [createElement(BIconChevronDoubleUp)],
         ),
       ],
-    )
+    );
   },
-}
+};
 </script>

@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import bootstrapMixin from "@/mixins/bootstrapMixin"
+import useVuelidate from "@vuelidate/core";
+import bootstrapMixin from "@/mixins/bootstrapMixin";
 
 export default {
   name: "b-text-input-form",
@@ -74,68 +74,70 @@ export default {
     displayRequired() {
       return Object.values(this.inputs)
         .map((input) => {
-          const inputRules = Object.keys(input.rules)
-          const isRequired = inputRules.includes("required")
-          const isLabelled = !!input.label
-          return isLabelled && isRequired
+          const inputRules = Object.keys(input.rules);
+          const isRequired = inputRules.includes("required");
+          const isLabelled = !!input.label;
+          return isLabelled && isRequired;
         })
-        .reduce((curr, acc) => curr || acc, false)
+        .reduce((curr, acc) => curr || acc, false);
     },
     submitDisabled() {
-      return this.v$.$invalid || this.submitted
+      return this.v$.$invalid || this.submitted;
     },
   },
   methods: {
     entryDirty(key) {
-      return this.v$.inputs[key].$dirty
+      return this.v$.inputs[key].$dirty;
     },
     entryValid(key) {
-      return !this.v$.inputs[key].$invalid
+      return !this.v$.inputs[key].$invalid;
     },
     entryRequired(key) {
-      return Object.keys(this.inputs[key].rules).includes("required")
+      return Object.keys(this.inputs[key].rules).includes("required");
     },
     entryState(key) {
-      return this.entryDirty(key) ? this.entryValid(key) : null
+      return this.entryDirty(key) ? this.entryValid(key) : null;
     },
     entryErrors(key) {
-      return this.v$.inputs[key].$errors.map((error) => error.$message).filter((message) => message)
+      return this.v$.inputs[key].$errors
+        .map((error) => error.$message)
+        .filter((message) => message);
     },
     entryFeedback(key) {
-      return this.inputs[key].feedback && !!this.entryErrors(key).length
+      return this.inputs[key].feedback && !!this.entryErrors(key).length;
     },
     async submit() {
-      this.submitted = true
-      await this.consumer()
-      this.submitted = false
+      this.submitted = true;
+      await this.consumer();
+      this.submitted = false;
     },
   },
   watch: {
     inputs: {
       nested: true,
       handler() {
-        this.$emit("input", this.inputs)
+        this.$emit("input", this.inputs);
       },
     },
   },
   setup() {
     return {
       v$: useVuelidate(),
-    }
+    };
   },
   data() {
     return {
       submitted: false,
       inputs: this.value,
-    }
+    };
   },
   validations() {
-    const validations = { inputs: {} }
+    const validations = { inputs: {} };
     Object.entries(this.inputs).forEach(([key, data]) => {
-      validations.inputs[key] = { value: data.rules }
-    })
+      validations.inputs[key] = { value: data.rules };
+    });
 
-    return validations
+    return validations;
   },
-}
+};
 </script>

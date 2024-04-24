@@ -1,5 +1,5 @@
 <script>
-import {BJumbotron} from "bootstrap-vue"
+import {BJumbotron} from "bootstrap-vue";
 
 export default {
   name: "b-content-area",
@@ -19,7 +19,7 @@ export default {
         on: data.on,
       },
       children,
-    )
+    );
   },
-}
+};
 </script>

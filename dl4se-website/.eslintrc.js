@@ -15,4 +15,4 @@ module.exports = {
     "vue/no-unused-components": process.env.NODE_ENV === "production" ? "warn" : "off",
     "vue/multi-word-component-names": "off",
   },
-}
+};

@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import formatterMixin from "@/mixins/formatterMixin"
-import {Bar} from "vue-chartjs/legacy"
-import {BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip} from "chart.js"
+import formatterMixin from "@/mixins/formatterMixin";
+import {Bar} from "vue-chartjs/legacy";
+import {BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip} from "chart.js";
 
-Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 // https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html#:~:text=tableau.Brown20%3A-,tableau.Gray20,-%3A
 const colors = [
@@ -36,7 +36,7 @@ const colors = [
   "#555f6a",
   "#4f5864",
   "#49525e",
-]
+];
 
 export default {
   name: "b-bar-chart",
@@ -53,7 +53,7 @@ export default {
     supplier: {
       type: Function,
       default() {
-        return {}
+        return {};
       },
     },
     label: {
@@ -62,23 +62,23 @@ export default {
     },
   },
   async mounted() {
-    this.busy = true
+    this.busy = true;
     await this.supplier()
       .then((res) => {
-        const labels = Object.keys(res)
-        const values = Object.values(res)
+        const labels = Object.keys(res);
+        const values = Object.values(res);
 
-        this.chartData.labels = labels
+        this.chartData.labels = labels;
         this.chartData.datasets = [
           {
             label: this.label,
             backgroundColor: colors,
             data: values,
           },
-        ]
+        ];
       })
-      .catch(() => {})
-    this.busy = false
+      .catch(() => {});
+    this.busy = false;
   },
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

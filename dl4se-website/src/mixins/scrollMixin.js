@@ -5,7 +5,7 @@ export default {
         x: 0,
         y: 0,
       },
-    }
+    };
   },
   created() {
     if (!this.$isServer) {
@@ -13,14 +13,14 @@ export default {
         this.scroll = {
           x: Math.round(window.scrollX),
           y: Math.round(window.scrollY),
-        }
-      }
+        };
+      };
 
-      this._scrollListener()
-      window.addEventListener("scroll", this._scrollListener)
+      this._scrollListener();
+      window.addEventListener("scroll", this._scrollListener);
     }
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this._scrollListener)
+    window.removeEventListener("scroll", this._scrollListener);
   },
-}
+};

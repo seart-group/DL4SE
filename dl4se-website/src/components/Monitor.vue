@@ -27,33 +27,33 @@ export default {
     supplier: {
       type: Function,
       default() {
-        return Promise.reject()
+        return Promise.reject();
       },
     },
   },
   methods: {
     download() {
-      const link = document.createElement("a")
-      link.download = "server.log"
-      link.href = URL.createObjectURL(new Blob([this.value]))
-      link.click()
+      const link = document.createElement("a");
+      link.download = "server.log";
+      link.href = URL.createObjectURL(new Blob([this.value]));
+      link.click();
     },
     async refresh() {
-      this.busy = true
+      this.busy = true;
       await this.supplier()
         .then((res) => (this.value = res))
-        .catch(() => (this.value = ""))
-      this.busy = false
+        .catch(() => (this.value = ""));
+      this.busy = false;
     },
   },
   async mounted() {
-    await this.refresh()
+    await this.refresh();
   },
   data() {
     return {
       busy: undefined,
       value: undefined,
-    }
+    };
   },
-}
+};
 </script>

@@ -1,21 +1,21 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import axios from "@/axios"
-import HomeView from "@/views/HomeView"
-import LogInView from "@/views/LogInView"
-import DashboardView from "@/views/DashboardView"
-import RegisterView from "@/views/RegisterView"
-import VerifyView from "@/views/VerifyView"
-import NotFoundView from "@/views/NotFoundView"
-import TaskCreateView from "@/views/TaskCreateView"
-import DownloadView from "@/views/DownloadView"
-import StatsView from "@/views/StatsView"
-import AboutView from "@/views/AboutView"
-import DocsView from "@/views/DocsView"
-import ForgotPasswordView from "@/views/ForgotPasswordView"
-import ResetPasswordView from "@/views/ResetPasswordView"
+import Vue from "vue";
+import VueRouter from "vue-router";
+import axios from "@/axios";
+import HomeView from "@/views/HomeView";
+import LogInView from "@/views/LogInView";
+import DashboardView from "@/views/DashboardView";
+import RegisterView from "@/views/RegisterView";
+import VerifyView from "@/views/VerifyView";
+import NotFoundView from "@/views/NotFoundView";
+import TaskCreateView from "@/views/TaskCreateView";
+import DownloadView from "@/views/DownloadView";
+import StatsView from "@/views/StatsView";
+import AboutView from "@/views/AboutView";
+import DocsView from "@/views/DocsView";
+import ForgotPasswordView from "@/views/ForgotPasswordView";
+import ResetPasswordView from "@/views/ResetPasswordView";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -125,7 +125,7 @@ const routes = [
       public: true,
     },
   },
-]
+];
 
 const router = new VueRouter({
   mode: "history",
@@ -133,22 +133,22 @@ const router = new VueRouter({
   routes,
   scrollBehavior: (to) => {
     if (to.hash) {
-      return { selector: to.hash }
+      return { selector: to.hash };
     }
   },
-})
+});
 
 router.beforeEach(async (to, _from, next) => {
   if (to.meta.public) {
-    next()
+    next();
   } else {
     await axios
       .get("/user")
       .then(() => next())
       .catch((err) => {
-        const code = err.response.status
+        const code = err.response.status;
         if (code === 401) {
-          const wasLoggedIn = !!router.app.$store.getters.getToken
+          const wasLoggedIn = !!router.app.$store.getters.getToken;
           if (wasLoggedIn) {
             router.app.$store.dispatch("logOut", to.name).then(() => {
               router.app.$bvToast.toast("Your session has expired, please log in again.", {
@@ -158,16 +158,16 @@ router.beforeEach(async (to, _from, next) => {
                 autoHideDelay: 3000,
                 appendToast: true,
                 solid: true,
-              })
-            })
+              });
+            });
           } else {
-            next({ name: "login", query: { target: to.name } })
+            next({ name: "login", query: { target: to.name } });
           }
         } else {
-          next({ name: "home" })
+          next({ name: "home" });
         }
-      })
+      });
   }
-})
+});
 
-export default router
+export default router;

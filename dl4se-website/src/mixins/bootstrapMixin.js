@@ -1,4 +1,4 @@
-import {words} from "lodash"
+import {words} from "lodash";
 
 export default {
   methods: {
@@ -10,7 +10,7 @@ export default {
         solid: true,
         autoHideDelay: (words(`${title} ${message}`).length / 5) * 1000 + 1000,
         appendToast: true,
-      })
+      });
     },
     async showConfirmModal(title, message) {
       return this.$bvModal.msgBoxConfirm(message, {
@@ -24,7 +24,7 @@ export default {
         headerClass: "confirm-modal-header",
         bodyClass: "confirm-modal-body",
         footerClass: "confirm-modal-footer",
-      })
+      });
     },
   },
-}
+};

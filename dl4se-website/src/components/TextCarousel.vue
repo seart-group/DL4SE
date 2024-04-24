@@ -22,7 +22,7 @@ export default {
     slides: {
       type: Object,
       default() {
-        return {}
+        return {};
       },
     },
     interval: {
@@ -32,14 +32,14 @@ export default {
   },
   computed: {
     currentInterval() {
-      return this.visible ? this.interval : 0
+      return this.visible ? this.interval : 0;
     },
   },
   methods: {
     intersectionObserverCallback(entries) {
       entries.forEach((entry) => {
-        this.visible = entry.isIntersecting
-      })
+        this.visible = entry.isIntersecting;
+      });
     },
   },
   mounted() {
@@ -48,18 +48,18 @@ export default {
         root: null,
         rootMargin: "-20px 0px",
         threshold: 0,
-      })
-      this.observer.observe(this.$el)
+      });
+      this.observer.observe(this.$el);
     }
   },
   beforeDestroy() {
-    this.observer.disconnect()
+    this.observer.disconnect();
   },
   data() {
     return {
       visible: undefined,
       observer: undefined,
-    }
+    };
   },
-}
+};
 </script>

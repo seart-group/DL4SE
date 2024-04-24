@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import {between, requiredIf} from "@vuelidate/validators"
+import useVuelidate from "@vuelidate/core";
+import {between, requiredIf} from "@vuelidate/validators";
 
 export default {
   name: "b-counter",
@@ -59,53 +59,53 @@ export default {
   },
   computed: {
     state() {
-      if (this.v$.$dirty || this.required) return !this.v$.$invalid
-      else return null
+      if (this.v$.$dirty || this.required) return !this.v$.$invalid;
+      else return null;
     },
     counterClasses() {
-      const internal = ["counter-input"]
-      return [...internal, ...this.counterClass.split(" ")]
+      const internal = ["counter-input"];
+      return [...internal, ...this.counterClass.split(" ")];
     },
   },
   methods: {
     toNumberOrNull(value) {
-      let parsed = parseFloat(value)
-      return isNaN(parsed) ? null : parsed
+      let parsed = parseFloat(value);
+      return isNaN(parsed) ? null : parsed;
     },
     setCount(value) {
-      this.count = this.toNumberOrNull(value)
+      this.count = this.toNumberOrNull(value);
     },
     increment() {
       if (this.count !== null) {
-        if (this.count < this.max) this.count += 1
+        if (this.count < this.max) this.count += 1;
       } else {
-        this.count = this.min
+        this.count = this.min;
       }
     },
     decrement() {
       if (this.count !== null) {
-        if (this.count > this.min) this.count -= 1
+        if (this.count > this.min) this.count -= 1;
       } else {
-        this.count = this.min
+        this.count = this.min;
       }
     },
   },
   watch: {
     count() {
-      if (!this.count) this.v$.$reset()
-      this.$emit("input", this.toNumberOrNull(this.count))
+      if (!this.count) this.v$.$reset();
+      this.$emit("input", this.toNumberOrNull(this.count));
     },
   },
   setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {};
     return {
       v$: useVuelidate(globalConfig),
-    }
+    };
   },
   data() {
     return {
       count: this.value,
-    }
+    };
   },
   validations() {
     return {
@@ -114,7 +114,7 @@ export default {
         between: between(this.min, this.max),
         required: requiredIf(this.required),
       },
-    }
+    };
   },
-}
+};
 </script>

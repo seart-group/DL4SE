@@ -54,49 +54,49 @@
 </template>
 
 <script>
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import BFooter from "@/components/Footer"
-import BSmartNavbar from "@/components/SmartNavbar"
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFooter from "@/components/Footer";
+import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
   components: { BFooter, BSmartNavbar },
   mixins: [bootstrapMixin],
   computed: {
     currentPage() {
-      return this.$route.name
+      return this.$route.name;
     },
     loggedIn() {
-      return !!this.$store.getters.getToken
+      return !!this.$store.getters.getToken;
     },
     loginTarget() {
-      const isHome = this.isOnPage("home")
-      const isLogin = this.isOnPage("login")
-      const isRegister = this.isOnPage("register")
-      return isHome || isLogin || isRegister ? undefined : this.currentPage
+      const isHome = this.isOnPage("home");
+      const isLogin = this.isOnPage("login");
+      const isRegister = this.isOnPage("register");
+      return isHome || isLogin || isRegister ? undefined : this.currentPage;
     },
   },
   methods: {
     isOnPage(name) {
-      return this.currentPage === name
+      return this.currentPage === name;
     },
     showLogOutModal() {
       this.showConfirmModal(
         "Log Out",
         "Any unsaved changes will be lost. Are you sure you want to continue?",
       ).then((confirmed) => {
-        if (confirmed) this.$store.dispatch("logOut")
-      })
+        if (confirmed) this.$store.dispatch("logOut");
+      });
     },
   },
   async beforeMount() {
     await this.$http.get("/").catch(() => {
-      this.connected = false
+      this.connected = false;
       this.appendToast(
         "Server Connection Refused",
         "The DL4SE server is currently unavailable. Please try accessing the site later.",
         "danger",
-      )
-    })
+      );
+    });
   },
   data() {
     return {
@@ -120,9 +120,9 @@ export default {
         name: "SEART",
         url: "https://seart.si.usi.ch/",
       },
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="sass">

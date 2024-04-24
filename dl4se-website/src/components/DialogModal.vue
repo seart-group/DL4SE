@@ -1,5 +1,5 @@
 <script>
-import {BModal} from "bootstrap-vue"
+import {BModal} from "bootstrap-vue";
 
 export default {
   name: "b-dialog-modal",
@@ -36,7 +36,7 @@ export default {
         },
       },
       [],
-    )
+    );
   },
-}
+};
 </script>

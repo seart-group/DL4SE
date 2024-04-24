@@ -93,10 +93,10 @@
 </template>
 
 <script>
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import scrollMixin from "@/mixins/scrollMixin"
-import BBackToTop from "@/components/BackToTop"
-import BTextCarousel from "@/components/TextCarousel"
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import scrollMixin from "@/mixins/scrollMixin";
+import BBackToTop from "@/components/BackToTop";
+import BTextCarousel from "@/components/TextCarousel";
 
 export default {
   components: { BBackToTop, BTextCarousel },
@@ -107,7 +107,7 @@ export default {
   },
   computed: {
     showBackToTop() {
-      return this.scroll.y > 100
+      return this.scroll.y > 100;
     },
   },
   data() {
@@ -131,7 +131,7 @@ export default {
           needsConnection: true,
         },
       ],
-    }
+    };
   },
-}
+};
 </script>

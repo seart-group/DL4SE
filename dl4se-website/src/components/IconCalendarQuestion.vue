@@ -1,5 +1,5 @@
 <script>
-import {BIconCalendar, BIconQuestion, BIconstack} from "bootstrap-vue"
+import {BIconCalendar, BIconQuestion, BIconstack} from "bootstrap-vue";
 
 export default {
   name: "b-icon-calendar-question",
@@ -23,7 +23,7 @@ export default {
         createElement(BIconQuestion, { props: { scale: 0.75, shiftV: -1, stacked: true } }),
         createElement(BIconCalendar, { props: { stacked: true } }),
       ],
-    )
+    );
   },
-}
+};
 </script>

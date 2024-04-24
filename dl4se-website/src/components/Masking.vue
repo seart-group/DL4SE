@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import BBreak from "@/components/Break"
-import BCounter from "@/components/Counter"
-import {requiredIf} from "@vuelidate/validators"
+import useVuelidate from "@vuelidate/core";
+import BBreak from "@/components/Break";
+import BCounter from "@/components/Counter";
+import {requiredIf} from "@vuelidate/validators";
 
 export default {
   name: "b-masking",
@@ -49,76 +49,76 @@ export default {
   },
   computed: {
     percentageSpecified() {
-      return this.local.masking.percentage != null
+      return this.local.masking.percentage != null;
     },
     tokenSpecified() {
-      return this.local.masking.token != null
+      return this.local.masking.token != null;
     },
     anySpecified() {
-      return !!this.percentageSpecified || !!this.tokenSpecified
+      return !!this.percentageSpecified || !!this.tokenSpecified;
     },
     anyEmpty() {
-      return !this.local.masking.percentage || !this.local.masking.token
+      return !this.local.masking.percentage || !this.local.masking.token;
     },
     bothEmpty() {
-      return !this.local.masking.percentage && !this.local.masking.token
+      return !this.local.masking.percentage && !this.local.masking.token;
     },
     tokenState() {
-      return this.anySpecified ? !this.v$.local.masking.token.$invalid : null
+      return this.anySpecified ? !this.v$.local.masking.token.$invalid : null;
     },
     checkboxDisabled() {
-      return this.anyEmpty || this.v$.$invalid
+      return this.anyEmpty || this.v$.$invalid;
     },
   },
   methods: {
     format(str) {
-      const trimmed = str.trim()
-      return trimmed ? trimmed : null
+      const trimmed = str.trim();
+      return trimmed ? trimmed : null;
     },
     setToken(value) {
-      this.local.masking.token = this.format(value)
+      this.local.masking.token = this.format(value);
     },
     resetCheckbox() {
-      if (this.v$.$invalid) this.local.masking.contiguousOnly = false
-      if (this.bothEmpty) this.local.masking.contiguousOnly = null
+      if (this.v$.$invalid) this.local.masking.contiguousOnly = false;
+      if (this.bothEmpty) this.local.masking.contiguousOnly = null;
     },
     resetValidation() {
-      if (this.bothEmpty) this.v$.$reset()
+      if (this.bothEmpty) this.v$.$reset();
     },
   },
   watch: {
     "local.masking.percentage": {
       handler() {
-        this.resetCheckbox()
-        this.resetValidation()
-        this.$emit("input", this.local.masking)
+        this.resetCheckbox();
+        this.resetValidation();
+        this.$emit("input", this.local.masking);
       },
     },
     "local.masking.token": {
       handler() {
-        this.resetCheckbox()
-        this.resetValidation()
-        this.$emit("input", this.local.masking)
+        this.resetCheckbox();
+        this.resetValidation();
+        this.$emit("input", this.local.masking);
       },
     },
     "local.masking.contiguousOnly": {
       handler() {
-        this.$emit("input", this.local.masking)
+        this.$emit("input", this.local.masking);
       },
     },
   },
   setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {};
     return {
       v$: useVuelidate(globalConfig),
-    }
+    };
   },
   data() {
     return {
       local: {
         masking: this.value,
       },
-    }
+    };
   },
   validations() {
     return {
@@ -130,7 +130,7 @@ export default {
           },
         },
       },
-    }
+    };
   },
-}
+};
 </script>

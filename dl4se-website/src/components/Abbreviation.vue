@@ -10,7 +10,7 @@ export default {
     formatter: {
       type: Function,
       default(value) {
-        return value
+        return value;
       },
     },
   },
@@ -34,7 +34,7 @@ export default {
         ],
       },
       props.formatter(props.value),
-    )
+    );
   },
-}
+};
 </script>

@@ -62,7 +62,7 @@ export default {
             name: "Identity",
             formatter: String,
           },
-        ]
+        ];
       },
     },
   },
@@ -72,33 +72,33 @@ export default {
         return {
           name: item.name,
           value: item.formatter(this.content),
-        }
-      })
+        };
+      });
     },
   },
   methods: {
     reset() {
-      this.activeTab = 0
-      this.showTooltip = false
-      this.$emit("reset")
+      this.activeTab = 0;
+      this.showTooltip = false;
+      this.$emit("reset");
     },
     copy() {
-      const idx = this.activeTab
-      const value = this.formatted[idx].value
-      navigator.clipboard.writeText(value).then(() => (this.showTooltip = true))
+      const idx = this.activeTab;
+      const value = this.formatted[idx].value;
+      navigator.clipboard.writeText(value).then(() => (this.showTooltip = true));
     },
     hideTooltip() {
-      this.showTooltip = false
+      this.showTooltip = false;
     },
     autoHideTooltip() {
-      setTimeout(this.hideTooltip, 2000)
+      setTimeout(this.hideTooltip, 2000);
     },
   },
   data() {
     return {
       activeTab: 0,
       showTooltip: false,
-    }
+    };
   },
-}
+};
 </script>

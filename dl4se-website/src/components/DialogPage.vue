@@ -20,8 +20,8 @@
             class="btn-secondary-border-2"
             :disabled="disabled"
             @click="
-              disabled = true
-              action()
+              disabled = true;
+              action();
             "
           >
             <b-icon :icon="icon" />
@@ -48,14 +48,14 @@ export default {
     actions: {
       type: Array,
       default() {
-        return []
+        return [];
       },
     },
   },
   data() {
     return {
       disabled: false,
-    }
+    };
   },
-}
+};
 </script>

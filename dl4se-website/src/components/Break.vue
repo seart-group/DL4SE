@@ -17,8 +17,8 @@ export default {
       "d-md-none": props.md,
       "d-sm-none": props.sm,
       "d-none": props.disabled,
-    }
-    return createElement("div", { class: classes })
+    };
+    return createElement("div", { class: classes });
   },
-}
+};
 </script>

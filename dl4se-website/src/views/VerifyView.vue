@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import routerMixin from "@/mixins/routerMixin"
-import BDialogPage from "@/components/DialogPage"
+import routerMixin from "@/mixins/routerMixin";
+import BDialogPage from "@/components/DialogPage";
 
 export default {
   props: {
@@ -20,18 +20,18 @@ export default {
   mixins: [routerMixin],
   methods: {
     async apiCall(endpoint, successHandler, errorHandler) {
-      const config = { params: { token: this.token } }
-      await this.$http.get(endpoint, config).then(successHandler).catch(errorHandler)
+      const config = { params: { token: this.token } };
+      await this.$http.get(endpoint, config).then(successHandler).catch(errorHandler);
     },
     async resendToken() {
-      await this.apiCall(this.resendEndpoint, this.resendSuccess, this.resendError)
+      await this.apiCall(this.resendEndpoint, this.resendSuccess, this.resendError);
     },
     async verifyToken() {
-      await this.apiCall(this.verifyEndpoint, this.verifySuccess, this.verifyError)
+      await this.apiCall(this.verifyEndpoint, this.verifySuccess, this.verifyError);
     },
   },
   async created() {
-    await this.verifyToken()
+    await this.verifyToken();
   },
   data() {
     return {
@@ -50,54 +50,55 @@ export default {
           "Account Verified",
           "Your account has been verified. You can now log in.",
           "secondary",
-        )
+        );
       },
       verifyError: (err) => {
-        const status = err.response.status
-        let title
-        let message
-        let variant
-        let action
+        const status = err.response.status;
+        let title;
+        let message;
+        let variant;
+        let action;
         switch (status) {
           case 403:
             action = () => {
-              this.showHtml = true
-            }
-            break
+              this.showHtml = true;
+            };
+            break;
           case 404:
-            title = "Invalid Token"
-            message = "The specified token does not exist. Check the link for errors and try again."
-            variant = "warning"
+            title = "Invalid Token";
+            message =
+              "The specified token does not exist. Check the link for errors and try again.";
+            variant = "warning";
             action = () => {
-              this.redirectHomeAndToast(title, message, variant)
-            }
-            break
+              this.redirectHomeAndToast(title, message, variant);
+            };
+            break;
           default:
-            title = "Server Error"
-            message = "An unexpected server error has occurred. Please try again later."
-            variant = "danger"
+            title = "Server Error";
+            message = "An unexpected server error has occurred. Please try again later.";
+            variant = "danger";
             action = () => {
-              this.redirectHomeAndToast(title, message, variant)
-            }
-            break
+              this.redirectHomeAndToast(title, message, variant);
+            };
+            break;
         }
-        action()
+        action();
       },
       resendSuccess: () => {
         this.redirectHomeAndToast(
           "Token Resent",
           "We have sent you a new verification link. Please check your email.",
           "secondary",
-        )
+        );
       },
       resendError: () => {
         this.redirectHomeAndToast(
           "Server Error",
           "An unexpected server error has occurred. Please try again later.",
           "danger",
-        )
+        );
       },
-    }
+    };
   },
-}
+};
 </script>

@@ -61,45 +61,45 @@
 </template>
 
 <script>
-import formatterMixin from "@/mixins/formatterMixin"
-import BBarChart from "@/components/BarChart"
+import formatterMixin from "@/mixins/formatterMixin";
+import BBarChart from "@/components/BarChart";
 
 export default {
   components: { BBarChart },
   mixins: [formatterMixin],
   methods: {
     async apiCall(endpoint) {
-      return this.$http.get(endpoint).then((res) => res.data)
+      return this.$http.get(endpoint).then((res) => res.data);
     },
     async totalUsers() {
-      return this.apiCall("/statistics/users")
+      return this.apiCall("/statistics/users");
     },
     async totalRepos() {
-      return this.apiCall("/statistics/repos")
+      return this.apiCall("/statistics/repos");
     },
     async totalFiles() {
-      return this.apiCall("/statistics/files")
+      return this.apiCall("/statistics/files");
     },
     async totalFuncs() {
-      return this.apiCall("/statistics/functions")
+      return this.apiCall("/statistics/functions");
     },
     async totalTasks() {
-      return this.apiCall("/statistics/tasks")
+      return this.apiCall("/statistics/tasks");
     },
     async totalCodeSize() {
-      return this.apiCall("/statistics/code")
+      return this.apiCall("/statistics/code");
     },
     async totalTasksSize() {
-      return this.apiCall("/statistics/tasks/size")
+      return this.apiCall("/statistics/tasks/size");
     },
     async reposByLanguage() {
-      return this.apiCall("/statistics/languages/repos")
+      return this.apiCall("/statistics/languages/repos");
     },
     async filesByLanguage() {
-      return this.apiCall("/statistics/languages/files")
+      return this.apiCall("/statistics/languages/files");
     },
     async funcsByLanguage() {
-      return this.apiCall("/statistics/languages/functions")
+      return this.apiCall("/statistics/languages/functions");
     },
   },
   async mounted() {
@@ -122,22 +122,22 @@ export default {
           totalCodeSize,
           totalTaskSize,
         ]) => {
-          this.count.users = totalUsers
-          this.count.repos = totalRepos
-          this.count.files = totalFiles
-          this.count.funcs = totalFunctions
-          this.count.tasks = totalTasks
+          this.count.users = totalUsers;
+          this.count.repos = totalRepos;
+          this.count.files = totalFiles;
+          this.count.funcs = totalFunctions;
+          this.count.tasks = totalTasks;
 
-          this.size.code = totalCodeSize
-          this.size.tasks = totalTaskSize
+          this.size.code = totalCodeSize;
+          this.size.tasks = totalTaskSize;
 
-          this.loading = false
+          this.loading = false;
         },
       )
       .catch(() => {
         // TODO 03.11.22: Migrate this to a router guard?
-        this.$router.replace({ name: "home" })
-      })
+        this.$router.replace({ name: "home" });
+      });
   },
   data() {
     return {
@@ -153,7 +153,7 @@ export default {
         code: undefined,
         tasks: undefined,
       },
-    }
+    };
   },
-}
+};
 </script>

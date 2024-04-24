@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import BBreak from "@/components/Break"
-import BCounter from "@/components/Counter"
+import useVuelidate from "@vuelidate/core";
+import BBreak from "@/components/Break";
+import BCounter from "@/components/Counter";
 
 export default {
   name: "b-range",
@@ -53,30 +53,34 @@ export default {
   },
   computed: {
     lowerMax() {
-      return this.count.upper !== null && this.count.upper <= this.max ? this.count.upper : this.max
+      return this.count.upper !== null && this.count.upper <= this.max
+        ? this.count.upper
+        : this.max;
     },
     upperMin() {
-      return this.count.lower !== null && this.min <= this.count.lower ? this.count.lower : this.min
+      return this.count.lower !== null && this.min <= this.count.lower
+        ? this.count.lower
+        : this.min;
     },
   },
   watch: {
     count: {
       deep: true,
       handler() {
-        this.$emit("input", this.count)
+        this.$emit("input", this.count);
       },
     },
   },
   setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {};
     return {
       v$: useVuelidate(globalConfig),
-    }
+    };
   },
   data() {
     return {
       count: this.value,
-    }
+    };
   },
-}
+};
 </script>

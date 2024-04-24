@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import {required} from "@vuelidate/validators"
+import useVuelidate from "@vuelidate/core";
+import {required} from "@vuelidate/validators";
 
 export default {
   name: "b-config-table",
@@ -74,79 +74,79 @@ export default {
     supplier: {
       type: Function,
       default() {
-        return Promise.reject()
+        return Promise.reject();
       },
     },
     consumer: {
       type: Function,
       default() {
-        return Promise.reject()
+        return Promise.reject();
       },
     },
   },
   computed: {
     hasMappings() {
-      return !!this.mappings && Object.keys(this.mappings).length > 0
+      return !!this.mappings && Object.keys(this.mappings).length > 0;
     },
     consumeDisabled() {
-      return this.v$.$invalid || !this.v$.$anyDirty || this.busy
+      return this.v$.$invalid || !this.v$.$anyDirty || this.busy;
     },
   },
   methods: {
     configDirty(key) {
-      return this.v$.mappings[key].$dirty
+      return this.v$.mappings[key].$dirty;
     },
     configValid(key) {
-      return !this.v$.mappings[key].$invalid
+      return !this.v$.mappings[key].$invalid;
     },
     configState(key) {
-      return this.configDirty(key) ? this.configValid(key) : null
+      return this.configDirty(key) ? this.configValid(key) : null;
     },
     async consume() {
-      this.busy = true
+      this.busy = true;
       await this.consumer(this.mappings)
         .then((res) => (this.mappings = res))
-        .catch(() => (this.mappings = {}))
+        .catch(() => (this.mappings = {}));
       // TODO 20.10.22: Add some form of error handling in rare event of failures
-      this.v$.$reset()
-      this.busy = false
+      this.v$.$reset();
+      this.busy = false;
     },
     async refresh() {
-      this.busy = true
+      this.busy = true;
       await this.supplier()
         .then((res) => (this.mappings = res))
-        .catch(() => (this.mappings = {}))
-      this.v$.$reset()
-      this.busy = false
+        .catch(() => (this.mappings = {}));
+      this.v$.$reset();
+      this.busy = false;
     },
   },
   async mounted() {
-    await this.refresh()
+    await this.refresh();
   },
   setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
+    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {};
     return {
       v$: useVuelidate(globalConfig),
-    }
+    };
   },
   data() {
     return {
       busy: undefined,
       mappings: undefined,
-    }
+    };
   },
   validations() {
     if (this.hasMappings) {
-      const rules = { $autoDirty: true, required }
+      const rules = { $autoDirty: true, required };
       return {
         mappings: Object.keys(this.mappings).reduce(
           (acc, key) => Object.assign(acc, { [key]: rules }),
           {},
         ),
-      }
+      };
     } else {
-      return {}
+      return {};
     }
   },
-}
+};
 </script>

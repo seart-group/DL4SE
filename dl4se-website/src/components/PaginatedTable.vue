@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import BDropdownSelect from "@/components/DropdownSelect"
+import BDropdownSelect from "@/components/DropdownSelect";
 
 export default {
   name: "b-paginated-table",
@@ -85,16 +85,16 @@ export default {
     fields: {
       type: Array,
       default() {
-        return []
+        return [];
       },
     },
     controls: {
       type: Array,
       default() {
-        return []
+        return [];
       },
       validator(value) {
-        return value.every((control) => typeof control === "string")
+        return value.every((control) => typeof control === "string");
       },
     },
     primaryKey: String,
@@ -102,7 +102,7 @@ export default {
       type: Number,
       required: true,
       validator(value) {
-        return value >= 0
+        return value >= 0;
       },
     },
     provider: {
@@ -116,16 +116,16 @@ export default {
   },
   methods: {
     refresh() {
-      this.$root.$emit("bv::refresh::table", this.id)
+      this.$root.$emit("bv::refresh::table", this.id);
     },
   },
   beforeMount() {
     if (this.refreshRate >= 0) {
-      this.intervalId = setInterval(this.refresh, this.refreshRate)
+      this.intervalId = setInterval(this.refresh, this.refreshRate);
     }
   },
   beforeDestroy() {
-    this.intervalId = clearInterval(this.intervalId)
+    this.intervalId = clearInterval(this.intervalId);
   },
   data() {
     return {
@@ -133,7 +133,7 @@ export default {
       currentPage: 1,
       perPage: 20,
       perPageOptions: [10, 20, 50, 100],
-    }
+    };
   },
-}
+};
 </script>

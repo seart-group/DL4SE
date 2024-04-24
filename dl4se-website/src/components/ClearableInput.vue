@@ -29,22 +29,22 @@ export default {
   },
   methods: {
     setInput(value) {
-      const trimmed = value.trim()
-      this.input = trimmed ? trimmed : null
+      const trimmed = value.trim();
+      this.input = trimmed ? trimmed : null;
     },
     clear() {
-      this.input = null
+      this.input = null;
     },
   },
   watch: {
     input() {
-      this.$emit("input", this.input)
+      this.$emit("input", this.input);
     },
   },
   data() {
     return {
       input: this.value,
-    }
+    };
   },
-}
+};
 </script>

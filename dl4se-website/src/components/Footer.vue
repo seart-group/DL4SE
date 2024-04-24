@@ -1,5 +1,5 @@
 <script>
-import {BCol, BContainer, BLink, BRow} from "bootstrap-vue"
+import {BCol, BContainer, BLink, BRow} from "bootstrap-vue";
 
 export default {
   name: "b-footer",
@@ -9,20 +9,20 @@ export default {
     authors: {
       type: Array,
       default() {
-        return []
+        return [];
       },
     },
     organisation: {
       type: Object,
       default() {
-        return {}
+        return {};
       },
     },
   },
   render(createElement, { props, data }) {
-    const showAuthors = props.authors?.length
+    const showAuthors = props.authors?.length;
     const showOrganisation =
-      props.organisation?.name !== undefined && props.organisation?.url !== undefined
+      props.organisation?.name !== undefined && props.organisation?.url !== undefined;
     return createElement(
       BContainer,
       {
@@ -94,7 +94,7 @@ export default {
                                   ]
                                 : []),
                             ],
-                          ]
+                          ];
                         }, [])
                         .flatMap((nodes) => nodes),
                     ],
@@ -136,7 +136,7 @@ export default {
           ],
         ),
       ],
-    )
+    );
   },
-}
+};
 </script>
