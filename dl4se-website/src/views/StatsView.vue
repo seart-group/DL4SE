@@ -100,7 +100,7 @@ export default {
     },
     async funcsByLanguage() {
       return this.apiCall("/statistics/languages/functions")
-    }
+    },
   },
   async mounted() {
     await Promise.all([
@@ -110,7 +110,7 @@ export default {
       this.totalFuncs(),
       this.totalTasks(),
       this.totalCodeSize(),
-      this.totalTasksSize()
+      this.totalTasksSize(),
     ])
       .then(
         ([
@@ -120,7 +120,7 @@ export default {
           totalFunctions,
           totalTasks,
           totalCodeSize,
-          totalTaskSize
+          totalTaskSize,
         ]) => {
           this.count.users = totalUsers
           this.count.repos = totalRepos
@@ -132,7 +132,7 @@ export default {
           this.size.tasks = totalTaskSize
 
           this.loading = false
-        }
+        },
       )
       .catch(() => {
         // TODO 03.11.22: Migrate this to a router guard?
@@ -147,13 +147,13 @@ export default {
         repos: undefined,
         files: undefined,
         funcs: undefined,
-        tasks: undefined
+        tasks: undefined,
       },
       size: {
         code: undefined,
-        tasks: undefined
-      }
+        tasks: undefined,
+      },
     }
-  }
+  },
 }
 </script>

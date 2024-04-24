@@ -32,7 +32,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import { between, requiredIf } from "@vuelidate/validators"
+import {between, requiredIf} from "@vuelidate/validators"
 
 export default {
   name: "b-counter",
@@ -40,22 +40,22 @@ export default {
     id: String,
     counterClass: {
       type: String,
-      default: ""
+      default: "",
     },
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     min: {
       type: Number,
-      default: Number.MIN_SAFE_INTEGER
+      default: Number.MIN_SAFE_INTEGER,
     },
     max: {
       type: Number,
-      default: Number.MAX_SAFE_INTEGER
+      default: Number.MAX_SAFE_INTEGER,
     },
     placeholder: String,
-    required: Boolean
+    required: Boolean,
   },
   computed: {
     state() {
@@ -65,7 +65,7 @@ export default {
     counterClasses() {
       const internal = ["counter-input"]
       return [...internal, ...this.counterClass.split(" ")]
-    }
+    },
   },
   methods: {
     toNumberOrNull(value) {
@@ -88,23 +88,23 @@ export default {
       } else {
         this.count = this.min
       }
-    }
+    },
   },
   watch: {
     count() {
       if (!this.count) this.v$.$reset()
       this.$emit("input", this.toNumberOrNull(this.count))
-    }
+    },
   },
   setup(props) {
     const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate(globalConfig)
+      v$: useVuelidate(globalConfig),
     }
   },
   data() {
     return {
-      count: this.value
+      count: this.value,
     }
   },
   validations() {
@@ -112,9 +112,9 @@ export default {
       count: {
         $autoDirty: true,
         between: between(this.min, this.max),
-        required: requiredIf(this.required)
-      }
+        required: requiredIf(this.required),
+      },
     }
-  }
+  },
 }
 </script>

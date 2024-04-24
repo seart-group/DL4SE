@@ -6,17 +6,17 @@ import router from "@/router"
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
+  storage: window.localStorage,
 })
 
 export default new Vuex.Store({
   state: {
-    token: null
+    token: null,
   },
   getters: {
     getToken(state) {
       return state.token
-    }
+    },
   },
   mutations: {
     setToken(state, value) {
@@ -24,7 +24,7 @@ export default new Vuex.Store({
     },
     clearToken(state) {
       state.token = null
-    }
+    },
   },
   actions: {
     async logOut(context, target) {
@@ -34,8 +34,8 @@ export default new Vuex.Store({
       // else
       //   router.go(0)
       // Uncomment previous lines to enable refresh on public page logout
-    }
+    },
   },
   modules: {},
-  plugins: [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin],
 })

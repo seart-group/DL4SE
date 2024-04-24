@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { email, helpers, required } from "@vuelidate/validators"
+import {email, helpers, required} from "@vuelidate/validators"
 import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import BTextInputForm from "@/components/TextInputForm"
@@ -24,7 +24,7 @@ export default {
           this.redirectHomeAndToast(
             "Account Created",
             "Your account has been created. We have sent you a verification link. Please check your email.",
-            "secondary"
+            "secondary",
           )
         })
         .catch((err) => {
@@ -32,7 +32,7 @@ export default {
           const handler = this.errorHandlers[status]
           handler()
         })
-    }
+    },
   },
   beforeRouteEnter(_to, _from, next) {
     next((vm) => {
@@ -47,10 +47,10 @@ export default {
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
-            "danger"
+            "danger",
           ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
-        409: () => this.appendToast("Form Error", "Email already in use.", "warning")
+        409: () => this.appendToast("Form Error", "Email already in use.", "warning"),
       },
       inputs: {
         email: {
@@ -63,8 +63,8 @@ export default {
           rules: {
             $autoDirty: true,
             required: helpers.withMessage("", required),
-            format: helpers.withMessage("Invalid email address", email)
-          }
+            format: helpers.withMessage("Invalid email address", email),
+          },
         },
         password: {
           label: "Password",
@@ -77,9 +77,9 @@ export default {
             required: helpers.withMessage("", required),
             format: helpers.withMessage(
               "Password must be between 6 and 20 characters, and contain one uppercase letter and number.",
-              helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
-            )
-          }
+              helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/),
+            ),
+          },
         },
         organisation: {
           label: "Organisation",
@@ -89,11 +89,11 @@ export default {
           feedback: true,
           rules: {
             $autoDirty: true,
-            required: helpers.withMessage("", required)
-          }
-        }
-      }
+            required: helpers.withMessage("", required),
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

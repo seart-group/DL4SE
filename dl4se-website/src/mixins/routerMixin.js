@@ -18,6 +18,6 @@ export default {
     },
     redirectDashboardAndToast(title, message, variant) {
       this.redirectAndToast({ name: "dashboard" })(title, message, variant)
-    }
-  }
+    },
+  },
 }

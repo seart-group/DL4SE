@@ -10,6 +10,6 @@
 import BDialogPage from "@/components/DialogPage"
 
 export default {
-  components: { BDialogPage }
+  components: { BDialogPage },
 }
 </script>

@@ -353,13 +353,13 @@ export default {
     BIconCalendarQuestion,
     BIconIdenticon,
     BMonitor,
-    BPaginatedTable
+    BPaginatedTable,
   },
   mixins: [bootstrapMixin, formatterMixin, routerMixin],
   computed: {
     tableHeight() {
       return `${this.$screen.xl ? 370 : 380}px`
-    }
+    },
   },
   methods: {
     toTitle(value) {
@@ -454,7 +454,7 @@ export default {
           this.appendToast(
             "Error Fetching Task Data",
             "There was a problem retrieving the task data. Refresh the page and try again.",
-            "warning"
+            "warning",
           )
         })
     },
@@ -475,7 +475,7 @@ export default {
           this.appendToast(
             "Error Fetching User Data",
             "There was a problem retrieving the user data. Refresh the page and try again.",
-            "warning"
+            "warning",
           )
         })
     },
@@ -488,7 +488,7 @@ export default {
             this.appendToast(
               "Cannot cancel task",
               "The task has already finished executing and can not be cancelled.",
-              "secondary"
+              "secondary",
             )
             break
           case 401:
@@ -496,7 +496,7 @@ export default {
               this.appendToast(
                 "Login Required",
                 "Your session has expired. Please log in again.",
-                "secondary"
+                "secondary",
               )
             })
             break
@@ -505,7 +505,7 @@ export default {
               this.appendToast(
                 "Access Restricted",
                 "You do not have the necessary authorization to modify the requested resource.",
-                "secondary"
+                "secondary",
               )
             })
             break
@@ -526,7 +526,7 @@ export default {
               this.appendToast(
                 "Login Required",
                 "Your session has expired. Please log in again.",
-                "secondary"
+                "secondary",
               )
             })
             break
@@ -535,7 +535,7 @@ export default {
               this.appendToast(
                 "Access Restricted",
                 "You do not have the necessary authorization to modify the requested resource.",
-                "secondary"
+                "secondary",
               )
             })
             break
@@ -576,7 +576,7 @@ export default {
         "You are about to shut down the server. " +
           "Doing so will cause any currently executing tasks to be suspended, " +
           "and the API unavailable until it is brought back up. " +
-          "Are you sure you want to continue?"
+          "Are you sure you want to continue?",
       )
         .then((confirmed) => {
           if (confirmed) {
@@ -589,7 +589,7 @@ export default {
           this.redirectHomeAndToast(
             "Shutting Down Server",
             "The server has been successfully shut down.",
-            "secondary"
+            "secondary",
           )
         })
         .catch(() => {})
@@ -601,7 +601,7 @@ export default {
         "You are about to restart the server. " +
           "Doing so will cause any currently executing tasks to be temporarily suspended. " +
           "During this time the API will also be unavailable. " +
-          "Are you sure you want to continue?"
+          "Are you sure you want to continue?",
       )
         .then((confirmed) => {
           if (confirmed) {
@@ -614,7 +614,7 @@ export default {
           this.appendToast(
             "Restarting Server",
             "Server restart has been initiated. It may take a moment before it becomes available again.",
-            "secondary"
+            "secondary",
           )
           return true
         })
@@ -632,7 +632,7 @@ export default {
             that.appendToast(
               "Server Connection Restored",
               "The DL4SE server is back online.",
-              "secondary"
+              "secondary",
             )
           })
           .catch(() => {})
@@ -642,7 +642,7 @@ export default {
       this.detailsModal.title = title
       this.detailsModal.content = item
       this.$root.$emit("bv::show::modal", this.detailsModal.id, button)
-    }
+    },
   },
   async beforeMount() {
     this.isAdmin = await this.$http
@@ -662,30 +662,30 @@ export default {
         formatters: [
           {
             name: "JSON",
-            formatter: (item) => JSON.stringify(item, null, 2)
+            formatter: (item) => JSON.stringify(item, null, 2),
           },
           {
             name: "Plaintext",
-            formatter: this.plaintextFormatter
-          }
-        ]
+            formatter: this.plaintextFormatter,
+          },
+        ],
       },
       taskTable: {
         id: "task-table",
         filters: {
-          uuid: null
+          uuid: null,
         },
         fields: [
           {
             key: "uuid",
             label: "UUID",
             sortable: true,
-            tdClass: ["text-nowrap", "text-monospace"]
+            tdClass: ["text-nowrap", "text-monospace"],
           },
           {
             key: "status",
             sortable: true,
-            tdClass: ["text-center"]
+            tdClass: ["text-center"],
           },
           {
             key: "submitted",
@@ -695,10 +695,10 @@ export default {
               return {
                 submitted: item.submitted ? new Date(Date.parse(item.submitted + "Z")) : null,
                 started: item.started ? new Date(Date.parse(item.started + "Z")) : null,
-                finished: item.finished ? new Date(Date.parse(item.finished + "Z")) : null
+                finished: item.finished ? new Date(Date.parse(item.finished + "Z")) : null,
               }
             },
-            tdClass: ["text-center"]
+            tdClass: ["text-center"],
           },
           {
             key: "progress",
@@ -720,66 +720,66 @@ export default {
                 status: item.status,
                 percentage: percentage,
                 processed: item.processed_results,
-                total: item.total_results
+                total: item.total_results,
               }
-            }
+            },
           },
           {
             key: "size",
             sortable: true,
             formatter: this.formatBytes,
-            tdClass: ["text-right", "text-nowrap"]
+            tdClass: ["text-right", "text-nowrap"],
           },
           {
             key: "details",
-            sortable: false
+            sortable: false,
           },
           {
             key: "actions",
-            sortable: false
-          }
+            sortable: false,
+          },
         ],
-        totalItems: 0
+        totalItems: 0,
       },
       userTable: {
         id: "user-table",
         filters: {
           uid: null,
           email: null,
-          organisation: null
+          organisation: null,
         },
         fields: [
           {
             key: "uid",
             label: "UID",
             sortable: true,
-            tdClass: ["text-monospace", "text-nowrap"]
+            tdClass: ["text-monospace", "text-nowrap"],
           },
           {
             key: "email",
-            sortable: true
+            sortable: true,
           },
           {
             key: "organisation",
-            sortable: true
+            sortable: true,
           },
           {
             key: "registered",
             sortable: true,
-            formatter: (value) => new Date(Date.parse(value + "Z"))
+            formatter: (value) => new Date(Date.parse(value + "Z")),
           },
           {
             key: "details",
-            sortable: false
+            sortable: false,
           },
           {
             key: "actions",
-            sortable: false
-          }
+            sortable: false,
+          },
         ],
-        totalItems: 0
-      }
+        totalItems: 0,
+      },
     }
-  }
+  },
 }
 </script>

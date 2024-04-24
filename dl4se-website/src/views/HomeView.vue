@@ -67,7 +67,7 @@
         :class="{
           'mb-3': idx === 0,
           'my-3': 0 < idx && idx < cards.length - 1,
-          'mt-3': idx === cards.length - 1
+          'mt-3': idx === cards.length - 1,
         }"
       >
         <b-card-body>
@@ -103,12 +103,12 @@ export default {
   mixins: [bootstrapMixin, scrollMixin],
   props: {
     connected: Boolean,
-    loggedIn: Boolean
+    loggedIn: Boolean,
   },
   computed: {
     showBackToTop() {
       return this.scroll.y > 100
-    }
+    },
   },
   data() {
     return {
@@ -121,17 +121,17 @@ export default {
              integrating additional languages and features.`,
         "Free & Open-Source": `Register for free today and get instant access to all the dataset construction features of our platform.
              The entire project is also open-source. You can view the source code or suggest improvements on the project
-             <a href="https://github.com/seart-group/DL4SE" target="_blank" class="text-secondary">GitHub page</a>.`
+             <a href="https://github.com/seart-group/DL4SE" target="_blank" class="text-secondary">GitHub page</a>.`,
       },
       cards: [
         {
           title: "Code Completion Dataset",
           description: "Use this form to build a dataset aimed at training code completion models.",
           linksTo: { name: "code" },
-          needsConnection: true
-        }
-      ]
+          needsConnection: true,
+        },
+      ],
     }
-  }
+  },
 }
 </script>

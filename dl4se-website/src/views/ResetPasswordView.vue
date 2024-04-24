@@ -9,13 +9,13 @@
 import BTextInputForm from "@/components/TextInputForm"
 import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
-import { helpers, required } from "@vuelidate/validators"
+import {helpers, required} from "@vuelidate/validators"
 
 export default {
   components: { BTextInputForm },
   mixins: [routerMixin, bootstrapMixin],
   props: {
-    token: String
+    token: String,
   },
   methods: {
     async reset() {
@@ -27,7 +27,7 @@ export default {
           this.redirectHomeAndToast(
             "Password Reset Successful",
             "Your password has been reset successfully. You can now log into your account with the new password.",
-            "secondary"
+            "secondary",
           )
         })
         .catch((err) => {
@@ -35,7 +35,7 @@ export default {
           const handler = this.errorHandlers[status]
           handler()
         })
-    }
+    },
   },
   data() {
     return {
@@ -44,21 +44,21 @@ export default {
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
-            "danger"
+            "danger",
           ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         403: () =>
           this.redirectHomeAndToast(
             "Token Expired",
             "The received token has expired. Please restart the password recovery process.",
-            "warning"
+            "warning",
           ),
         404: () =>
           this.redirectHomeAndToast(
             "Invalid Token",
             "The specified token does not exist. Check the link for errors and try again.",
-            "warning"
-          )
+            "warning",
+          ),
       },
       inputs: {
         password: {
@@ -70,11 +70,11 @@ export default {
           rules: {
             $autoDirty: true,
             required: required,
-            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
-          }
-        }
-      }
+            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/),
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

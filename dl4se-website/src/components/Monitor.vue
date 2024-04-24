@@ -28,8 +28,8 @@ export default {
       type: Function,
       default() {
         return Promise.reject()
-      }
-    }
+      },
+    },
   },
   methods: {
     download() {
@@ -44,7 +44,7 @@ export default {
         .then((res) => (this.value = res))
         .catch(() => (this.value = ""))
       this.busy = false
-    }
+    },
   },
   async mounted() {
     await this.refresh()
@@ -52,8 +52,8 @@ export default {
   data() {
     return {
       busy: undefined,
-      value: undefined
+      value: undefined,
     }
-  }
+  },
 }
 </script>

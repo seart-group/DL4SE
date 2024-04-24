@@ -73,7 +73,7 @@ export default {
       const isLogin = this.isOnPage("login")
       const isRegister = this.isOnPage("register")
       return isHome || isLogin || isRegister ? undefined : this.currentPage
-    }
+    },
   },
   methods: {
     isOnPage(name) {
@@ -82,11 +82,11 @@ export default {
     showLogOutModal() {
       this.showConfirmModal(
         "Log Out",
-        "Any unsaved changes will be lost. Are you sure you want to continue?"
+        "Any unsaved changes will be lost. Are you sure you want to continue?",
       ).then((confirmed) => {
         if (confirmed) this.$store.dispatch("logOut")
       })
-    }
+    },
   },
   async beforeMount() {
     await this.$http.get("/").catch(() => {
@@ -94,7 +94,7 @@ export default {
       this.appendToast(
         "Server Connection Refused",
         "The DL4SE server is currently unavailable. Please try accessing the site later.",
-        "danger"
+        "danger",
       )
     })
   },
@@ -105,23 +105,23 @@ export default {
       authors: [
         {
           name: "Ozren Dabić",
-          url: "https://dabico.github.io/"
+          url: "https://dabico.github.io/",
         },
         {
           name: "Emad Aghajani",
-          url: "https://emadpres.github.io/"
+          url: "https://emadpres.github.io/",
         },
         {
           name: "Gabriele Bavota",
-          url: "https://inf.usi.ch/faculty/bavota/"
-        }
+          url: "https://inf.usi.ch/faculty/bavota/",
+        },
       ],
       organisation: {
         name: "SEART",
-        url: "https://seart.si.usi.ch/"
-      }
+        url: "https://seart.si.usi.ch/",
+      },
     }
-  }
+  },
 }
 </script>
 

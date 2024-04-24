@@ -3,8 +3,8 @@ export default {
     return {
       scroll: {
         x: 0,
-        y: 0
-      }
+        y: 0,
+      },
     }
   },
   created() {
@@ -12,7 +12,7 @@ export default {
       this._scrollListener = () => {
         this.scroll = {
           x: Math.round(window.scrollX),
-          y: Math.round(window.scrollY)
+          y: Math.round(window.scrollY),
         }
       }
 
@@ -22,5 +22,5 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this._scrollListener)
-  }
+  },
 }

@@ -6,7 +6,7 @@ export default {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
         roundingIncrement: 1,
-        useGrouping: false
+        useGrouping: false,
       })
       const i = Math.floor(Math.log(value) / Math.log(k))
       const f = formatter.format(value / Math.pow(k, i))
@@ -20,6 +20,6 @@ export default {
     },
     formatBytes(value) {
       return this.format(value, 2, 1024, ["B", "KB", "MB", "GB", "TB", "PB"])
-    }
-  }
+    },
+  },
 }

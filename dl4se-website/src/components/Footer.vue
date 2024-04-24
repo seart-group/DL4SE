@@ -1,5 +1,5 @@
 <script>
-import { BCol, BContainer, BLink, BRow } from "bootstrap-vue"
+import {BCol, BContainer, BLink, BRow} from "bootstrap-vue"
 
 export default {
   name: "b-footer",
@@ -10,14 +10,14 @@ export default {
       type: Array,
       default() {
         return []
-      }
+      },
     },
     organisation: {
       type: Object,
       default() {
         return {}
-      }
-    }
+      },
+    },
   },
   render(createElement, { props, data }) {
     const showAuthors = props.authors?.length
@@ -28,24 +28,24 @@ export default {
       {
         props: {
           ...props,
-          fluid: true
+          fluid: true,
         },
         attrs: data.attrs,
         class: {
           "footer-container": true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
       [
         createElement(
           BRow,
           {
             props: {
-              alignH: "between"
-            }
+              alignH: "between",
+            },
           },
           [
             ...(showAuthors
@@ -55,15 +55,15 @@ export default {
                     {
                       props: {
                         md: "auto",
-                        sm: "12"
-                      }
+                        sm: "12",
+                      },
                     },
                     [
                       createElement("div", {
                         class: "footer-text",
                         domProps: {
-                          innerHTML: "Created by:&nbsp;"
-                        }
+                          innerHTML: "Created by:&nbsp;",
+                        },
                       }),
                       ...props.authors
                         .reduce((acc, author, idx) => {
@@ -77,10 +77,10 @@ export default {
                                   class: "footer-link",
                                   props: {
                                     target: "_blank",
-                                    href: author.url
-                                  }
+                                    href: author.url,
+                                  },
                                 },
-                                author.name
+                                author.name,
                               ),
                               ...(idx + 1 < props.authors.length
                                 ? [
@@ -88,17 +88,17 @@ export default {
                                       key: `separator-${idx}`,
                                       class: "footer-link-separator",
                                       domProps: {
-                                        innerHTML: ",&nbsp;"
-                                      }
-                                    })
+                                        innerHTML: ",&nbsp;",
+                                      },
+                                    }),
                                   ]
-                                : [])
-                            ]
+                                : []),
+                            ],
                           ]
                         }, [])
-                        .flatMap((nodes) => nodes)
-                    ]
-                  )
+                        .flatMap((nodes) => nodes),
+                    ],
+                  ),
                 ]
               : []),
             ...(showOrganisation
@@ -108,15 +108,15 @@ export default {
                     {
                       props: {
                         md: "auto",
-                        sm: "12"
-                      }
+                        sm: "12",
+                      },
                     },
                     [
                       createElement("div", {
                         class: "footer-text",
                         domProps: {
-                          innerHTML: "Maintained by:&nbsp;"
-                        }
+                          innerHTML: "Maintained by:&nbsp;",
+                        },
                       }),
                       createElement(
                         BLink,
@@ -124,19 +124,19 @@ export default {
                           class: "footer-link",
                           props: {
                             href: props.organisation.url,
-                            target: "_blank"
-                          }
+                            target: "_blank",
+                          },
                         },
-                        props.organisation.name
-                      )
-                    ]
-                  )
+                        props.organisation.name,
+                      ),
+                    ],
+                  ),
                 ]
-              : [])
-          ]
-        )
-      ]
+              : []),
+          ],
+        ),
+      ],
     )
-  }
+  },
 }
 </script>

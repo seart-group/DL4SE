@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { email, helpers, required } from "@vuelidate/validators"
+import {email, helpers, required} from "@vuelidate/validators"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
 import BTextInputForm from "@/components/TextInputForm"
 
@@ -24,7 +24,7 @@ export default {
   computed: {
     target() {
       return this.$route.query.target || "home"
-    }
+    },
   },
   methods: {
     async login() {
@@ -42,7 +42,7 @@ export default {
           const handler = this.errorHandlers[status]
           handler()
         })
-    }
+    },
   },
   beforeRouteEnter(_to, _from, next) {
     next((vm) => {
@@ -57,10 +57,10 @@ export default {
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
-            "danger"
+            "danger",
           ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
-        401: () => this.appendToast("Form Error", "Invalid login credentials.", "warning")
+        401: () => this.appendToast("Form Error", "Invalid login credentials.", "warning"),
       },
       inputs: {
         email: {
@@ -73,8 +73,8 @@ export default {
           rules: {
             $autoDirty: true,
             required: required,
-            format: email
-          }
+            format: email,
+          },
         },
         password: {
           label: "Password",
@@ -85,11 +85,11 @@ export default {
           rules: {
             $autoDirty: true,
             required: required,
-            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/)
-          }
-        }
-      }
+            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/),
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

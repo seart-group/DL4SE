@@ -21,7 +21,7 @@
           isInvalid,
           invalidTagText,
           isDuplicate,
-          duplicateTagText
+          duplicateTagText,
         }"
       >
         <b-input-group class="tag-select-input-group">
@@ -69,23 +69,23 @@ export default {
     id: String,
     value: {
       type: Array,
-      required: true
+      required: true,
     },
     disabled: Boolean,
     separator: {
       type: String,
-      default: "\n"
+      default: "\n",
     },
     placeholder: {
       type: String,
-      default: "Your tag..."
+      default: "Your tag...",
     },
     validator: {
       type: Function,
       default(tag) {
         return /^\w*$/.test(tag)
-      }
-    }
+      },
+    },
   },
   methods: {
     read(ev) {
@@ -104,19 +104,19 @@ export default {
     reset() {
       this.tags = []
       this.$refs["tags-file"].value = null
-    }
+    },
   },
   watch: {
     disabled: {
       handler() {
         this.reset()
-      }
+      },
     },
     tags: {
       handler() {
         this.$emit("input", this.tags)
-      }
-    }
+      },
+    },
   },
   updated() {
     const tags = this.$refs["tags-values"]
@@ -127,8 +127,8 @@ export default {
   },
   data() {
     return {
-      tags: this.value
+      tags: this.value,
     }
-  }
+  },
 }
 </script>

@@ -1,5 +1,5 @@
 <script>
-import { BJumbotron } from "bootstrap-vue"
+import {BJumbotron} from "bootstrap-vue"
 
 export default {
   name: "b-content-area",
@@ -13,13 +13,13 @@ export default {
         class: {
           "content-area": true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
-      children
+      children,
     )
-  }
+  },
 }
 </script>

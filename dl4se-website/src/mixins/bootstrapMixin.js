@@ -1,4 +1,4 @@
-import { words } from "lodash"
+import {words} from "lodash"
 
 export default {
   methods: {
@@ -9,7 +9,7 @@ export default {
         variant: variant,
         solid: true,
         autoHideDelay: (words(`${title} ${message}`).length / 5) * 1000 + 1000,
-        appendToast: true
+        appendToast: true,
       })
     },
     async showConfirmModal(title, message) {
@@ -23,8 +23,8 @@ export default {
         contentClass: "confirm-modal-content",
         headerClass: "confirm-modal-header",
         bodyClass: "confirm-modal-body",
-        footerClass: "confirm-modal-footer"
+        footerClass: "confirm-modal-footer",
       })
-    }
-  }
+    },
+  },
 }

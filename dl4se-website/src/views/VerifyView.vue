@@ -14,7 +14,7 @@ import BDialogPage from "@/components/DialogPage"
 
 export default {
   props: {
-    token: String
+    token: String,
   },
   components: { BDialogPage },
   mixins: [routerMixin],
@@ -28,7 +28,7 @@ export default {
     },
     async verifyToken() {
       await this.apiCall(this.verifyEndpoint, this.verifySuccess, this.verifyError)
-    }
+    },
   },
   async created() {
     await this.verifyToken()
@@ -42,14 +42,14 @@ export default {
         {
           text: "Resend",
           icon: "arrow-clockwise",
-          action: this.resendToken
-        }
+          action: this.resendToken,
+        },
       ],
       verifySuccess: () => {
         this.redirectHomeAndToast(
           "Account Verified",
           "Your account has been verified. You can now log in.",
-          "secondary"
+          "secondary",
         )
       },
       verifyError: (err) => {
@@ -87,17 +87,17 @@ export default {
         this.redirectHomeAndToast(
           "Token Resent",
           "We have sent you a new verification link. Please check your email.",
-          "secondary"
+          "secondary",
         )
       },
       resendError: () => {
         this.redirectHomeAndToast(
           "Server Error",
           "An unexpected server error has occurred. Please try again later.",
-          "danger"
+          "danger",
         )
-      }
+      },
     }
-  }
+  },
 }
 </script>

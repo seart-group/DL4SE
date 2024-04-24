@@ -44,15 +44,15 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     content: {
       type: [String, Object],
-      required: true
+      required: true,
     },
     formatters: {
       type: Array,
@@ -60,21 +60,21 @@ export default {
         return [
           {
             name: "Identity",
-            formatter: String
-          }
+            formatter: String,
+          },
         ]
-      }
-    }
+      },
+    },
   },
   computed: {
     formatted() {
       return this.formatters.map((item) => {
         return {
           name: item.name,
-          value: item.formatter(this.content)
+          value: item.formatter(this.content),
         }
       })
-    }
+    },
   },
   methods: {
     reset() {
@@ -92,13 +92,13 @@ export default {
     },
     autoHideTooltip() {
       setTimeout(this.hideTooltip, 2000)
-    }
+    },
   },
   data() {
     return {
       activeTab: 0,
-      showTooltip: false
+      showTooltip: false,
     }
-  }
+  },
 }
 </script>

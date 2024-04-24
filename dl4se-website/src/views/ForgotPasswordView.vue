@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { email, required } from "@vuelidate/validators"
+import {email, required} from "@vuelidate/validators"
 import BTextInputForm from "@/components/TextInputForm"
 import routerMixin from "@/mixins/routerMixin"
 import bootstrapMixin from "@/mixins/bootstrapMixin"
@@ -24,7 +24,7 @@ export default {
           this.redirectHomeAndToast(
             "Password Reset Requested",
             "We have initiated a password reset procedure for your account. Please check the specified email for further instructions.",
-            "secondary"
+            "secondary",
           )
         })
         .catch((err) => {
@@ -32,7 +32,7 @@ export default {
           const handler = this.errorHandlers[status]
           handler()
         })
-    }
+    },
   },
   data() {
     return {
@@ -41,15 +41,15 @@ export default {
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
-            "danger"
+            "danger",
           ),
         400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
         404: () =>
           this.appendToast(
             "Account Not Found",
             "No account is associated to the specified email address.",
-            "warning"
-          )
+            "warning",
+          ),
       },
       inputs: {
         email: {
@@ -62,11 +62,11 @@ export default {
           rules: {
             $autoDirty: true,
             required: required,
-            format: email
-          }
-        }
-      }
+            format: email,
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

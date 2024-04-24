@@ -79,14 +79,14 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     title: String,
     fields: {
       type: Array,
       default() {
         return []
-      }
+      },
     },
     controls: {
       type: Array,
@@ -95,7 +95,7 @@ export default {
       },
       validator(value) {
         return value.every((control) => typeof control === "string")
-      }
+      },
     },
     primaryKey: String,
     totalItems: {
@@ -103,21 +103,21 @@ export default {
       required: true,
       validator(value) {
         return value >= 0
-      }
+      },
     },
     provider: {
       type: Function,
-      required: true
+      required: true,
     },
     refreshRate: {
       type: Number,
-      default: -1
-    }
+      default: -1,
+    },
   },
   methods: {
     refresh() {
       this.$root.$emit("bv::refresh::table", this.id)
-    }
+    },
   },
   beforeMount() {
     if (this.refreshRate >= 0) {
@@ -132,8 +132,8 @@ export default {
       intervalId: undefined,
       currentPage: 1,
       perPage: 20,
-      perPageOptions: [10, 20, 50, 100]
+      perPageOptions: [10, 20, 50, 100],
     }
-  }
+  },
 }
 </script>

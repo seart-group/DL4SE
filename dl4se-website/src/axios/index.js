@@ -3,7 +3,7 @@ import store from "@/store"
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
-  timeout: 5000
+  timeout: 5000,
 })
 
 const noAuth = [
@@ -23,7 +23,7 @@ const noAuth = [
   "/statistics/tasks/size",
   "/statistics/languages/repos",
   "/statistics/languages/files",
-  "/statistics/languages/functions"
+  "/statistics/languages/functions",
 ]
 
 instance.interceptors.request.use(
@@ -32,7 +32,7 @@ instance.interceptors.request.use(
     if (request.method === "POST") request.headers["Content-Type"] = "application/json"
     return request
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 export default instance

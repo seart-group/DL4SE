@@ -23,9 +23,9 @@ export default {
     id: String,
     value: {
       type: String,
-      default: null
+      default: null,
     },
-    placeholder: String
+    placeholder: String,
   },
   methods: {
     setInput(value) {
@@ -34,17 +34,17 @@ export default {
     },
     clear() {
       this.input = null
-    }
+    },
   },
   watch: {
     input() {
       this.$emit("input", this.input)
-    }
+    },
   },
   data() {
     return {
-      input: this.value
+      input: this.value,
     }
-  }
+  },
 }
 </script>

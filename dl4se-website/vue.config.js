@@ -7,10 +7,10 @@ module.exports = defineConfig({
       template: "public/index.html",
       filename: "index.html",
       title: "DL4SE",
-      chunks: ["chunk-vendors", "chunk-common", "index"]
-    }
+      chunks: ["chunk-vendors", "chunk-common", "index"],
+    },
   },
   devServer: {
-    port: process.env.VUE_APP_PORT
-  }
+    port: process.env.VUE_APP_PORT,
+  },
 })

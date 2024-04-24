@@ -25,7 +25,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import { requiredIf } from "@vuelidate/validators"
+import {requiredIf} from "@vuelidate/validators"
 
 export default {
   name: "b-dropdown-select",
@@ -36,47 +36,47 @@ export default {
     disabled: Boolean,
     placeholder: {
       type: String,
-      default: "Value"
+      default: "Value",
     },
     header: {
       type: String,
-      default: "Choose an option"
+      default: "Choose an option",
     },
     options: {
       type: Array,
       default() {
         return []
-      }
-    }
+      },
+    },
   },
   computed: {
     toggleContent() {
       return this.selected ? this.selected : this.placeholder
-    }
+    },
   },
   watch: {
     selected() {
       this.$emit("input", this.selected)
-    }
+    },
   },
   setup(props) {
     const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate(globalConfig)
+      v$: useVuelidate(globalConfig),
     }
   },
   data() {
     return {
-      selected: this.value
+      selected: this.value,
     }
   },
   validations() {
     return {
       selected: {
         $autoDirty: true,
-        required: requiredIf(this.required)
-      }
+        required: requiredIf(this.required),
+      },
     }
-  }
+  },
 }
 </script>

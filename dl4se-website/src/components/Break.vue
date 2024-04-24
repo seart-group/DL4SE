@@ -7,7 +7,7 @@ export default {
     lg: Boolean,
     md: Boolean,
     sm: Boolean,
-    disabled: Boolean
+    disabled: Boolean,
   },
   render(createElement, { props }) {
     const classes = {
@@ -16,9 +16,9 @@ export default {
       "d-lg-none": props.lg,
       "d-md-none": props.md,
       "d-sm-none": props.sm,
-      "d-none": props.disabled
+      "d-none": props.disabled,
     }
     return createElement("div", { class: classes })
-  }
+  },
 }
 </script>

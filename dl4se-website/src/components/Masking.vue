@@ -38,14 +38,14 @@
 import useVuelidate from "@vuelidate/core"
 import BBreak from "@/components/Break"
 import BCounter from "@/components/Counter"
-import { requiredIf } from "@vuelidate/validators"
+import {requiredIf} from "@vuelidate/validators"
 
 export default {
   name: "b-masking",
   components: { BBreak, BCounter },
   props: {
     id: String,
-    value: Object
+    value: Object,
   },
   computed: {
     percentageSpecified() {
@@ -68,7 +68,7 @@ export default {
     },
     checkboxDisabled() {
       return this.anyEmpty || this.v$.$invalid
-    }
+    },
   },
   methods: {
     format(str) {
@@ -84,7 +84,7 @@ export default {
     },
     resetValidation() {
       if (this.bothEmpty) this.v$.$reset()
-    }
+    },
   },
   watch: {
     "local.masking.percentage": {
@@ -92,32 +92,32 @@ export default {
         this.resetCheckbox()
         this.resetValidation()
         this.$emit("input", this.local.masking)
-      }
+      },
     },
     "local.masking.token": {
       handler() {
         this.resetCheckbox()
         this.resetValidation()
         this.$emit("input", this.local.masking)
-      }
+      },
     },
     "local.masking.contiguousOnly": {
       handler() {
         this.$emit("input", this.local.masking)
-      }
-    }
+      },
+    },
   },
   setup(props) {
     const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate(globalConfig)
+      v$: useVuelidate(globalConfig),
     }
   },
   data() {
     return {
       local: {
-        masking: this.value
-      }
+        masking: this.value,
+      },
     }
   },
   validations() {
@@ -126,11 +126,11 @@ export default {
         masking: {
           token: {
             $autoDirty: true,
-            required: requiredIf(this.percentageSpecified)
-          }
-        }
-      }
+            required: requiredIf(this.percentageSpecified),
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

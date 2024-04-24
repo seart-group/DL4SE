@@ -288,12 +288,12 @@ import BRange from "@/components/Range"
 export default {
   components: {
     BDropdownSelect,
-    BRange
+    BRange,
   },
   mixins: [routerMixin, bootstrapMixin],
   props: {
     uuid: String,
-    generic: Boolean
+    generic: Boolean,
   },
   computed: {
     dropdownState() {
@@ -306,7 +306,7 @@ export default {
       },
       set(value) {
         this.task.query.min_commits = value.lower
-      }
+      },
     },
     contributors: {
       get() {
@@ -314,7 +314,7 @@ export default {
       },
       set(value) {
         this.task.query.min_contributors = value.lower
-      }
+      },
     },
     issues: {
       get() {
@@ -322,7 +322,7 @@ export default {
       },
       set(value) {
         this.task.query.min_issues = value.lower
-      }
+      },
     },
     stars: {
       get() {
@@ -330,58 +330,58 @@ export default {
       },
       set(value) {
         this.task.query.min_stars = value.lower
-      }
+      },
     },
     characters: {
       get() {
         return {
           lower: this.task.query.min_characters,
-          upper: this.task.query.max_characters
+          upper: this.task.query.max_characters,
         }
       },
       set(value) {
         this.task.query.min_characters = value.lower
         this.task.query.max_characters = value.upper
-      }
+      },
     },
     tokens: {
       get() {
         return {
           lower: this.task.query.min_tokens,
-          upper: this.task.query.max_tokens
+          upper: this.task.query.max_tokens,
         }
       },
       set(value) {
         this.task.query.min_tokens = value.lower
         this.task.query.max_tokens = value.upper
-      }
+      },
     },
     lines: {
       get() {
         return {
           lower: this.task.query.min_lines,
-          upper: this.task.query.max_lines
+          upper: this.task.query.max_lines,
         }
       },
       set(value) {
         this.task.query.min_lines = value.lower
         this.task.query.max_lines = value.upper
-      }
-    }
+      },
+    },
   },
   watch: {
     "task.query.exclude_duplicates": {
       handler() {
         if (this.task.query.exclude_duplicates && this.task.query.exclude_identical)
           this.task.query.exclude_identical = false
-      }
+      },
     },
     "task.query.exclude_identical": {
       handler() {
         if (this.task.query.exclude_identical && this.task.query.exclude_duplicates)
           this.task.query.exclude_duplicates = false
-      }
-    }
+      },
+    },
   },
   methods: {
     submitSuccess() {
@@ -390,7 +390,7 @@ export default {
         "Your dataset creation request has been accepted. " +
           "Please note that it may take some time until it begins executing. " +
           "You will receive an email notification once the dataset is compiled.",
-        "secondary"
+        "secondary",
       )
     },
     submitFailure(err) {
@@ -404,7 +404,7 @@ export default {
             this.appendToast(
               "Login Required",
               "Your session has expired. Please log in again.",
-              "secondary"
+              "secondary",
             )
           })
           break
@@ -413,7 +413,7 @@ export default {
             "Task Exists",
             "A similar task is already queued or executing." +
               " Please wait for it to finish before submitting again.",
-            "warning"
+            "warning",
           )
           break
         case 429:
@@ -421,14 +421,14 @@ export default {
             "Too Many Active Tasks",
             "You have already reached your limit on the number of active tasks." +
               " Try again later once one of them finishes.",
-            "warning"
+            "warning",
           )
           break
         default:
           this.appendToast(
             "Server Error",
             "An unexpected server error has occurred. Please try again later.",
-            "danger"
+            "danger",
           )
           break
       }
@@ -457,7 +457,7 @@ export default {
                 this.redirectDashboardAndToast(
                   "Invalid UUID",
                   "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
-                  "warning"
+                  "warning",
                 )
                 break
               case 401:
@@ -465,7 +465,7 @@ export default {
                   this.appendToast(
                     "Login Required",
                     "Your session has expired. Please log in again.",
-                    "secondary"
+                    "secondary",
                   )
                 })
                 break
@@ -475,7 +475,7 @@ export default {
                 this.redirectDashboardAndToast(
                   "Task Not Found",
                   "The specified task could not be found.",
-                  "warning"
+                  "warning",
                 )
                 break
               default:
@@ -484,11 +484,11 @@ export default {
             }
           })
       }
-    }
+    },
   },
   setup() {
     return {
-      v$: useVuelidate()
+      v$: useVuelidate(),
     }
   },
   async mounted() {
@@ -520,30 +520,30 @@ export default {
           exclude_test: false,
           exclude_non_ascii: false,
           exclude_errors: false,
-          exclude_boilerplate: false
+          exclude_boilerplate: false,
         },
         processing: {
           include_ast: false,
           include_symbolic_expression: false,
           include_tree_sitter_version: false,
           remove_documentation_comments: false,
-          remove_regular_comments: false
-        }
+          remove_regular_comments: false,
+        },
       },
       options: {
         granularities: [
           {
             text: "File",
-            value: "file"
+            value: "file",
           },
           {
             text: "Function",
-            value: "function"
-          }
+            value: "function",
+          },
         ],
-        languages: []
-      }
+        languages: [],
+      },
     }
-  }
+  },
 }
 </script>

@@ -65,7 +65,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import {required} from "@vuelidate/validators"
 
 export default {
   name: "b-config-table",
@@ -75,14 +75,14 @@ export default {
       type: Function,
       default() {
         return Promise.reject()
-      }
+      },
     },
     consumer: {
       type: Function,
       default() {
         return Promise.reject()
-      }
-    }
+      },
+    },
   },
   computed: {
     hasMappings() {
@@ -90,7 +90,7 @@ export default {
     },
     consumeDisabled() {
       return this.v$.$invalid || !this.v$.$anyDirty || this.busy
-    }
+    },
   },
   methods: {
     configDirty(key) {
@@ -118,7 +118,7 @@ export default {
         .catch(() => (this.mappings = {}))
       this.v$.$reset()
       this.busy = false
-    }
+    },
   },
   async mounted() {
     await this.refresh()
@@ -126,13 +126,13 @@ export default {
   setup(props) {
     const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate(globalConfig)
+      v$: useVuelidate(globalConfig),
     }
   },
   data() {
     return {
       busy: undefined,
-      mappings: undefined
+      mappings: undefined,
     }
   },
   validations() {
@@ -141,12 +141,12 @@ export default {
       return {
         mappings: Object.keys(this.mappings).reduce(
           (acc, key) => Object.assign(acc, { [key]: rules }),
-          {}
-        )
+          {},
+        ),
       }
     } else {
       return {}
     }
-  }
+  },
 }
 </script>

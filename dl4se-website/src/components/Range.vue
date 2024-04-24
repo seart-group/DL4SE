@@ -44,12 +44,12 @@ export default {
     value: Object,
     min: {
       type: Number,
-      default: Number.MIN_SAFE_INTEGER
+      default: Number.MIN_SAFE_INTEGER,
     },
     max: {
       type: Number,
-      default: Number.MAX_SAFE_INTEGER
-    }
+      default: Number.MAX_SAFE_INTEGER,
+    },
   },
   computed: {
     lowerMax() {
@@ -57,26 +57,26 @@ export default {
     },
     upperMin() {
       return this.count.lower !== null && this.min <= this.count.lower ? this.count.lower : this.min
-    }
+    },
   },
   watch: {
     count: {
       deep: true,
       handler() {
         this.$emit("input", this.count)
-      }
-    }
+      },
+    },
   },
   setup(props) {
     const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
     return {
-      v$: useVuelidate(globalConfig)
+      v$: useVuelidate(globalConfig),
     }
   },
   data() {
     return {
-      count: this.value
+      count: this.value,
     }
-  }
+  },
 }
 </script>

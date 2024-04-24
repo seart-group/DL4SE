@@ -23,24 +23,24 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/login",
     name: "login",
     component: LogInView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/register",
     name: "register",
     component: RegisterView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/verify/:token",
@@ -48,16 +48,16 @@ const routes = [
     component: VerifyView,
     props: true,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/password/request",
     name: "forgot",
     component: ForgotPasswordView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/password/reset/:token",
@@ -65,16 +65,16 @@ const routes = [
     component: ResetPasswordView,
     props: true,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/dashboard",
     name: "dashboard",
     component: DashboardView,
     meta: {
-      public: false
-    }
+      public: false,
+    },
   },
   {
     path: "/code/:uuid?",
@@ -82,8 +82,8 @@ const routes = [
     component: TaskCreateView,
     props: true,
     meta: {
-      public: false
-    }
+      public: false,
+    },
   },
   {
     path: "/download/:uuid",
@@ -91,40 +91,40 @@ const routes = [
     component: DownloadView,
     props: true,
     meta: {
-      public: false
-    }
+      public: false,
+    },
   },
   {
     path: "/stats",
     name: "stats",
     component: StatsView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/about",
     name: "about",
     component: AboutView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/docs",
     name: "docs",
     component: DocsView,
     meta: {
-      public: true
-    }
+      public: true,
+    },
   },
   {
     path: "/:pathMatch(.*)*",
     component: NotFoundView,
     meta: {
-      public: true
-    }
-  }
+      public: true,
+    },
+  },
 ]
 
 const router = new VueRouter({
@@ -135,7 +135,7 @@ const router = new VueRouter({
     if (to.hash) {
       return { selector: to.hash }
     }
-  }
+  },
 })
 
 router.beforeEach(async (to, _from, next) => {
@@ -157,7 +157,7 @@ router.beforeEach(async (to, _from, next) => {
                 variant: "secondary",
                 autoHideDelay: 3000,
                 appendToast: true,
-                solid: true
+                solid: true,
               })
             })
           } else {

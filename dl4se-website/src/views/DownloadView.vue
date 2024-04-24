@@ -14,7 +14,7 @@ import BDialogPage from "@/components/DialogPage"
 export default {
   components: { BDialogPage },
   props: {
-    uuid: String
+    uuid: String,
   },
   mixins: [routerMixin],
   async created() {
@@ -32,7 +32,7 @@ export default {
             this.redirectDashboardAndToast(
               "Invalid UUID",
               "The specified task UUID is not valid. Make sure you copied the link correctly, and try again.",
-              "warning"
+              "warning",
             )
             break
           case 401:
@@ -40,7 +40,7 @@ export default {
               this.appendToast(
                 "Login Required",
                 "Your session has expired. Please log in again.",
-                "secondary"
+                "secondary",
               )
             })
             break
@@ -48,21 +48,21 @@ export default {
             this.redirectDashboardAndToast(
               "Task Download Refused",
               "This task can not be downloaded.",
-              "warning"
+              "warning",
             )
             break
           case 404:
             this.redirectDashboardAndToast(
               "Task Not Found",
               "The specified task could not be found.",
-              "warning"
+              "warning",
             )
             break
           case 410:
             this.redirectDashboardAndToast(
               "Task Download Expired",
               "The download link for this task is no longer valid.",
-              "secondary"
+              "secondary",
             )
             break
           default:
@@ -81,14 +81,14 @@ export default {
           this.$router.push({ name: "dashboard" })
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   data() {
     return {
       timer: 5,
-      show: false
+      show: false,
     }
-  }
+  },
 }
 </script>

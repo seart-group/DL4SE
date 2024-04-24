@@ -67,8 +67,8 @@ export default {
     value: Object,
     consumer: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     displayRequired() {
@@ -83,7 +83,7 @@ export default {
     },
     submitDisabled() {
       return this.v$.$invalid || this.submitted
-    }
+    },
   },
   methods: {
     entryDirty(key) {
@@ -108,25 +108,25 @@ export default {
       this.submitted = true
       await this.consumer()
       this.submitted = false
-    }
+    },
   },
   watch: {
     inputs: {
       nested: true,
       handler() {
         this.$emit("input", this.inputs)
-      }
-    }
+      },
+    },
   },
   setup() {
     return {
-      v$: useVuelidate()
+      v$: useVuelidate(),
     }
   },
   data() {
     return {
       submitted: false,
-      inputs: this.value
+      inputs: this.value,
     }
   },
   validations() {
@@ -136,6 +136,6 @@ export default {
     })
 
     return validations
-  }
+  },
 }
 </script>

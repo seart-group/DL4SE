@@ -9,8 +9,8 @@
 
 <script>
 import formatterMixin from "@/mixins/formatterMixin"
-import { Bar } from "vue-chartjs/legacy"
-import { BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip } from "chart.js"
+import {Bar} from "vue-chartjs/legacy"
+import {BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip} from "chart.js"
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -35,7 +35,7 @@ const colors = [
   "#5b6570",
   "#555f6a",
   "#4f5864",
-  "#49525e"
+  "#49525e",
 ]
 
 export default {
@@ -45,21 +45,21 @@ export default {
   props: {
     id: {
       type: String,
-      default: ""
+      default: "",
     },
     title: {
-      type: String
+      type: String,
     },
     supplier: {
       type: Function,
       default() {
         return {}
-      }
+      },
     },
     label: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   async mounted() {
     this.busy = true
@@ -73,8 +73,8 @@ export default {
           {
             label: this.label,
             backgroundColor: colors,
-            data: values
-          }
+            data: values,
+          },
         ]
       })
       .catch(() => {})
@@ -85,30 +85,30 @@ export default {
       busy: false,
       chartData: {
         labels: [],
-        datasets: []
+        datasets: [],
       },
       chartOptions: {
         responsive: true,
         scales: {
           y: {
             ticks: {
-              callback: this.formatNumber
-            }
-          }
+              callback: this.formatNumber,
+            },
+          },
         },
         plugins: {
           tooltip: {
             yAlign: "bottom",
             titleAlign: "center",
             backgroundColor: "#000000",
-            cornerRadius: 0
+            cornerRadius: 0,
           },
           legend: {
-            display: !!this.label
-          }
-        }
-      }
+            display: !!this.label,
+          },
+        },
+      },
     }
-  }
+  },
 }
 </script>

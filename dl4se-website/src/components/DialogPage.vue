@@ -39,23 +39,23 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: false
+      required: false,
     },
     actions: {
       type: Array,
       default() {
         return []
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      disabled: false
+      disabled: false,
     }
-  }
+  },
 }
 </script>

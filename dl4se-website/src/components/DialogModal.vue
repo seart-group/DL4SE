@@ -1,5 +1,5 @@
 <script>
-import { BModal } from "bootstrap-vue"
+import {BModal} from "bootstrap-vue"
 
 export default {
   name: "b-dialog-modal",
@@ -7,12 +7,12 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   render(createElement, { props, data, children }) {
     return createElement(
@@ -27,16 +27,16 @@ export default {
           bodyClass: "dialog-modal-body",
           footerClass: "dialog-modal-footer",
           scrollable: true,
-          centered: true
+          centered: true,
         },
         directives: data.directives ?? [],
         on: data.on,
         scopedSlots: {
-          "modal-footer": () => children
-        }
+          "modal-footer": () => children,
+        },
       },
-      []
+      [],
     )
-  }
+  },
 }
 </script>

@@ -9,12 +9,12 @@ export default {
   props: {
     identifier: {
       type: String,
-      required: true
+      required: true,
     },
     scale: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
     // TODO 22.11.22: Introduce support for other BIcon props
     // https://bootstrap-vue.org/docs/icons#component-reference
   },
@@ -23,7 +23,7 @@ export default {
     const options = {
       format: "svg",
       margin: 0,
-      size: 16
+      size: 16,
     }
 
     const svg = new Identicon(hash, options).render().getDump()
@@ -34,7 +34,7 @@ export default {
     if (props.scale !== 1)
       g.setAttribute(
         "transform",
-        `translate(8 8) scale(${props.scale} ${props.scale}) translate(-8 -8)`
+        `translate(8 8) scale(${props.scale} ${props.scale}) translate(-8 -8)`,
       )
 
     return createElement(
@@ -45,7 +45,7 @@ export default {
           "b-icon": true,
           bi: true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         attrs: {
           height: "1em",
@@ -56,16 +56,16 @@ export default {
           role: "img",
           ariaLabel: "identicon",
           fill: "currentColor",
-          stroke: "currentColor"
+          stroke: "currentColor",
         },
         domProps: {
-          innerHTML: g.outerHTML
+          innerHTML: g.outerHTML,
         },
         on: data.listeners,
-        directives: data.directives
+        directives: data.directives,
       },
-      []
+      [],
     )
-  }
+  },
 }
 </script>

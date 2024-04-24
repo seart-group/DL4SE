@@ -23,31 +23,31 @@ export default {
       type: Object,
       default() {
         return {}
-      }
+      },
     },
     interval: {
       type: Number,
-      default: 10000
-    }
+      default: 10000,
+    },
   },
   computed: {
     currentInterval() {
       return this.visible ? this.interval : 0
-    }
+    },
   },
   methods: {
     intersectionObserverCallback(entries) {
       entries.forEach((entry) => {
         this.visible = entry.isIntersecting
       })
-    }
+    },
   },
   mounted() {
     if (IntersectionObserver !== undefined) {
       this.observer = new IntersectionObserver(this.intersectionObserverCallback, {
         root: null,
         rootMargin: "-20px 0px",
-        threshold: 0
+        threshold: 0,
       })
       this.observer.observe(this.$el)
     }
@@ -58,8 +58,8 @@ export default {
   data() {
     return {
       visible: undefined,
-      observer: undefined
+      observer: undefined,
     }
-  }
+  },
 }
 </script>
