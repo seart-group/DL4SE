@@ -389,12 +389,11 @@ export default {
       }
     },
     async taskProvider(ctx) {
-      const url = this.isAdmin ? "/admin/task" : "/task"
       const params = { page: ctx.currentPage, size: ctx.perPage }
       if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`
       const filters = this.taskTable.filters
       if (filters.uuid) params.uuid = filters.uuid
-      return this.$http.get(url, { params: params })
+      return this.$http.get("/task", { params: params })
           .then((res) => {
             this.taskTable.totalItems = res.data.total_items
             return res.data.items
@@ -426,7 +425,7 @@ export default {
           })
     },
     async taskCancel(uuid) {
-      const endpoint = `/task/cancel/${uuid}`
+      const endpoint = `/task/${uuid}/cancel`
       await this.$http.post(endpoint)
           .catch((err) => {
             const status = err.response.status
