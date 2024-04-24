@@ -37,20 +37,21 @@
     <main>
       <router-view :connected="connected" :logged-in="loggedIn" class="router-view" />
     </main>
-    <footer>
-      <b-footer :authors="authors" :organisation="organisation" />
+    <footer class="bg-light-gray py-3">
+      <b-container class="text-center">
+        <span class="text-muted">&copy; 2022 - {{ new Date().getFullYear() }}</span>
+      </b-container>
     </footer>
   </fragment>
 </template>
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin";
-import BFooter from "@/components/Footer";
 import BLogo from "@/components/Logo";
 import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
-  components: { BLogo, BFooter, BSmartNavbar },
+  components: { BLogo, BSmartNavbar },
   mixins: [bootstrapMixin],
   computed: {
     currentPage() {
