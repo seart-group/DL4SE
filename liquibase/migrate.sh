@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -o allexport
+
+source .env
+
 liquibase \
   --username="$DATABASE_USER" \
   --password="$DATABASE_PASS" \
