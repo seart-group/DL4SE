@@ -38,7 +38,7 @@
 import useVuelidate from "@vuelidate/core";
 import BBreak from "@/components/Break";
 import BCounter from "@/components/Counter";
-import {requiredIf} from "@vuelidate/validators";
+import { requiredIf } from "@vuelidate/validators";
 
 export default {
   name: "b-masking",

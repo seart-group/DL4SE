@@ -25,7 +25,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import {requiredIf} from "@vuelidate/validators";
+import { requiredIf } from "@vuelidate/validators";
 
 export default {
   name: "b-dropdown-select",

@@ -1,5 +1,5 @@
 <script>
-import {BJumbotron} from "bootstrap-vue";
+import { BJumbotron } from "bootstrap-vue";
 
 export default {
   name: "b-content-area",

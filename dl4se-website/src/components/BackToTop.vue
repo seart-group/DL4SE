@@ -1,5 +1,5 @@
 <script>
-import {BButton, BIconChevronDoubleUp} from "bootstrap-vue";
+import { BButton, BIconChevronDoubleUp } from "bootstrap-vue";
 
 export default {
   name: "BackToTop",

@@ -1,5 +1,5 @@
 <script>
-import {BIconCalendar, BIconPlayFill, BIconstack} from "bootstrap-vue";
+import { BIconCalendar, BIconPlayFill, BIconstack } from "bootstrap-vue";
 
 export default {
   name: "b-icon-calendar-play",

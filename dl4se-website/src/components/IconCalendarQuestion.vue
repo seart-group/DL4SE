@@ -1,5 +1,5 @@
 <script>
-import {BIconCalendar, BIconQuestion, BIconstack} from "bootstrap-vue";
+import { BIconCalendar, BIconQuestion, BIconstack } from "bootstrap-vue";
 
 export default {
   name: "b-icon-calendar-question",

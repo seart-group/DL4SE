@@ -9,8 +9,8 @@
 
 <script>
 import formatterMixin from "@/mixins/formatterMixin";
-import {Bar} from "vue-chartjs/legacy";
-import {BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip} from "chart.js";
+import { Bar } from "vue-chartjs/legacy";
+import { BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip } from "chart.js";
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 

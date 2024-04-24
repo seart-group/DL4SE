@@ -22,7 +22,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import {between, requiredIf} from "@vuelidate/validators";
+import { between, requiredIf } from "@vuelidate/validators";
 
 export default {
   name: "b-counter",

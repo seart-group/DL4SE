@@ -1,5 +1,5 @@
 <script>
-import {BCol, BContainer, BLink, BRow} from "bootstrap-vue";
+import { BCol, BContainer, BLink, BRow } from "bootstrap-vue";
 
 export default {
   name: "b-footer",

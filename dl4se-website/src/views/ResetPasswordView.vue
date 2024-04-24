@@ -9,7 +9,7 @@
 import BTextInputForm from "@/components/TextInputForm";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
-import {helpers, required} from "@vuelidate/validators";
+import { helpers, required } from "@vuelidate/validators";
 
 export default {
   components: { BTextInputForm },
