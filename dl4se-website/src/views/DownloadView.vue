@@ -17,10 +17,10 @@ export default {
   },
   mixins: [ routerMixin ],
   async created() {
-    await this.$http.get(`/task/token/${this.uuid}`)
+    await this.$http.get(`/task/${this.uuid}/token`)
         .then(res => {
           const token = res.data
-          window.location.href = `${process.env.VUE_APP_API_BASE_URL}/task/download/${this.uuid}?token=${token}`
+          window.location.href = `${process.env.VUE_APP_API_BASE_URL}/task/${this.uuid}/download?token=${token}`
           this.show = true
         })
         .catch(err => {
