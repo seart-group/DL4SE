@@ -6,6 +6,7 @@
           <b-logo />
         </template>
         <template #nav-items-left>
+          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')"> Home </b-nav-item>
           <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">
             Statistics
           </b-nav-item>
