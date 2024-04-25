@@ -1,5 +1,5 @@
 <template>
-  <b-carousel :interval="currentInterval" fade no-hover-pause no-touch class="text-carousel">
+  <b-carousel :interval="currentInterval" indicators fade no-hover-pause no-touch class="text-carousel">
     <b-carousel-slide v-for="([title, content], idx) in Object.entries(slides)" :key="idx" class="text-carousel-slide">
       <b-card no-body class="text-carousel-card">
         <b-card-body>
