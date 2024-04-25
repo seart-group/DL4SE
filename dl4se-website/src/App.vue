@@ -31,6 +31,10 @@
               Register
             </b-nav-item>
           </template>
+          <b-nav-item href="https://github.com/seart-group/dl4se" target="_blank">
+            <b-icon-github class="d-none d-sm-inline" />
+            <span class="d-inline d-sm-none"> GitHub </span>
+          </b-nav-item>
         </template>
       </b-smart-navbar>
     </header>
