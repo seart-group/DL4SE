@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <h1 class="page-title">Log In</h1>
+    <h1 class="text-center">Log In</h1>
     <b-text-input-form v-model="inputs" :consumer="login">
       <template #footer>
         <b-form-row>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { email, helpers, required } from "@vuelidate/validators";
+import {email, helpers, required} from "@vuelidate/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BTextInputForm from "@/components/TextInputForm";
 

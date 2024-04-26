@@ -1,6 +1,6 @@
 <template>
-  <div class="dialog-page">
-    <h1 class="dialog-page-title">{{ title }}</h1>
+  <div class="text-center">
+    <h1>{{ title }}</h1>
     <h3 class="dialog-page-description" v-if="description">
       {{ description }}
     </h3>

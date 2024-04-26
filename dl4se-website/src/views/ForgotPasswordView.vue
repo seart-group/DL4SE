@@ -1,12 +1,12 @@
 <template>
   <div id="forgot-password">
-    <h1 class="page-title">Request New Password</h1>
+    <h1 class="text-center">Request New Password</h1>
     <b-text-input-form v-model="inputs" :consumer="request" />
   </div>
 </template>
 
 <script>
-import { email, required } from "@vuelidate/validators";
+import {email, required} from "@vuelidate/validators";
 import BTextInputForm from "@/components/TextInputForm";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";

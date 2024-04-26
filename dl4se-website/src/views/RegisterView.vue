@@ -1,12 +1,12 @@
 <template>
   <div id="register">
-    <h1 class="page-title">Register</h1>
+    <h1 class="text-center">Register</h1>
     <b-text-input-form v-model="inputs" :consumer="register" />
   </div>
 </template>
 
 <script>
-import { email, helpers, required } from "@vuelidate/validators";
+import {email, helpers, required} from "@vuelidate/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BTextInputForm from "@/components/TextInputForm";

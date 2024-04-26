@@ -5,11 +5,22 @@ $enable-responsive-font-sizes: true
 @import "variables"
 @import "mixins"
 @import "svg"
-@import "typography"
 @import "transition"
 @import "override"
 @import "extension"
 @import "component"
+
+@font-face
+  font-family: 'Trebuchet MS'
+  font-style: normal
+  font-weight: normal
+  src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
+
+@font-face
+  font-family: 'Inconsolata'
+  font-style: normal
+  font-weight: normal
+  src: local('Inconsolata'), url('@/assets/fonts/inconsolata.woff') format('woff')
 
 *
   margin: 0

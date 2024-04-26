@@ -1,6 +1,6 @@
 <template>
   <div id="reset-password">
-    <h1 class="page-title">Specify New Password</h1>
+    <h1 class="text-center">Specify New Password</h1>
     <b-text-input-form v-model="inputs" :consumer="reset" />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import BTextInputForm from "@/components/TextInputForm";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
-import { helpers, required } from "@vuelidate/validators";
+import {helpers, required} from "@vuelidate/validators";
 
 export default {
   components: { BTextInputForm },
