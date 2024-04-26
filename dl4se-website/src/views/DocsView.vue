@@ -84,10 +84,10 @@
     <h3 id="meta" class="page-section">Metadata</h3>
     <div class="page-section">
       <p class="page-text">
-        Certain studies/models may benefit from information such as the AST-representation of source code, which is
-        why we chose to offer the option of including an Abstract Syntax Tree (<code>AST</code>) representation of
-        each exported instance in Extensible Markup Language (XML) format. The inclusion of this information within
-        the dataset will increase its size drastically.
+        Certain studies/models may benefit from information such as the AST-representation of source code, which is why
+        we chose to offer the option of including an Abstract Syntax Tree (<code>AST</code>) representation of each
+        exported instance in Extensible Markup Language (XML) format. The inclusion of this information within the
+        dataset will increase its size drastically.
       </p>
       <p class="page-text">
         Alternatively, we also provide the Symbolic Expression (<code>S-Expression</code>) representation of the AST.
