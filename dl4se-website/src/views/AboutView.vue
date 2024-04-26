@@ -57,3 +57,8 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="sass">
+.page-text
+  text-align: justify!important
+</style>

@@ -235,3 +235,12 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="sass">
+.page-list-item
+  margin-left: 1.5rem!important
+  margin-bottom: .5rem!important
+
+.page-text
+  text-align: justify!important
+</style>
