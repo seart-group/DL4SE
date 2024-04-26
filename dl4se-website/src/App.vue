@@ -97,24 +97,6 @@ export default {
     return {
       interval: undefined,
       connected: true,
-      authors: [
-        {
-          name: "Ozren Dabić",
-          url: "https://dabico.github.io/",
-        },
-        {
-          name: "Emad Aghajani",
-          url: "https://emadpres.github.io/",
-        },
-        {
-          name: "Gabriele Bavota",
-          url: "https://inf.usi.ch/faculty/bavota/",
-        },
-      ],
-      organisation: {
-        name: "SEART",
-        url: "https://seart.si.usi.ch/",
-      },
     };
   },
 };
