@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard" v-if="show">
-    <h1 class="page-title">Dashboard</h1>
+    <h1 class="d-none">Dashboard</h1>
     <b-container>
       <b-row align-h="center">
         <b-col>

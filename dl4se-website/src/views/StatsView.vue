@@ -1,6 +1,6 @@
 <template>
   <div id="stats">
-    <h1 class="page-title">Statistics</h1>
+    <h1 class="d-none">Statistics</h1>
     <b-container>
       <b-row>
         <b-col>
