@@ -6,11 +6,10 @@
           <b-logo />
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')"> Home </b-nav-item>
-          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">
-            Statistics
-          </b-nav-item>
-          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')"> About </b-nav-item>
+          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">Statistics</b-nav-item>
+          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Documentation</b-nav-item>
+          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
@@ -33,7 +32,7 @@
           </template>
           <b-nav-item href="https://github.com/seart-group/dl4se" target="_blank">
             <b-icon-github class="d-none d-sm-inline" />
-            <span class="d-inline d-sm-none"> GitHub </span>
+            <span class="d-inline d-sm-none">GitHub</span>
           </b-nav-item>
         </template>
       </b-smart-navbar>
