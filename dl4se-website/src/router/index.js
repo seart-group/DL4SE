@@ -7,7 +7,7 @@ import DashboardView from "@/views/DashboardView";
 import RegisterView from "@/views/RegisterView";
 import VerifyView from "@/views/VerifyView";
 import NotFoundView from "@/views/NotFoundView";
-import TaskCreateView from "@/views/TaskCreateView";
+import CodeTaskView from "@/views/CodeTaskView";
 import DownloadView from "@/views/DownloadView";
 import StatsView from "@/views/StatsView";
 import AboutView from "@/views/AboutView";
@@ -79,7 +79,7 @@ const routes = [
   {
     path: "/code/:uuid?",
     name: "code",
-    component: TaskCreateView,
+    component: CodeTaskView,
     props: true,
     meta: {
       public: false,
