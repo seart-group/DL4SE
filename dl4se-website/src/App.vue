@@ -86,7 +86,7 @@ export default {
       this.connected = false;
       this.appendToast(
         "Server Connection Refused",
-        "The DL4SE server is currently unavailable. Please try accessing the site later.",
+        "The server is currently unreachable. Please try accessing the site later.",
         "danger",
       );
     });

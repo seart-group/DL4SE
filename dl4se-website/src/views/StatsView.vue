@@ -21,7 +21,7 @@
             </template>
             <template #default>
               <p class="text-justify">
-                DL4SE is host to
+                The platform is host to
                 <strong v-b-tooltip="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</strong>
                 functions, sourced from
                 <strong v-b-tooltip="count.files.toLocaleString()">{{ formatNatural(count.files) }}</strong>

@@ -106,7 +106,7 @@ export default {
   data() {
     return {
       slides: {
-        "Simple Dataset Construction": `<em>DL4SE</em> allows you to easily create large-scale datasets that can be used to either run MSR studies
+        "Simple Dataset Construction": `Our platform allows you to easily create large-scale datasets that can be used to either run MSR studies
              or to train DL models to automate SE tasks. Use our forms to define the characteristics of the dataset you
              would like to build.`,
         "Continuously Up-To-Date": `Our crawlers work around the clock to ensure that you are served data that is in line with the source. At
