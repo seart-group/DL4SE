@@ -65,10 +65,8 @@ export default {
       return !!this.$store.getters.getToken;
     },
     loginTarget() {
-      const isHome = this.isOnPage("home");
-      const isLogin = this.isOnPage("login");
-      const isRegister = this.isOnPage("register");
-      return isHome || isLogin || isRegister ? undefined : this.currentPage;
+      const pages = ["home", "login", "register"];
+      return pages.some(this.isOnPage) ? undefined : this.currentPage;
     },
   },
   methods: {
