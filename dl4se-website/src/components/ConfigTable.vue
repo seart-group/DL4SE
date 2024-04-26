@@ -65,7 +65,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import {required} from "@vuelidate/validators";
 
 export default {
   name: "b-config-table",
@@ -147,3 +147,8 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass">
+.text-monospace
+  font-family: 'Inconsolata', Helvetica, Arial, sans-serif
+</style>
