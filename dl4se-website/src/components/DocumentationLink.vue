@@ -1,5 +1,5 @@
 <script>
-import {BIconQuestionCircleFill, BLink} from "bootstrap-vue";
+import { BIconQuestionCircleFill, BLink } from "bootstrap-vue";
 
 export default {
   name: "BDocumentationLink",
