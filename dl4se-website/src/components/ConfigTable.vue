@@ -65,7 +65,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import {required} from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 
 export default {
   name: "b-config-table",
