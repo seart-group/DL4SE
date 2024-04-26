@@ -62,9 +62,7 @@
             <b-form-group label-class="font-weight-bold" class="m-0 pb-2 pb-md-0">
               <template #label>
                 Granularity
-                <b-link :to="{ name: 'docs', hash: '#granularity' }" target="_blank" class="text-dark" tabindex="-1">
-                  <b-icon-question-circle-fill />
-                </b-link>
+                <b-documentation-link page="docs" section="#granularity" tabindex="-1" target="_blank" />
               </template>
               <b-form-radio-group
                 id="type-radio"
@@ -78,9 +76,7 @@
             <b-form-group label-class="font-weight-bold" class="m-0">
               <template #label>
                 AST
-                <b-link :to="{ name: 'docs', hash: '#ast' }" target="_blank" class="text-dark" tabindex="-1">
-                  <b-icon-question-circle-fill />
-                </b-link>
+                <b-documentation-link page="docs" section="#ast" tabindex="-1" target="_blank" />
               </template>
               <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
                 Pair each instance with its Symbolic Expression representation
@@ -118,9 +114,7 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Exclude
-                <b-link :to="{ name: 'docs', hash: '#exclusion' }" target="_blank" class="text-dark" tabindex="-1">
-                  <b-icon-question-circle-fill />
-                </b-link>
+                <b-documentation-link page="docs" section="#exclusion" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test"> Test code </b-checkbox>
               <b-checkbox
@@ -142,14 +136,7 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Ignore
-                <b-link
-                  :to="{ name: 'docs', hash: '#duplicates-and-clones' }"
-                  target="_blank"
-                  class="text-dark"
-                  tabindex="-1"
-                >
-                  <b-icon-question-circle-fill />
-                </b-link>
+                <b-documentation-link page="docs" section="#duplicates-and-clones" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="duplicates-checkbox" v-model="task.query.exclude_duplicates" inline>
                 Duplicates
@@ -175,14 +162,7 @@
             <b-form-group label-class="font-weight-bold">
               <template #label>
                 Remove
-                <b-link
-                  :to="{ name: 'docs', hash: '#comment-removal' }"
-                  target="_blank"
-                  class="text-dark"
-                  tabindex="-1"
-                >
-                  <b-icon-question-circle-fill />
-                </b-link>
+                <b-documentation-link page="docs" section="#comment-removal" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_documentation_comments">
                 Documentation comments
@@ -209,11 +189,13 @@
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
+import BDocumentationLink from "@/components/DocumentationLink";
 import BDropdownSelect from "@/components/DropdownSelect";
 import BRange from "@/components/Range";
 
 export default {
   components: {
+    BDocumentationLink,
     BDropdownSelect,
     BRange,
   },
