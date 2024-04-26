@@ -81,16 +81,27 @@
         </b-tbody>
       </b-table-simple>
     </div>
-    <h3 id="ast" class="page-section">AST-based Representation</h3>
+    <h3 id="meta" class="page-section">Metadata</h3>
     <div class="page-section">
       <p class="page-text">
-        Certain studies/models may benefit from information such as the AST-representation of source code, which is why
-        we chose to offer the option of including an Abstract Syntax Tree (<code>AST</code>) representation of each
-        exported instance in Extensible Markup Language (XML) format. The inclusion of this information within the
-        dataset will increase its size drastically. Furthermore, since the AST is pre-computed for each instance at
-        mining time, any processing applied to the source code implies that the syntax tree will be recomputed to be
-        consistent with the code representation. For this reason, the inclusion of ASTs in the dataset may also increase
-        the time needed to create the dataset.
+        Certain studies/models may benefit from information such as the AST-representation of source code, which is
+        why we chose to offer the option of including an Abstract Syntax Tree (<code>AST</code>) representation of
+        each exported instance in Extensible Markup Language (XML) format. The inclusion of this information within
+        the dataset will increase its size drastically.
+      </p>
+      <p class="page-text">
+        Alternatively, we also provide the Symbolic Expression (<code>S-Expression</code>) representation of the AST.
+        This format is more compact as compared to XML, but it is also omits certain information such as the row/column
+        positions of nodes in the source code. This is a more fitting format for studies/models that benefit from
+        knowing the structure of the AST, without requiring exact positional information. The inclusion of this
+        information within the dataset will increase its size, but not as drastically as XML.
+      </p>
+      <p class="page-text">
+        Finally, we provide the option to include the tag and semantic version of the <code>tree-sitter</code> binding
+        with was used to mine the information for each instance. Given that the binding and its grammars change over
+        time, this information can be useful for reproducibility purposes. Furthermore, it can be used for diagnostic
+        purposes, should the user encounter any issues with the generated dataset. Given that this information is
+        included on a per-instance basis, it will slightly increase the size of the dataset.
       </p>
     </div>
     <h3 id="filtering" class="page-section">Filtering</h3>

@@ -75,8 +75,8 @@
           <b-col lg="6" md="9" cols="12">
             <b-form-group label-class="font-weight-bold" class="m-0">
               <template #label>
-                AST
-                <b-documentation-link page="docs" section="#ast" tabindex="-1" target="_blank" />
+                Metadata
+                <b-documentation-link page="docs" section="#meta" tabindex="-1" target="_blank" />
               </template>
               <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
                 Pair each instance with its Symbolic Expression representation
