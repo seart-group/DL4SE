@@ -72,7 +72,7 @@
               />
             </b-form-group>
           </b-col>
-          <b-col xl="5" lg="6" md="9" cols="12">
+          <b-col lg="6" md="9" cols="12">
             <b-form-group label-class="font-weight-bold" class="m-0">
               <template #label>
                 AST
