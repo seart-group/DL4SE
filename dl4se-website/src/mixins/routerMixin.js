@@ -13,9 +13,6 @@ export default {
     redirectHomeAndToast(title, message, variant) {
       this.redirectAndToast({ name: "home" })(title, message, variant);
     },
-    redirectLoginAndToast(title, message, variant) {
-      this.redirectAndToast({ name: "login" })(title, message, variant);
-    },
     redirectDashboardAndToast(title, message, variant) {
       this.redirectAndToast({ name: "dashboard" })(title, message, variant);
     },
