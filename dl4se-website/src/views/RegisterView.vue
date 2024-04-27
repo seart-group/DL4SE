@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {email, helpers, required} from "@vuelidate/validators";
+import { email, helpers, required } from "@vuelidate/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BTextInputForm from "@/components/TextInputForm";
