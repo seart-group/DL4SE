@@ -1,5 +1,5 @@
 <script>
-import { BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle } from "bootstrap-vue";
+import {BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle} from "bootstrap-vue";
 
 export default {
   name: "b-smart-navbar",
@@ -31,7 +31,6 @@ export default {
           ...data.attrs,
         },
         class: {
-          "smart-navbar": true,
           ...(data.class || {}),
           ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
