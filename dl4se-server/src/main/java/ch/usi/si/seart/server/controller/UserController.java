@@ -117,7 +117,7 @@ public class UserController {
 
     @PostMapping("/password/reset")
     public ResponseEntity<?> resetPassword(@RequestParam @NotBlank String token, @Valid @RequestBody PasswordDto dto) {
-        User requester = verificationService.getOwner(token);
+        User requester = passwordResetService.getOwner(token);
         passwordResetService.verify(token);
         UserPrincipal principal = conversionService.convert(requester, UserPrincipal.class);
         userDetailsPasswordService.updatePassword(principal, dto.getPassword());
