@@ -10,13 +10,13 @@
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
             </template>
             <b-form-input
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="new-password"
-                v-model.trim="form.password"
-                :disabled="submitted"
-                :state="valid('password')"
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              v-model.trim="form.password"
+              :disabled="submitted"
+              :state="valid('password')"
             />
             <template #description v-if="Boolean(v$.form.password.$invalid)">
               <b-form-text>
@@ -32,13 +32,13 @@
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
             </template>
             <b-form-input
-                id="confirm"
-                name="confirm"
-                type="password"
-                autocomplete="new-password"
-                v-model.trim="form.confirm"
-                :disabled="submitted"
-                :state="valid('confirm')"
+              id="confirm"
+              name="confirm"
+              type="password"
+              autocomplete="new-password"
+              v-model.trim="form.confirm"
+              :disabled="submitted"
+              :state="valid('confirm')"
             />
             <template #invalid-feedback>
               <b-form-text> Must match the password above. </b-form-text>
@@ -85,11 +85,10 @@ export default {
     },
     async reset() {
       this.submitted = true;
-      await this.$http.post(
-          "/user/password/reset",
-          { password: this.form.password },
-          { params: { token: this.token }
-        })
+      const payload = { password: this.form.password };
+      const config = { params: { token: this.token } };
+      await this.$http
+        .post("/user/password/reset", payload, config)
         .then(() => {
           this.redirectHomeAndToast(
             "Password Reset Successful",
