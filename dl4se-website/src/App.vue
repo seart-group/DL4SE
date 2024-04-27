@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar>
+      <b-smart-navbar class="bg-light">
         <template #brand>
           <b-logo />
         </template>
@@ -40,10 +40,12 @@
     <main>
       <router-view :connected="connected" :logged-in="loggedIn" class="router-view" />
     </main>
-    <footer class="bg-light-gray py-3">
-      <b-container class="text-center">
-        <span class="text-muted">&copy; 2022 - {{ new Date().getFullYear() }}</span>
-      </b-container>
+    <footer>
+      <div class="bg-light py-3">
+        <b-container class="text-center">
+          <span class="text-muted">&copy; 2022 - {{ new Date().getFullYear() }}</span>
+        </b-container>
+      </div>
     </footer>
   </fragment>
 </template>
