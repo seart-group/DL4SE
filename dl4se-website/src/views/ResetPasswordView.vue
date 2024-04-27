@@ -1,28 +1,95 @@
 <template>
   <div id="reset-password">
     <h1 class="text-center">Specify New Password</h1>
-    <b-text-input-form v-model="inputs" :consumer="reset" />
+    <b-container>
+      <b-form @submit.prevent.stop="reset" novalidate>
+        <b-form-row>
+          <b-form-group label-for="password" :state="valid('password')">
+            <template #label>
+              Password
+              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+            </template>
+            <b-form-input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                v-model.trim="form.password"
+                :disabled="submitted"
+                :state="valid('password')"
+            />
+            <template #description v-if="Boolean(v$.form.password.$invalid)">
+              <b-form-text>
+                Must be at least 6 characters long, containing one uppercase letter and a number.
+              </b-form-text>
+            </template>
+          </b-form-group>
+        </b-form-row>
+        <b-form-row>
+          <b-form-group label-for="confirm" :state="valid('confirm')">
+            <template #label>
+              Confirm Password
+              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+            </template>
+            <b-form-input
+                id="confirm"
+                name="confirm"
+                type="password"
+                autocomplete="new-password"
+                v-model.trim="form.confirm"
+                :disabled="submitted"
+                :state="valid('confirm')"
+            />
+            <template #invalid-feedback>
+              <b-form-text> Must match the password above. </b-form-text>
+            </template>
+          </b-form-group>
+        </b-form-row>
+        <b-form-row>
+          <b-form-group>
+            <b-form-text class="text-left">
+              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+              Required fields
+            </b-form-text>
+          </b-form-group>
+        </b-form-row>
+        <b-form-row>
+          <b-form-group>
+            <b-button type="submit" :disabled="v$.$invalid || submitted" class="btn btn-secondary border-2 border-dark">
+              Submit
+            </b-button>
+          </b-form-group>
+        </b-form-row>
+        <b-overlay :show="submitted" variant="light" no-wrap :z-index="Number.MAX_SAFE_INTEGER" />
+      </b-form>
+    </b-container>
   </div>
 </template>
 
 <script>
-import BTextInputForm from "@/components/TextInputForm";
+import useVuelidate from "@vuelidate/core";
+import { required, sameAs } from "@vuelidate/validators";
+import { password } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
-import { helpers, required } from "@vuelidate/validators";
 
 export default {
-  components: { BTextInputForm },
   mixins: [routerMixin, bootstrapMixin],
   props: {
     token: String,
   },
   methods: {
+    valid(key) {
+      const element = this.v$.form[key];
+      return element.$dirty ? !element.$invalid : null;
+    },
     async reset() {
-      const payload = {};
-      Object.entries(this.inputs).forEach(([key, data]) => (payload[key] = data.value));
-      await this.$http
-        .post("/user/password/reset", payload, { params: { token: this.token } })
+      this.submitted = true;
+      await this.$http.post(
+          "/user/password/reset",
+          { password: this.form.password },
+          { params: { token: this.token }
+        })
         .then(() => {
           this.redirectHomeAndToast(
             "Password Reset Successful",
@@ -31,50 +98,73 @@ export default {
           );
         })
         .catch((err) => {
-          const status = err.response.status;
-          const handler = this.errorHandlers[status];
-          handler();
+          switch (err.response.status) {
+            case 400: {
+              this.appendToast("Form Error", "Invalid form inputs.", "warning");
+              break;
+            }
+            case 403: {
+              this.redirectHomeAndToast(
+                "Token Expired",
+                "The received token has expired. Please restart the password recovery process.",
+                "warning",
+              );
+              break;
+            }
+            case 404: {
+              this.redirectHomeAndToast(
+                "Invalid Token",
+                "The specified token does not exist. Check the link for errors and try again.",
+                "warning",
+              );
+              break;
+            }
+            default: {
+              this.appendToast(
+                "Server Error",
+                "An unexpected server error has occurred. Please try again later.",
+                "danger",
+              );
+            }
+          }
+        })
+        .finally(() => {
+          this.submitted = false;
         });
     },
   },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
-      errorHandlers: {
-        0: () =>
-          this.appendToast(
-            "Server Error",
-            "An unexpected server error has occurred. Please try again later.",
-            "danger",
-          ),
-        400: () => this.appendToast("Form Error", "Invalid form inputs.", "warning"),
-        403: () =>
-          this.redirectHomeAndToast(
-            "Token Expired",
-            "The received token has expired. Please restart the password recovery process.",
-            "warning",
-          ),
-        404: () =>
-          this.redirectHomeAndToast(
-            "Invalid Token",
-            "The specified token does not exist. Check the link for errors and try again.",
-            "warning",
-          ),
+      submitted: false,
+      form: {
+        password: null,
+        confirm: null,
       },
-      inputs: {
+    };
+  },
+  validations() {
+    return {
+      form: {
         password: {
-          label: "Type In Your New Password",
-          type: "password",
-          value: null,
-          autocomplete: "new-password",
-          feedback: false,
-          rules: {
-            $autoDirty: true,
-            required: required,
-            format: helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{6,20}$/),
-          },
+          $autoDirty: true,
+          required: required,
+          format: password,
+        },
+        confirm: {
+          $autoDirty: true,
+          required: required,
+          format: password,
+          sameAs: sameAs(this.form.password),
         },
       },
     };
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/view/reset-password.sass" />
