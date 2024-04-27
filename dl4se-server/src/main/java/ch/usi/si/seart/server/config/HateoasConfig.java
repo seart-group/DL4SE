@@ -7,11 +7,8 @@ import ch.usi.si.seart.server.config.properties.WebsiteProperties;
 import ch.usi.si.seart.server.hateoas.URLGenerator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.MalformedURLException;
@@ -21,40 +18,35 @@ import java.net.URL;
 public class HateoasConfig {
 
     @Bean
-    public URLGenerator<VerificationToken> verificationURLGenerator(UriBuilder uriBuilder) {
-        return new TokenLinkGenerator<>(uriBuilder, "verify");
+    public URLGenerator<VerificationToken> verificationURLGenerator(WebsiteProperties properties) {
+        return new TokenLinkGenerator<>(properties.getBaseURL().toString(), "verify");
     }
 
     @Bean
-    public URLGenerator<PasswordResetToken> passwordResetURLGenerator(UriBuilder uriBuilder) {
-        return new TokenLinkGenerator<>(uriBuilder, "password", "reset");
-    }
-
-    @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    UriBuilder uriBuilder(WebsiteProperties properties) {
-        return UriComponentsBuilder.fromHttpUrl(properties.getBaseURL().toString());
+    public URLGenerator<PasswordResetToken> passwordResetURLGenerator(WebsiteProperties properties) {
+        return new TokenLinkGenerator<>(properties.getBaseURL().toString(), "password", "reset");
     }
 
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     static final class TokenLinkGenerator<T extends Token> implements URLGenerator<T> {
 
-        UriBuilder uriComponentsBuilder;
+        String base;
 
         String[] prefixSegments;
 
-        public TokenLinkGenerator(UriBuilder uriComponentsBuilder, String... prefixSegments) {
-            this.uriComponentsBuilder = uriComponentsBuilder;
+        public TokenLinkGenerator(String base, String... prefixSegments) {
+            this.base = base;
             this.prefixSegments = prefixSegments;
         }
 
         @Override
         public URL generate(Token token) {
             try {
-                return uriComponentsBuilder
+                return UriComponentsBuilder.fromHttpUrl(base)
                         .pathSegment(prefixSegments)
                         .pathSegment(token.getValue())
                         .build()
+                        .toUri()
                         .toURL();
             } catch (MalformedURLException ex) {
                 throw new IllegalStateException("URL construction failed", ex);
