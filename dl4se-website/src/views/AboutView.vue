@@ -43,7 +43,7 @@
     <section aria-labelledby="language-support">
       <h2 id="language-support">Why do you only support Java &amp; Python?</h2>
       <p>
-        This is only our first step. As time goes on, we plan to integrate C, C++, Javascript, TypeScript, etc. We will
+        This is only our first step. As time goes on, we plan to integrate C, C++, JavaScript, TypeScript, etc. We will
         also further expand the types of datasets that can be built, providing forms specialized for the creation of
         datasets to automate code summarization and code review.
       </p>
