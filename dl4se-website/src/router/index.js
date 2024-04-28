@@ -17,6 +17,13 @@ import ResetPasswordView from "@/views/ResetPasswordView";
 
 Vue.use(VueRouter);
 
+const isAdmin = async (_to, _from, next) => {
+  await axios
+    .get("/admin")
+    .then(() => next())
+    .catch(() => router.replace({ name: "home" }));
+};
+
 const routes = [
   {
     path: "/",
