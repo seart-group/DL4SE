@@ -11,15 +11,29 @@
       <b-row>
         <b-col>
           <h2>Server Controls</h2>
-          <b-content-area class="d-flex justify-content-md-start justify-content-around">
-            <b-button @click="shutdownServer" variant="danger">
-              <b-icon-power />
-              Shutdown
-            </b-button>
-            <b-button @click="restartServer" variant="secondary">
-              <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
-              Restart
-            </b-button>
+          <b-content-area class="d-flex justify-content-around justify-content-md-start">
+            <b-container>
+              <b-row>
+                <b-col cols="12" sm="auto">
+                  <b-button @click="shutdownServer" variant="danger" class="mb-3 mb-sm-0" block>
+                    <b-icon-power />
+                    Shutdown
+                  </b-button>
+                </b-col>
+                <b-col cols="12" sm="auto">
+                  <b-button @click="restartServer" variant="secondary" class="mb-3 mb-sm-0" block>
+                    <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+                    Restart
+                  </b-button>
+                </b-col>
+                <b-col cols="12" sm="auto">
+                  <b-button @click="getLog" variant="primary" block>
+                    <b-icon-file-earmark-text />
+                    Log
+                  </b-button>
+                </b-col>
+              </b-row>
+            </b-container>
           </b-content-area>
         </b-col>
       </b-row>
@@ -98,6 +112,21 @@ export default {
           })
           .catch(() => {});
       }, 5000);
+    },
+    async getLog() {
+      return this.$http
+        .get("/actuator/logfile")
+        .then((res) => res.data)
+        .then((log) => {
+          const options = { type: "text/plain" };
+          const blob = new Blob([log], options);
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "server.log";
+          a.click();
+          URL.revokeObjectURL(url);
+        });
     },
   },
 };
