@@ -12,24 +12,21 @@ export default {
     BNavbarToggle,
   },
   props: {
-    id: {
+    toggleable: {
       type: String,
-      default: "smart-navbar",
+      default: "sm",
+    },
+    sticky: {
+      type: Boolean,
+      default: true,
     },
   },
   render(createElement, { props, data }) {
     return createElement(
       BNavbar,
       {
-        props: {
-          ...props,
-          toggleable: "sm",
-          sticky: true,
-        },
-        attrs: {
-          id: props.id,
-          ...data.attrs,
-        },
+        props: { ...props },
+        attrs: { ...data.attrs },
         class: {
           ...(data.class || {}),
           ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),

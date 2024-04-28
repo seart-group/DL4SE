@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar class="bg-light">
+      <b-smart-navbar id="smart-navbar" toggleable="md" class="bg-light">
         <template #brand>
           <b-logo />
         </template>
