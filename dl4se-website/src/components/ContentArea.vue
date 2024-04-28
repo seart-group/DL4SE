@@ -8,7 +8,10 @@ export default {
     return createElement(
       BJumbotron,
       {
-        props: props,
+        props: {
+          variant: "light",
+          ...props,
+        },
         attrs: data.attrs,
         class: {
           "content-area": true,
@@ -23,3 +26,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/content-area.sass" />
