@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ["plugin:vue/essential", "eslint:recommended", "prettier"],
+  extends: ["plugin:vue/essential", "plugin:prettier/recommended", "eslint:recommended"],
   parserOptions: {
     parser: "@babel/eslint-parser",
   },
