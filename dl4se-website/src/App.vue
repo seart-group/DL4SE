@@ -102,7 +102,19 @@ export default {
 </script>
 
 <style lang="sass">
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+
 #app
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
+
+.router-view
+  padding-top: map-get($spacers, 4)!important
+  padding-bottom: map-get($spacers, 4)!important
+
+@media (min-width: 576px)
+  .router-view
+    padding-left: map-get($spacers, 4)!important
+    padding-right: map-get($spacers, 4)!important
 </style>
