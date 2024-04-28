@@ -231,10 +231,6 @@
       <h3>Server Log</h3>
       <b-monitor :supplier="getLog" />
     </b-container>
-    <b-container v-if="isAdmin">
-      <h3>Server Environment</h3>
-      <b-config-table :supplier="getConfiguration" :consumer="updateConfiguration" />
-    </b-container>
     <b-details-modal
       :id="detailsModal.id"
       :title="detailsModal.title"
@@ -283,7 +279,6 @@ import formatterMixin from "@/mixins/formatterMixin";
 import routerMixin from "@/mixins/routerMixin";
 import BAbbreviation from "@/components/Abbreviation";
 import BClearableInput from "@/components/ClearableInput";
-import BConfigTable from "@/components/ConfigTable";
 import BDetailsModal from "@/components/DetailsModal";
 import BDialogModal from "@/components/DialogModal";
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
@@ -297,7 +292,6 @@ export default {
   components: {
     BAbbreviation,
     BClearableInput,
-    BConfigTable,
     BDetailsModal,
     BDialogModal,
     BIconCalendarExclamation,
@@ -504,14 +498,6 @@ export default {
         .get(endpoint, config)
         .then((res) => res.data)
         .then(this.cleanLog);
-    },
-    async getConfiguration() {
-      const endpoint = "/admin/configuration";
-      return this.$http.get(endpoint).then((res) => res.data);
-    },
-    async updateConfiguration(configuration) {
-      const endpoint = "/admin/configuration";
-      return this.$http.post(endpoint, configuration).then((res) => res.data);
     },
     display(title, item, button) {
       this.detailsModal.title = title;

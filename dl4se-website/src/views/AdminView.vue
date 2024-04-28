@@ -4,6 +4,12 @@
     <b-container>
       <b-row>
         <b-col>
+          <h2>Server Environment</h2>
+          <b-config-table :supplier="getConfiguration" :consumer="updateConfiguration" />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
           <h2>Server Controls</h2>
           <b-content-area class="d-flex justify-content-md-start justify-content-around">
             <b-button @click="shutdownServer" variant="danger">
@@ -24,12 +30,24 @@
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import routerMixin from "@/mixins/routerMixin";
+import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea";
 
 export default {
-  components: { BContentArea },
+  components: {
+    BConfigTable,
+    BContentArea,
+  },
   mixins: [bootstrapMixin, routerMixin],
   methods: {
+    async getConfiguration() {
+      const endpoint = "/admin/configuration";
+      return this.$http.get(endpoint).then((res) => res.data);
+    },
+    async updateConfiguration(configuration) {
+      const endpoint = "/admin/configuration";
+      return this.$http.post(endpoint, configuration).then((res) => res.data);
+    },
     async shutdownServer() {
       this.showConfirmModal(
         "Shut Down Server",
