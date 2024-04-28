@@ -1,10 +1,7 @@
 <template>
-  <div class="bar-chart">
-    <h5 class="bar-chart-title" v-if="title">{{ title }}</h5>
-    <b-overlay :show="busy" variant="light">
-      <Bar :chart-id="id" :chart-data="chartData" :chart-options="chartOptions" />
-    </b-overlay>
-  </div>
+  <b-overlay :show="busy" variant="light">
+    <Bar :chart-id="id" :chart-data="chartData" :chart-options="chartOptions" />
+  </b-overlay>
 </template>
 
 <script>
@@ -97,6 +94,13 @@ export default {
           },
         },
         plugins: {
+          title: {
+            display: true,
+            text: this.title,
+            font: {
+              size: 16,
+            },
+          },
           tooltip: {
             yAlign: "bottom",
             titleAlign: "center",

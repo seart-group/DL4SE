@@ -41,13 +41,13 @@
     <b-container>
       <b-row align-h="center">
         <b-col cols="12" md="8" lg="6" xl="4">
-          <b-bar-chart title="Number of repositories by language" :supplier="reposByLanguage" />
+          <b-bar-chart title="Number of repositories by language" :supplier="reposByLanguage" class="mb-3 mb-xl-0" />
         </b-col>
         <b-col cols="12" md="8" lg="6" xl="4">
-          <b-bar-chart title="Number of files by language" :supplier="filesByLanguage" />
+          <b-bar-chart title="Number of files by language" :supplier="filesByLanguage" class="mb-3 mb-xl-0" />
         </b-col>
         <b-col cols="12" md="8" lg="6" xl="4">
-          <b-bar-chart title="Number of functions by language" :supplier="funcsByLanguage" />
+          <b-bar-chart title="Number of functions by language" :supplier="funcsByLanguage" class="mb-3 mb-xl-0" />
         </b-col>
       </b-row>
     </b-container>
