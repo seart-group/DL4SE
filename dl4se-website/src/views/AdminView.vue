@@ -15,19 +15,19 @@
             <b-container>
               <b-row>
                 <b-col cols="12" sm="auto">
-                  <b-button @click="shutdownServer" variant="danger" class="mb-3 mb-sm-0" block>
+                  <b-button @click="shutdownServer" variant="danger" class="mb-3 mb-sm-0" :disabled="disabled" block>
                     <b-icon-power />
                     Shutdown
                   </b-button>
                 </b-col>
                 <b-col cols="12" sm="auto">
-                  <b-button @click="restartServer" variant="secondary" class="mb-3 mb-sm-0" block>
+                  <b-button @click="restartServer" variant="secondary" class="mb-3 mb-sm-0" :disabled="disabled" block>
                     <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
                     Restart
                   </b-button>
                 </b-col>
                 <b-col cols="12" sm="auto">
-                  <b-button @click="getLog" variant="primary" block>
+                  <b-button @click="getLog" variant="primary" :disabled="disabled" block>
                     <b-icon-file-earmark-text />
                     Log
                   </b-button>
@@ -92,6 +92,7 @@ export default {
           return confirmed ? this.$http.post("/actuator/restart") : Promise.reject(false);
         })
         .then(() => {
+          this.disabled = true;
           this.appendToast(
             "Restarting Server",
             "Server restart has been initiated. It may take a moment before it becomes available again.",
@@ -110,7 +111,9 @@ export default {
             clearInterval(check);
             that.appendToast("Server Connection Restored", "The DL4SE server is back online.", "secondary");
           })
-          .catch(() => {});
+          .finally(() => {
+            that.disabled = false;
+          });
       }, 5000);
     },
     async getLog() {
@@ -128,6 +131,11 @@ export default {
           URL.revokeObjectURL(url);
         });
     },
+  },
+  data() {
+    return {
+      disabled: false,
+    };
   },
 };
 </script>
