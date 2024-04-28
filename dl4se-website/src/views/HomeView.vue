@@ -128,3 +128,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/view/home.sass" />
