@@ -227,10 +227,6 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container v-if="isAdmin">
-      <h3>Server Log</h3>
-      <b-monitor :supplier="getLog" />
-    </b-container>
     <b-details-modal
       :id="detailsModal.id"
       :title="detailsModal.title"
@@ -285,7 +281,6 @@ import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
 import BIconCalendarPlay from "@/components/IconCalendarPlay";
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
 import BIconIdenticon from "@/components/IconIdenticon";
-import BMonitor from "@/components/Monitor";
 import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
@@ -298,7 +293,6 @@ export default {
     BIconCalendarPlay,
     BIconCalendarQuestion,
     BIconIdenticon,
-    BMonitor,
     BPaginatedTable,
   },
   mixins: [bootstrapMixin, formatterMixin, routerMixin],
@@ -483,21 +477,6 @@ export default {
         }
       });
       this.$root.$emit("bv::refresh::table", this.userTable.id);
-    },
-    // TODO 21.10.22: Not what I would call "full-proof" but it will work for now
-    cleanLog(str) {
-      const lines = this.$_.split(str, /[\n\r]/);
-      const regex = /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}.\d{3}\s+(TRACE|DEBUG|INFO|WARN|ERROR)\s+\d+\s-{3}/;
-      if (!regex.test(lines[0])) lines.shift();
-      return lines.join("\n");
-    },
-    async getLog() {
-      const endpoint = "/actuator/logfile";
-      const config = { headers: { Range: "bytes=-1048576" } };
-      return this.$http
-        .get(endpoint, config)
-        .then((res) => res.data)
-        .then(this.cleanLog);
     },
     display(title, item, button) {
       this.detailsModal.title = title;
