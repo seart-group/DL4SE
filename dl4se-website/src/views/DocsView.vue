@@ -1,5 +1,5 @@
 <template functional>
-  <article class="p-5" aria-labelledby="documentation">
+  <article class="p-4" aria-labelledby="documentation">
     <h1 id="documentation" class="d-none">Documentation</h1>
     <section aria-labelledby="granularity">
       <h2 id="granularity">Granularity</h2>

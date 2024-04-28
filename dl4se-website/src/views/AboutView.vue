@@ -1,5 +1,5 @@
 <template functional>
-  <article class="p-5" aria-labelledby="about">
+  <article class="p-4" aria-labelledby="about">
     <h1 id="about" class="d-none">About</h1>
     <section aria-labelledby="description">
       <h2 id="description">DL4SE (Deep Learning 4 Software Engineering)</h2>
