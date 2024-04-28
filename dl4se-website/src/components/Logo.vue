@@ -14,15 +14,14 @@ export default {
           href: "https://seart.si.usi.ch",
         },
         class: {
-          logo: true,
           ...(data.class || {}),
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
       },
-      [
-        createElement("span", { class: { "logo-box": true } }, "SE"),
-        createElement("span", { class: { "logo-text": true } }, "ART"),
-      ],
+      [createElement("span", {}, "SE"), createElement("span", {}, "ART")],
     );
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/logo.sass" />
