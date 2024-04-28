@@ -24,7 +24,6 @@ export default {
         props: props,
         attrs: data.attrs,
         class: {
-          "back-to-top": true,
           ...(data.class || {}),
           ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
@@ -35,7 +34,10 @@ export default {
         createElement(
           BButton,
           {
-            class: "back-to-top-btn",
+            props: {
+              variant: "light",
+              squared: true,
+            },
             directives: [
               {
                 name: "scroll-to",
@@ -54,3 +56,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/back-to-top.sass" />
