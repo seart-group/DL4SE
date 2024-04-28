@@ -1,0 +1,27 @@
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+
+$header-row-height: 50px
+$body-row-height: 64px
+$input-min-width: 150px
+$input-max-width: 500px
+$button-height: 40px
+
+th, td
+  vertical-align: middle!important
+
+thead > tr
+  height: $header-row-height!important
+
+tbody > tr
+  height: $body-row-height!important
+
+input
+  min-width: $input-min-width!important
+  max-width: $input-max-width!important
+  padding-right: calc(map-get($spacers, 4) + map-get($spacers, 4) / 2)!important
+
+button
+  height: $button-height!important
+  border: 0!important
+  border-radius: 0!important

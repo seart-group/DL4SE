@@ -1,25 +1,24 @@
 <template>
-  <div class="config-table-container">
+  <div>
     <b-overlay :show="busy" variant="light">
       <b-table-simple
+        class="border-secondary border-bottom"
+        sticky-header="370px"
+        :hover="hasMappings"
         responsive
         borderless
-        :hover="hasMappings"
-        sticky-header="370px"
-        class="config-table-border"
-        table-class="config-table"
       >
-        <b-thead head-variant="dark" class="config-table-header-row">
+        <b-thead head-variant="dark">
           <b-tr>
             <b-th>Property</b-th>
             <b-th>Setting</b-th>
           </b-tr>
         </b-thead>
-        <b-tbody class="config-table-body">
+        <b-tbody class="bg-light">
           <template v-if="hasMappings">
-            <b-tr v-for="key in Object.keys(mappings)" :key="key" class="config-table-row">
+            <b-tr v-for="key in Object.keys(mappings)" :key="key">
               <b-td class="text-monospace">
-                <label :for="`${key}_input`" class="config-table-label">
+                <label :for="`${key}_input`" class="m-0">
                   {{ key }}
                 </label>
               </b-td>
@@ -29,13 +28,13 @@
                   :state="configState(key)"
                   :disabled="busy"
                   v-model.trim="mappings[key]"
-                  class="config-table-input"
+                  class="border-secondary border-top-0 border-left-0 border-right-0 rounded-0"
                 />
               </b-td>
             </b-tr>
           </template>
           <template v-else>
-            <b-tr class="b-table-empty-row config-table-row">
+            <b-tr class="b-table-empty-row bg-light">
               <b-td colspan="2">
                 <div role="alert" aria-live="polite">
                   <div class="text-center my-2">There are no records to show</div>
@@ -49,11 +48,11 @@
     <b-container>
       <b-row no-gutters align-h="center">
         <b-col cols="auto">
-          <b-button-group>
-            <b-button @click="consume" :disabled="consumeDisabled" class="config-table-btn">
+          <b-button-group class="border-bottom border-secondary">
+            <b-button @click="consume" :disabled="consumeDisabled" variant="light">
               <b-icon-cloud-upload /> Synchronize
             </b-button>
-            <b-button @click="refresh" :disabled="busy" class="config-table-btn">
+            <b-button @click="refresh" :disabled="busy" variant="light">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>
           </b-button-group>
@@ -148,7 +147,4 @@ export default {
 };
 </script>
 
-<style scoped lang="sass">
-.text-monospace
-  font-family: 'Inconsolata', Helvetica, Arial, sans-serif
-</style>
+<style scoped lang="sass" src="@/assets/styles/component/config-table.sass" />
