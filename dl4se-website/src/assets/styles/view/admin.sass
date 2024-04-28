@@ -1,0 +1,21 @@
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+@import "node_modules/bootstrap/scss/_mixins.scss"
+@import "node_modules/bootstrap/scss/_grid.scss"
+
+.content-area
+  $percentage: 25%
+
+  .btn
+    border-width: 2px!important
+
+  .btn.btn-danger
+    border-color: darken(map-get($theme-colors, "danger"), $percentage)!important
+
+  .btn.btn-secondary
+    border-color: darken(map-get($theme-colors, "secondary"), $percentage)!important
+
+@include media-breakpoint-up(md)
+  .content-area
+    .btn:not(:last-child)
+      margin-right: map-get($spacers, 4)!important

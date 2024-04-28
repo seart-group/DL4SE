@@ -9,6 +9,7 @@ import VerifyView from "@/views/VerifyView";
 import NotFoundView from "@/views/NotFoundView";
 import CodeTaskView from "@/views/CodeTaskView";
 import DownloadView from "@/views/DownloadView";
+import AdminView from "@/views/AdminView";
 import StatsView from "@/views/StatsView";
 import AboutView from "@/views/AboutView";
 import DocsView from "@/views/DocsView";
@@ -97,6 +98,15 @@ const routes = [
     name: "download",
     component: DownloadView,
     props: true,
+    meta: {
+      public: false,
+    },
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: AdminView,
+    beforeEnter: isAdmin,
     meta: {
       public: false,
     },
