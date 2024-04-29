@@ -1,12 +1,36 @@
 @import "node_modules/bootstrap/scss/_functions.scss"
 @import "node_modules/bootstrap/scss/_variables.scss"
 
-.datasets
+section
   display: flex!important
-  flex-wrap: wrap!important
   flex-direction: column!important
-  align-content: center!important
   justify-content: center!important
+
+  &#logo
+    min-height: 90vh!important
+  &#summary
+    min-height: 95vh!important
+  &#datasets
+    min-height: 82vh!important
+    flex-wrap: wrap!important
+    align-content: center!important
+
+.branding
+  font-size: clamp(6rem, 24vw, 8rem)!important
+
+  .negative
+    color: $white!important
+    background-color: $black!important
+    padding-left: clamp(2rem, 8vw, 4rem)!important
+    padding-right: clamp(0.5rem, 2vw, 1rem)!important
+
+  .positive
+    color: $black!important
+    padding-left: clamp(0.25rem, 1vw, 0.5rem)!important
+    font-weight: 200!important
+
+.tagline
+  font-size: clamp(1rem, 4.25vw, 1.5rem)!important
 
 .datasets-card
   max-width: 500px!important

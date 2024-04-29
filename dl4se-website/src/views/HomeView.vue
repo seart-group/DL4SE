@@ -1,18 +1,18 @@
 <template>
-  <div id="home" class="home">
-    <div id="logo" class="branding fullscreen" v-if="!loggedIn">
+  <div id="home" class="d-flex flex-column justify-content-between">
+    <section id="logo" v-if="!loggedIn">
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding-image">
-              <span class="branding-image-negative">DL</span>
-              <span class="branding-image-positive">4SE</span>
+            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding">
+              <span class="negative">DL</span>
+              <span class="positive">4SE</span>
             </div>
           </b-col>
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="logo-tagline">
+            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="tagline">
               Deep Learning For Software Engineering
             </div>
           </b-col>
@@ -22,7 +22,7 @@
             <b-link
               v-scroll-to="'#summary'"
               v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }"
-              class="home-scroll-link"
+              class="text-secondary text-decoration-none"
             >
               <b-icon-chevron-double-down />
               Scroll For More Info
@@ -31,8 +31,8 @@
           </b-col>
         </b-row>
       </b-container>
-    </div>
-    <div id="summary" class="summary fullscreen" v-if="!loggedIn">
+    </section>
+    <section id="summary" v-if="!loggedIn">
       <b-container>
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
@@ -44,7 +44,7 @@
             <b-link
               v-scroll-to="'#datasets'"
               v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }"
-              class="home-scroll-link"
+              class="text-secondary text-decoration-none"
             >
               <b-icon-chevron-double-down />
               Create A Dataset
@@ -53,8 +53,8 @@
           </b-col>
         </b-row>
       </b-container>
-    </div>
-    <div id="datasets" class="datasets fullscreen">
+    </section>
+    <section id="datasets">
       <b-card
         v-for="({ title, description, linksTo, needsConnection }, idx) in cards"
         :key="idx"
@@ -78,7 +78,7 @@
           </b-card-text>
         </b-card-body>
       </b-card>
-    </div>
+    </section>
     <transition name="fade">
       <b-back-to-top target="#home" :offset="-225" v-show="showBackToTop" />
     </transition>
