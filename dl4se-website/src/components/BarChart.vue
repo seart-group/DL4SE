@@ -1,6 +1,6 @@
 <template>
   <b-overlay :show="busy" variant="light">
-    <Bar :chart-id="id" :chart-data="chartData" :chart-options="chartOptions">
+    <Bar :chart-id="id" :chart-data="chartData" :chart-options="chartOptions" class="chart bar-chart">
       <slot>Error rendering chart!</slot>
     </Bar>
   </b-overlay>
@@ -100,3 +100,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/bar-chart.sass" />
