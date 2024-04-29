@@ -1,0 +1,16 @@
+form
+  input[type=text],
+  input[type=email],
+  input[type=password],
+  input[type=number]
+    background-color: $gray-200!important
+    border-color: $gray-600!important
+    border-radius: 0!important
+    border-width: 0 0 1px 0!important
+
+  button[type="submit"]
+    border-width: 2px!important
+
+  @each $color, $value in $theme-colors
+     button[type="submit"].btn-#{$color}
+        border-color: darken($value, 25%)!important

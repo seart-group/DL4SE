@@ -55,9 +55,7 @@
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-button type="submit" :disabled="v$.$invalid || submitted" class="btn btn-secondary border-2 border-dark">
-              Submit
-            </b-button>
+            <b-button type="submit" variant="secondary" :disabled="v$.$invalid || submitted">Submit</b-button>
           </b-form-group>
         </b-form-row>
         <b-overlay :show="submitted" variant="light" no-wrap :z-index="Number.MAX_SAFE_INTEGER" />
