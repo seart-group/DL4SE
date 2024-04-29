@@ -12,7 +12,7 @@ import DownloadView from "@/views/DownloadView";
 import AdminView from "@/views/AdminView";
 import StatsView from "@/views/StatsView";
 import AboutView from "@/views/AboutView";
-import DocsView from "@/views/DocsView";
+import DocumentationView from "@/views/DocumentationView";
 import ForgotPasswordView from "@/views/ForgotPasswordView";
 import ResetPasswordView from "@/views/ResetPasswordView";
 
@@ -130,7 +130,7 @@ const routes = [
   {
     path: "/docs",
     name: "docs",
-    component: DocsView,
+    component: DocumentationView,
     meta: {
       public: true,
     },
