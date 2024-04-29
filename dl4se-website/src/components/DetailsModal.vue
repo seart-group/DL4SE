@@ -2,29 +2,29 @@
   <b-modal
     :id="id"
     :title="title"
-    content-class="details-modal-content"
-    footer-class="details-modal-footer"
+    content-class="rounded-0"
+    footer-class="justify-content-start"
     scrollable
     centered
     @hidden="reset"
   >
-    <b-card no-body class="details-modal-card">
+    <b-card no-body class="rounded-0">
       <b-tabs v-model="activeTab" card @activate-tab="hideTooltip">
         <b-tab
           v-for="{ name, value } in formatted"
           :title="name"
           :key="name.toLowerCase()"
           :disabled="!value"
-          title-link-class="details-modal-tab-title"
+          title-link-class="rounded-0 text-secondary"
         >
           <b-card-body>
-            <pre class="m-0">{{ value }}</pre>
+            <pre><code class="text-monospace">{{ value }}</code></pre>
           </b-card-body>
         </b-tab>
       </b-tabs>
     </b-card>
     <template #modal-footer>
-      <b-button :id="`${id}-btn`" class="btn-secondary-border-2" @click="copy">
+      <b-button :id="`${id}-btn`" variant="secondary" @click="copy">
         <b-icon-clipboard />
       </b-button>
       <b-tooltip
@@ -102,3 +102,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/details-modal.sass" />
