@@ -2,7 +2,7 @@
 import { BButton, BIconChevronDoubleUp } from "bootstrap-vue";
 
 export default {
-  name: "BackToTop",
+  name: "b-back-to-top",
   functional: true,
   props: {
     target: {
