@@ -1,5 +1,5 @@
 <template functional>
-  <article class="p-4" aria-labelledby="documentation">
+  <article aria-labelledby="documentation">
     <h1 id="documentation" class="d-none">Documentation</h1>
     <section aria-labelledby="granularity">
       <h2 id="granularity">Granularity</h2>
@@ -184,3 +184,5 @@
     </section>
   </article>
 </template>
+
+<style scoped lang="sass" src="@/assets/styles/view/documentation.sass" />

@@ -1,5 +1,5 @@
 <template functional>
-  <article class="p-4" aria-labelledby="about">
+  <article aria-labelledby="about">
     <h1 id="about" class="d-none">About</h1>
     <section aria-labelledby="description">
       <h2 id="description">DL4SE (Deep Learning 4 Software Engineering)</h2>
@@ -58,3 +58,5 @@
     </section>
   </article>
 </template>
+
+<style scoped lang="sass" src="@/assets/styles/view/about.sass" />
