@@ -45,8 +45,8 @@ export default {
           ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         attrs: {
-          height: "1em",
-          width: "1em",
+          height: data.attrs.height || "1em",
+          width: data.attrs.width || "1em",
           viewBox: "0 0 16 16",
           xmlns: "http://www.w3.org/2000/svg",
           focusable: false,
