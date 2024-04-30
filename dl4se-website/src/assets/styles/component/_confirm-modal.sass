@@ -11,14 +11,4 @@
   border: 0!important
   flex-direction: row-reverse!important
   justify-content: center!important
-
-  .btn
-    border-width: 2px!important
-
-  $percentage: 25%
-
-  .btn-danger
-    border-color: darken($red, $percentage)!important
-
-  .btn-secondary
-    border-color: darken($gray-600, $percentage)!important
+  @include btn-accent

@@ -1,17 +1,6 @@
 @import "node_modules/bootstrap/scss/_functions.scss"
 @import "node_modules/bootstrap/scss/_variables.scss"
+@import "@/assets/styles/mixins"
 
 .content-area
-  $percentage: 25%
-
-  .btn
-    border-width: 2px!important
-
-  .btn.btn-danger
-    border-color: darken(map-get($theme-colors, "danger"), $percentage)!important
-
-  .btn.btn-secondary
-    border-color: darken(map-get($theme-colors, "secondary"), $percentage)!important
-
-  .btn.btn-primary
-    border-color: darken(map-get($theme-colors, "primary"), $percentage)!important
+  @include btn-accent

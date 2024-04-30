@@ -1,5 +1,9 @@
-@mixin brightness($percentage)
-  filter: brightness(#{$percentage+'%'})!important
+@mixin btn-accent($selector: ".btn")
+  #{$selector}
+    border-width: 2px!important
+  @each $color, $value in $theme-colors
+    #{$selector}.btn-#{$color}
+      border-color: darken($value, 25%)!important
 
 @mixin min-width($pixels)
   min-width: $pixels+px!important
