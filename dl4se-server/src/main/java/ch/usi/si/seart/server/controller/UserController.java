@@ -26,9 +26,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
+@Validated
 @RestController
 @RequestMapping("/user")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -121,6 +125,19 @@ public class UserController {
         passwordResetService.verify(token);
         UserPrincipal principal = conversionService.convert(requester, UserPrincipal.class);
         userDetailsPasswordService.updatePassword(principal, dto.getPassword());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/uid")
+    public ResponseEntity<?> updateUsername(
+            @NotBlank @Pattern(regexp = "^[a-zA-Z0-9_-]{3,64}$") @RequestBody String uid,
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        User requester = userService.getWithId(principal.getId());
+        if (!requester.getUid().equals(uid)) {
+            requester.setUid(uid);
+            userService.update(requester);
+        }
         return ResponseEntity.ok().build();
     }
 }

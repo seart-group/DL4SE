@@ -46,3 +46,10 @@ Content-Type: application/json
 {
   "password": "22022onaguL"
 }
+
+### PUT /user/uid
+PUT localhost:8080/api/user/uid
+Content-Type: text/plain;charset=UTF-8
+Authorization: Bearer {{token}}
+
+ozozozoz
