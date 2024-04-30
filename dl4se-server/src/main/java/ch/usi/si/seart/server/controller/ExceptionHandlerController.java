@@ -2,8 +2,8 @@ package ch.usi.si.seart.server.controller;
 
 import ch.usi.si.seart.exception.EntityNotFoundException;
 import ch.usi.si.seart.server.exception.TokenExpiredException;
+import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,7 +46,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         Throwable cause = ex.getCause();
-        if (cause instanceof ConstraintViolationException) {
+        if (cause instanceof org.hibernate.exception.ConstraintViolationException) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -68,6 +72,25 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TokenExpiredException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public void handleTokenExpired(TokenExpiredException ignored) {
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> constraintViolationException(ConstraintViolationException ex) {
+        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
+        Map<String, String> errors = violations.stream()
+                .map(violation -> {
+                    Path path = violation.getPropertyPath();
+                    String field = Iterables.getLast(path).toString();
+                    String message = violation.getMessage();
+                    return Map.entry(field, message);
+                })
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
+        Map<String, Map<String, String>> payload = Map.of("errors", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(payload);
     }
 
     @Override
