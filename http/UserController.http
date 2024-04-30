@@ -53,3 +53,10 @@ Content-Type: text/plain;charset=UTF-8
 Authorization: Bearer {{token}}
 
 ozozozoz
+
+### PUT /user/organisation
+PUT localhost:8080/api/user/organisation
+Content-Type: text/plain;charset=UTF-8
+Authorization: Bearer {{token}}
+
+Università della Svizzera italiana
