@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="PUT /user/organisation" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/user" path="$PROJECT_DIR$/http/UserController.http" index="10" requestIdentifier="PUT /user/organisation" runType="Run single request">
+  <configuration default="false" name="PUT /user/organisation" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/user" path="$PROJECT_DIR$/http/UserController.http" index="11" requestIdentifier="PUT /user/organisation" runType="Run single request">
     <method v="2" />
   </configuration>
 </component>

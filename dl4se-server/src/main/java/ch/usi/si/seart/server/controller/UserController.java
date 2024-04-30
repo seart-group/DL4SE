@@ -12,6 +12,7 @@ import ch.usi.si.seart.server.security.UserPrincipal;
 import ch.usi.si.seart.server.service.EmailService;
 import ch.usi.si.seart.server.service.TokenService;
 import ch.usi.si.seart.server.service.UserService;
+import ch.usi.si.seart.validation.constraints.OWASPEmail;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -137,6 +138,22 @@ public class UserController {
         if (!requester.getUid().equals(uid)) {
             requester.setUid(uid);
             userService.update(requester);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/email")
+    public ResponseEntity<?> updateEmail(
+            @NotBlank @OWASPEmail @RequestBody String email,
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        User requester = userService.getWithId(principal.getId());
+        if (!requester.getEmail().equals(email)) {
+            requester.setEmail(email);
+            requester.setVerified(false);
+            userService.update(requester);
+            VerificationToken token = verificationService.generate(requester);
+            emailService.sendVerificationEmail(token);
         }
         return ResponseEntity.ok().build();
     }
