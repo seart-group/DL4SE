@@ -4,7 +4,7 @@
     <b-container>
       <b-form @submit.prevent.stop="reset" novalidate>
         <b-form-row>
-          <b-form-group label-for="password" :state="valid('password')">
+          <b-form-group label-for="password">
             <template #label>
               Password
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
@@ -16,17 +16,16 @@
               autocomplete="new-password"
               v-model.trim="form.password"
               :disabled="submitted"
-              :state="valid('password')"
+              :state="v$.form.password.$dirty ? !v$.form.password.$invalid : null"
             />
-            <template #description v-if="Boolean(v$.form.password.$invalid)">
-              <b-form-text>
-                Must be at least 6 characters long, containing one uppercase letter and a number.
-              </b-form-text>
-            </template>
+            <b-form-text v-if="v$.form.password.$invalid">
+              <b-icon-exclamation-octagon />
+              <span>Must be at least 6 characters long, containing a number, uppercase and lowercase character.</span>
+            </b-form-text>
           </b-form-group>
         </b-form-row>
         <b-form-row>
-          <b-form-group label-for="confirm" :state="valid('confirm')">
+          <b-form-group label-for="confirm">
             <template #label>
               Confirm Password
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
@@ -38,11 +37,12 @@
               autocomplete="new-password"
               v-model.trim="form.confirm"
               :disabled="submitted"
-              :state="valid('confirm')"
+              :state="v$.form.confirm.$dirty ? !v$.form.confirm.$invalid : null"
             />
-            <template #invalid-feedback>
-              <b-form-text> Must match the password above. </b-form-text>
-            </template>
+            <b-form-invalid-feedback v-if="v$.form.confirm.$dirty && v$.form.confirm.$invalid">
+              <b-icon-exclamation-triangle />
+              Must match the password above.
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-form-row>
         <b-form-row>
@@ -77,10 +77,6 @@ export default {
     token: String,
   },
   methods: {
-    valid(key) {
-      const element = this.v$.form[key];
-      return element.$dirty ? !element.$invalid : null;
-    },
     async reset() {
       this.submitted = true;
       const payload = { password: this.form.password };
