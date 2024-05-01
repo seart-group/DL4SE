@@ -4,7 +4,7 @@
     <b-container>
       <b-form @submit.prevent.stop="login" novalidate>
         <b-form-row>
-          <b-form-group label-for="email" :state="valid('email')">
+          <b-form-group label-for="email">
             <template #label>
               Email
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
@@ -16,14 +16,14 @@
               autocomplete="email"
               v-model.trim="form.email"
               :disabled="submitted"
-              :state="valid('email')"
+              :state="v$.form.email.$dirty ? !v$.form.email.$invalid : null"
               placeholder="example@email.com"
               autofocus
             />
           </b-form-group>
         </b-form-row>
         <b-form-row>
-          <b-form-group label-for="password" :state="valid('password')">
+          <b-form-group label-for="password">
             <template #label>
               Password
               <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
@@ -35,7 +35,7 @@
               autocomplete="current-password"
               v-model.trim="form.password"
               :disabled="submitted"
-              :state="valid('password')"
+              :state="v$.form.password.$dirty ? !v$.form.password.$invalid : null"
             />
           </b-form-group>
         </b-form-row>
@@ -77,10 +77,6 @@ export default {
     },
   },
   methods: {
-    valid(key) {
-      const element = this.v$.form[key];
-      return element.$dirty ? !element.$invalid : null;
-    },
     async login() {
       this.submitted = true;
       await this.$http
