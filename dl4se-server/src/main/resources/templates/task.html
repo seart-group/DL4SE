@@ -85,32 +85,60 @@
                                               <table class="table table-striped table-bordered" border="0" cellpadding="0" cellspacing="0" style='width: 100%; max-width: 100%; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; border: 1px solid #e2e8f0;'>
                                                 <tbody style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>
                                                   <tr style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;' bgcolor="#f2f2f2">
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Task</td>
-                                                    <td th:text="${uuid}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Task</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${uuid}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Status</td>
-                                                    <td th:text="${status}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Status</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${status}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;' bgcolor="#f2f2f2">
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Submitted</td>
-                                                    <td th:text="${submitted}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Submitted</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${submitted}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Started</td>
-                                                    <td th:text="${started}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Started</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${started}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr th:if="${finished != null}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;' bgcolor="#f2f2f2">
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Finished</td>
-                                                    <td th:text="${finished}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Finished</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${finished}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Results</td>
-                                                    <td th:text="${processedResults}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Results</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${processedResults}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                   <tr th:if="${size != null}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;' bgcolor="#f2f2f2">
-                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">Size</td>
-                                                    <td th:text="${size}" style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top"></td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'>Size</span>
+                                                    </td>
+                                                    <td style='line-height: 24px; font-size: 16px; font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal; margin: 0; padding: 12px; border: 1px solid #e2e8f0;' align="left" valign="top">
+                                                      <span th:text="${size}" style='font-family: "Trebuchet MS", Helvetica, Arial, sans-serif; font-style: normal; font-variant: normal;'></span>
+                                                    </td>
                                                   </tr>
                                                 </tbody>
                                               </table>
