@@ -8,5 +8,6 @@ public interface TokenService<T extends Token> {
     T generate(User user);
     T refresh(String value);
     void verify(String value);
+    void delete(User user);
     User getOwner(String value);
 }

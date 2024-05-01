@@ -47,6 +47,11 @@ abstract class AbstractTokenService<T extends Token> implements TokenService<T> 
     }
 
     @Override
+    public void delete(User user) {
+        tokenRepository.deleteByUser(user);
+    }
+
+    @Override
     public User getOwner(String value) {
         return tokenRepository.findByValue(value)
                 .map(Token::getUser)

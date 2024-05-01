@@ -12,6 +12,7 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface TokenRepository<T extends Token> extends JpaRepository<T, Long> {
 
+    void deleteByUser(@NotNull User user);
     Optional<T> findByValue(@NotBlank String value);
     Optional<T> findFirstByUser(@NotNull User user);
 }
