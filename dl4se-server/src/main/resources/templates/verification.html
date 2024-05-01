@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Reset your password</title>
+    <title>Complete your registration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
       @font-face {
@@ -19,7 +19,7 @@
     </style>
   </head>
   <body class="bg-light">
-    <preview>Forgot your password? Happens to the best of us!</preview>
+    <preview>Complete your registration</preview>
     <div class="container">
       <div class="card my-10 rounded-none bg-white">
         <div class="card-body">
@@ -31,12 +31,10 @@
           </div>
           <div class="space-y-3">
             <p class="text-justify">
-              Forgot your password? Happens to the best of us!
-              You can reset your password by clicking
-              <a class="text-secondary" th:href="${link}">this link</a>.
-              The link will remain active for the next 15 minutes.
-              If you didn't request this change, you can safely ignore this email.
-              Your current password will remain unchanged.
+              Welcome aboard! We're thrilled to have you join us. To get started,
+              please take a moment to verify your email address by clicking
+              <a th:href="${link}" class="text-secondary">this link</a>.
+              Note that this procedure must be completed within the next 24 hours.
             </p>
             <p class="text-justify">
               If you have any questions or need further assistance, feel free to contact our
