@@ -19,6 +19,7 @@ public interface UserService {
 
     User create(User user);
     User update(User user);
+    void delete(User user);
     Page<User> getAll(Specification<User> specification, Pageable pageable);
     User getWithId(Long id);
     User getWithUid(String uid);
@@ -42,6 +43,11 @@ public interface UserService {
         @Override
         public User update(User user) {
             return userRepository.save(user);
+        }
+
+        @Override
+        public void delete(User user) {
+            userRepository.delete(user);
         }
 
         @Override
