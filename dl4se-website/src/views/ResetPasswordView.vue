@@ -7,7 +7,7 @@
           <b-form-group label-for="password">
             <template #label>
               Password
-              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
             <b-form-input
               id="password"
@@ -28,7 +28,7 @@
           <b-form-group label-for="confirm">
             <template #label>
               Confirm Password
-              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
             <b-form-input
               id="confirm"
@@ -48,7 +48,7 @@
         <b-form-row>
           <b-form-group>
             <b-form-text class="text-left">
-              <b-icon-asterisk font-scale="0.35" shift-v="32" class="text-danger" />
+              <b-icon-asterisk font-scale="0.35" class="text-danger" />
               Required fields
             </b-form-text>
           </b-form-group>
