@@ -2,11 +2,11 @@
   <article aria-labelledby="about">
     <h1 id="about" class="d-none">About</h1>
     <section aria-labelledby="description">
-      <h2 id="description">DL4SE (Deep Learning 4 Software Engineering)</h2>
+      <h2 id="description">What is the SEART dataset hub?</h2>
       <p>
-        The DL4SE tool allows to easily create large-scale datasets that can be used to either run studies on mining
-        software repositories or to train deep learning models to automate software engineering tasks. Use our forms to
-        define the characteristics of the dataset you would like to build. The question mark icons in the forms will
+        Our platform allows researchers to easily create large-scale datasets that can be used to either run studies on
+        mining software repositories or to train deep learning models to automate software engineering tasks. Use our
+        forms to define the characteristics of the dataset you would like to build. The question mark icons in the forms
         guide you by providing explanations about the different filters you can use as well as processing operations
         that you can apply.
       </p>
@@ -52,7 +52,7 @@
       <h2 id="bug-reports">How can I report a bug?</h2>
       <p>
         Our platform is open source. Use the
-        <a href="https://github.com/seart-group/dl4se/issues" target="_blank" class="text-secondary"> issue tracker </a>
+        <a href="https://github.com/seart-group/dl4se/issues" target="_blank" class="text-secondary">issue tracker</a>
         hosted on GitHub.
       </p>
     </section>
