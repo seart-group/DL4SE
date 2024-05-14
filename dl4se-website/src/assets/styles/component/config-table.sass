@@ -1,5 +1,6 @@
 @import "node_modules/bootstrap/scss/_functions.scss"
 @import "node_modules/bootstrap/scss/_variables.scss"
+@import "node_modules/bootstrap/scss/_mixins.scss"
 
 $header-row-height: 50px
 $body-row-height: 64px
@@ -21,7 +22,11 @@ input
   max-width: $input-max-width!important
   padding-right: calc(map-get($spacers, 4) + map-get($spacers, 4) / 2)!important
 
-button
-  height: $button-height!important
-  border: 0!important
-  border-radius: 0!important
+.btn-group
+  .btn
+    @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
+    height: $button-height!important
+    border-top: 0!important
+    border-left: 0!important
+    border-right: 0!important
+    border-radius: 0!important

@@ -48,11 +48,11 @@
     <b-container>
       <b-row no-gutters align-h="center">
         <b-col cols="auto">
-          <b-button-group class="border-bottom border-secondary">
-            <b-button @click="consume" :disabled="consumeDisabled" variant="light">
+          <b-button-group>
+            <b-button @click="consume" :disabled="consumeDisabled">
               <b-icon-cloud-upload /> Synchronize
             </b-button>
-            <b-button @click="refresh" :disabled="busy" variant="light">
+            <b-button @click="refresh" :disabled="busy">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>
           </b-button-group>
