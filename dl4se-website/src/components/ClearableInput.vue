@@ -1,15 +1,8 @@
 <template>
-  <b-input-group class="clearable-input">
-    <b-input
-      type="text"
-      :id="id"
-      v-model.trim="input"
-      :placeholder="placeholder"
-      @input="setInput"
-      class="clearable-input-field"
-    />
-    <b-input-group-append class="clearable-input-group">
-      <b-button class="clearable-input-button" @click="clear">
+  <b-input-group>
+    <b-input type="text" :id="id" v-model.trim="input" :placeholder="placeholder" @input="setInput" />
+    <b-input-group-append>
+      <b-button @click="clear" type="secondary">
         <b-icon-x scale="1.5" />
       </b-button>
     </b-input-group-append>
@@ -29,8 +22,8 @@ export default {
   },
   methods: {
     setInput(value) {
-      const trimmed = value.trim();
-      this.input = trimmed ? trimmed : null;
+      const trimmed = value?.trim();
+      this.input = trimmed || null;
     },
     clear() {
       this.input = null;
@@ -48,3 +41,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/clearable-input.sass" />
