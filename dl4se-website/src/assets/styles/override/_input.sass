@@ -1,13 +1,13 @@
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button
-  -webkit-appearance: none
-  margin: 0
+  -webkit-appearance: none!important
+  margin: 0!important
 
 input[type=number]
-  -moz-appearance: textfield
+  -moz-appearance: textfield!important
 
 input:focus, .form-control:focus
-  box-shadow: 0 0 0 0.2rem $normal-gray-muted
+  box-shadow: 0 0 0 0.2rem transparentize($gray-600, 0.5)!important
 
 %input
   @extend .form-control
