@@ -19,7 +19,7 @@
             <b-nav-item :to="{ name: 'dashboard' }" :active="isOnPage('dashboard')" :disabled="!connected">
               Dashboard
             </b-nav-item>
-            <b-nav-item @click="showLogOutModal" :disabled="!connected"> Log Out </b-nav-item>
+            <b-nav-item @click="showLogOutModal" :disabled="!connected">Log Out</b-nav-item>
           </template>
           <template v-else>
             <b-nav-item
