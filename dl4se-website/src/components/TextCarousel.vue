@@ -1,12 +1,14 @@
 <template>
-  <b-carousel :interval="currentInterval" indicators fade no-hover-pause no-touch class="text-carousel">
-    <b-carousel-slide v-for="([title, content], idx) in Object.entries(slides)" :key="idx" class="text-carousel-slide">
-      <b-card no-body class="text-carousel-card">
-        <b-card-body>
-          <b-card-title>{{ title }}</b-card-title>
-          <b-card-text class="text-justify" v-html="content" />
-        </b-card-body>
-      </b-card>
+  <b-carousel :interval="currentInterval" :indicators="showIndicators" fade no-hover-pause no-touch>
+    <b-carousel-slide v-for="([title, content], idx) in Object.entries(slides)" :key="idx">
+      <template #img>
+        <b-card no-body class="border-0 rounded-0">
+          <b-card-body>
+            <b-card-title class="text-center">{{ title }}</b-card-title>
+            <b-card-text class="text-justify mb-4" v-html="content" />
+          </b-card-body>
+        </b-card>
+      </template>
     </b-carousel-slide>
   </b-carousel>
 </template>
@@ -23,12 +25,15 @@ export default {
     },
     interval: {
       type: Number,
-      default: 10000,
+      default: 10_000,
     },
   },
   computed: {
     currentInterval() {
       return this.visible ? this.interval : 0;
+    },
+    showIndicators() {
+      return Object.keys(this.slides).length > 1;
     },
   },
   methods: {
@@ -59,3 +64,11 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+
+.carousel-indicators li
+  background-color: $gray-600!important
+</style>
