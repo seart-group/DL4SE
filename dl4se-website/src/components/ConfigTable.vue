@@ -50,7 +50,8 @@
         <b-col cols="auto">
           <b-button-group>
             <b-button @click="consume" :disabled="consumeDisabled">
-              <b-icon-cloud-upload /> Synchronize
+              <b-icon-cloud-upload />
+              Synchronize
             </b-button>
             <b-button @click="refresh" :disabled="busy">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
