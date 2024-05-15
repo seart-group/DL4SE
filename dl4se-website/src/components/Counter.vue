@@ -1,10 +1,9 @@
 <template>
-  <div class="counter">
+  <div class="d-flex position-relative align-items-center">
     <b-input
       type="number"
       :id="id"
       :placeholder="placeholder"
-      :class="counterClasses"
       v-model.number="count"
       :min="min"
       :max="max"
@@ -13,9 +12,9 @@
       @keydown.up.prevent="increment"
       @keydown.down.prevent="decrement"
     />
-    <div class="counter-btn-group">
-      <b-button type="button" @click="increment" class="counter-btn-top counter-btn-chevron-up" tabindex="-1" />
-      <b-button type="button" @click="decrement" class="counter-btn-bottom counter-btn-chevron-down" tabindex="-1" />
+    <div class="d-table-cell position-relative align-middle text-nowrap">
+      <b-button type="button" @click="increment" tabindex="-1" class="btn-up" />
+      <b-button type="button" @click="decrement" tabindex="-1" class="btn-down" />
     </div>
   </div>
 </template>
@@ -28,10 +27,6 @@ export default {
   name: "b-counter",
   props: {
     id: String,
-    counterClass: {
-      type: String,
-      default: "",
-    },
     value: {
       type: Number,
       default: null,
@@ -51,10 +46,6 @@ export default {
     state() {
       if (this.v$.$dirty || this.required) return !this.v$.$invalid;
       else return null;
-    },
-    counterClasses() {
-      const internal = ["counter-input"];
-      return [...internal, ...this.counterClass.split(" ")];
     },
   },
   methods: {
@@ -108,3 +99,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/counter.sass" />
