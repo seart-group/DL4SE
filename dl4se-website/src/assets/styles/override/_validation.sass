@@ -1,19 +1,24 @@
-.was-validated .form-control:valid:focus,
-.was-validated .form-control:invalid:focus,
+$dark-green: darken($success, 15%)
+$dark-red: darken($danger, 15%)
+
 .form-control.is-valid:focus,
-.form-control.is-invalid:focus
-  box-shadow: 0 0 0 0.2rem $normal-gray-muted
+.form-control.is-invalid:focus,
+.was-validated .form-control:valid:focus,
+.was-validated .form-control:invalid:focus
+  box-shadow: 0 0 0 0.2rem transparentize($gray-600, 0.5)!important
 
-.was-validated .form-control:invalid,
-.was-validated .form-control:valid,
+.form-control.is-valid,
 .form-control.is-invalid,
-.form-control.is-valid
-  background-position: right calc(0.375em + 0.1875rem) center
+.was-validated .form-control:valid,
+.was-validated .form-control:invalid
+  background-position: right calc(0.375em + 0.1875rem) center!important
 
-.was-validated .form-control:valid, .form-control.is-valid
+.form-control.is-valid,
+.was-validated .form-control:valid
   @include bg-check-lg($dark-green)
 
-.was-validated .form-control:invalid, .form-control.is-invalid
+.form-control.is-invalid,
+.was-validated .form-control:invalid
   @include bg-x-lg($dark-red)
 
 .invalid-feedback
