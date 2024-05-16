@@ -5,6 +5,9 @@
     #{$selector}.btn-#{$color}
       border-color: darken($value, 25%)!important
 
+@mixin color-transition($duration: 0.15s)
+    transition: color $duration ease-in-out, background-color $duration ease-in-out, border-color $duration ease-in-out, box-shadow $duration ease-in-out
+
 @mixin min-width($pixels)
   min-width: $pixels+px!important
 
