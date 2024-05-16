@@ -242,29 +242,24 @@
       title="Specify Task Filters"
       @hide="$root.$emit('bv::refresh::table', taskTable.id)"
     >
-      <label for="task-filter-uuid"> Filter by UUID: </label>
-      <b-clearable-input
-        id="task-filter-uuid"
-        placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-        v-model="taskTable.filters.uuid"
-      />
+      <label for="task-filter-uuid">Filter by UUID:</label>
+      <b-clearable-input id="task-filter-uuid" v-model="taskTable.filters.uuid" placeholder="Partial / Full UUID" />
     </b-dialog-modal>
     <b-dialog-modal
       id="user-filter-select"
       title="Specify User Filters"
       @hide="$root.$emit('bv::refresh::table', userTable.id)"
     >
-      <label for="user-filter-uid"> Filter by UID: </label>
-      <b-clearable-input id="user-filter-uid" placeholder="XXXXXXXXXXX" v-model="userTable.filters.uid" class="mb-3" />
-      <label for="user-filter-email"> Filter by Email: </label>
+      <label for="user-filter-uid">Filter by UID:</label>
+      <b-clearable-input id="user-filter-uid" v-model="userTable.filters.uid" placeholder="User ID / Username" />
+      <label for="user-filter-email">Filter by Email:</label>
+      <b-clearable-input id="user-filter-email" v-model="userTable.filters.email" placeholder="example@email.com" />
+      <label for="user-filter-organisation">Filter by Organisation:</label>
       <b-clearable-input
-        id="user-filter-email"
-        placeholder="example@email.com"
-        v-model="userTable.filters.email"
-        class="mb-3"
+        id="user-filter-organisation"
+        v-model="userTable.filters.organisation"
+        placeholder="Organisation Name"
       />
-      <label for="user-filter-organisation"> Filter by Organisation: </label>
-      <b-clearable-input id="user-filter-organisation" placeholder="" v-model="userTable.filters.organisation" />
     </b-dialog-modal>
   </div>
 </template>
@@ -620,3 +615,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/view/dashboard.sass" />
