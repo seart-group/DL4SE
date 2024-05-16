@@ -2,11 +2,15 @@
   <div id="dashboard" v-if="show">
     <h1 class="d-none">Dashboard</h1>
     <b-container>
+      <b-row>
+        <b-col>
+          <h2>Requested Datasets</h2>
+        </b-col>
+      </b-row>
       <b-row align-h="center">
         <b-col>
           <b-paginated-table
             :id="taskTable.id"
-            title="Requested Datasets"
             :fields="taskTable.fields"
             :controls="['modal', 'filters']"
             :primary-key="taskTable.fields[0].key"
@@ -163,11 +167,15 @@
       </b-row>
     </b-container>
     <b-container v-if="isAdmin">
+      <b-row>
+        <b-col>
+          <h2>Platform Users</h2>
+        </b-col>
+      </b-row>
       <b-row align-h="center">
         <b-col>
           <b-paginated-table
             :id="userTable.id"
-            title="Platform Users"
             :fields="userTable.fields"
             :controls="['filters']"
             :primary-key="userTable.fields[0].key"

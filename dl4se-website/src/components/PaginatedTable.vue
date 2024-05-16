@@ -1,6 +1,5 @@
 <template>
   <div class="paginated-table-container">
-    <h3 v-if="title">{{ title }}</h3>
     <b-table
       :id="id"
       class="paginated-table-border"
@@ -81,7 +80,6 @@ export default {
       type: String,
       required: true,
     },
-    title: String,
     fields: {
       type: Array,
       default() {
