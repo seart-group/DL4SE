@@ -8,6 +8,9 @@
 @mixin color-transition($duration: 0.15s)
     transition: color $duration ease-in-out, background-color $duration ease-in-out, border-color $duration ease-in-out, box-shadow $duration ease-in-out
 
+@mixin box-shadow($color: $gray-600)
+  box-shadow: 0 0 0 0.2rem transparentize($color, 0.5)!important
+
 @mixin min-width($pixels)
   min-width: $pixels+px!important
 
