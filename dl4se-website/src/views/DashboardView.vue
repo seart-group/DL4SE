@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard" v-if="show">
+  <div id="dashboard">
     <h1 class="d-none">Dashboard</h1>
     <b-container>
       <b-row>
@@ -166,75 +166,6 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container v-if="isAdmin">
-      <b-row>
-        <b-col>
-          <h2>Platform Users</h2>
-        </b-col>
-      </b-row>
-      <b-row align-h="center">
-        <b-col>
-          <b-paginated-table
-            :id="userTable.id"
-            :fields="userTable.fields"
-            :controls="['filters']"
-            :primary-key="userTable.fields[0].key"
-            :total-items="userTable.totalItems"
-            :provider="userProvider"
-            :sticky-header="tableHeight"
-          >
-            <template #controls(filters)>
-              <b-button v-b-modal.user-filter-select block class="paginated-table-btn">
-                <b-icon-filter class="align-middle" font-scale="1.5" />
-                <span class="align-middle">Filter Settings</span>
-              </b-button>
-            </template>
-            <template #cell(uid)="row">
-              <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
-            </template>
-            <template #cell(registered)="row">
-              <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
-            </template>
-            <template #cell(details)="row">
-              <b-icon
-                :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
-                v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
-                class="mr-2"
-                scale="1.35"
-              />
-              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
-                <b-icon
-                  :icon="row.item.role === 'ADMIN' ? 'person-plus-fill' : 'person-fill'"
-                  :shift-h="row.item.role === 'ADMIN' ? 2 : 0"
-                  stacked
-                />
-                <b-icon icon="x-circle" stacked variant="danger" v-if="!row.item.enabled" />
-              </b-iconstack>
-            </template>
-            <template #cell(actions)="row">
-              <div class="d-lg-table-cell d-inline-flex">
-                <b-button
-                  class="btn-secondary-border-2 mr-1"
-                  size="sm"
-                  v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
-                  @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
-                >
-                  <b-icon :icon="`person-${row.item.enabled ? 'x' : 'check'}-fill`" />
-                </b-button>
-                <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="row.item.role === 'ADMIN' ? 'Demote' : 'Promote'"
-                  @click="userAction(row.item.uid, row.item.role === 'ADMIN' ? 'demote' : 'promote')"
-                >
-                  <b-icon :icon="`person-${row.item.role === 'ADMIN' ? 'dash' : 'plus'}-fill`" />
-                </b-button>
-              </div>
-            </template>
-          </b-paginated-table>
-        </b-col>
-      </b-row>
-    </b-container>
     <b-details-modal
       :id="detailsModal.id"
       :title="detailsModal.title"
@@ -253,22 +184,6 @@
       <label for="task-filter-uuid">Filter by UUID:</label>
       <b-clearable-input id="task-filter-uuid" v-model="taskTable.filters.uuid" placeholder="Partial / Full UUID" />
     </b-dialog-modal>
-    <b-dialog-modal
-      id="user-filter-select"
-      title="Specify User Filters"
-      @hide="$root.$emit('bv::refresh::table', userTable.id)"
-    >
-      <label for="user-filter-uid">Filter by UID:</label>
-      <b-clearable-input id="user-filter-uid" v-model="userTable.filters.uid" placeholder="User ID / Username" />
-      <label for="user-filter-email">Filter by Email:</label>
-      <b-clearable-input id="user-filter-email" v-model="userTable.filters.email" placeholder="example@email.com" />
-      <label for="user-filter-organisation">Filter by Organisation:</label>
-      <b-clearable-input
-        id="user-filter-organisation"
-        v-model="userTable.filters.organisation"
-        placeholder="Organisation Name"
-      />
-    </b-dialog-modal>
   </div>
 </template>
 
@@ -283,7 +198,6 @@ import BDialogModal from "@/components/DialogModal";
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
 import BIconCalendarPlay from "@/components/IconCalendarPlay";
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
-import BIconIdenticon from "@/components/IconIdenticon";
 import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
@@ -295,7 +209,6 @@ export default {
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
-    BIconIdenticon,
     BPaginatedTable,
   },
   mixins: [bootstrapMixin, formatterMixin, routerMixin],
@@ -401,27 +314,6 @@ export default {
           );
         });
     },
-    async userProvider(ctx) {
-      const params = { page: ctx.currentPage - 1, size: ctx.perPage };
-      if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`;
-      const filters = this.userTable.filters;
-      if (filters.uid) params.uid = filters.uid;
-      if (filters.email) params.email = filters.email;
-      if (filters.organisation) params.organisation = filters.organisation;
-      return this.$http
-        .get("/admin/user", { params: params })
-        .then((res) => {
-          this.userTable.totalItems = res.data.total_items;
-          return res.data.items;
-        })
-        .catch(() => {
-          this.appendToast(
-            "Error Fetching User Data",
-            "There was a problem retrieving the user data. Refresh the page and try again.",
-            "warning",
-          );
-        });
-    },
     async taskCancel(uuid) {
       const endpoint = `/task/${uuid}/cancel`;
       await this.$http.post(endpoint).catch((err) => {
@@ -455,49 +347,14 @@ export default {
       });
       this.$root.$emit("bv::refresh::table", this.taskTable.id);
     },
-    async userAction(uid, action) {
-      const endpoint = `/admin/user/${uid}/${action}`;
-      await this.$http.post(endpoint).catch((err) => {
-        const status = err.response.status;
-        switch (status) {
-          case 401:
-            this.$store.dispatch("logOut").then(() => {
-              this.appendToast("Login Required", "Your session has expired. Please log in again.", "secondary");
-            });
-            break;
-          case 403:
-            this.$store.dispatch("logOut").then(() => {
-              this.appendToast(
-                "Access Restricted",
-                "You do not have the necessary authorization to modify the requested resource.",
-                "secondary",
-              );
-            });
-            break;
-          default:
-            this.$router.push({ name: "home" });
-            break;
-        }
-      });
-      this.$root.$emit("bv::refresh::table", this.userTable.id);
-    },
     display(title, item, button) {
       this.detailsModal.title = title;
       this.detailsModal.content = item;
       this.$root.$emit("bv::show::modal", this.detailsModal.id, button);
     },
   },
-  async beforeMount() {
-    this.isAdmin = await this.$http
-      .get("/admin")
-      .then(() => true)
-      .catch(() => false);
-    this.show = true;
-  },
   data() {
     return {
-      show: false,
-      isAdmin: undefined,
       detailsModal: {
         id: "details-modal",
         title: "",
@@ -569,44 +426,6 @@ export default {
             sortable: true,
             formatter: this.formatBytes,
             tdClass: ["text-right", "text-nowrap"],
-          },
-          {
-            key: "details",
-            sortable: false,
-          },
-          {
-            key: "actions",
-            sortable: false,
-          },
-        ],
-        totalItems: 0,
-      },
-      userTable: {
-        id: "user-table",
-        filters: {
-          uid: null,
-          email: null,
-          organisation: null,
-        },
-        fields: [
-          {
-            key: "uid",
-            label: "UID",
-            sortable: true,
-            tdClass: ["text-monospace", "text-nowrap"],
-          },
-          {
-            key: "email",
-            sortable: true,
-          },
-          {
-            key: "organisation",
-            sortable: true,
-          },
-          {
-            key: "registered",
-            sortable: true,
-            formatter: (value) => new Date(Date.parse(value + "Z")),
           },
           {
             key: "details",
