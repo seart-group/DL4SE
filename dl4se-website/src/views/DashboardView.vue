@@ -89,9 +89,9 @@
               </div>
             </template>
             <template #cell(details)="row">
-              <div class="d-inline-flex">
+              <div class="d-inline-flex gap-1">
                 <b-button
-                  class="btn-secondary-border-2 mr-1"
+                  class="btn-secondary-border-2"
                   size="sm"
                   v-b-tooltip="'Show User Details'"
                   @click="display('Submitter', row.item.user, $event.target)"
@@ -99,7 +99,7 @@
                   <b-icon-person-lines-fill />
                 </b-button>
                 <b-button
-                  class="btn-secondary-border-2 mr-1"
+                  class="btn-secondary-border-2"
                   size="sm"
                   v-b-tooltip="'Show Query Details'"
                   @click="display('Query', row.item.query, $event.target)"
@@ -117,9 +117,9 @@
               </div>
             </template>
             <template #cell(actions)="row">
-              <div class="d-inline-flex">
+              <div class="d-inline-flex gap-1">
                 <template v-if="['FINISHED', 'CANCELLED', 'ERROR'].includes(row.item.status)">
-                  <span class="d-inline-block mr-1" tabindex="0" v-b-tooltip="'Cancel Task'">
+                  <span class="d-inline-block" tabindex="0" v-b-tooltip="'Cancel Task'">
                     <b-button class="btn-secondary-border-2" size="sm" disabled>
                       <b-icon-trash />
                     </b-button>
@@ -127,7 +127,7 @@
                 </template>
                 <template v-else>
                   <b-button
-                    class="btn-secondary-border-2 mr-1"
+                    class="btn-secondary-border-2"
                     size="sm"
                     v-b-tooltip="'Cancel Task'"
                     @click="taskCancel(row.item.uuid)"
@@ -136,7 +136,7 @@
                   </b-button>
                 </template>
                 <b-button
-                  class="btn-secondary-border-2 mr-1"
+                  class="btn-secondary-border-2"
                   size="sm"
                   :to="{ name: 'code', params: { uuid: row.item.uuid } }"
                   v-b-tooltip="'Edit Task'"

@@ -27,25 +27,26 @@
               <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
             </template>
             <template #cell(details)="row">
-              <b-icon
-                :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
-                v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
-                class="mr-2"
-                scale="1.35"
-              />
-              <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
+              <div class="d-inline-flex gap-2">
                 <b-icon
-                  :icon="row.item.role === 'ADMIN' ? 'person-plus-fill' : 'person-fill'"
-                  :shift-h="row.item.role === 'ADMIN' ? 2 : 0"
-                  stacked
+                  :icon="`patch-${row.item.verified ? 'check' : 'question'}-fill`"
+                  v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
+                  scale="1.35"
                 />
-                <b-icon icon="x-circle" stacked variant="danger" v-if="!row.item.enabled" />
-              </b-iconstack>
+                <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
+                  <b-icon
+                    :icon="row.item.role === 'ADMIN' ? 'person-plus-fill' : 'person-fill'"
+                    :shift-h="row.item.role === 'ADMIN' ? 2 : 0"
+                    stacked
+                  />
+                  <b-icon icon="x-circle" stacked variant="danger" v-if="!row.item.enabled" />
+                </b-iconstack>
+              </div>
             </template>
             <template #cell(actions)="row">
-              <div class="d-lg-table-cell d-inline-flex">
+              <div class="d-inline-flex gap-1">
                 <b-button
-                  class="btn-secondary-border-2 mr-1"
+                  class="btn-secondary-border-2"
                   size="sm"
                   v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
                   @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
