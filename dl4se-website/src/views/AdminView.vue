@@ -15,7 +15,7 @@
             :sticky-header="tableHeight"
           >
             <template #controls(filters)>
-              <b-button v-b-modal.user-filter-select block class="paginated-table-btn">
+              <b-button v-b-modal.user-filter-select block class="btn-controls">
                 <b-icon-filter class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Filter Settings</span>
               </b-button>

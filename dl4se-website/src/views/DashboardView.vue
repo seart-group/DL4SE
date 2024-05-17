@@ -19,13 +19,13 @@
             :sticky-header="tableHeight"
           >
             <template #controls(modal)>
-              <b-button :to="{ name: 'code' }" block class="paginated-table-btn">
+              <b-button :to="{ name: 'code' }" block class="btn-controls">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
               </b-button>
             </template>
             <template #controls(filters)>
-              <b-button v-b-modal.task-filter-select block class="paginated-table-btn">
+              <b-button v-b-modal.task-filter-select block class="btn-controls">
                 <b-icon-filter class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Filter Settings</span>
               </b-button>

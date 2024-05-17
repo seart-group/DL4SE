@@ -1,28 +1,23 @@
 <template>
-  <div class="paginated-table-container">
+  <div class="paginated-table-container table-paginated">
     <b-table
       :id="id"
-      class="paginated-table-border"
-      borderless
-      responsive
-      table-class="paginated-table"
-      head-variant="dark"
-      thead-class="paginated-table-header"
-      thead-tr-class="paginated-table-header-row"
-      tbody-class="paginated-table-body"
-      tbody-tr-class="paginated-table-row"
-      hover
-      show-empty
       :items="provider"
-      :primary-key="primaryKey"
       :fields="fields"
-      sort-icon-left
-      no-sort-reset
-      no-local-sorting
+      :primary-key="primaryKey"
       :per-page="perPage"
       :current-page="currentPage"
       v-bind="$attrs"
       v-on="$listeners"
+      class="table-container"
+      head-variant="dark"
+      sort-icon-left
+      no-sort-reset
+      no-local-sorting
+      show-empty
+      borderless
+      responsive
+      hover
     >
       <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
         <slot :name="scopedSlotName" v-bind="slotData" />
@@ -31,9 +26,9 @@
         <slot :name="slotName" />
       </template>
     </b-table>
-    <b-container class="paginated-table-controls">
+    <b-container tag="nav" class="controls-container">
       <b-row no-gutters align-h="center">
-        <b-col md="auto" cols="12">
+        <b-col cols="12" md="auto">
           <b-pagination
             v-model="currentPage"
             :per-page="perPage"
@@ -47,21 +42,20 @@
             <template #ellipsis-text><b-icon-three-dots /></template>
           </b-pagination>
         </b-col>
-        <b-col md="auto" col>
-          <b-dropdown-select
-            header="Choose Page Size"
-            placeholder="Page Size"
-            v-model="perPage"
-            :options="perPageOptions"
-            class="paginated-table-dropdown"
-          />
+        <b-col cols="12" md="auto">
+          <b-input-group>
+            <b-dropdown-select
+              v-model="perPage"
+              :options="perPageOptions"
+              header="Choose Page Size"
+              class="flex-grow-1"
+            />
+            <b-button class="btn-controls btn-square" @click="refresh">
+              <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+            </b-button>
+          </b-input-group>
         </b-col>
-        <b-col cols="auto">
-          <b-button class="paginated-table-refresh" @click="refresh">
-            <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
-          </b-button>
-        </b-col>
-        <b-col v-for="control in controls" :key="control" md="auto" cols="12" class="ml-md-3">
+        <b-col v-for="control in controls" :key="control" cols="12" md="auto">
           <slot :name="`controls(${control})`" />
         </b-col>
       </b-row>
@@ -136,34 +130,4 @@ export default {
 };
 </script>
 
-<style scoped lang="sass">
-@import "node_modules/bootstrap/scss/_functions.scss"
-@import "node_modules/bootstrap/scss/_variables.scss"
-@import "@/assets/styles/_mixins.sass"
-
-.pagination
-  ::v-deep
-    .page-item
-      .page-link
-        width: 40px!important
-        height: 40px!important
-        color: $gray-600!important
-        background-color: $gray-200!important
-        border-color: $gray-600!important
-        border-left: 0!important
-        border-top: 0!important
-        border-right: 0!important
-        @include color-transition
-      &.active
-        .page-link
-          color: $white!important
-          background-color: $gray-700!important
-      &.disabled
-        .page-link
-          color: $gray-400!important
-          background-color: $gray-100!important
-      &:not(.active):not(.disabled)
-        .page-link:hover
-          color: $white!important
-          background-color: $gray-600!important
-</style>
+<style scoped lang="sass" src="@/assets/styles/component/paginated-table.sass" />

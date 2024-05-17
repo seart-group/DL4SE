@@ -1,0 +1,79 @@
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+@import "node_modules/bootstrap/scss/_mixins.scss"
+@import "@/assets/styles/_mixins.sass"
+
+$button-size: 40px
+
+.btn-square
+  height: $button-size!important
+  width: $button-size!important
+
+.btn-controls
+  @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
+  border-top: 0!important
+  border-left: 0!important
+  border-right: 0!important
+  border-radius: 0!important
+  height: $button-size!important
+
+.dropdown
+  min-width: 80px!important
+
+.controls-container
+  padding: 0!important
+  .row
+    row-gap: 10px!important
+
+.table-paginated
+  $header-height: 50px
+  $row-height: 64px
+  $empty-height: $row-height * 5
+  ::v-deep
+    th
+      // This is required to undo a bug that was introduced in version 2.22 of BSV:
+      // https://github.com/bootstrap-vue/bootstrap-vue/issues/6961
+      position: sticky!important
+    th,
+    td
+      vertical-align: middle!important
+    thead tr
+      height: $header-height!important
+    tbody tr
+      height: $row-height!important
+    .b-table-empty-row
+      color: $black
+      background-color: $gray-200
+      height: $empty-height!important
+
+.table-container
+  border: 1px solid $gray-600!important
+  border-left: 0!important
+  border-top: 0!important
+  border-right: 0!important
+
+.pagination
+  ::v-deep
+    .page-item
+      .page-link
+        $link-size: 40px
+        width: $link-size!important
+        height: $link-size!important
+        color: $gray-600!important
+        background-color: $gray-200!important
+        border-color: $gray-600!important
+        border-left: 0!important
+        border-top: 0!important
+        border-right: 0!important
+        @include color-transition
+      &.active
+        .page-link
+          color: $white!important
+          background-color: $gray-700!important
+      &.disabled
+        .page-link
+          opacity: 65%!important
+      &:not(.disabled)
+        .page-link:hover
+          color: $white!important
+          background-color: $gray-600!important
