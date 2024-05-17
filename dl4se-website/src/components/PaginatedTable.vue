@@ -38,9 +38,9 @@
             v-model="currentPage"
             :per-page="perPage"
             :total-rows="totalItems"
-            last-number
-            first-number
             align="center"
+            first-number
+            last-number
           >
             <template #prev-text><b-icon-chevron-left /></template>
             <template #next-text><b-icon-chevron-right /></template>
@@ -135,3 +135,35 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass">
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+@import "@/assets/styles/_mixins.sass"
+
+.pagination
+  ::v-deep
+    .page-item
+      .page-link
+        width: 40px!important
+        height: 40px!important
+        color: $gray-600!important
+        background-color: $gray-200!important
+        border-color: $gray-600!important
+        border-left: 0!important
+        border-top: 0!important
+        border-right: 0!important
+        @include color-transition
+      &.active
+        .page-link
+          color: $white!important
+          background-color: $gray-700!important
+      &.disabled
+        .page-link
+          color: $gray-400!important
+          background-color: $gray-100!important
+      &:not(.active):not(.disabled)
+        .page-link:hover
+          color: $white!important
+          background-color: $gray-600!important
+</style>
