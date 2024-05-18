@@ -81,7 +81,7 @@
                   <span class="text-nowrap">No Results</span>
                 </template>
                 <template v-else>
-                  <span v-html="row.value.percentage" />
+                  <span>{{ row.value.percentage }}</span>
                   <b-progress
                     :max="row.value.total"
                     :value="row.value.processed"
