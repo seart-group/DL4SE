@@ -183,7 +183,7 @@
             <b-form-group class="col-12 col-sm">
               <template #label>
                 Remove
-                <b-documentation-link page="docs" section="#comment-removal" tabindex="-1" target="_blank" />
+                <b-documentation-link page="docs" section="#processing" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="comments-checkbox" v-model="task.processing.remove_regular_comments">
                 Regular comments
