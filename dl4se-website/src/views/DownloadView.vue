@@ -1,18 +1,21 @@
 <template>
-  <b-dialog-page
-    id="download"
-    v-if="show"
-    title="Download will commence shortly"
-    :description="`You will be redirected back to the dashboard in ${timer}...`"
-  />
+  <div id="download" v-if="show">
+    <h1 class="d-none">Download</h1>
+    <b-container>
+      <b-row>
+        <b-col>
+          <h2 class="text-center">Download will commence shortly</h2>
+          <p class="text-center">You will be redirected back to the dashboard in {{ timer }}...</p>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
 import routerMixin from "@/mixins/routerMixin";
-import BDialogPage from "@/components/DialogPage";
 
 export default {
-  components: { BDialogPage },
   props: {
     uuid: String,
   },
@@ -20,8 +23,7 @@ export default {
   async created() {
     await this.$http
       .get(`/task/${this.uuid}/token`)
-      .then((res) => {
-        const token = res.data;
+      .then(({ data: token }) => {
         window.location.href = `${process.env.VUE_APP_API_BASE_URL}/task/${this.uuid}/download?token=${token}`;
         this.show = true;
       })
