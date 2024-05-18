@@ -1,13 +1,7 @@
 <template>
-  <div>
+  <div class="table-config">
     <b-overlay :show="busy" variant="light">
-      <b-table-simple
-        class="border-secondary border-bottom"
-        sticky-header="370px"
-        :hover="hasMappings"
-        responsive
-        borderless
-      >
+      <b-table-simple :hover="hasMappings" class="table-container" sticky-header="370px" responsive borderless>
         <b-thead head-variant="dark">
           <b-tr>
             <b-th>Property</b-th>
@@ -17,19 +11,13 @@
         <b-tbody class="bg-light">
           <template v-if="hasMappings">
             <b-tr v-for="key in Object.keys(mappings)" :key="key">
-              <b-td class="text-monospace">
-                <label :for="`${key}_input`" class="m-0">
+              <b-td>
+                <label :for="`${key}_input`" class="text-monospace">
                   {{ key }}
                 </label>
               </b-td>
               <b-td>
-                <b-input
-                  :id="`${key}_input`"
-                  :state="configState(key)"
-                  :disabled="busy"
-                  v-model.trim="mappings[key]"
-                  class="border-secondary border-top-0 border-left-0 border-right-0 rounded-0"
-                />
+                <b-input :id="`${key}_input`" v-model.trim="mappings[key]" :state="configState(key)" :disabled="busy" />
               </b-td>
             </b-tr>
           </template>
@@ -46,14 +34,14 @@
       </b-table-simple>
     </b-overlay>
     <b-container>
-      <b-row no-gutters align-h="center">
+      <b-row align-h="center" no-gutters>
         <b-col cols="auto">
           <b-button-group>
             <b-button @click="consume" :disabled="consumeDisabled">
               <b-icon-cloud-upload />
               Synchronize
             </b-button>
-            <b-button @click="refresh" :disabled="busy">
+            <b-button @click="refresh" :disabled="busy" class="btn-square">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>
           </b-button-group>

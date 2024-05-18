@@ -4,29 +4,48 @@
 
 $header-row-height: 50px
 $body-row-height: 64px
-$input-min-width: 100px
-$input-max-width: $input-min-width * 3.5
-$button-height: 40px
+
+label
+  margin: 0!important
 
 th, td
   vertical-align: middle!important
 
-thead > tr
-  height: $header-row-height!important
+tr
+  thead &
+    height: $header-row-height!important
+  tbody &
+    height: $body-row-height!important
 
-tbody > tr
-  height: $body-row-height!important
+.table-container
+  border: 1px solid $gray-600!important
+  border-left: 0!important
+  border-top: 0!important
+  border-right: 0!important
 
 input
+  $input-min-width: 100px
+  $input-max-width: $input-min-width * 3.5
   min-width: $input-min-width!important
   max-width: $input-max-width!important
   padding-right: calc(map-get($spacers, 4) + map-get($spacers, 4) / 2)!important
+  border: 1px solid $gray-600!important
+  border-left: 0!important
+  border-top: 0!important
+  border-right: 0!important
+  border-radius: 0!important
 
 .btn-group
+  $button-size: 40px
+
   .btn
     @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
-    height: $button-height!important
+    height: $button-size!important
     border-top: 0!important
     border-left: 0!important
     border-right: 0!important
     border-radius: 0!important
+
+  .btn-square
+    width: $button-size!important
+    height: $button-size!important
