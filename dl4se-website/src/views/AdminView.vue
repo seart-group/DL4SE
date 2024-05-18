@@ -124,13 +124,13 @@
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import routerMixin from "@/mixins/routerMixin";
-import BAbbreviation from "@/components/Abbreviation.vue";
-import BClearableInput from "@/components/ClearableInput.vue";
+import BAbbreviation from "@/components/Abbreviation";
+import BClearableInput from "@/components/ClearableInput";
 import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea";
-import BDialogModal from "@/components/DialogModal.vue";
-import BIconIdenticon from "@/components/IconIdenticon.vue";
-import BPaginatedTable from "@/components/PaginatedTable.vue";
+import BDialogModal from "@/components/DialogModal";
+import BIconIdenticon from "@/components/IconIdenticon";
+import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
   components: {
