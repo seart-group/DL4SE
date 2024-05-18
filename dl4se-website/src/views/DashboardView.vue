@@ -31,8 +31,13 @@
               </b-button>
             </template>
             <template #cell(uuid)="row">
-              <b-abbreviation v-if="!$screen.md" :value="row.value" :formatter="(val) => val.split('-')[0]" />
-              <span v-html="row.value" v-else />
+              <b-abbreviation
+                v-if="!$screen.md"
+                :value="row.value"
+                :formatter="(val) => val.split('-')[0]"
+                class="text-monospace"
+              />
+              <span v-else class="text-monospace">{{ row.value }}</span>
             </template>
             <template #cell(status)="row">
               <b-icon :icon="statusToSquareIcon(row.value)" v-b-tooltip="toTitle(row.value)" font-scale="1.25" />
