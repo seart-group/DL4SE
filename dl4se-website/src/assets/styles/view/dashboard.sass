@@ -1,7 +1,13 @@
 @import "node_modules/bootstrap/scss/_functions.scss"
 @import "node_modules/bootstrap/scss/_variables.scss"
+@import "@/assets/styles/mixins"
 
 div[id*="filter-select"]
   .input-group
     &:not(:last-child)
       margin-bottom: map-get($spacers, 3)!important
+
+.table-paginated
+  ::v-deep
+    table
+      @include btn-accent

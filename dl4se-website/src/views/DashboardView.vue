@@ -91,26 +91,23 @@
             <template #cell(details)="row">
               <div class="d-inline-flex gap-1">
                 <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="'Show User Details'"
                   @click="display('Submitter', row.item.user, $event.target)"
+                  v-b-tooltip="'Show User Details'"
+                  size="sm"
                 >
                   <b-icon-person-lines-fill />
                 </b-button>
                 <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="'Show Query Details'"
                   @click="display('Query', row.item.query, $event.target)"
+                  v-b-tooltip="'Show Query Details'"
+                  size="sm"
                 >
                   <b-icon-search />
                 </b-button>
                 <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="'Show Processing Details'"
                   @click="display('Processing', row.item.processing, $event.target)"
+                  v-b-tooltip="'Show Processing Details'"
+                  size="sm"
                 >
                   <b-icon-gear-fill />
                 </b-button>
@@ -120,42 +117,31 @@
               <div class="d-inline-flex gap-1">
                 <template v-if="['FINISHED', 'CANCELLED', 'ERROR'].includes(row.item.status)">
                   <span class="d-inline-block" tabindex="0" v-b-tooltip="'Cancel Task'">
-                    <b-button class="btn-secondary-border-2" size="sm" disabled>
+                    <b-button size="sm" disabled>
                       <b-icon-trash />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
-                  <b-button
-                    class="btn-secondary-border-2"
-                    size="sm"
-                    v-b-tooltip="'Cancel Task'"
-                    @click="taskCancel(row.item.uuid)"
-                  >
+                  <b-button @click="taskCancel(row.item.uuid)" v-b-tooltip="'Cancel Task'" size="sm">
                     <b-icon-trash />
                   </b-button>
                 </template>
-                <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  :to="{ name: 'code', params: { uuid: row.item.uuid } }"
-                  v-b-tooltip="'Edit Task'"
-                >
+                <b-button v-b-tooltip="'Edit Task'" :to="{ name: 'code', params: { uuid: row.item.uuid } }" size="sm">
                   <b-icon-pencil-square />
                 </b-button>
                 <template v-if="row.item.status !== 'FINISHED' || row.item.expired || row.item.total_results === 0">
                   <span class="d-inline-block" tabindex="0" v-b-tooltip="'Download Results'">
-                    <b-button class="btn-secondary-border-2" size="sm" disabled>
+                    <b-button size="sm" disabled>
                       <b-icon-download />
                     </b-button>
                   </span>
                 </template>
                 <template v-else>
                   <b-button
-                    class="btn-secondary-border-2 d-inline-block"
-                    size="sm"
                     :to="{ name: 'download', params: { uuid: row.item.uuid } }"
                     v-b-tooltip="'Download Results'"
+                    size="sm"
                   >
                     <b-icon-download />
                   </b-button>

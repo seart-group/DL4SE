@@ -46,18 +46,16 @@
             <template #cell(actions)="row">
               <div class="d-inline-flex gap-1">
                 <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
                   @click="userAction(row.item.uid, row.item.enabled ? 'disable' : 'enable')"
+                  v-b-tooltip="row.item.enabled ? 'Disable' : 'Enable'"
+                  size="sm"
                 >
                   <b-icon :icon="`person-${row.item.enabled ? 'x' : 'check'}-fill`" />
                 </b-button>
                 <b-button
-                  class="btn-secondary-border-2"
-                  size="sm"
-                  v-b-tooltip="row.item.role === 'ADMIN' ? 'Demote' : 'Promote'"
                   @click="userAction(row.item.uid, row.item.role === 'ADMIN' ? 'demote' : 'promote')"
+                  v-b-tooltip="row.item.role === 'ADMIN' ? 'Demote' : 'Promote'"
+                  size="sm"
                 >
                   <b-icon :icon="`person-${row.item.role === 'ADMIN' ? 'dash' : 'plus'}-fill`" />
                 </b-button>
