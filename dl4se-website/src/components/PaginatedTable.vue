@@ -1,5 +1,5 @@
 <template>
-  <div class="paginated-table-container table-paginated">
+  <div class="table-paginated">
     <b-table
       :id="id"
       :items="provider"
