@@ -1,7 +1,7 @@
 <template>
   <div id="admin">
     <h1 class="d-none">Admin</h1>
-    <b-container>
+    <b-container class="d-flex flex-column row-gap-3">
       <b-row>
         <b-col>
           <h2>Platform Users</h2>
