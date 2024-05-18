@@ -1,122 +1,163 @@
 <template>
   <div id="task" v-if="show">
-    <div class="task-create-form">
-      <b-container class="task-create-form-section-top">
-        <b-row>
-          <b-col>
-            <h5 class="task-create-form-section-title">Repository Sample Characteristics</h5>
-          </b-col>
-        </b-row>
-        <b-row class="justify-content-md-between align-items-xl-center">
-          <b-col xl="5" lg="4" md="5" sm="12">
-            <b-row no-gutters align-h="between" align-v="center">
-              <b-col xl="4" lg="12">
-                <b-form-group :state="dropdownState" class="m-0 py-2">
-                  <b-dropdown-select
-                    id="language-select"
-                    placeholder="Language"
-                    header="Select a language"
-                    :options="options.languages"
-                    v-model="task.query.language_name"
-                    required
-                  />
-                  <template #invalid-feedback> Language is required </template>
-                </b-form-group>
-              </b-col>
-              <b-col xl="7" lg="12">
-                <b-form-group class="m-0 py-2">
-                  <b-checkbox id="license-checkbox" v-model="task.query.has_license" inline>
-                    Has Open-source License
-                  </b-checkbox>
-                  <b-checkbox id="forks-checkbox" v-model="task.query.exclude_forks" inline> Exclude Forks </b-checkbox>
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col xl="7" lg="8" md="6" sm="12">
-            <b-row no-gutters class="justify-content-lg-around">
-              <b-col lg="6" md="12">
-                <b-range id="commits-range" field="commits" v-model="commits" lower-bound :min="0" />
-              </b-col>
-              <b-col lg="6" md="12">
-                <b-range id="issues-range" field="issues" v-model="contributors" lower-bound :min="0" />
-              </b-col>
-              <b-col lg="6" md="12">
-                <b-range id="contributors-range" field="contributors" v-model="issues" lower-bound :min="0" />
-              </b-col>
-              <b-col lg="6" md="12">
-                <b-range id="stars-range" field="stars" v-model="stars" lower-bound :min="0" />
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container class="py-4 task-create-form-section-middle">
-        <b-row>
-          <b-col>
-            <h5 class="task-create-form-section-title">Dataset Characteristics</h5>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col xl="2" lg="2" md="3" cols="12">
-            <b-form-group label-class="font-weight-bold" class="m-0 pb-2 pb-md-0">
-              <template #label>
-                Granularity
-                <b-documentation-link page="docs" section="#granularity" tabindex="-1" target="_blank" />
-              </template>
-              <b-form-radio-group
-                id="type-radio"
-                required
-                v-model="task.query.granularity"
-                :options="options.granularities"
+    <h1 class="d-none">Create Code Dataset</h1>
+    <b-form @submit.prevent.stop="submit" class="container bg-light border">
+      <b-form-row>
+        <b-col>
+          <h2>Repository Sample Characteristics</h2>
+        </b-col>
+      </b-form-row>
+      <b-form-row>
+        <b-form-group :state="dropdownState" class="col-12">
+          <b-dropdown-select
+            id="language-select"
+            placeholder="Language"
+            header="Select a language"
+            :options="options.languages"
+            v-model="task.query.language_name"
+            required
+          />
+          <template #invalid-feedback>Language is required</template>
+        </b-form-group>
+        <b-form-group label="Commits:" class="col-12 col-sm-6 col-md-3">
+          <b-counter id="commits-input" v-model.number="task.query.min_commits" placeholder="min" :min="0" />
+        </b-form-group>
+        <b-form-group label="Issues:" class="col-12 col-sm-6 col-md-3">
+          <b-counter id="issues-input" v-model.number="task.query.min_issues" placeholder="min" :min="0" />
+        </b-form-group>
+        <b-form-group label="Contributors:" class="col-12 col-sm-6 col-md-3">
+          <b-counter id="contributors-input" v-model.number="task.query.min_contributors" placeholder="min" :min="0" />
+        </b-form-group>
+        <b-form-group label="Stars:" class="col-12 col-sm-6 col-md-3">
+          <b-counter id="stars-input" v-model.number="task.query.min_stars" placeholder="min" :min="0" />
+        </b-form-group>
+        <b-form-group class="col-12">
+          <b-checkbox id="license-checkbox" v-model="task.query.has_license" :inline="$screen.sm">
+            Has Open-source License
+          </b-checkbox>
+          <b-checkbox id="forks-checkbox" v-model="task.query.exclude_forks" :inline="$screen.sm">
+            Exclude Forks
+          </b-checkbox>
+        </b-form-group>
+      </b-form-row>
+      <b-form-row>
+        <b-col>
+          <hr />
+          <h2>Dataset Characteristics</h2>
+        </b-col>
+      </b-form-row>
+      <b-form-row class="column-gap-3">
+        <b-form-group class="col-12 col-md-auto">
+          <template #label>
+            Granularity
+            <b-documentation-link page="docs" section="#granularity" tabindex="-1" target="_blank" />
+          </template>
+          <b-form-radio-group
+            id="type-radio"
+            v-model="task.query.granularity"
+            :options="options.granularities"
+            :stacked="$screen.md"
+            required
+          />
+        </b-form-group>
+        <b-form-group class="col-12 col-md">
+          <template #label>
+            Metadata
+            <b-documentation-link page="docs" section="#meta" tabindex="-1" target="_blank" />
+          </template>
+          <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
+            Pair each instance with its Symbolic Expression representation
+          </b-form-checkbox>
+          <b-form-text v-show="task.processing.include_symbolic_expression">
+            Choosing to include S-Expressions in your dataset will increase the size of the exported file.
+          </b-form-text>
+          <b-form-checkbox id="ast-checkbox" v-model="task.processing.include_ast">
+            Pair each instance with its AST-based representation
+          </b-form-checkbox>
+          <b-form-text v-show="task.processing.include_ast">
+            Choosing to include ASTs in your dataset will <strong>drastically</strong> increase the size of the exported
+            file.
+          </b-form-text>
+          <b-form-checkbox id="ts-checkbox" v-model="task.processing.include_tree_sitter_version">
+            Pair each instance with <code>tree-sitter</code> parser metadata
+          </b-form-checkbox>
+          <b-form-text v-show="task.processing.include_tree_sitter_version">
+            Enabling this will include the version of the <code>tree-sitter</code> parser which was used to compute all
+            the instance information. This meta-information is used primarily for troubleshooting, and as such is
+            unlikely to benefit the average user. For this reason we recommend keeping it turned off.
+          </b-form-text>
+        </b-form-group>
+      </b-form-row>
+      <b-form-row>
+        <b-col>
+          <hr />
+          <h2>Code Filters &amp; Processing</h2>
+        </b-col>
+      </b-form-row>
+      <b-row>
+        <b-col cols="12" md="6">
+          <b-form-row>
+            <b-form-group label="Characters:" class="col-12 col-sm-6">
+              <b-counter
+                id="characters-input-min"
+                v-model.number="task.query.min_characters"
+                :min="0"
+                :max="task.query.max_characters || Number.MAX_SAFE_INTEGER"
+                placeholder="min"
               />
             </b-form-group>
-          </b-col>
-          <b-col lg="6" md="9" cols="12">
-            <b-form-group label-class="font-weight-bold" class="m-0">
-              <template #label>
-                Metadata
-                <b-documentation-link page="docs" section="#meta" tabindex="-1" target="_blank" />
-              </template>
-              <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
-                Pair each instance with its Symbolic Expression representation
-              </b-form-checkbox>
-              <b-form-text v-show="task.processing.include_symbolic_expression" class="pl-4">
-                Choosing to include S-Expressions in your dataset will increase the size of the exported file.
-              </b-form-text>
-              <b-form-checkbox id="ast-checkbox" v-model="task.processing.include_ast">
-                Pair each instance with its AST-based representation
-              </b-form-checkbox>
-              <b-form-text v-show="task.processing.include_ast" class="pl-4">
-                Choosing to include ASTs in your dataset will <strong>drastically</strong> increase the size of the
-                exported file.
-              </b-form-text>
-              <b-form-checkbox id="ts-checkbox" v-model="task.processing.include_tree_sitter_version">
-                Pair each instance with <code>tree-sitter</code> parser metadata
-              </b-form-checkbox>
-              <b-form-text v-show="task.processing.include_tree_sitter_version" class="pl-4">
-                Enabling this will include the version of the <code>tree-sitter</code> parser which was used to compute
-                all the instance information. This meta-information is used primarily for troubleshooting, and as such
-                is unlikely to benefit the average user. For this reason we recommend keeping it turned off.
-              </b-form-text>
+            <b-form-group class="col-12 col-sm-6 align-self-end">
+              <b-counter
+                id="characters-input-max"
+                v-model.number="task.query.max_characters"
+                :min="task.query.min_characters || 0"
+                placeholder="max"
+              />
             </b-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container class="pb-4 task-create-form-section-middle">
-        <b-row>
-          <b-col>
-            <h5 class="task-create-form-section-title">Instance Filters</h5>
-          </b-col>
-        </b-row>
-        <b-row align-h="center">
-          <b-col lg="3" md="6" sm="12">
-            <b-form-group label-class="font-weight-bold">
+            <b-form-group label="Tokens:" class="col-12 col-sm-6">
+              <b-counter
+                id="tokens-input-min"
+                v-model.number="task.query.min_tokens"
+                :min="0"
+                :max="task.query.max_tokens || Number.MAX_SAFE_INTEGER"
+                placeholder="min"
+              />
+            </b-form-group>
+            <b-form-group class="col-12 col-sm-6 align-self-end">
+              <b-counter
+                id="tokens-input-max"
+                v-model.number="task.query.max_tokens"
+                :min="task.query.min_tokens || 0"
+                placeholder="max"
+              />
+            </b-form-group>
+            <b-form-group label="Lines:" class="col-12 col-sm-6">
+              <b-counter
+                id="lines-input-min"
+                v-model.number="task.query.min_lines"
+                :min="0"
+                :max="task.query.max_lines || Number.MAX_SAFE_INTEGER"
+                placeholder="min"
+              />
+            </b-form-group>
+            <b-form-group class="col-12 col-sm-6 align-self-end">
+              <b-counter
+                id="lines-input-max"
+                v-model.number="task.query.max_lines"
+                :min="task.query.min_lines || 0"
+                placeholder="max"
+              />
+            </b-form-group>
+          </b-form-row>
+        </b-col>
+        <b-col cols="12" md="6">
+          <b-form-row class="column-gap-3">
+            <b-form-group class="col-12">
               <template #label>
                 Exclude
                 <b-documentation-link page="docs" section="#exclusion" tabindex="-1" target="_blank" />
               </template>
-              <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test"> Test code </b-checkbox>
+              <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test">Test code</b-checkbox>
               <b-checkbox
                 id="boilerplate-code-checkbox"
                 v-if="task.query.granularity === 'function'"
@@ -131,57 +172,35 @@
                 Instances with non-ASCII characters
               </b-checkbox>
             </b-form-group>
-          </b-col>
-          <b-col lg="2" md="6" sm="12">
-            <b-form-group label-class="font-weight-bold">
+            <b-form-group class="col-12 col-sm-auto">
               <template #label>
                 Ignore
                 <b-documentation-link page="docs" section="#duplicates-and-clones" tabindex="-1" target="_blank" />
               </template>
-              <b-checkbox id="duplicates-checkbox" v-model="task.query.exclude_duplicates" inline>
-                Duplicates
-              </b-checkbox>
-              <b-checkbox id="clones-checkbox" v-model="task.query.exclude_identical" inline> Near-clones </b-checkbox>
+              <b-checkbox id="duplicates-checkbox" v-model="task.query.exclude_duplicates">Duplicates</b-checkbox>
+              <b-checkbox id="clones-checkbox" v-model="task.query.exclude_identical">Near-clones</b-checkbox>
             </b-form-group>
-          </b-col>
-          <b-col lg="7" md="9" sm="12">
-            <b-range id="characters-range" field="characters" lower-bound upper-bound :min="0" v-model="characters" />
-            <b-range id="tokens-range" field="tokens" lower-bound upper-bound :min="0" v-model="tokens" />
-            <b-range id="lines-range" field="lines" lower-bound upper-bound :min="0" v-model="lines" />
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container class="task-create-form-section-middle">
-        <b-row>
-          <b-col>
-            <h5 class="task-create-form-section-title">Instance Processing</h5>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <b-form-group label-class="font-weight-bold">
+            <b-form-group class="col-12 col-sm">
               <template #label>
                 Remove
                 <b-documentation-link page="docs" section="#comment-removal" tabindex="-1" target="_blank" />
               </template>
-              <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_documentation_comments">
-                Documentation comments
-              </b-checkbox>
               <b-checkbox id="comments-checkbox" v-model="task.processing.remove_regular_comments">
                 Regular comments
               </b-checkbox>
+              <b-checkbox id="docstring-checkbox" v-model="task.processing.remove_documentation_comments">
+                Documentation comments
+              </b-checkbox>
             </b-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container class="py-4 task-create-form-section-bottom">
-        <b-row align-h="center">
-          <b-col cols="auto">
-            <b-button :disabled="v$.$invalid" @click="submit" class="btn-secondary-border-2">Generate Dataset</b-button>
-          </b-col>
-        </b-row>
-      </b-container>
-    </div>
+          </b-form-row>
+        </b-col>
+      </b-row>
+      <b-form-row>
+        <b-form-group class="col-12 d-flex justify-content-center">
+          <b-button type="submit" :disabled="v$.$invalid">Submit</b-button>
+        </b-form-group>
+      </b-form-row>
+    </b-form>
   </div>
 </template>
 
@@ -189,93 +208,24 @@
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
+import BCounter from "@/components/Counter";
 import BDocumentationLink from "@/components/DocumentationLink";
 import BDropdownSelect from "@/components/DropdownSelect";
-import BRange from "@/components/Range";
 
 export default {
   components: {
+    BCounter,
     BDocumentationLink,
     BDropdownSelect,
-    BRange,
   },
   mixins: [routerMixin, bootstrapMixin],
   props: {
     uuid: String,
-    generic: Boolean,
   },
   computed: {
     dropdownState() {
       const child$ = this.v$.$getResultsForChild("language-select");
       return child$ ? !child$.$invalid : null;
-    },
-    commits: {
-      get() {
-        return { lower: this.task.query.min_commits };
-      },
-      set(value) {
-        this.task.query.min_commits = value.lower;
-      },
-    },
-    contributors: {
-      get() {
-        return { lower: this.task.query.min_contributors };
-      },
-      set(value) {
-        this.task.query.min_contributors = value.lower;
-      },
-    },
-    issues: {
-      get() {
-        return { lower: this.task.query.min_issues };
-      },
-      set(value) {
-        this.task.query.min_issues = value.lower;
-      },
-    },
-    stars: {
-      get() {
-        return { lower: this.task.query.min_stars };
-      },
-      set(value) {
-        this.task.query.min_stars = value.lower;
-      },
-    },
-    characters: {
-      get() {
-        return {
-          lower: this.task.query.min_characters,
-          upper: this.task.query.max_characters,
-        };
-      },
-      set(value) {
-        this.task.query.min_characters = value.lower;
-        this.task.query.max_characters = value.upper;
-      },
-    },
-    tokens: {
-      get() {
-        return {
-          lower: this.task.query.min_tokens,
-          upper: this.task.query.max_tokens,
-        };
-      },
-      set(value) {
-        this.task.query.min_tokens = value.lower;
-        this.task.query.max_tokens = value.upper;
-      },
-    },
-    lines: {
-      get() {
-        return {
-          lower: this.task.query.min_lines,
-          upper: this.task.query.max_lines,
-        };
-      },
-      set(value) {
-        this.task.query.min_lines = value.lower;
-        this.task.query.max_lines = value.upper;
-      },
     },
   },
   watch: {
@@ -296,9 +246,11 @@ export default {
     submitSuccess() {
       this.redirectDashboardAndToast(
         "Task Created",
-        "Your dataset creation request has been accepted. " +
-          "Please note that it may take some time until it begins executing. " +
-          "You will receive an email notification once the dataset is compiled.",
+        `
+        Your dataset creation request has been accepted.
+        Please note that it may take some time until it begins executing.
+        You will receive an email notification once the dataset is compiled.
+        `,
         "secondary",
       );
     },
@@ -316,15 +268,20 @@ export default {
         case 409:
           this.redirectDashboardAndToast(
             "Task Exists",
-            "A similar task is already queued or executing." + " Please wait for it to finish before submitting again.",
+            `
+            A similar task is already queued or executing.
+            Please wait for it to finish before submitting again.
+            `,
             "warning",
           );
           break;
         case 429:
           this.redirectDashboardAndToast(
             "Too Many Active Tasks",
-            "You have already reached your limit on the number of active tasks." +
-              " Try again later once one of them finishes.",
+            `
+            You have already reached your limit on the number of active tasks.
+            Try again later once one of them finishes.
+            `,
             "warning",
           );
           break;
@@ -341,15 +298,14 @@ export default {
       await this.$http.post("/task/code/create", this.task).then(this.submitSuccess).catch(this.submitFailure);
     },
     async getLanguages() {
-      await this.$http.get("/language").then((res) => (this.options.languages = res.data));
+      await this.$http.get("/language").then(({ data }) => (this.options.languages = data));
     },
     async getParameters() {
       if (this.uuid) {
         await this.$http(`/task/${this.uuid}`)
-          .then((res) => {
-            const task = res.data;
-            Object.assign(this.task.query, task.query);
-            Object.assign(this.task.processing, task.processing);
+          .then(({ data }) => {
+            Object.assign(this.task.query, data.query);
+            Object.assign(this.task.processing, data.processing);
           })
           .catch((err) => {
             const status = err.response.status;
@@ -440,3 +396,5 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/view/code.sass" />

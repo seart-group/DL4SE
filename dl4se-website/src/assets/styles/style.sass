@@ -32,41 +32,9 @@ $enable-responsive-font-sizes: true
 html
   position: relative
 
-.bg-light-gray
-  background-color: $light-gray
-
 .btn-secondary-border-2
   @extend .btn
   @extend .btn-secondary
   @extend .text-center
   @extend .border-2
   border-color: $dark-gray!important
-
-.task-create-form
-  @extend .my-lg-5
-  @extend .my-md-4
-  @extend .my-sm-3
-  @extend .my-3
-
-%task-create-form-section
-  background-color: #f2f2f2ee!important
-  @extend .border-left
-  @extend .border-right
-
-.task-create-form-section-top
-  @extend %task-create-form-section
-  @extend .border-top
-
-.task-create-form-section-middle
-  @extend %task-create-form-section
-
-.task-create-form-section-bottom
-  @extend %task-create-form-section
-  @extend .border-bottom
-
-.task-create-form-section-title
-  @extend .my-2
-  @extend .border-2
-  @extend .border-bottom
-  @extend .border-dark
-  @extend .font-weight-bold
