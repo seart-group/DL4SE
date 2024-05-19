@@ -65,10 +65,4 @@ export default {
 };
 </script>
 
-<style lang="sass">
-@import "node_modules/bootstrap/scss/_functions.scss"
-@import "node_modules/bootstrap/scss/_variables.scss"
-
-.carousel-indicators li
-  background-color: $gray-600!important
-</style>
+<style scoped lang="sass" src="@/assets/styles/component/text-carousel.sass" />
