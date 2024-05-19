@@ -197,7 +197,7 @@
       </b-row>
       <b-form-row>
         <b-form-group class="col-12 d-flex justify-content-center">
-          <b-button type="submit" :disabled="v$.$invalid">Submit</b-button>
+          <b-form-submit :disabled="v$.$invalid" />
         </b-form-group>
       </b-form-row>
     </b-form>
@@ -211,12 +211,14 @@ import useVuelidate from "@vuelidate/core";
 import BCounter from "@/components/Counter";
 import BDocumentationLink from "@/components/DocumentationLink";
 import BDropdownSelect from "@/components/DropdownSelect";
+import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   components: {
     BCounter,
     BDocumentationLink,
     BDropdownSelect,
+    BFormSubmit,
   },
   mixins: [routerMixin, bootstrapMixin],
   props: {

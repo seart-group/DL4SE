@@ -39,9 +39,7 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col">
-                      <b-button type="submit" variant="secondary" :disabled="!canUpdateUid" :block="!$screen.sm">
-                        Save
-                      </b-button>
+                      <b-form-submit :disabled="!canUpdateUid" :block="!$screen.sm">Save</b-form-submit>
                     </b-form-group>
                   </b-form-row>
                 </b-form>
@@ -60,9 +58,7 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col">
-                      <b-button type="submit" variant="secondary" :disabled="!canUpdateEmail" :block="!$screen.sm">
-                        Change Email
-                      </b-button>
+                      <b-form-submit :disabled="!canUpdateEmail" :block="!$screen.sm">Change Email</b-form-submit>
                     </b-form-group>
                   </b-form-row>
                 </b-form>
@@ -76,7 +72,7 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col">
-                      <b-button type="submit" variant="secondary" :block="!$screen.sm">Change Password</b-button>
+                      <b-form-submit :block="!$screen.sm">Change Password</b-form-submit>
                     </b-form-group>
                   </b-form-row>
                 </b-form>
@@ -95,14 +91,7 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col mb-0">
-                      <b-button
-                        type="submit"
-                        variant="secondary"
-                        :disabled="!canUpdateOrganisation"
-                        :block="!$screen.sm"
-                      >
-                        Save
-                      </b-button>
+                      <b-form-submit :disabled="!canUpdateOrganisation" :block="!$screen.sm">Save</b-form-submit>
                     </b-form-group>
                   </b-form-row>
                 </b-form>
@@ -117,15 +106,19 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { email, required } from "@vuelidate/validators";
+import { email, required, sameAs } from "@vuelidate/validators";
 import { uid } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFormSubmit from "@/components/FormSubmit";
 import BIconIdenticon from "@/components/IconIdenticon";
 
 export default {
   mixins: [routerMixin, bootstrapMixin],
-  components: { BIconIdenticon },
+  components: {
+    BFormSubmit,
+    BIconIdenticon,
+  },
   computed: {
     canUpdateUid() {
       const invalid = this.v$.form.uid.$invalid;

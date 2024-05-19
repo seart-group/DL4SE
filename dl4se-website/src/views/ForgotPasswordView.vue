@@ -32,7 +32,7 @@
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-button type="submit" variant="secondary" :disabled="v$.$invalid || submitted">Submit</b-button>
+            <b-form-submit :disabled="v$.$invalid || submitted" />
           </b-form-group>
         </b-form-row>
         <b-overlay :show="submitted" variant="light" no-wrap :z-index="Number.MAX_SAFE_INTEGER" />
@@ -46,9 +46,11 @@ import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [routerMixin, bootstrapMixin],
+  components: { BFormSubmit },
   methods: {
     valid(key) {
       const element = this.v$.form[key];
