@@ -1,25 +1,39 @@
-<template>
-  <b-carousel-slide>
-    <template #img>
-      <b-card no-body>
-        <b-card-header />
-        <b-card-body>
-          <b-card-title>
-            <slot name="title" />
-          </b-card-title>
-          <b-card-text>
-            <slot name="content" />
-          </b-card-text>
-        </b-card-body>
-        <b-card-footer />
-      </b-card>
-    </template>
-  </b-carousel-slide>
-</template>
-
 <script>
+import { BCard, BCardBody, BCardFooter, BCardHeader, BCardText, BCardTitle, BCarouselSlide } from "bootstrap-vue";
+
 export default {
   name: "b-text-carousel-slide",
+  functional: true,
+  components: {
+    BCarouselSlide,
+    BCard,
+    BCardHeader,
+    BCardBody,
+    BCardFooter,
+    BCardTitle,
+    BCardText,
+  },
+  render(createElement, { props, data }) {
+    return createElement(BCarouselSlide, {
+      props: props,
+      attrs: data.attrs,
+      class: data.staticClass,
+      directives: data.directives ?? [],
+      on: data.on,
+      scopedSlots: {
+        img: () => [
+          createElement(BCard, { props: { "no-body": true } }, [
+            createElement(BCardHeader),
+            createElement(BCardBody, {}, [
+              createElement(BCardTitle, {}, data.scopedSlots["title"]()),
+              createElement(BCardText, {}, data.scopedSlots["content"]()),
+            ]),
+            createElement(BCardFooter),
+          ]),
+        ],
+      },
+    });
+  },
 };
 </script>
 
