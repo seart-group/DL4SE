@@ -25,7 +25,7 @@ export default {
           contentClass: "rounded-0",
           headerClass: "border-0",
           footerClass: "d-none",
-          scrollable: true,
+          scrollable: Boolean(props.scrollable),
           centered: true,
         },
         directives: data.directives ?? [],
