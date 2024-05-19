@@ -30,11 +30,8 @@ export default {
         },
         directives: data.directives ?? [],
         on: data.on,
-        scopedSlots: {
-          default: () => children,
-        },
       },
-      [],
+      children,
     );
   },
 };
