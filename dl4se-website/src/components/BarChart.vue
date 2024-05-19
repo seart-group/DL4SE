@@ -100,5 +100,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="sass" src="@/assets/styles/component/bar-chart.sass" />
