@@ -5,7 +5,7 @@ export default {
   name: "b-form-submit",
   functional: true,
   components: { BButton },
-  render(createElement, { props, data, slots }) {
+  render(createElement, { props, data, children }) {
     return createElement(
       BButton,
       {
@@ -18,7 +18,7 @@ export default {
         directives: data.directives ?? [],
         on: data.on,
       },
-      slots().default ?? ["Submit"],
+      children ?? ["Submit"],
     );
   },
 };
