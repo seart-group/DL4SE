@@ -1,15 +1,6 @@
 <template>
-  <b-carousel :interval="currentInterval" :indicators="showIndicators" fade no-hover-pause no-touch>
-    <b-carousel-slide v-for="([title, content], idx) in Object.entries(slides)" :key="idx">
-      <template #img>
-        <b-card no-body class="border-0 rounded-0">
-          <b-card-body>
-            <b-card-title class="text-center">{{ title }}</b-card-title>
-            <b-card-text class="text-justify mb-4" v-html="content" />
-          </b-card-body>
-        </b-card>
-      </template>
-    </b-carousel-slide>
+  <b-carousel :interval="currentInterval" :indicators="indicators" :fade="fade" no-hover-pause no-touch>
+    <slot />
   </b-carousel>
 </template>
 
@@ -17,11 +8,13 @@
 export default {
   name: "b-text-carousel",
   props: {
-    slides: {
-      type: Object,
-      default() {
-        return {};
-      },
+    fade: {
+      type: Boolean,
+      default: true,
+    },
+    indicators: {
+      type: Boolean,
+      default: true,
     },
     interval: {
       type: Number,
@@ -31,9 +24,6 @@ export default {
   computed: {
     currentInterval() {
       return this.visible ? this.interval : 0;
-    },
-    showIndicators() {
-      return Object.keys(this.slides).length > 1;
     },
   },
   methods: {
