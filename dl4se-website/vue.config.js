@@ -7,7 +7,7 @@ module.exports = defineConfig({
       entry: "src/main.js",
       template: "public/index.html",
       filename: "index.html",
-      title: "DL4SE",
+      title: "SEART Dataset Hub",
       chunks: ["chunk-vendors", "chunk-common", "index"],
     },
   },
