@@ -4,6 +4,19 @@
 label
   margin: 0!important
 
+th, td
+  vertical-align: middle!important
+tr
+  thead &
+    height: $table-header-row-height !important
+  tbody &
+    height: $table-body-row-height!important
+
+.b-table-empty-row
+  color: $black!important
+  background-color: $gray-200!important
+  height: calc($table-body-row-height * 5 - 1px)!important
+
 input
   $input-min-height: 40px
   $input-min-width: 100px
