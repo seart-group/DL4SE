@@ -8,6 +8,8 @@ $link-color: theme-color("secondary")
 $link-hover-color: darken($link-color, 15%)
 $link-hover-decoration: none
 $table-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out
+$font-family-sans-serif: "Trebuchet MS", Helvetica, Arial, sans-serif
+$font-family-base: $font-family-sans-serif
 $enable-responsive-font-sizes: true
 
 @import "node_modules/bootstrap/scss/bootstrap"
@@ -25,18 +27,9 @@ $enable-responsive-font-sizes: true
   font-weight: normal
   src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
 
-@font-face
-  font-family: 'Inconsolata'
-  font-style: normal
-  font-weight: normal
-  src: local('Inconsolata'), url('@/assets/fonts/inconsolata.woff') format('woff')
-
 *
   margin: 0
   padding: 0
-  font-family: "Trebuchet MS", Helvetica, Arial, sans-serif!important
-  font-style: normal!important
-  font-variant: normal!important
 
 html
   position: relative
