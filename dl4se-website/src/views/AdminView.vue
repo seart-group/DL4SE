@@ -195,7 +195,7 @@ export default {
           .get("/")
           .then(() => {
             clearInterval(check);
-            that.appendToast("Server Connection Restored", "The DL4SE server is back online.", "secondary");
+            that.appendToast("Server Connection Restored", "The server is back online.", "secondary");
           })
           .finally(() => {
             that.disabled = false;
