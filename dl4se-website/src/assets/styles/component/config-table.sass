@@ -2,9 +2,6 @@
 @import "node_modules/bootstrap/scss/_variables.scss"
 @import "node_modules/bootstrap/scss/_mixins.scss"
 
-$header-row-height: 50px
-$body-row-height: 64px
-
 label
   margin: 0!important
 
@@ -12,16 +9,15 @@ th, td
   vertical-align: middle!important
 
 tr
+  $header-row-height: 50px
+  $body-row-height: 64px
   thead &
     height: $header-row-height!important
   tbody &
     height: $body-row-height!important
 
 .table-container
-  border: 1px solid $gray-600!important
-  border-left: 0!important
-  border-top: 0!important
-  border-right: 0!important
+  border-bottom: 1px solid $gray-600!important
 
 input
   $input-min-width: 100px
