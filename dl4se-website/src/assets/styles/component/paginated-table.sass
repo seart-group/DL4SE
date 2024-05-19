@@ -26,28 +26,11 @@ $button-size: 40px
     row-gap: 10px!important
 
 .table-paginated
-  $header-height: 50px
-  $row-height: 64px
-  $empty-height: $row-height * 5
   ::v-deep
     th
       // This is required to undo a bug that was introduced in version 2.22 of BSV:
       // https://github.com/bootstrap-vue/bootstrap-vue/issues/6961
       position: sticky!important
-    th,
-    td
-      vertical-align: middle!important
-    thead tr
-      height: $header-height!important
-    tbody tr
-      height: $row-height!important
-    .b-table-empty-row
-      color: $black
-      background-color: $gray-200
-      height: $empty-height!important
-
-.table-container
-  border-bottom: 1px solid $gray-600!important
 
 .pagination
   ::v-deep
