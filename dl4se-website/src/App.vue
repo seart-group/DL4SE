@@ -34,8 +34,8 @@
             </b-nav-item>
           </template>
           <b-nav-item href="https://github.com/seart-group/dl4se" target="_blank">
-            <b-icon-github class="d-none d-md-inline" />
-            <span class="d-inline d-md-none">GitHub</span>
+            <b-icon-github v-if="$screen.md" />
+            <template v-else>GitHub</template>
           </b-nav-item>
         </template>
       </b-smart-navbar>
