@@ -49,7 +49,7 @@
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-link :to="{ name: 'forgot' }" class="text-secondary">Forgotten password?</b-link>
+            <b-link :to="{ name: 'forgot' }">Forgotten password?</b-link>
           </b-form-group>
         </b-form-row>
         <b-form-row>

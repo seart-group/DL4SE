@@ -17,11 +17,7 @@
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <b-link
-              v-scroll-to="'#summary'"
-              v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }"
-              class="text-secondary text-decoration-none"
-            >
+            <b-link v-scroll-to="'#summary'" v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }">
               <b-icon-chevron-double-down />
               Scroll For More Info
               <b-icon-chevron-double-down />
@@ -56,8 +52,7 @@
                 <template #content>
                   Register for free today and get instant access to all the dataset construction features of our
                   platform. The entire project is also open-source. You can view the source code or suggest improvements
-                  on the project
-                  <a href="https://github.com/seart-group/DL4SE" target="_blank" class="text-secondary">GitHub page</a>.
+                  on the project <a href="https://github.com/seart-group/DL4SE" target="_blank">GitHub page</a>.
                 </template>
               </b-text-carousel-slide>
             </b-text-carousel>
@@ -65,7 +60,7 @@
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <b-link :to="{ name: 'dashboard' }" :disabled="!connected" class="text-secondary text-decoration-none">
+            <b-link :to="{ name: 'dashboard' }" :disabled="!connected">
               <b-icon-chevron-double-right />
               Get Started
               <b-icon-chevron-double-right />

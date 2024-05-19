@@ -52,8 +52,7 @@
       <h2 id="bug-reports">How can I report a bug?</h2>
       <p>
         Our platform is open source. Use the
-        <a href="https://github.com/seart-group/dl4se/issues" target="_blank" class="text-secondary">issue tracker</a>
-        hosted on GitHub.
+        <a href="https://github.com/seart-group/dl4se/issues" target="_blank">issue tracker</a> hosted on GitHub.
       </p>
     </section>
   </article>
