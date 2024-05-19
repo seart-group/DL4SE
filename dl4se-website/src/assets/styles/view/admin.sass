@@ -1,6 +1,11 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
+.modal-body
+  .input-group
+    $margin: map-get($spacers, 3)
+    margin-bottom: $margin!important
+
 .content-area
   @include btn-accent
 

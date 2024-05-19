@@ -1,10 +1,10 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-div[id*="filter-select"]
+.modal-body
   .input-group
-    &:not(:last-child)
-      margin-bottom: map-get($spacers, 3)!important
+    $margin: map-get($spacers, 3)
+    margin-bottom: $margin!important
 
 .table-paginated
   ::v-deep
