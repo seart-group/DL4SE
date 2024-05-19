@@ -34,16 +34,14 @@ abstract class AbstractTokenService<T extends Token> implements TokenService<T> 
 
     @Override
     public void verify(String value) {
-        tokenRepository.findByValue(value)
-                .ifPresentOrElse(
-                        token -> {
-                            tokenRepository.delete(token);
-                            if (token.isExpired()) throw new TokenExpiredException(token);
-                        },
-                        () -> {
-                            throw new TokenNotFoundException(Token_.value, value);
-                        }
-                );
+        tokenRepository.findByValue(value).ifPresentOrElse(this::verify, () -> {
+            throw new TokenNotFoundException(Token_.value, value);
+        });
+    }
+
+    protected void verify(T token) {
+        tokenRepository.delete(token);
+        if (token.isExpired()) throw new TokenExpiredException(token);
     }
 
     @Override
