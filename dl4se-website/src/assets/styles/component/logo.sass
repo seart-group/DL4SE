@@ -4,16 +4,15 @@
 a
   text-decoration: none!important
   span:first-child
-    color: gray("200")!important
-    background-color: gray("600")!important
+    color: $gray-200!important
+    background-color: $gray-600!important
     padding-left: map-get($spacers, 2)!important
     padding-right: calc(map-get($spacers, 1) / 2)!important
     margin-right: calc(map-get($spacers, 1) / 2)!important
   span:last-child
-    color: gray("600")!important
-
-a:hover
-  span:first-child
-    background-color: gray("700")!important
-  span:last-child
-    color: gray("700")!important
+    color: $gray-600!important
+  &:hover
+    span:first-child
+      background-color: $gray-700!important
+    span:last-child
+      color: $gray-700!important
