@@ -1,11 +1,11 @@
 th, td
   vertical-align: middle!important
 
-thead tr
-  height: 50px!important
-
-tbody tr
-  height: 64px!important
+tr
+  thead &
+    height: 50px!important
+  tbody &
+    height: 64px!important
 
 .b-table-empty-row
   color: $black
@@ -15,12 +15,11 @@ tbody tr
 .table-container
   border-bottom: 1px solid $gray-600!important
 
-.table-hover tbody tr
-  color: $black
-  background-color: $gray-200
-  transition: $table-transition
-
-.table-hover tbody tr:hover
-  color: $white
-  background-color: $gray-600
-  transition: $table-transition
+.table-hover
+  tbody tr
+    color: $black
+    background-color: $gray-200
+    transition: $table-transition
+    &:hover
+      color: $white
+      background-color: $gray-600
