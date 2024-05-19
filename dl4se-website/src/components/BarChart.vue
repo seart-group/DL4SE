@@ -81,6 +81,7 @@ export default {
           title: {
             display: true,
             text: this.title,
+            color: "#000000",
             font: {
               size: 16,
             },
