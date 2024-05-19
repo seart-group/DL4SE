@@ -7,7 +7,6 @@ export default {
         toaster: "b-toaster-top-right",
         title: title,
         variant: variant,
-        toastClass: "rounded-0",
         solid: true,
         autoHideDelay: (words(`${title} ${message}`).length / 5) * 1000 + 1000,
         appendToast: true,
