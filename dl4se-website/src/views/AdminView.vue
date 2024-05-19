@@ -73,29 +73,19 @@
       <b-row>
         <b-col>
           <h2>Server Controls</h2>
-          <b-content-area class="d-flex justify-content-around justify-content-md-start">
-            <b-container>
-              <b-row>
-                <b-col cols="12" sm="auto">
-                  <b-button @click="shutdownServer" variant="danger" class="mb-3 mb-sm-0" :disabled="disabled" block>
-                    <b-icon-power />
-                    Shutdown
-                  </b-button>
-                </b-col>
-                <b-col cols="12" sm="auto">
-                  <b-button @click="restartServer" variant="secondary" class="mb-3 mb-sm-0" :disabled="disabled" block>
-                    <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
-                    Restart
-                  </b-button>
-                </b-col>
-                <b-col cols="12" sm="auto">
-                  <b-button @click="getLog" variant="primary" :disabled="disabled" block>
-                    <b-icon-file-earmark-text />
-                    Log
-                  </b-button>
-                </b-col>
-              </b-row>
-            </b-container>
+          <b-content-area :class="{ 'gap-3': true, 'd-flex': $screen.sm, 'd-grid': !$screen.sm }">
+            <b-button :disabled="disabled" @click="shutdownServer" variant="danger">
+              <b-icon-power />
+              Shutdown
+            </b-button>
+            <b-button :disabled="disabled" @click="restartServer">
+              <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+              Restart
+            </b-button>
+            <b-button :disabled="disabled" @click="getLog" variant="primary">
+              <b-icon-file-earmark-text />
+              Log
+            </b-button>
           </b-content-area>
         </b-col>
       </b-row>
