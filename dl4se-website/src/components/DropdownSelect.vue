@@ -1,11 +1,11 @@
 <template>
   <b-dropdown :id="id" :disabled="disabled" no-caret block menu-class="w-100">
     <template #button-content>
-      {{ toggleContent }}
+      {{ selected ? selected : placeholder }}
     </template>
     <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
     <b-dropdown-item v-for="option in options" :key="option" :value="option" @click="selected = option">
-      {{ option }}
+      {{ option ? option : placeholder }}
     </b-dropdown-item>
   </b-dropdown>
 </template>
@@ -23,7 +23,7 @@ export default {
     disabled: Boolean,
     placeholder: {
       type: String,
-      default: "Value",
+      default: "None Selected",
     },
     header: {
       type: String,
@@ -31,14 +31,7 @@ export default {
     },
     options: {
       type: Array,
-      default() {
-        return [];
-      },
-    },
-  },
-  computed: {
-    toggleContent() {
-      return this.selected ? this.selected : this.placeholder;
+      default: () => [],
     },
   },
   watch: {
