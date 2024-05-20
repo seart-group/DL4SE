@@ -27,7 +27,8 @@ input
   &:hover,
   &:active,
   &:focus
-    @include bg-chevron-up($white)
+    &:not(:disabled)
+      @include bg-chevron-up($white)
 
 .btn-down
   border-left: 0!important
@@ -39,4 +40,5 @@ input
   &:hover,
   &:active,
   &:focus
-    @include bg-chevron-down($white)
+    &:not(:disabled)
+      @include bg-chevron-down($white)

@@ -8,13 +8,14 @@
       :min="min"
       :max="max"
       :state="state"
+      :disabled="disabled"
       @input="setCount"
       @keydown.up.prevent="increment"
       @keydown.down.prevent="decrement"
     />
     <div class="d-table-cell position-relative align-middle text-nowrap">
-      <b-button type="button" @click="increment" tabindex="-1" class="btn-up" />
-      <b-button type="button" @click="decrement" tabindex="-1" class="btn-down" />
+      <b-button :disabled="disabled" @click="increment" tabindex="-1" class="btn-up" />
+      <b-button :disabled="disabled" @click="decrement" tabindex="-1" class="btn-down" />
     </div>
   </div>
 </template>
@@ -41,6 +42,10 @@ export default {
     },
     placeholder: String,
     required: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     state() {
