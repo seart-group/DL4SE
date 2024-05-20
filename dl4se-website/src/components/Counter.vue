@@ -41,7 +41,10 @@ export default {
       default: Number.MAX_SAFE_INTEGER,
     },
     placeholder: String,
-    required: Boolean,
+    required: {
+      type: Boolean,
+      default: false,
+    },
     disabled: {
       type: Boolean,
       default: false,
