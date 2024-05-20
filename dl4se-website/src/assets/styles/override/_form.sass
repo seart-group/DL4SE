@@ -1,16 +1,7 @@
 form
-  input[type=text],
-  input[type=email],
-  input[type=password],
-  input[type=number]
-    background-color: $gray-200!important
-    border-color: $gray-600!important
-    border-radius: 0!important
-    border-width: 0 0 1px 0!important
-
+  .form-control
+    &:disabled,
+    &.disabled
+      opacity: $disabled-opacity!important
     &:focus
-      background-color: $white!important
-
-  .form-control:disabled,
-  .form-control.disabled
-    opacity: $disabled-opacity!important
+      box-shadow: $box-shadow!important

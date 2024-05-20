@@ -1,11 +1,18 @@
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button
-  -webkit-appearance: none!important
-  margin: 0!important
-
-input[type=number]
-  -moz-appearance: textfield!important
-
-input:focus,
-.form-control:focus
-  box-shadow: $box-shadow!important
+input
+  background-color: $gray-200!important
+  border-color: $gray-600!important
+  border-radius: 0!important
+  border-width: 0 0 1px 0!important
+  &:focus
+    background-color: $white!important
+    box-shadow: $box-shadow!important
+  &[type="number"]
+    -webkit-appearance: textfield!important
+    -moz-appearance: textfield!important
+    appearance: textfield!important
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button
+    -webkit-appearance: none!important
+    -moz-appearance: none!important
+    appearance: none!important
+    margin: 0!important
