@@ -44,12 +44,9 @@
         </b-col>
         <b-col cols="12" md="auto">
           <b-input-group>
-            <b-dropdown-select
-              v-model="perPage"
-              :options="perPageOptions"
-              header="Choose Page Size"
-              class="flex-grow-1"
-            />
+            <b-dropdown-select v-model="perPage" :options="perPageOptions" class="flex-grow-1">
+              <template #header>Choose page size</template>
+            </b-dropdown-select>
             <b-button class="btn-controls btn-square" @click="refresh">
               <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
             </b-button>

@@ -3,7 +3,9 @@
     <template #button-content>
       {{ selected ? selected : placeholder }}
     </template>
-    <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
+    <b-dropdown-header>
+      <slot name="header">Choose an option</slot>
+    </b-dropdown-header>
     <b-dropdown-item v-for="option in options" :key="option" :value="option" @click="selected = option">
       {{ option ? option : placeholder }}
     </b-dropdown-item>
@@ -24,10 +26,6 @@ export default {
     placeholder: {
       type: String,
       default: "None Selected",
-    },
-    header: {
-      type: String,
-      default: "Choose an option",
     },
     options: {
       type: Array,

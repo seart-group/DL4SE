@@ -12,11 +12,12 @@
           <b-dropdown-select
             id="language-select"
             placeholder="Language"
-            header="Select a language"
             :options="options.languages"
             v-model="task.query.language_name"
             required
-          />
+          >
+            <template #header>Choose a language</template>
+          </b-dropdown-select>
           <template #invalid-feedback>Language is required</template>
         </b-form-group>
         <b-form-group label="Commits:" class="col-12 col-sm-6 col-md-3">
