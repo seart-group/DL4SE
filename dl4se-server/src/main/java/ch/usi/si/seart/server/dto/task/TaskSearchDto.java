@@ -1,5 +1,6 @@
 package ch.usi.si.seart.server.dto.task;
 
+import ch.usi.si.seart.model.task.Status;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Objects;
-import java.util.function.Predicate;
 
 @Getter
 @Setter
@@ -20,12 +18,13 @@ import java.util.function.Predicate;
 public class TaskSearchDto {
 
     String uuid;
-
-    private static Predicate<String> notNull = Objects::nonNull;
-    private static Predicate<String> notBlank = Predicate.not(String::isBlank);
-    private static Predicate<String> specified = notNull.and(notBlank);
+    Status status;
 
     public boolean hasUuid() {
-        return specified.test(uuid);
+        return uuid != null && !uuid.isBlank();
+    }
+
+    public boolean hasStatus() {
+        return status != null;
     }
 }

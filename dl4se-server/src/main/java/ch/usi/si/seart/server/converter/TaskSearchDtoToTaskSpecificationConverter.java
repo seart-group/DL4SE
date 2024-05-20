@@ -1,5 +1,6 @@
 package ch.usi.si.seart.server.converter;
 
+import ch.usi.si.seart.model.task.Status;
 import ch.usi.si.seart.model.task.Task;
 import ch.usi.si.seart.model.task.Task_;
 import ch.usi.si.seart.server.dto.task.TaskSearchDto;
@@ -19,6 +20,10 @@ public class TaskSearchDtoToTaskSpecificationConverter implements Converter<Task
             Specification<Task> other = withUuidContaining(source.getUuid());
             specification = specification.and(other);
         }
+        if (source.hasStatus()) {
+            Specification<Task> other = withStatus(source.getStatus());
+            specification = specification.and(other);
+        }
         return specification;
     }
 
@@ -26,6 +31,13 @@ public class TaskSearchDtoToTaskSpecificationConverter implements Converter<Task
         return (root, query, criteriaBuilder) -> {
             Expression<String> expression = root.get(Task_.UUID).as(String.class);
             return criteriaBuilder.like(expression, "%" + pattern + "%");
+        };
+    }
+
+    private Specification<Task> withStatus(Status status) {
+        return (root, query, criteriaBuilder) -> {
+            Expression<Status> expression = root.get(Task_.status);
+            return criteriaBuilder.equal(expression, status);
         };
     }
 }
