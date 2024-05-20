@@ -174,6 +174,17 @@
     >
       <label for="task-filter-uuid">Filter by UUID:</label>
       <b-clearable-input id="task-filter-uuid" v-model="taskTable.filters.uuid" placeholder="Partial / Full UUID" />
+      <p class="d-inline-block mb-2 cursor-default" @click="$refs.taskFilterStatus.$el.querySelector('button').focus()">
+        Filter by Status:
+      </p>
+      <b-dropdown-select
+        id="task-filter-status"
+        ref="taskFilterStatus"
+        aria-label="Filter by Status:"
+        v-model="taskTable.filters.status"
+        :options="[null, 'QUEUED', 'EXECUTING', 'FINISHED', 'CANCELLED', 'ERROR']"
+        placeholder="ALL"
+      />
     </b-dialog-modal>
   </div>
 </template>
@@ -186,6 +197,7 @@ import BAbbreviation from "@/components/Abbreviation";
 import BClearableInput from "@/components/ClearableInput";
 import BDetailsModal from "@/components/DetailsModal";
 import BDialogModal from "@/components/DialogModal";
+import BDropdownSelect from "@/components/DropdownSelect";
 import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
 import BIconCalendarPlay from "@/components/IconCalendarPlay";
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
@@ -197,6 +209,7 @@ export default {
     BClearableInput,
     BDetailsModal,
     BDialogModal,
+    BDropdownSelect,
     BIconCalendarExclamation,
     BIconCalendarPlay,
     BIconCalendarQuestion,
@@ -291,6 +304,7 @@ export default {
       if (ctx.sortBy) params.sort = `${ctx.sortBy},${ctx.sortDesc ? "desc" : "asc"}`;
       const filters = this.taskTable.filters;
       if (filters.uuid) params.uuid = filters.uuid;
+      if (filters.status) params.status = filters.status;
       return this.$http
         .get("/task", { params: params })
         .then((res) => {
@@ -365,6 +379,7 @@ export default {
         id: "task-table",
         filters: {
           uuid: null,
+          status: null,
         },
         fields: [
           {
