@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import getRandomName from "namesgenerator";
 import useVuelidate from "@vuelidate/core";
 import { email, required, sameAs } from "@vuelidate/validators";
 import { uid } from "@/validators";
@@ -150,10 +151,10 @@ export default {
     },
   },
   methods: {
-    generateUsername() {
-      const [base, _] = this.user.email.split("@");
-      const random = Math.floor(Math.random() * 1000);
-      return `${base}_${random}`;
+    generateUsername(separator = "_") {
+      const name = getRandomName(separator);
+      const numbers = Math.floor(Math.random() * 1000);
+      return name + separator + numbers;
     },
     responseMapper(json) {
       return json.map((item) => item.name);
