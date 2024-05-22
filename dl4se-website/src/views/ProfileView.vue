@@ -39,7 +39,14 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col">
-                      <div :class="{ 'd-grid': !$screen.sm, 'd-inline-flex': $screen.sm, 'gap-3': true }">
+                      <div
+                        :class="{
+                          'row-gap-3': true,
+                          'column-gap-2': true,
+                          'd-grid': !$screen.sm,
+                          'd-inline-flex': $screen.sm,
+                        }"
+                      >
                         <b-form-submit :disabled="!canUpdateUid">Save</b-form-submit>
                         <b-button type="button" @click="form.uid = generateUsername()">Random</b-button>
                       </div>
