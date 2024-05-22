@@ -65,25 +65,32 @@
           </b-form-group>
         </b-form-row>
         <b-form-row>
-          <b-form-group label-for="organisation">
-            <template #label>
+          <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
+          <div role="group">
+            <label for="organisation" class="d-block">
               Organisation
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
-            </template>
-            <b-form-input
-              id="organisation"
-              name="organisation"
-              type="text"
-              v-model.trim="form.organisation"
-              :disabled="submitted"
-              :state="v$.form.organisation.$dirty ? !v$.form.organisation.$invalid : null"
-              placeholder="Your Organisation Name"
-            />
+            </label>
+            <div class="position-relative">
+              <b-form-auto-complete
+                id="organisation"
+                name="organisation"
+                type="text"
+                v-model.trim="form.organisation"
+                server="http://universities.hipolabs.com/search"
+                query-param="name"
+                :debounce-time="250"
+                :server-params="{ limit: 10 }"
+                :response-mapper="responseMapper"
+                :disabled="submitted"
+                :state="v$.form.organisation.$dirty ? !v$.form.organisation.$invalid : null"
+              />
+            </div>
             <b-form-text v-if="v$.form.organisation.$invalid">
               <b-icon-exclamation-octagon />
               We use this information for analytics.
             </b-form-text>
-          </b-form-group>
+          </div>
         </b-form-row>
         <b-form-row>
           <b-form-group>
@@ -110,12 +117,19 @@ import { email, required, sameAs } from "@vuelidate/validators";
 import { password } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFormAutoComplete from "@/components/FormAutoComplete";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [routerMixin, bootstrapMixin],
-  components: { BFormSubmit },
+  components: {
+    BFormAutoComplete,
+    BFormSubmit,
+  },
   methods: {
+    responseMapper(json) {
+      return json.map((item) => item.name);
+    },
     async register() {
       this.submitted = true;
       const payload = {

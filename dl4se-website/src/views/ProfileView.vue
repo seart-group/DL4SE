@@ -80,14 +80,22 @@
                 <b-card-sub-title sub-title-tag="h3">Organisation</b-card-sub-title>
                 <b-form @submit.stop.prevent="updateOrganisation">
                   <b-form-row>
-                    <b-form-group class="col">
-                      <b-input
-                        type="text"
-                        placeholder="New organisation"
-                        v-model.trim="form.organisation"
-                        :state="!v$.form.organisation.$invalid"
-                      />
-                    </b-form-group>
+                    <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
+                    <div role="group" class="col">
+                      <div class="position-relative">
+                        <b-form-auto-complete
+                          type="text"
+                          v-model.trim="form.organisation"
+                          server="http://universities.hipolabs.com/search"
+                          query-param="name"
+                          :debounce-time="250"
+                          :server-params="{ limit: 10 }"
+                          :response-mapper="responseMapper"
+                          :state="!v$.form.organisation.$invalid"
+                          class="mb-3"
+                        />
+                      </div>
+                    </div>
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col mb-0">
@@ -112,10 +120,12 @@ import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormSubmit from "@/components/FormSubmit";
 import BIconIdenticon from "@/components/IconIdenticon";
+import BFormAutoComplete from "@/components/FormAutoComplete.vue";
 
 export default {
   mixins: [routerMixin, bootstrapMixin],
   components: {
+    BFormAutoComplete,
     BFormSubmit,
     BIconIdenticon,
   },
@@ -137,6 +147,9 @@ export default {
     },
   },
   methods: {
+    responseMapper(json) {
+      return json.map((item) => item.name);
+    },
     updateUid() {
       const config = { headers: { "Content-Type": "text/plain;charset=UTF-8" } };
       this.$http
