@@ -8,7 +8,7 @@
     :disabled="disabled"
     :placeholder="placeholder"
     autocomplete="off"
-    v-model.trim="value"
+    v-model.trim="input"
   />
 </template>
 
@@ -22,6 +22,7 @@ export default {
       type: String,
       default: null,
     },
+    value: [String, Number],
     name: {
       type: String,
       default: null,
@@ -101,8 +102,8 @@ export default {
     },
   },
   watch: {
-    value() {
-      this.$emit("input", this.value);
+    input() {
+      this.$emit("input", this.input);
     },
   },
   mounted() {
@@ -114,7 +115,7 @@ export default {
       maximumItems: this.maximumItems,
       suggestionsThreshold: this.suggestionsThreshold,
       notFoundMessage: this.notFoundMessage,
-      onSelectItem: ({ label }) => (this.value = label),
+      onSelectItem: ({ label }) => (this.input = label),
       onServerResponse: (response) => response.json().then(this.responseMapper),
       highlightClass: "bg-transparent text-current text-decoration-underline p-0",
       activeClasses: ["bg-secondary", "text-white"],
@@ -130,7 +131,7 @@ export default {
   },
   data() {
     return {
-      value: undefined,
+      input: this.value,
     };
   },
 };
