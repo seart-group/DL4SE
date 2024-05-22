@@ -8,13 +8,12 @@
         </b-col>
       </b-form-row>
       <b-form-row>
-        <b-form-group :state="dropdownState" class="col-12">
+        <b-form-group :state="!v$.task.query.language_name.$invalid" class="col-12">
           <b-dropdown-select
             id="language-select"
             placeholder="Language"
             :options="options.languages"
             v-model="task.query.language_name"
-            required
           >
             <template #header>Choose a language</template>
           </b-dropdown-select>
@@ -209,6 +208,7 @@
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import BCounter from "@/components/Counter";
 import BDocumentationLink from "@/components/DocumentationLink";
 import BDropdownSelect from "@/components/DropdownSelect";
@@ -224,12 +224,6 @@ export default {
   mixins: [routerMixin, bootstrapMixin],
   props: {
     uuid: String,
-  },
-  computed: {
-    dropdownState() {
-      const child$ = this.v$.$getResultsForChild("language-select");
-      return child$ ? !child$.$invalid : null;
-    },
   },
   watch: {
     "task.query.exclude_duplicates": {
@@ -394,6 +388,18 @@ export default {
           },
         ],
         languages: [],
+      },
+    };
+  },
+  validations() {
+    return {
+      task: {
+        query: {
+          language_name: {
+            $autoDirty: true,
+            required: required,
+          },
+        },
       },
     };
   },
