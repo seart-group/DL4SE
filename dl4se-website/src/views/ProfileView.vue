@@ -326,16 +326,4 @@ export default {
 };
 </script>
 
-<style lang="sass">
-@import "node_modules/bootstrap/scss/_functions.scss"
-@import "node_modules/bootstrap/scss/_variables.scss"
-
-ul[id$="_tab_controls_"]
-  gap: 10px!important
-  .nav-link
-    border-radius: 0!important
-  .nav-link:not(.active)
-    color: $secondary!important
-</style>
-
 <style scoped lang="sass" src="@/assets/styles/view/profile.sass" />

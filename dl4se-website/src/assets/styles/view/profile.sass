@@ -1,7 +1,11 @@
 @import "@/assets/styles/variables"
 
-$card-form-input-height: 40px
-$card-form-input-max-width: 350px
+.tabs ::v-deep ul[role="tablist"]
+  gap: 10px!important
+  .nav-link
+    border-radius: 0!important
+  .nav-link:not(.active)
+    color: $gray-600!important
 
 .card-subtitle
   color: $black!important
@@ -26,5 +30,7 @@ form
     gap: 5px!important
 
   input
+    $card-form-input-height: 40px
+    $card-form-input-max-width: 350px
     height: $card-form-input-height!important
     max-width: $card-form-input-max-width!important
