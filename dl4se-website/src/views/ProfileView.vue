@@ -28,13 +28,13 @@
                         :state="!v$.form.uid.$invalid"
                         :spellcheck="false"
                       />
-                      <b-form-text>
-                        <b-icon-exclamation-octagon />
+                      <b-form-invalid-feedback v-if="v$.form.uid.$invalid">
+                        <b-icon-exclamation-triangle />
                         <span>
                           Must be between 3 and 64 characters long, consisting only of alphanumeric characters, dashes
                           and underscores.
                         </span>
-                      </b-form-text>
+                      </b-form-invalid-feedback>
                     </b-form-group>
                   </b-form-row>
                   <b-form-row>
