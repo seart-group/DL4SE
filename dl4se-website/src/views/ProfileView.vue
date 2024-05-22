@@ -39,7 +39,10 @@
                   </b-form-row>
                   <b-form-row>
                     <b-form-group class="col">
-                      <b-form-submit :disabled="!canUpdateUid" :block="!$screen.sm">Save</b-form-submit>
+                      <div :class="{ 'd-grid': !$screen.sm, 'd-inline-flex': $screen.sm, 'gap-3': true }">
+                        <b-form-submit :disabled="!canUpdateUid">Save</b-form-submit>
+                        <b-button type="button" @click="form.uid = generateUsername()">Random</b-button>
+                      </div>
                     </b-form-group>
                   </b-form-row>
                 </b-form>
@@ -147,6 +150,11 @@ export default {
     },
   },
   methods: {
+    generateUsername() {
+      const [base, _] = this.user.email.split("@");
+      const random = Math.floor(Math.random() * 1000);
+      return `${base}_${random}`;
+    },
     responseMapper(json) {
       return json.map((item) => item.name);
     },
