@@ -3,12 +3,13 @@
     <b-input
       type="number"
       :id="id"
-      :placeholder="placeholder"
-      v-model.number="count"
       :min="min"
       :max="max"
       :state="state"
       :disabled="disabled"
+      :required="required"
+      :placeholder="placeholder"
+      v-model.number="count"
       @input="setCount"
       @keydown.up.prevent="increment"
       @keydown.down.prevent="decrement"
@@ -21,13 +22,13 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
-import { between, requiredIf } from "@vuelidate/validators";
-
 export default {
   name: "b-counter",
   props: {
-    id: String,
+    id: {
+      type: String,
+      default: null,
+    },
     value: {
       type: Number,
       default: null,
@@ -40,7 +41,10 @@ export default {
       type: Number,
       default: Number.MAX_SAFE_INTEGER,
     },
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: null,
+    },
     required: {
       type: Boolean,
       default: false,
@@ -49,16 +53,14 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  computed: {
-    state() {
-      if (this.v$.$dirty || this.required) return !this.v$.$invalid;
-      else return null;
+    state: {
+      type: Boolean,
+      default: null,
     },
   },
   methods: {
     toNumberOrNull(value) {
-      let parsed = parseFloat(value);
+      const parsed = parseFloat(value);
       return isNaN(parsed) ? null : parsed;
     },
     setCount(value) {
@@ -81,28 +83,12 @@ export default {
   },
   watch: {
     count() {
-      if (!this.count) this.v$.$reset();
       this.$emit("input", this.toNumberOrNull(this.count));
     },
-  },
-  setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {};
-    return {
-      v$: useVuelidate(globalConfig),
-    };
   },
   data() {
     return {
       count: this.value,
-    };
-  },
-  validations() {
-    return {
-      count: {
-        $autoDirty: true,
-        between: between(this.min, this.max),
-        required: requiredIf(this.required),
-      },
     };
   },
 };

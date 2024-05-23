@@ -20,16 +20,40 @@
           <template #invalid-feedback>Language is required</template>
         </b-form-group>
         <b-form-group label="Commits:" class="col-12 col-sm-6 col-md-3">
-          <b-counter id="commits-input" v-model.number="task.query.min_commits" placeholder="min" :min="0" />
+          <b-counter
+            id="commits-input"
+            placeholder="min"
+            v-model.number="task.query.min_commits"
+            :state="validate(v$.task.query.min_commits)"
+            :min="0"
+          />
         </b-form-group>
         <b-form-group label="Issues:" class="col-12 col-sm-6 col-md-3">
-          <b-counter id="issues-input" v-model.number="task.query.min_issues" placeholder="min" :min="0" />
+          <b-counter
+            id="issues-input"
+            placeholder="min"
+            v-model.number="task.query.min_issues"
+            :state="validate(v$.task.query.min_issues)"
+            :min="0"
+          />
         </b-form-group>
         <b-form-group label="Contributors:" class="col-12 col-sm-6 col-md-3">
-          <b-counter id="contributors-input" v-model.number="task.query.min_contributors" placeholder="min" :min="0" />
+          <b-counter
+            id="contributors-input"
+            placeholder="min"
+            v-model.number="task.query.min_contributors"
+            :state="validate(v$.task.query.min_contributors)"
+            :min="0"
+          />
         </b-form-group>
         <b-form-group label="Stars:" class="col-12 col-sm-6 col-md-3">
-          <b-counter id="stars-input" v-model.number="task.query.min_stars" placeholder="min" :min="0" />
+          <b-counter
+            id="stars-input"
+            placeholder="min"
+            v-model.number="task.query.min_stars"
+            :state="validate(v$.task.query.min_stars)"
+            :min="0"
+          />
         </b-form-group>
         <b-form-group class="col-12">
           <b-checkbox id="license-checkbox" v-model="task.query.has_license" :inline="$screen.sm">
@@ -100,52 +124,58 @@
             <b-form-group label="Characters:" class="col-12 col-sm-6">
               <b-counter
                 id="characters-input-min"
+                placeholder="min"
                 v-model.number="task.query.min_characters"
                 :min="0"
-                :max="task.query.max_characters || Number.MAX_SAFE_INTEGER"
-                placeholder="min"
+                :max="coalesceMax(task.query.max_characters)"
+                :state="validate(v$.task.query.min_characters)"
               />
             </b-form-group>
             <b-form-group class="col-12 col-sm-6 align-self-end">
               <b-counter
                 id="characters-input-max"
-                v-model.number="task.query.max_characters"
-                :min="task.query.min_characters || 0"
                 placeholder="max"
+                v-model.number="task.query.max_characters"
+                :min="coalesceMin(task.query.min_characters)"
+                :state="validate(v$.task.query.max_characters)"
               />
             </b-form-group>
             <b-form-group label="Tokens:" class="col-12 col-sm-6">
               <b-counter
                 id="tokens-input-min"
+                placeholder="min"
                 v-model.number="task.query.min_tokens"
                 :min="0"
-                :max="task.query.max_tokens || Number.MAX_SAFE_INTEGER"
-                placeholder="min"
+                :max="coalesceMax(task.query.max_tokens)"
+                :state="validate(v$.task.query.min_tokens)"
               />
             </b-form-group>
             <b-form-group class="col-12 col-sm-6 align-self-end">
               <b-counter
                 id="tokens-input-max"
-                v-model.number="task.query.max_tokens"
-                :min="task.query.min_tokens || 0"
                 placeholder="max"
+                v-model.number="task.query.max_tokens"
+                :min="coalesceMin(task.query.min_tokens)"
+                :state="validate(v$.task.query.max_tokens)"
               />
             </b-form-group>
             <b-form-group label="Lines:" class="col-12 col-sm-6">
               <b-counter
                 id="lines-input-min"
+                placeholder="min"
                 v-model.number="task.query.min_lines"
                 :min="0"
-                :max="task.query.max_lines || Number.MAX_SAFE_INTEGER"
-                placeholder="min"
+                :max="coalesceMax(task.query.max_lines)"
+                :state="validate(v$.task.query.min_lines)"
               />
             </b-form-group>
             <b-form-group class="col-12 col-sm-6 align-self-end">
               <b-counter
                 id="lines-input-max"
-                v-model.number="task.query.max_lines"
-                :min="task.query.min_lines || 0"
                 placeholder="max"
+                v-model.number="task.query.max_lines"
+                :min="coalesceMin(task.query.min_lines)"
+                :state="validate(v$.task.query.max_lines)"
               />
             </b-form-group>
           </b-form-row>
@@ -208,7 +238,7 @@
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { between, minValue, required } from "@vuelidate/validators";
 import BCounter from "@/components/Counter";
 import BDocumentationLink from "@/components/DocumentationLink";
 import BDropdownSelect from "@/components/DropdownSelect";
@@ -240,6 +270,18 @@ export default {
     },
   },
   methods: {
+    coalesceMin(value) {
+      return value || 0;
+    },
+    coalesceMax(value) {
+      return value || Number.MAX_SAFE_INTEGER;
+    },
+    validate(el$) {
+      const valid = !el$.$invalid;
+      const value = el$.$model;
+      const nullish = value === undefined || value === null;
+      return !nullish ? valid : null;
+    },
     submitSuccess() {
       this.redirectDashboardAndToast(
         "Task Created",
@@ -334,7 +376,7 @@ export default {
   },
   setup() {
     return {
-      v$: useVuelidate(),
+      v$: useVuelidate({ $autoDirty: true }),
     };
   },
   async mounted() {
@@ -396,8 +438,37 @@ export default {
       task: {
         query: {
           language_name: {
-            $autoDirty: true,
             required: required,
+          },
+          min_commits: {
+            value: minValue(0),
+          },
+          min_issues: {
+            value: minValue(0),
+          },
+          min_contributors: {
+            value: minValue(0),
+          },
+          min_stars: {
+            value: minValue(0),
+          },
+          min_characters: {
+            value: between(0, this.task.query.max_characters || Number.MAX_SAFE_INTEGER),
+          },
+          max_characters: {
+            value: between(this.task.query.min_characters || 0, Number.MAX_SAFE_INTEGER),
+          },
+          min_tokens: {
+            value: between(0, this.task.query.max_tokens || Number.MAX_SAFE_INTEGER),
+          },
+          max_tokens: {
+            value: between(this.task.query.min_tokens || 0, Number.MAX_SAFE_INTEGER),
+          },
+          min_lines: {
+            value: between(0, this.task.query.max_lines || Number.MAX_SAFE_INTEGER),
+          },
+          max_lines: {
+            value: between(this.task.query.min_lines || 0, Number.MAX_SAFE_INTEGER),
           },
         },
       },
