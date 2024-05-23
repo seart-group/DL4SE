@@ -256,6 +256,11 @@ export default {
     uuid: String,
   },
   watch: {
+    "task.query.granularity": {
+      handler() {
+        if (this.task.query.granularity === "file") this.task.query.exclude_boilerplate = false;
+      },
+    },
     "task.query.exclude_duplicates": {
       handler() {
         if (this.task.query.exclude_duplicates && this.task.query.exclude_identical)
