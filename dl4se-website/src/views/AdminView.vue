@@ -39,7 +39,8 @@
                     :shift-h="row.item.role === 'ADMIN' ? 2 : 0"
                     stacked
                   />
-                  <b-icon icon="x-circle" stacked variant="danger" v-if="!row.item.enabled" />
+                  <b-icon icon="x-lg" stacked variant="danger" v-if="!row.item.enabled" scale="0.8" />
+                  <b-icon icon="circle" stacked variant="danger" v-if="!row.item.enabled" />
                 </b-iconstack>
               </div>
             </template>
