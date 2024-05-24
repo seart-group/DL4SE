@@ -1,6 +1,6 @@
 <template>
   <b-input-group>
-    <b-input type="text" :id="id" v-model.trim="input" :placeholder="placeholder" @input="setInput" />
+    <b-input type="text" :id="id" :placeholder="placeholder" v-model.trim="input" @input="setInput" />
     <b-input-group-append>
       <b-button @click="clear">
         <b-icon-x scale="1.5" />
@@ -13,12 +13,18 @@
 export default {
   name: "b-clearable-input",
   props: {
-    id: String,
+    id: {
+      type: String,
+      default: null,
+    },
     value: {
       type: String,
       default: null,
     },
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: null,
+    },
   },
   methods: {
     setInput(value) {
