@@ -16,9 +16,15 @@
 export default {
   name: "b-dropdown-select",
   props: {
-    id: String,
+    id: {
+      type: String,
+      default: null,
+    },
     value: [String, Number],
-    disabled: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     placeholder: {
       type: String,
       default: "None Selected",
