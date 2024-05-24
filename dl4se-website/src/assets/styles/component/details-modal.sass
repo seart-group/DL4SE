@@ -4,5 +4,10 @@
 pre
   margin: 0!important
 
-footer
-  @include btn-accent
+::v-deep
+  .modal-body > *
+    border-radius: 0!important
+  .modal-content
+    border-radius: 0!important
+  .modal-footer
+    @include btn-accent
