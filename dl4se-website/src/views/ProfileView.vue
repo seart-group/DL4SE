@@ -17,7 +17,7 @@
             <b-tabs active-nav-item-class="border-md-bottom" align="center" :vertical="$screen.md" card>
               <b-tab title="General" active>
                 <b-card-title title-tag="h2" class="d-none">Update information</b-card-title>
-                <b-card-sub-title sub-title-tag="h3">Username</b-card-sub-title>
+                <b-card-sub-title sub-title-tag="h3" sub-title-text-variant="">Username</b-card-sub-title>
                 <b-form @submit.stop.prevent="updateUid">
                   <b-form-row>
                     <b-form-group class="col">
@@ -54,7 +54,7 @@
                   </b-form-row>
                 </b-form>
                 <hr />
-                <b-card-sub-title sub-title-tag="h3">Email</b-card-sub-title>
+                <b-card-sub-title sub-title-tag="h3" sub-title-text-variant="">Email</b-card-sub-title>
                 <b-form @submit.prevent.stop="updateEmail">
                   <b-form-row>
                     <b-form-group class="col">
@@ -73,7 +73,7 @@
                   </b-form-row>
                 </b-form>
                 <hr />
-                <b-card-sub-title sub-title-tag="h3">Password</b-card-sub-title>
+                <b-card-sub-title sub-title-tag="h3" sub-title-text-variant="">Password</b-card-sub-title>
                 <b-form @submit.stop.prevent="updatePassword">
                   <b-form-row>
                     <b-form-group class="col">
@@ -87,7 +87,7 @@
                   </b-form-row>
                 </b-form>
                 <hr />
-                <b-card-sub-title sub-title-tag="h3">Organisation</b-card-sub-title>
+                <b-card-sub-title sub-title-tag="h3" sub-title-text-variant="">Organisation</b-card-sub-title>
                 <b-form @submit.stop.prevent="updateOrganisation">
                   <b-form-row>
                     <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
