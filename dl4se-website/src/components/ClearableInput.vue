@@ -2,7 +2,7 @@
   <b-input-group>
     <b-input type="text" :id="id" v-model.trim="input" :placeholder="placeholder" @input="setInput" />
     <b-input-group-append>
-      <b-button @click="clear" type="secondary">
+      <b-button @click="clear">
         <b-icon-x scale="1.5" />
       </b-button>
     </b-input-group-append>
