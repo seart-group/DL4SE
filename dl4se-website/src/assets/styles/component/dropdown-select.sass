@@ -1,12 +1,11 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-$toggle-height: 40px
-
 .dropdown.show ::v-deep .dropdown-toggle
   @include bg-chevron-down($white)
 
 .dropdown ::v-deep .dropdown-toggle
+  $toggle-height: 40px
   height: $toggle-height!important
   border-radius: 0!important
   border-left: 0!important

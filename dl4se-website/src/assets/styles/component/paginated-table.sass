@@ -1,11 +1,9 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-$button-size: 40px
-
 .btn-square
-  height: $button-size!important
-  width: $button-size!important
+  height: $input-height!important
+  width: $input-height!important
 
 .btn-controls
   @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
@@ -13,7 +11,7 @@ $button-size: 40px
   border-left: 0!important
   border-right: 0!important
   border-radius: 0!important
-  height: $button-size!important
+  height: $input-height!important
 
 .dropdown
   min-width: 80px!important
