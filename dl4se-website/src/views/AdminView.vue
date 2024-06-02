@@ -177,6 +177,7 @@ import { ref } from "@vue/composition-api";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import formatterMixin from "@/mixins/formatterMixin";
 import routerMixin from "@/mixins/routerMixin";
 import BAbbreviation from "@/components/Abbreviation";
 import BClearableInput from "@/components/ClearableInput";
@@ -194,7 +195,7 @@ export default {
     BIconIdenticon,
     BPaginatedTable,
   },
-  mixins: [bootstrapMixin, routerMixin],
+  mixins: [bootstrapMixin, formatterMixin, routerMixin],
   computed: {
     hasConfigs() {
       const configs = this.configTable.configs;
@@ -257,9 +258,6 @@ export default {
           this.configTable.busy = false;
           this.v$.configTable.$reset();
         });
-    },
-    toTitle(value) {
-      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
     },
     async shutdownServer() {
       this.showConfirmModal(

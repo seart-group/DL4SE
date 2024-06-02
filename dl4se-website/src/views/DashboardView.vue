@@ -220,9 +220,6 @@ export default {
     },
   },
   methods: {
-    toTitle(value) {
-      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
-    },
     plaintextFormatter(item) {
       return Object.entries(item)
         .filter(([, value]) => {

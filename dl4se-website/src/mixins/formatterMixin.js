@@ -21,5 +21,8 @@ export default {
     formatBytes(value) {
       return this.format(value, 2, 1024, ["B", "KB", "MB", "GB", "TB", "PB"]);
     },
+    toTitle(value) {
+      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
+    },
   },
 };
