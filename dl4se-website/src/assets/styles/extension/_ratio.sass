@@ -1,0 +1,3 @@
+@each $width, $height in $embed-responsive-aspect-ratios
+  .ratio-#{$width}x#{$height}
+    aspect-ratio: #{$width} / #{$height}!important
