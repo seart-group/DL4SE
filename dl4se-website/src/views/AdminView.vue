@@ -68,7 +68,68 @@
       <b-row>
         <b-col>
           <h2>Server Environment</h2>
-          <b-config-table :supplier="getConfiguration" :consumer="updateConfiguration" />
+          <div class="table-config-container">
+            <b-overlay :show="configTable.busy" variant="light">
+              <b-table-simple
+                :id="configTable.id"
+                :hover="hasConfigs"
+                :sticky-header="tableHeight"
+                class="table-container"
+                responsive
+                borderless
+              >
+                <b-thead head-variant="dark">
+                  <b-tr>
+                    <b-th>Property</b-th>
+                    <b-th>Value</b-th>
+                  </b-tr>
+                </b-thead>
+                <b-tbody class="bg-light">
+                  <template v-if="hasConfigs">
+                    <b-tr v-for="key in Object.keys(configTable.configs)" :key="key">
+                      <b-td>
+                        <label :for="key" class="text-monospace m-0">
+                          {{ key }}
+                        </label>
+                      </b-td>
+                      <b-td>
+                        <b-input
+                          :id="key"
+                          :state="configState(key)"
+                          :disabled="configTable.busy"
+                          v-model.trim="configTable.configs[key]"
+                        />
+                      </b-td>
+                    </b-tr>
+                  </template>
+                  <template v-else>
+                    <b-tr class="b-table-empty-row bg-light">
+                      <b-td colspan="2">
+                        <div role="alert" aria-live="polite">
+                          <div class="text-center my-2">There are no records to show</div>
+                        </div>
+                      </b-td>
+                    </b-tr>
+                  </template>
+                </b-tbody>
+              </b-table-simple>
+            </b-overlay>
+            <b-container>
+              <b-row align-h="center" no-gutters>
+                <b-col cols="auto">
+                  <b-button-group>
+                    <b-button :disabled="disableSync" @click="configUpdate">
+                      <b-icon-cloud-upload />
+                      Synchronize
+                    </b-button>
+                    <b-button :disabled="configTable.busy" @click="configRefresh" class="ratio-1x1">
+                      <b-icon-arrow-clockwise shift-h="-2" rotate="45" />
+                    </b-button>
+                  </b-button-group>
+                </b-col>
+              </b-row>
+            </b-container>
+          </div>
         </b-col>
       </b-row>
       <b-row>
@@ -111,11 +172,14 @@
 </template>
 
 <script>
+import axios from "@/axios";
+import { ref } from "@vue/composition-api";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import routerMixin from "@/mixins/routerMixin";
 import BAbbreviation from "@/components/Abbreviation";
 import BClearableInput from "@/components/ClearableInput";
-import BConfigTable from "@/components/ConfigTable";
 import BContentArea from "@/components/ContentArea";
 import BDialogModal from "@/components/DialogModal";
 import BIconIdenticon from "@/components/IconIdenticon";
@@ -125,7 +189,6 @@ export default {
   components: {
     BAbbreviation,
     BClearableInput,
-    BConfigTable,
     BContentArea,
     BDialogModal,
     BIconIdenticon,
@@ -133,21 +196,70 @@ export default {
   },
   mixins: [bootstrapMixin, routerMixin],
   computed: {
+    hasConfigs() {
+      const configs = this.configTable.configs;
+      return !!Object.keys(configs).length;
+    },
+    disableSync() {
+      if (!this.hasConfigs) return true;
+      const validator = this.v$.configTable.configs;
+      return validator.$invalid || !validator.$anyDirty || this.configTable.busy;
+    },
     tableHeight() {
       return `${this.$screen.xl ? 370 : 380}px`;
     },
   },
   methods: {
+    configDirty(key) {
+      return this.v$.configTable.configs[key].$dirty;
+    },
+    configValid(key) {
+      return !this.v$.configTable.configs[key].$invalid;
+    },
+    configState(key) {
+      return this.configDirty(key) ? this.configValid(key) : null;
+    },
+    async configUpdate() {
+      const endpoint = "/admin/configuration";
+      if (this.v$.configTable.$invalid) return;
+      this.configTable.busy = true;
+      this.$http
+        .post(endpoint, this.configTable.configs)
+        .then(() => {
+          this.appendToast("Configuration Updated", "Server configuration has been successfully updated.", "secondary");
+        })
+        .catch(() => {
+          this.appendToast(
+            "Error Updating Configuration",
+            "There was a problem updating the server configuration. Please try again.",
+            "warning",
+          );
+        })
+        .finally(() => {
+          this.configTable.busy = false;
+          this.v$.configTable.$reset();
+        });
+    },
+    async configRefresh() {
+      const endpoint = "/admin/configuration";
+      this.configTable.busy = true;
+      this.$http
+        .get(endpoint)
+        .then((res) => (this.configTable.configs = res.data))
+        .catch(() => {
+          this.appendToast(
+            "Error Fetching Configuration",
+            "There was a problem retrieving the server configuration. Please try again.",
+            "warning",
+          );
+        })
+        .finally(() => {
+          this.configTable.busy = false;
+          this.v$.configTable.$reset();
+        });
+    },
     toTitle(value) {
       return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
-    },
-    async getConfiguration() {
-      const endpoint = "/admin/configuration";
-      return this.$http.get(endpoint).then((res) => res.data);
-    },
-    async updateConfiguration(configuration) {
-      const endpoint = "/admin/configuration";
-      return this.$http.post(endpoint, configuration).then((res) => res.data);
     },
     async shutdownServer() {
       this.showConfirmModal(
@@ -198,9 +310,7 @@ export default {
             clearInterval(check);
             that.appendToast("Server Connection Restored", "The server is back online.", "secondary");
           })
-          .finally(() => {
-            that.disabled = false;
-          });
+          .finally(() => (that.disabled = false));
       }, 5000);
     },
     async getLog() {
@@ -266,6 +376,21 @@ export default {
       this.$root.$emit("bv::refresh::table", this.userTable.id);
     },
   },
+  setup() {
+    const configTable = ref({
+      id: "config-table",
+      busy: false,
+      configs: {},
+    });
+    (async () => {
+      const endpoint = "/admin/configuration";
+      configTable.value.configs = await axios.get(endpoint).then(({ data }) => data);
+    })();
+    return {
+      v$: useVuelidate({ $autoDirty: true }),
+      configTable: configTable,
+    };
+  },
   data() {
     return {
       disabled: false,
@@ -308,6 +433,19 @@ export default {
         totalItems: 0,
       },
     };
+  },
+  validations() {
+    const rules = { $autoDirty: true, required };
+    return this.hasConfigs
+      ? {
+          configTable: {
+            configs: Object.keys(this.configTable.configs).reduce(
+              (acc, key) => Object.assign(acc, { [key]: rules }),
+              {},
+            ),
+          },
+        }
+      : {};
   },
 };
 </script>

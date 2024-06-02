@@ -1,10 +1,6 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-.btn-square
-  height: $input-height!important
-  width: $input-height!important
-
 .btn-controls
   @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
   border-top: 0!important
@@ -20,24 +16,6 @@
   padding: 0!important
   .row
     row-gap: 10px!important
-
-.table-paginated
-  ::v-deep
-    th
-      // This is required to undo a bug that was introduced in version 2.22 of BSV:
-      // https://github.com/bootstrap-vue/bootstrap-vue/issues/6961
-      position: sticky!important
-    th, td
-      vertical-align: middle!important
-    tr
-      thead &
-        height: $table-header-row-height !important
-      tbody &
-        height: $table-body-row-height!important
-    .b-table-empty-row
-      color: $black!important
-      background-color: $gray-200!important
-      height: calc($table-body-row-height * 5 - 1px)!important
 
 .pagination
   ::v-deep
