@@ -8,7 +8,7 @@
         <b-tbody>
           <b-tr>
             <b-td><em>File</em></b-td>
-            <b-td> Corresponds to entire source code files originating from projects hosted on GitHub. </b-td>
+            <b-td>Corresponds to entire source code files originating from projects hosted on GitHub.</b-td>
           </b-tr>
           <b-tr>
             <b-td><em>Function</em></b-td>
@@ -23,7 +23,7 @@
         <b-tbody>
           <b-tr>
             <b-td><code>content</code></b-td>
-            <b-td> The raw or processed source code of an instance. </b-td>
+            <b-td>The raw or processed source code of an instance.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>content_hash</code></b-td>
@@ -33,11 +33,11 @@
           </b-tr>
           <b-tr>
             <b-td><code>characters</code></b-td>
-            <b-td> The total number of characters composing the instance source code. </b-td>
+            <b-td>The total number of characters composing the instance source code.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>lines</code></b-td>
-            <b-td> The total number of lines composing the instance source code. </b-td>
+            <b-td>The total number of lines composing the instance source code.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>code_tokens</code></b-td>
@@ -49,7 +49,7 @@
           </b-tr>
           <b-tr>
             <b-td><code>total_tokens</code></b-td>
-            <b-td> The total number of all tokens present in the instance source code. </b-td>
+            <b-td>The total number of all tokens present in the instance source code.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>is_test</code></b-td>
