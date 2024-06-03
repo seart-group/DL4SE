@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset dabico:6
+-- changeset dabico:7
 
 CREATE TABLE "configuration" (
     "key" text PRIMARY KEY NOT NULL,
@@ -52,8 +52,3 @@ ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 CREATE INDEX "token_user_id_idx" ON "token" (user_id);
 CREATE INDEX "task_user_id_idx" ON "task" (user_id);
 CREATE INDEX "task_expired_idx" ON "task" (finished, expired) WHERE finished IS NOT NULL AND expired = false;
-CREATE INDEX "file_content_hash_idx" ON "file" (content_hash);
-CREATE INDEX "function_content_hash_idx" ON "function" (content_hash);
-CREATE INDEX "file_ast_hash_idx" ON "file" (ast_hash);
-CREATE INDEX "function_ast_hash_idx" ON "function" (ast_hash);
-CREATE INDEX "git_repo_stats_idx" ON "git_repo" (commits, contributors, issues, stars) INCLUDE (is_fork, license);

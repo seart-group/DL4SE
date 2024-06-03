@@ -9,4 +9,5 @@
     <include file="scripts/02_enum.sql" relativeToChangelogFile="true" />
     <include file="scripts/03_meta.sql" relativeToChangelogFile="true" />
     <include file="scripts/04_test.sql" relativeToChangelogFile="true" />
+    <include file="scripts/05_index.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
