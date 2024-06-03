@@ -1,4 +1,4 @@
-FROM maven:3.9.5-eclipse-temurin-11-alpine AS build
+FROM maven:3.9.7-eclipse-temurin-11-alpine AS build
 
 COPY ./pom.xml /pom.xml
 COPY ./dl4se-analyzer /dl4se-analyzer
