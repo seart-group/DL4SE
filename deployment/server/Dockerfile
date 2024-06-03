@@ -12,7 +12,7 @@ RUN mvn -e \
         -Pserver \
         -am -DskipTests
 
-FROM eclipse-temurin:11.0.21_9-jre-alpine
+FROM eclipse-temurin:11.0.23_9-jre-alpine
 
 COPY --from=build /dl4se-server/target/dl4se-server-*.jar /server.jar
 
