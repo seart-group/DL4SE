@@ -19,7 +19,15 @@ COPY --from=build /dl4se-server/target/dl4se-server-*.jar /server.jar
 RUN apk update --quiet && \
     apk add --no-cache \
             --quiet \
+            curl \
             git \
             libstdc++
 
 ENTRYPOINT java $JAVA_OPTS -jar server.jar
+
+HEALTHCHECK \
+    --start-period=30s \
+    --interval=60s \
+    --timeout=5s \
+    --retries=5 \
+    CMD curl --silent --fail --request GET http://localhost:$SERVER_PORT/api || exit 1

@@ -94,12 +94,6 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
-    healthcheck:
-      test: wget --spider --quiet --no-check-certificate https://localhost:${SERVER_PORT}/api || exit 1
-      start_period: 15s
-      interval: 30s
-      timeout: 5s
-      retries: 3
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
 
