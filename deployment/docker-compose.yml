@@ -83,7 +83,6 @@ services:
       SERVER_SECURITY_USER: ${SERVER_SECURITY_USER}
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
-      KEYSTORE_PASS: ${KEYSTORE_PASS}
       WEBSITE_URL: http://localhost:${WEBSITE_PORT}
     volumes:
       - ./logs:/logs
