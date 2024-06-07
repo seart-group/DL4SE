@@ -25,9 +25,11 @@ RUN apk update --quiet && \
 
 ENTRYPOINT java $JAVA_OPTS -jar server.jar
 
+EXPOSE 8080
+
 HEALTHCHECK \
     --start-period=30s \
     --interval=60s \
     --timeout=5s \
     --retries=5 \
-    CMD curl --silent --fail --request GET http://localhost:$SERVER_PORT/api || exit 1
+    CMD curl --silent --fail --request GET http://localhost:8080/api || exit 1

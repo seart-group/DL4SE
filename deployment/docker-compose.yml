@@ -82,7 +82,6 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      SERVER_PORT: ${SERVER_PORT}
       SERVER_MAIL_ADDR: ${SERVER_MAIL_ADDR}
       SERVER_MAIL_PASS: ${SERVER_MAIL_PASS}
       SERVER_SECURITY_USER: ${SERVER_SECURITY_USER}
@@ -110,7 +109,6 @@ services:
       dockerfile: deployment/website/Dockerfile
       args:
         WEBSITE_PORT: ${WEBSITE_PORT}
-        SERVER_URL: https://localhost:${SERVER_PORT}/api
     networks: 
       - default
     restart: always
