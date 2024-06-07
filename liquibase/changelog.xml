@@ -11,4 +11,5 @@
     <include relativeToChangelogFile="true" file="scripts/04_test.sql" />
     <include relativeToChangelogFile="true" file="scripts/05_index.sql" />
     <include relativeToChangelogFile="true" file="scripts/06_user.sql" />
+    <include relativeToChangelogFile="true" file="scripts/07_task.sql" />
 </databaseChangeLog>
