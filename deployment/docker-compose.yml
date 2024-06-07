@@ -53,6 +53,11 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
+      JAVA_OPTS: >
+        -Dcrawler.languages.Java=java
+        -Dcrawler.languages.Python=py
+        -Dcrawler.analyzer.core-pool-size=4
+        -Dcrawler.analyzer.max-pool-size=8
     volumes:
       - ./logs:/logs
     depends_on:
