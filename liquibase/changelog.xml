@@ -12,4 +12,5 @@
     <include relativeToChangelogFile="true" file="scripts/05_index.sql" />
     <include relativeToChangelogFile="true" file="scripts/06_user.sql" />
     <include relativeToChangelogFile="true" file="scripts/07_task.sql" />
+    <include relativeToChangelogFile="true" file="scripts/08_materialize.sql" />
 </databaseChangeLog>
