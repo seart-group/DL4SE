@@ -41,7 +41,7 @@ services:
 
   dl4se-crawler:
     container_name: dl4se-crawler
-    image: dl4se/dl4se-crawler:latest
+    image: seart/dl4se-crawler:latest
     build:
       context: ../
       dockerfile: deployment/crawler/Dockerfile
@@ -65,7 +65,7 @@ services:
 
   dl4se-server:
     container_name: dl4se-server
-    image: dl4se/dl4se-server:latest
+    image: seart/dl4se-server:latest
     build:
       context: ../
       dockerfile: deployment/server/Dockerfile
@@ -105,7 +105,7 @@ services:
 
   dl4se-website:
     container_name: dl4se-website
-    image: dl4se/dl4se-website:latest
+    image: seart/dl4se-website:latest
     build:
       context: ../
       dockerfile: deployment/website/Dockerfile
