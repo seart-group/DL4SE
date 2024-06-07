@@ -87,7 +87,7 @@ services:
       SERVER_SECURITY_USER: ${SERVER_SECURITY_USER}
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
-      WEBSITE_URL: http://localhost:${WEBSITE_PORT}
+      WEBSITE_URL: http://localhost:7031
     volumes:
       - ./logs:/logs
       - server-tmp:/tmp
@@ -98,8 +98,7 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+    ports: [ "48002:8080" ]
 
   dl4se-website:
     container_name: dl4se-website
@@ -107,16 +106,18 @@ services:
     build:
       context: ../
       dockerfile: deployment/website/Dockerfile
-      args:
-        WEBSITE_PORT: ${WEBSITE_PORT}
     networks: 
       - default
-    restart: always
+    environment:
+      BASE_URL: http://localhost:48002
     depends_on:
       dl4se-server:
         condition: service_healthy
-    ports:
-      - "${WEBSITE_PORT}:80"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports: [ "7031:80" ]
 
 volumes:
   data:
