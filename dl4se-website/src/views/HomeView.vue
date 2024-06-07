@@ -12,7 +12,7 @@
         </b-row>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="tagline">Dataset Hub</div>
+            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="tagline">Data Hub</div>
           </b-col>
         </b-row>
         <b-row align-h="center">
