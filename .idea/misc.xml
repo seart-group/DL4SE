@@ -10,8 +10,15 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-analyzer/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-crawler/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-model/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-server/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-spring/pom.xml" />
+        <option value="$PROJECT_DIR$/dl4se-transformer/pom.xml" />
       </list>
     </option>
+    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
   <component name="ProjectType">

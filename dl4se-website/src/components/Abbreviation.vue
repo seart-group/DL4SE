@@ -5,14 +5,14 @@ export default {
   props: {
     value: {
       type: undefined,
-      required: true
+      required: true,
     },
     formatter: {
       type: Function,
       default(value) {
-        return value
-      }
-    }
+        return value;
+      },
+    },
   },
   render(createElement, { props, data }) {
     return createElement(
@@ -27,14 +27,14 @@ export default {
             rawName: "v-b-tooltip.html",
             value: props.value,
             modifiers: {
-              html: true
-            }
+              html: true,
+            },
           },
-          ...(data.directives ?? [])
-        ]
+          ...(data.directives ?? []),
+        ],
       },
-      props.formatter(props.value)
-    )
-  }
-}
+      props.formatter(props.value),
+    );
+  },
+};
 </script>

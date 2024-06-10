@@ -1,0 +1,12 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+.modal-body
+  .input-group
+    $margin: map-get($spacers, 3)
+    margin-bottom: $margin!important
+
+.table-paginated
+  ::v-deep
+    table
+      @include btn-accent

@@ -1,0 +1,44 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+.btn-controls
+  @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
+  border-top: 0!important
+  border-left: 0!important
+  border-right: 0!important
+  border-radius: 0!important
+  height: $input-height!important
+
+.dropdown
+  min-width: 80px!important
+
+.controls-container
+  padding: 0!important
+  .row
+    row-gap: 10px!important
+
+.pagination
+  ::v-deep
+    .page-item
+      .page-link
+        $link-size: 40px
+        width: $link-size!important
+        height: $link-size!important
+        color: $gray-600!important
+        background-color: $gray-200!important
+        border-color: $gray-600!important
+        border-left: 0!important
+        border-top: 0!important
+        border-right: 0!important
+        transition: $btn-transition
+      &.active
+        .page-link
+          color: $white!important
+          background-color: $gray-700!important
+      &.disabled
+        .page-link
+          opacity: $disabled-opacity!important
+      &:not(.disabled)
+        .page-link:hover
+          color: $white!important
+          background-color: $gray-600!important

@@ -1,5 +1,5 @@
 <script>
-import { BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle } from "bootstrap-vue"
+import { BCollapse, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle } from "bootstrap-vue";
 
 export default {
   name: "b-smart-navbar",
@@ -9,34 +9,30 @@ export default {
     BNavbar,
     BNavbarBrand,
     BNavbarNav,
-    BNavbarToggle
+    BNavbarToggle,
   },
   props: {
-    id: {
+    toggleable: {
       type: String,
-      default: "smart-navbar"
-    }
+      default: "sm",
+    },
+    sticky: {
+      type: Boolean,
+      default: true,
+    },
   },
   render(createElement, { props, data }) {
     return createElement(
       BNavbar,
       {
-        props: {
-          ...props,
-          toggleable: "sm",
-          sticky: true
-        },
-        attrs: {
-          id: props.id,
-          ...data.attrs
-        },
+        props: { ...props },
+        attrs: { ...data.attrs },
         class: {
-          "smart-navbar": true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         on: data.listeners,
-        directives: data.directives ?? []
+        directives: data.directives ?? [],
       },
       [
         createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),
@@ -46,16 +42,16 @@ export default {
           {
             props: {
               id: `${props.id}-collapse`,
-              isNav: true
-            }
+              isNav: true,
+            },
           },
           [
             createElement(BNavbarNav, {}, data.scopedSlots["nav-items-left"]()),
-            createElement(BNavbarNav, { class: "ml-auto" }, data.scopedSlots["nav-items-right"]())
-          ]
-        )
-      ]
-    )
-  }
-}
+            createElement(BNavbarNav, { class: "ml-auto" }, data.scopedSlots["nav-items-right"]()),
+          ],
+        ),
+      ],
+    );
+  },
+};
 </script>

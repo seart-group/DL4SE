@@ -3,6 +3,14 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <includeAll relativeToChangelogFile="true" path="/scripts/"/>
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
+    <include relativeToChangelogFile="true" file="scripts/00_init.sql" />
+    <include relativeToChangelogFile="true" file="scripts/01_view.sql" />
+    <include relativeToChangelogFile="true" file="scripts/02_enum.sql" />
+    <include relativeToChangelogFile="true" file="scripts/03_meta.sql" />
+    <include relativeToChangelogFile="true" file="scripts/04_test.sql" />
+    <include relativeToChangelogFile="true" file="scripts/05_index.sql" />
+    <include relativeToChangelogFile="true" file="scripts/06_user.sql" />
+    <include relativeToChangelogFile="true" file="scripts/07_task.sql" />
+    <include relativeToChangelogFile="true" file="scripts/08_materialize.sql" />
 </databaseChangeLog>

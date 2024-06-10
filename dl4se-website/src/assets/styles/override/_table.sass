@@ -1,9 +1,31 @@
-.table-hover tbody tr
-  color: $black
-  background-color: $light-gray
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+.b-table-sticky-header th
+  // This is required to undo a bug that was introduced in version 2.22 of BSV:
+  // https://github.com/bootstrap-vue/bootstrap-vue/issues/6961
+  position: sticky!important
 
-.table-hover tbody tr:hover
-  color: $white
-  background-color: $normal-gray
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+.b-table-empty-row
+  color: $black!important
+  background-color: $gray-200!important
+  height: calc($table-body-row-height * 5 - 1px)!important
+
+.table
+  th, td
+    vertical-align: middle!important
+
+  &.table-hover
+    tbody tr
+      color: $black!important
+      background-color: $gray-200!important
+      transition: $table-transition!important
+      &:hover
+        color: $white!important
+        background-color: $gray-600!important
+
+  &:not(.table-sm)
+    thead tr
+      height: $table-header-row-height
+    tbody tr
+      height: $table-body-row-height
+
+.table-container
+  border-bottom: 1px solid $gray-600!important

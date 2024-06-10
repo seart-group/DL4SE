@@ -1,5 +1,5 @@
 <script>
-import { BJumbotron } from "bootstrap-vue"
+import { BJumbotron } from "bootstrap-vue";
 
 export default {
   name: "b-content-area",
@@ -8,18 +8,23 @@ export default {
     return createElement(
       BJumbotron,
       {
-        props: props,
+        props: {
+          variant: "light",
+          ...props,
+        },
         attrs: data.attrs,
         class: {
           "content-area": true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
-      children
-    )
-  }
-}
+      children,
+    );
+  },
+};
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/content-area.sass" />

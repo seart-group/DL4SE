@@ -1,0 +1,13 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+pre
+  margin: 0!important
+
+::v-deep
+  .modal-body > *
+    border-radius: 0!important
+  .modal-content
+    border-radius: 0!important
+  .modal-footer
+    @include btn-accent

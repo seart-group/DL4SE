@@ -1,5 +1,5 @@
 <script>
-import { BIconCalendar, BIconExclamation, BIconstack } from "bootstrap-vue"
+import { BIconCalendar, BIconExclamation, BIconstack } from "bootstrap-vue";
 
 export default {
   name: "b-icon-calendar-exclamation",
@@ -7,7 +7,7 @@ export default {
   components: {
     BIconCalendar,
     BIconExclamation,
-    BIconstack
+    BIconstack,
   },
   render(createElement, { props, data }) {
     return createElement(
@@ -17,13 +17,13 @@ export default {
         attrs: data.attrs,
         class: data.staticClass,
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
       [
         createElement(BIconExclamation, { props: { scale: 0.75, shiftV: -1, stacked: true } }),
-        createElement(BIconCalendar, { props: { stacked: true } })
-      ]
-    )
-  }
-}
+        createElement(BIconCalendar, { props: { stacked: true } }),
+      ],
+    );
+  },
+};
 </script>

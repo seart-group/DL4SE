@@ -1,19 +1,28 @@
-FROM node:18.7-alpine as install
-ARG WEBSITE_PORT
-ARG SERVER_URL
-COPY ./dl4se-website/package*.json ./
-RUN npm install
+FROM node:18.20.3-alpine AS build
+
 COPY ./dl4se-website .
 
-FROM install as build
-ARG WEBSITE_PORT
-ARG SERVER_URL
-ARG NODE_ENV=production
-RUN apk update && apk add gettext
-RUN envsubst < .env.template > .env
-RUN npm run build
+COPY <<-EOF .env
+VUE_APP_API_BASE_URL=http://localhost:8080/api
+EOF
 
-FROM nginx:1.23-alpine as production
+RUN npm ci && npm run build
+
+FROM nginx:1.26.0-alpine-slim AS production
+
+ENV TZ=UTC
+
 COPY --from=build /dist /usr/share/nginx/html
-COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/nginx.conf.template /etc/nginx/templates/default.conf.template
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
+
+EXPOSE 80 8000
+
+HEALTHCHECK \
+    --start-period=10s \
+    --interval=60s \
+    --timeout=30s \
+    --retries=5 \
+    CMD nc -z 127.0.0.1 80 || exit 1

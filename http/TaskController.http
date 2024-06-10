@@ -1,5 +1,5 @@
-### POST /task/create
-POST https://localhost:8080/api/task/create
+### POST /task/{dataset}/create
+POST localhost:8080/api/task/code/create
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -13,7 +13,6 @@ Content-Type: application/json
     "min_contributors" : 10,
     "min_issues" : 5,
     "min_stars" : 20,
-    "include_ast" : true,
     "min_tokens" : 10,
     "max_tokens" : 5000,
     "min_lines" : 3,
@@ -24,43 +23,38 @@ Content-Type: application/json
     "exclude_identical" : true,
     "exclude_test" : false,
     "exclude_non_ascii" : true,
+    "exclude_errors": true,
     "exclude_boilerplate" : true
   },
   "processing" : {
-    "remove_docstring" : true,
-    "remove_inner_comments" : false,
-    "mask_token" : "<MASK>",
-    "mask_percentage" : 50,
-    "mask_contiguous_only" : true,
-    "abstract_code": true,
-    "abstract_idioms" : [
-      "App",
-      "main",
-      "String"
-    ]
+    "include_ast" : false,
+    "include_symbolic_expression": false,
+    "include_tree_sitter_version" : false,
+    "remove_regular_comments" : false,
+    "remove_documentation_comments" : false
   }
 }
 
-### POST /task/cancel
-POST https://localhost:8080/api/task/cancel/{{uuid}}
+### POST /task/{uuid}/cancel
+POST localhost:8080/api/task/{{uuid}}/cancel
 Authorization: Bearer {{token}}
 
 ### GET /task
-GET https://localhost:8080/api/task
+GET localhost:8080/api/task
 Authorization: Bearer {{token}}
 
 ### GET /task/{uuid}
-GET https://localhost:8080/api/task/{{uuid}}
+GET localhost:8080/api/task/{{uuid}}
 Authorization: Bearer {{token}}
 
 ### GET /task/stats
-GET https://localhost:8080/api/task/stats
+GET localhost:8080/api/task/stats
 Authorization: Bearer {{token}}
 
-### GET /task/token
-GET https://localhost:8080/api/task/token/{{uuid}}
+### GET /task/{uuid}/token
+GET localhost:8080/api/task/{{uuid}}/token
 Authorization: Bearer {{token}}
 
-### GET /task/download
-GET https://localhost:8080/api/task/download/{{uuid}}?token={{task_token}}
+### GET /task/{uuid}/download
+GET localhost:8080/api/task/{{uuid}}/download?token={{task_token}}
 Content-Type: application/gzip

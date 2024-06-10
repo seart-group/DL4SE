@@ -11,12 +11,12 @@ module.exports = {
             options: {
               indentedSyntax: true,
               sassOptions: {
-                indentedSyntax: true
-              }
-            }
-          }
-        ]
-      }
-    ]
-  }
-}
+                indentedSyntax: true,
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+};

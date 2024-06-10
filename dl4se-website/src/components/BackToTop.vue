@@ -1,21 +1,21 @@
 <script>
-import { BButton, BIconChevronDoubleUp } from "bootstrap-vue"
+import { BButton, BIconChevronDoubleUp } from "bootstrap-vue";
 
 export default {
-  name: "BackToTop",
+  name: "b-back-to-top",
   functional: true,
   props: {
     target: {
       type: String,
       required: true,
       validator(value) {
-        return /#\S+/.test(value)
-      }
+        return /#\S+/.test(value);
+      },
     },
     offset: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   render(createElement, { props, data }) {
     return createElement(
@@ -24,33 +24,37 @@ export default {
         props: props,
         attrs: data.attrs,
         class: {
-          "back-to-top": true,
           ...(data.class || {}),
-          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || [])
+          ...Object.fromEntries(data.staticClass?.split(" ").map((sc) => [sc, true]) || []),
         },
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
       [
         createElement(
           BButton,
           {
-            class: "back-to-top-btn",
+            props: {
+              variant: "light",
+              squared: true,
+            },
             directives: [
               {
                 name: "scroll-to",
                 rawName: "v-scroll-to",
                 value: {
                   el: props.target,
-                  offset: props.offset
-                }
-              }
-            ]
+                  offset: props.offset,
+                },
+              },
+            ],
           },
-          [createElement(BIconChevronDoubleUp)]
-        )
-      ]
-    )
-  }
-}
+          [createElement(BIconChevronDoubleUp)],
+        ),
+      ],
+    );
+  },
+};
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/back-to-top.sass" />

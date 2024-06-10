@@ -3,15 +3,24 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-analyzer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-analyzer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-crawler/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-crawler/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-model/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-model/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-model/target/generated-sources/annotations" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-patches/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-patches/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-spring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-spring/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-src2abs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dl4se-src2abs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-transformer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-transformer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-tree-sitter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dl4se-tree-sitter/src/main/resources" charset="UTF-8" />
   </component>
 </project>

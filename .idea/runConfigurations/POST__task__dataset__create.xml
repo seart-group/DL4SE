@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="POST /task/{dataset}/create" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/task" path="$PROJECT_DIR$/http/TaskController.http" requestIdentifier="POST /task/{dataset}/create" runType="Run single request">
+    <method v="2" />
+  </configuration>
+</component>

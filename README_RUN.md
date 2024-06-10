@@ -24,15 +24,7 @@ java \
 
 ## Server
 
-Since the server makes use of Spring Security, local development requires you to generate a self-signed PKCS12 keystore.
-Although you could do this manually, if the appropriate environment variable is set up, you can just run the
-[`security/keystore.sh`](security/keystore.sh) script as follows to receive the required `.p12` file:
-
-```shell
-./security/keystore.sh $KEYSTORE_PASS 
-```
-
-After that compile the module into a JAR:
+Compile the module into a JAR:
 
 ```shell
 mvn package -pl dl4se-server -am

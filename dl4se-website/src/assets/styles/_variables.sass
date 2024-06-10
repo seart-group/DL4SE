@@ -1,13 +1,63 @@
-$light-gray: #e6e6e6
-$normal-gray: #6c757d
-$dark-gray: #323639
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
 
-$light-gray-muted: transparentize($light-gray, 0.5)
-$normal-gray-muted: transparentize($normal-gray, 0.5)
-$dark-gray-muted: transparentize($dark-gray, 0.5)
+// Opacity
+$disabled-opacity: .65
 
-$light-red: #f8d8da
-$dark-red: #56151b
+// Tables
+$table-header-row-height: 50px
+$table-body-row-height: 64px
+$table-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out
 
-$light-green: #d8f8da
-$dark-green: #165724
+// Toasts
+$toast-border-radius: 0
+
+// Tooltips
+$tooltip-max-width: 350px
+$tooltip-border-radius: 0
+$tooltip-opacity: 1
+
+// Forms
+$input-height-sm: 32px
+$input-height: 40px
+$input-height-lg: 48px
+$input-border-radius: 0
+$input-border-radius-sm: 0
+$input-border-radius-lg: 0
+$custom-radio-indicator-border-radius: 0
+$custom-radio-indicator-icon-checked: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><rect width='12' height='12' fill='#{$custom-control-indicator-checked-color}'/></svg>")
+
+// Form validation
+$form-feedback-valid-color: darken($success, 15%)
+$form-feedback-invalid-color: darken($danger, 15%)
+$form-feedback-icon-valid-color: $form-feedback-valid-color
+$form-feedback-icon-valid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$form-feedback-icon-valid-color}' viewBox='0 0 16 16'><path d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/></svg>")
+$form-feedback-icon-invalid-color: $form-feedback-invalid-color
+$form-feedback-icon-invalid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$form-feedback-icon-invalid-color}' viewBox='0 0 16 16'><path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z'/></svg>")
+$form-validation-state-valid: ("color": $form-feedback-valid-color, "icon": $form-feedback-icon-valid)
+$form-validation-state-invalid: ("color": $form-feedback-invalid-color, "icon": $form-feedback-icon-invalid)
+$form-validation-states: ("valid": $form-validation-state-valid, "invalid": $form-validation-state-invalid)
+
+// Progress bars
+$progress-bar-bg: theme-color("dark")
+$progress-bg: $gray-100
+$progress-border: 1px solid $gray-600
+$progress-border-radius: 0
+
+// Box Shadows
+$box-shadow-sm: 0 0 0 0.1rem rgba($black, .1)
+$box-shadow: 0 0 0 0.2rem rgba($black, .2)
+$box-shadow-lg: 0 0 0 0.4rem rgba($black, .4)
+
+// Links
+$link-color: theme-color("secondary")
+$link-hover-color: darken($link-color, 15%)
+$link-hover-decoration: none
+
+// Typography
+$font-family-sans-serif: "Trebuchet MS", Helvetica, Arial, sans-serif
+$font-family-base: $font-family-sans-serif
+$hr-margin-y: 0
+
+// Options
+$enable-responsive-font-sizes: true

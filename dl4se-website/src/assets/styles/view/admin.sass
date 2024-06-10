@@ -1,0 +1,36 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+.modal-body
+  .input-group
+    $margin: map-get($spacers, 3)
+    margin-bottom: $margin!important
+
+.content-area
+  @include btn-accent
+
+.table-config-container
+  input
+    min-width: 100px!important
+    max-width: 350px!important
+    background-color: $white!important
+    padding-right: calc(map-get($spacers, 4) + map-get($spacers, 4) / 2)!important
+    border: 1px solid $gray-600!important
+    border-left: 0!important
+    border-top: 0!important
+    border-right: 0!important
+
+  .btn-group
+    $button-size: 40px
+    .btn
+      @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
+      height: $button-size!important
+      border-top: 0!important
+      border-left: 0!important
+      border-right: 0!important
+      border-radius: 0!important
+
+.table-paginated
+  ::v-deep
+    table
+      @include btn-accent

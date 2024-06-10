@@ -1,29 +1,25 @@
 <template>
   <fragment>
     <header>
-      <b-smart-navbar>
+      <b-smart-navbar id="smart-navbar" toggleable="md" class="bg-light">
         <template #brand>
-          <b-link :to="{ name: 'home' }" :active="isOnPage('home')" class="brand">
-            <span class="brand-negative">DL</span>
-            <span class="brand-positive">4SE</span>
-          </b-link>
+          <b-logo />
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">
-            Statistics
-          </b-nav-item>
-          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')"> About </b-nav-item>
+          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">Statistics</b-nav-item>
+          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Documentation</b-nav-item>
+          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
-            <b-nav-item
-              :to="{ name: 'dashboard' }"
-              :active="isOnPage('dashboard')"
-              :disabled="!connected"
-            >
+            <b-nav-item :to="{ name: 'profile' }" :active="isOnPage('profile')" :disabled="!connected">
+              Profile
+            </b-nav-item>
+            <b-nav-item :to="{ name: 'dashboard' }" :active="isOnPage('dashboard')" :disabled="!connected">
               Dashboard
             </b-nav-item>
-            <b-nav-item @click="showLogOutModal" :disabled="!connected"> Log Out </b-nav-item>
+            <b-nav-item @click="showLogOutModal" :disabled="!connected">Log Out</b-nav-item>
           </template>
           <template v-else>
             <b-nav-item
@@ -33,14 +29,14 @@
             >
               Log In
             </b-nav-item>
-            <b-nav-item
-              :to="{ name: 'register' }"
-              :active="isOnPage('register')"
-              :disabled="!connected"
-            >
+            <b-nav-item :to="{ name: 'register' }" :active="isOnPage('register')" :disabled="!connected">
               Register
             </b-nav-item>
           </template>
+          <b-nav-item href="https://github.com/seart-group/dl4se" target="_blank">
+            <b-icon-github v-if="$screen.md" />
+            <template v-else>GitHub</template>
+          </b-nav-item>
         </template>
       </b-smart-navbar>
     </header>
@@ -48,85 +44,80 @@
       <router-view :connected="connected" :logged-in="loggedIn" class="router-view" />
     </main>
     <footer>
-      <b-footer :authors="authors" :organisation="organisation" />
+      <div class="bg-light py-3">
+        <b-container class="text-center">
+          <span class="text-muted">&copy; 2022 - {{ new Date().getFullYear() }}</span>
+        </b-container>
+      </div>
     </footer>
   </fragment>
 </template>
 
 <script>
-import bootstrapMixin from "@/mixins/bootstrapMixin"
-import BFooter from "@/components/Footer"
-import BSmartNavbar from "@/components/SmartNavbar"
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BLogo from "@/components/Logo";
+import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
-  components: { BFooter, BSmartNavbar },
+  components: { BLogo, BSmartNavbar },
   mixins: [bootstrapMixin],
   computed: {
     currentPage() {
-      return this.$route.name
+      return this.$route.name;
     },
     loggedIn() {
-      return !!this.$store.getters.getToken
+      return !!this.$store.getters.getToken;
     },
     loginTarget() {
-      const isHome = this.isOnPage("home")
-      const isLogin = this.isOnPage("login")
-      const isRegister = this.isOnPage("register")
-      return isHome || isLogin || isRegister ? undefined : this.currentPage
-    }
+      const pages = ["home", "login", "register"];
+      return pages.some(this.isOnPage) ? undefined : this.currentPage;
+    },
   },
   methods: {
     isOnPage(name) {
-      return this.currentPage === name
+      return this.currentPage === name;
     },
     showLogOutModal() {
-      this.showConfirmModal(
-        "Log Out",
-        "Any unsaved changes will be lost. Are you sure you want to continue?"
-      ).then((confirmed) => {
-        if (confirmed) this.$store.dispatch("logOut")
-      })
-    }
+      this.showConfirmModal("Log Out", "Any unsaved changes will be lost. Are you sure you want to continue?").then(
+        (confirmed) => {
+          if (confirmed) this.$store.dispatch("logOut");
+        },
+      );
+    },
   },
   async beforeMount() {
     await this.$http.get("/").catch(() => {
-      this.connected = false
+      this.connected = false;
       this.appendToast(
         "Server Connection Refused",
-        "The DL4SE server is currently unavailable. Please try accessing the site later.",
-        "danger"
-      )
-    })
+        "The server is currently unreachable. Please try accessing the site later.",
+        "danger",
+      );
+    });
   },
   data() {
     return {
       interval: undefined,
       connected: true,
-      authors: [
-        {
-          name: "Ozren Dabić",
-          url: "https://dabico.github.io/"
-        },
-        {
-          name: "Emad Aghajani",
-          url: "https://emadpres.github.io/"
-        },
-        {
-          name: "Gabriele Bavota",
-          url: "https://inf.usi.ch/faculty/bavota/"
-        }
-      ],
-      organisation: {
-        name: "SEART",
-        url: "https://seart.si.usi.ch/"
-      }
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style lang="sass">
+@import "node_modules/bootstrap/scss/_functions.scss"
+@import "node_modules/bootstrap/scss/_variables.scss"
+
 #app
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
+
+.router-view
+  padding-top: map-get($spacers, 4)!important
+  padding-bottom: map-get($spacers, 4)!important
+
+@media (min-width: 576px)
+  .router-view
+    padding-left: map-get($spacers, 4)!important
+    padding-right: map-get($spacers, 4)!important
 </style>

@@ -1,82 +1,50 @@
 <template>
-  <b-dropdown
-    :id="id"
-    no-caret
-    block
-    toggle-class="dropdown-select-toggle"
-    menu-class="dropdown-select-menu"
-    :disabled="disabled"
-  >
+  <b-dropdown :id="id" :disabled="disabled" no-caret block menu-class="w-100">
     <template #button-content>
-      {{ toggleContent }}
+      {{ selected ? selected : placeholder }}
     </template>
-    <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-    <b-dropdown-item
-      v-for="option in options"
-      :key="option"
-      :value="option"
-      @click="selected = option"
-      class="dropdown-select-item"
-    >
-      {{ option }}
+    <b-dropdown-header>
+      <slot name="header">Choose an option</slot>
+    </b-dropdown-header>
+    <b-dropdown-item v-for="option in options" :key="option" :value="option" @click="selected = option">
+      {{ option ? option : placeholder }}
     </b-dropdown-item>
   </b-dropdown>
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core"
-import { requiredIf } from "@vuelidate/validators"
-
 export default {
   name: "b-dropdown-select",
   props: {
-    id: String,
+    id: {
+      type: String,
+      default: null,
+    },
     value: [String, Number],
-    required: Boolean,
-    disabled: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     placeholder: {
       type: String,
-      default: "Value"
-    },
-    header: {
-      type: String,
-      default: "Choose an option"
+      default: "None Selected",
     },
     options: {
       type: Array,
-      default() {
-        return []
-      }
-    }
-  },
-  computed: {
-    toggleContent() {
-      return this.selected ? this.selected : this.placeholder
-    }
+      default: () => [],
+    },
   },
   watch: {
     selected() {
-      this.$emit("input", this.selected)
-    }
-  },
-  setup(props) {
-    const globalConfig = props.id !== undefined ? { $registerAs: props.id } : {}
-    return {
-      v$: useVuelidate(globalConfig)
-    }
+      this.$emit("input", this.selected);
+    },
   },
   data() {
     return {
-      selected: this.value
-    }
+      selected: this.value,
+    };
   },
-  validations() {
-    return {
-      selected: {
-        $autoDirty: true,
-        required: requiredIf(this.required)
-      }
-    }
-  }
-}
+};
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/dropdown-select.sass" />

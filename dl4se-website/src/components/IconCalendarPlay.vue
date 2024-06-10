@@ -1,5 +1,5 @@
 <script>
-import { BIconCalendar, BIconPlayFill, BIconstack } from "bootstrap-vue"
+import { BIconCalendar, BIconPlayFill, BIconstack } from "bootstrap-vue";
 
 export default {
   name: "b-icon-calendar-play",
@@ -7,7 +7,7 @@ export default {
   components: {
     BIconCalendar,
     BIconPlayFill,
-    BIconstack
+    BIconstack,
   },
   render(createElement, { props, data }) {
     return createElement(
@@ -17,13 +17,13 @@ export default {
         attrs: data.attrs,
         class: data.staticClass,
         directives: data.directives ?? [],
-        on: data.on
+        on: data.on,
       },
       [
         createElement(BIconPlayFill, { props: { scale: 0.5, shiftV: -1, stacked: true } }),
-        createElement(BIconCalendar, { props: { stacked: true } })
-      ]
-    )
-  }
-}
+        createElement(BIconCalendar, { props: { stacked: true } }),
+      ],
+    );
+  },
+};
 </script>

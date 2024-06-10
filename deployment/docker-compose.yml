@@ -1,10 +1,11 @@
-version: '3.5'
+version: '3.9'
+name: 'dl4se'
 
 services:
 
   dl4se-db:
     container_name: dl4se-db
-    image: postgres:14.2-alpine
+    image: postgres:15.4-alpine
     volumes:
       - data:/var/lib/postgresql/data
     networks: [ default ]
@@ -23,8 +24,13 @@ services:
 
   dl4se-liquibase:
     container_name: dl4se-liquibase
-    image: liquibase/liquibase:4.9
-    command: --username=${DATABASE_USER} --password=${DATABASE_PASS} --url=jdbc:postgresql://dl4se-db:${DATABASE_PORT}/${DATABASE_NAME} --changeLogFile=changelog.xml --hub-mode=off update
+    image: liquibase/liquibase:4.28.0-alpine
+    command:
+      --username=${DATABASE_USER}
+      --password=${DATABASE_PASS}
+      --url=jdbc:postgresql://dl4se-db:${DATABASE_PORT}/${DATABASE_NAME}
+      --changeLogFile=changelog.xml
+      update
     volumes:
       - ../liquibase/changelog.xml:/liquibase/changelog.xml
       - ../liquibase/scripts/:/liquibase/scripts/
@@ -35,7 +41,7 @@ services:
 
   dl4se-crawler:
     container_name: dl4se-crawler
-    image: dl4se/dl4se-crawler:latest
+    image: seart/dl4se-crawler:latest
     build:
       context: ../
       dockerfile: deployment/crawler/Dockerfile
@@ -47,9 +53,13 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      CODE_SEARCH_URL: http://gym.si.usi.ch:48001/api/r/search
+      JAVA_OPTS: >
+        -Dcrawler.languages.Java=java
+        -Dcrawler.languages.Python=py
+        -Dcrawler.analyzer.core-pool-size=4
+        -Dcrawler.analyzer.max-pool-size=8
     volumes:
-      - logs-crawler:/logs
+      - ./logs:/logs
     depends_on:
       dl4se-liquibase:
         condition: service_completed_successfully
@@ -60,7 +70,7 @@ services:
 
   dl4se-server:
     container_name: dl4se-server
-    image: dl4se/dl4se-server:latest
+    image: seart/dl4se-server:latest
     build:
       context: ../
       dockerfile: deployment/server/Dockerfile
@@ -72,17 +82,15 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      SERVER_PORT: ${SERVER_PORT}
       SERVER_MAIL_ADDR: ${SERVER_MAIL_ADDR}
       SERVER_MAIL_PASS: ${SERVER_MAIL_PASS}
       SERVER_SECURITY_USER: ${SERVER_SECURITY_USER}
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       SERVER_JWT_SECRET: ${SERVER_JWT_SECRET}
-      KEYSTORE_PASS: ${KEYSTORE_PASS}
-      WEBSITE_URL: http://localhost:${WEBSITE_PORT}
+      WEBSITE_URL: http://localhost:7031
     volumes:
-      - logs-server:/logs
-      - tmp-server:/tmp
+      - ./logs:/logs
+      - server-tmp:/tmp
     depends_on:
       dl4se-liquibase:
         condition: service_completed_successfully
@@ -90,42 +98,32 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
-    healthcheck:
-      test: wget --spider --quiet --no-check-certificate https://localhost:${SERVER_PORT}/api || exit 1
-      start_period: 15s
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+    ports: [ "48002:8080" ]
 
   dl4se-website:
     container_name: dl4se-website
-    image: dl4se/dl4se-website:latest
+    image: seart/dl4se-website:latest
     build:
       context: ../
       dockerfile: deployment/website/Dockerfile
-      args:
-        WEBSITE_PORT: ${WEBSITE_PORT}
-        SERVER_URL: https://localhost:${SERVER_PORT}/api
     networks: 
       - default
-    restart: always
+    environment:
+      BASE_URL: http://localhost:48002
     depends_on:
       dl4se-server:
         condition: service_healthy
-    ports:
-      - "${WEBSITE_PORT}:80"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports: [ "7031:80" ]
 
 volumes:
   data:
     name: dl4se-data
-  logs-crawler:
-    name: dl4se-logs-crawler
-  logs-server:
-    name: dl4se-logs-server
-  tmp-server:
-    name: dl4se-tmp-server
+  server-tmp:
+    name: dl4se-server-tmp
 
 networks:
   default:

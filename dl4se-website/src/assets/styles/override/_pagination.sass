@@ -1,32 +1,7 @@
-.page-link:focus
-  box-shadow: 0 0 0 0.2rem $normal-gray-muted !important
+.pagination
+  margin-bottom: 0!important
 
-.page-item .page-link
-  min-width: 40px!important
-  min-height: 40px!important
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
-  @extend .border-secondary
-  @extend .border-left-0
-  @extend .border-top-0
-  @extend .border-right-0
-  @extend .text-center
-  @extend .rounded-0
-
-.page-item .page-link
-  color: $normal-gray
-  background-color: $light-gray
-
-.page-item .page-link:hover
-  color: $white
-  background-color: $normal-gray
-
-.page-item.disabled .page-link
-  color: $normal-gray-muted
-  background-color: $light-gray-muted
-
-.page-item.active .page-link
-  background-color: $normal-gray
-
-.page-item.active.disabled .page-link
-  color: rgb(255 255 255 / 50%)
-  background-color: $normal-gray-muted
+.page-link
+  border-radius: 0!important
+  &:focus
+    box-shadow: $box-shadow!important

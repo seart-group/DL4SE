@@ -1,46 +1,42 @@
 ### GET /admin
-GET https://localhost:8080/api/admin
+GET localhost:8080/api/admin
 Authorization: Bearer {{token}}
 
 ### GET /admin/user
-GET https://localhost:8080/api/admin/user
+GET localhost:8080/api/admin/user
 Authorization: Bearer {{token}}
 
 ### GET /admin/user/{uid}
-GET https://localhost:8080/api/admin/user/{{target_uid}}
+GET localhost:8080/api/admin/user/{{target_uid}}
 Authorization: Bearer {{token}}
 
 ### POST /admin/user/{uid}/enable
-POST https://localhost:8080/api/admin/user/{{target_uid}}/enable
+POST localhost:8080/api/admin/user/{{target_uid}}/enable
 Authorization: Bearer {{token}}
 
 ### POST /admin/user/{uid}/disable
-POST https://localhost:8080/api/admin/user/{{target_uid}}/disable
+POST localhost:8080/api/admin/user/{{target_uid}}/disable
 Authorization: Bearer {{token}}
 
 ### POST /admin/user/{uid}/promote
-POST https://localhost:8080/api/admin/user/{{target_uid}}/promote
+POST localhost:8080/api/admin/user/{{target_uid}}/promote
 Authorization: Bearer {{token}}
 
 ### POST /admin/user/{uid}/demote
-POST https://localhost:8080/api/admin/user/{{target_uid}}/demote
-Authorization: Bearer {{token}}
-
-### GET /admin/task
-GET https://localhost:8080/api/admin/task
+POST localhost:8080/api/admin/user/{{target_uid}}/demote
 Authorization: Bearer {{token}}
 
 ### GET /admin/task/stats
-GET https://localhost:8080/api/admin/task/stats
+GET localhost:8080/api/admin/task/stats
 Authorization: Bearer {{token}}
 
 ### GET /admin/configuration
-GET https://localhost:8080/api/admin/configuration
+GET localhost:8080/api/admin/configuration
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### POST /admin/configuration
-POST https://localhost:8080/api/admin/configuration
+POST localhost:8080/api/admin/configuration
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

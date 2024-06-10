@@ -1,24 +1,35 @@
-FROM maven:3.8.4-jdk-11-slim AS build
+FROM maven:3.9.7-eclipse-temurin-11-alpine AS build
 
 COPY ./pom.xml /pom.xml
-COPY ./dl4se-crawler /dl4se-crawler
 COPY ./dl4se-model /dl4se-model
 COPY ./dl4se-server /dl4se-server
-COPY ./dl4se-src2abs /dl4se-src2abs
+COPY ./dl4se-spring /dl4se-spring
+COPY ./dl4se-transformer /dl4se-transformer
 
-RUN mvn -e --no-transfer-progress install:install-file \
-    -Dfile="./dl4se-src2abs/lib/javalexer.jar" \
-    -DgroupId="edu.wm.cs" \
-    -DartifactId="javalexer" \
-    -Dversion="1" \
-    -Dpackaging="jar"
+RUN mvn -e \
+        --no-transfer-progress \
+        package \
+        -Pserver \
+        -am -DskipTests
 
-RUN mvn -e --no-transfer-progress clean package -pl dl4se-server -am -DskipTests
-
-FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+FROM eclipse-temurin:11.0.23_9-jre-alpine
 
 COPY --from=build /dl4se-server/target/dl4se-server-*.jar /server.jar
 
-RUN apk update && apk add git
+RUN apk update --quiet && \
+    apk add --no-cache \
+            --quiet \
+            curl \
+            git \
+            libstdc++
 
-ENTRYPOINT java -jar server.jar
+ENTRYPOINT java $JAVA_OPTS -jar server.jar
+
+EXPOSE 8080
+
+HEALTHCHECK \
+    --start-period=30s \
+    --interval=60s \
+    --timeout=5s \
+    --retries=5 \
+    CMD curl --silent --fail --request GET http://localhost:8080/api || exit 1

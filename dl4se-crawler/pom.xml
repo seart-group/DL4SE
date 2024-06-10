@@ -3,121 +3,89 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>dl4se</artifactId>
-    <groupId>usi.si.seart</groupId>
+    <groupId>ch.usi.si.seart</groupId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>dl4se-crawler</artifactId>
 
-  <name>dl4se-crawler</name>
+  <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <app.mainClass>usi.si.seart.Crawler</app.mainClass>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>usi.si.seart</groupId>
+      <groupId>ch.usi.si.seart</groupId>
       <artifactId>dl4se-model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>dl4se-analyzer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>dl4se-spring</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.4.3</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.8</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>commons-compiler</artifactId>
-      <version>3.1.8</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.http-client</groupId>
-      <artifactId>google-http-client</artifactId>
-      <version>1.42.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.9.0</version>
     </dependency>
     <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>3.24.4</version>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-boot.version}</version>
         <configuration>
-          <systemProperties>
-            <db.password>password123</db.password>
-          </systemProperties>
-          <environmentVariables>
-            <DB_USER>dabico</DB_USER>
-            <DB_SERVER>server.si.usi.ch</DB_SERVER>
-            <DB_PORT>12345</DB_PORT>
-          </environmentVariables>
+          <mainClass>${project.module.mainClass}</mainClass>
         </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>${app.mainClass}</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
         <executions>
           <execution>
             <goals>
-              <goal>java</goal>
+              <goal>repackage</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <mainClass>${app.mainClass}</mainClass>
-        </configuration>
       </plugin>
     </plugins>
   </build>

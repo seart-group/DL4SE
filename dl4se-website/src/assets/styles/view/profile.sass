@@ -1,0 +1,34 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+.tabs ::v-deep ul[role="tablist"]
+  gap: 10px!important
+  .nav-link
+    border-radius: 0!important
+
+.card-subtitle
+  $margin: map-get($spacers, 2)
+  margin-bottom: $margin!important
+
+.card-body
+  height: 60vh!important
+  overflow-y: auto!important
+
+hr
+  $margin: map-get($spacers, 3)
+  margin-bottom: $margin!important
+
+form
+  .bi
+    margin: 3px 0!important
+
+  @include btn-accent(".btn[type=submit] ~ .btn")
+
+  .form-text,
+  .invalid-feedback
+    display: flex!important
+    flex-direction: row!important
+    gap: 5px!important
+
+  input
+    max-width: 350px!important

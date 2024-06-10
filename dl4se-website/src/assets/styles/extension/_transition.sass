@@ -1,4 +1,12 @@
-@for $i from 0 through 10
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 1s ease
+
+.fade-enter,
+.fade-leave-to
+  opacity: 0
+
+@for $i from 0 through 5
   $delay: $i * 500
   .transition-delay-#{$delay}
-    transition-delay: $delay+ms
+    transition-delay: #{$delay}ms

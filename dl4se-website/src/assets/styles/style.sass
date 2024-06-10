@@ -1,173 +1,19 @@
-$enable-responsive-font-sizes: true
-
-@import "node_modules/bootstrap/scss/bootstrap"
-@import "node_modules/bootstrap-vue/src/index"
 @import "variables"
 @import "mixins"
-@import "svg"
-@import "typography"
-@import "transition"
-@import "override"
+@import "node_modules/bootstrap/scss/bootstrap"
+@import "node_modules/bootstrap-vue/src/index"
 @import "extension"
-@import "component"
+@import "override"
+
+@font-face
+  font-family: 'Trebuchet MS'
+  font-style: normal
+  font-weight: normal
+  src: local('Trebuchet MS'), url('@/assets/fonts/trebuc.woff') format('woff')
 
 *
   margin: 0
   padding: 0
-  box-sizing: border-box
 
 html
   position: relative
-
-body
-  color: black
-  min-height: 100vh
-  @extend .m-0
-  @extend .d-flex
-  @extend .flex-column
-  @extend .justify-content-between
-  @extend .text-regular
-
-body > header
-  @extend .d-block
-
-body > main
-  @extend .d-block
-  @extend .mb-auto
-
-body > footer
-  @extend .d-block
-
-.bg-light-gray
-  background-color: $light-gray
-
-.btn-secondary-border-2
-  @extend .btn
-  @extend .btn-secondary
-  @extend .text-center
-  @extend .border-2
-  border-color: $dark-gray!important
-
-.btn-danger-border-2
-  @extend .btn
-  @extend .btn-danger
-  @extend .text-center
-  @extend .border-2
-  border-color: $dark-red!important
-
-.fullscreen
-  &.logo
-    min-height: 95vh!important
-  &.summary
-    min-height: 100vh!important
-  &.datasets
-    min-height: 88vh!important
-
-.home
-  @extend .d-flex
-  @extend .flex-column
-  @extend .justify-content-between
-
-.home-scroll-link
-  @extend .text-secondary
-  @extend .text-decoration-none
-
-.logo
-  @extend .d-flex
-  @extend .flex-column
-  @extend .justify-content-center
-
-.logo-image
-  font-size: clamp(6rem, 24vw, 8rem)!important
-
-.logo-image-negative
-  color: $white!important
-  background-color: $black!important
-  padding-left: clamp(2rem, 8vw, 4rem)!important
-  padding-right: clamp(0.5rem, 2vw, 1rem)!important
-
-.logo-image-positive
-  color: $black!important
-  padding-left: clamp(0.25rem, 1vw, 0.5rem)!important
-  font-weight: 200!important
-
-.logo-tagline
-  font-size: clamp(1rem, 4.25vw, 1.5rem)!important
-
-.summary
-  @extend .d-flex
-  @extend .flex-column
-  @extend .justify-content-center
-
-.datasets
-  @extend .d-flex
-  @extend .flex-wrap
-  @extend .flex-column
-  @extend .align-content-center
-  @extend .justify-content-center
-
-.datasets-card
-  @include max-width(500)
-  @extend .bg-light-gray
-  @extend .border-secondary
-  @extend .border-left-0
-  @extend .border-top-0
-  @extend .border-right-0
-  @extend .rounded-0
-
-
-.brand
-  font-size: 1.65rem!important
-  text-decoration: none!important
-
-.brand-negative
-  color: $light-gray!important
-  background-color: $dark-gray!important
-  padding-left: 1rem!important
-  padding-right: 0.25rem!important
-
-.brand-positive
-  color: $dark-gray!important
-  padding-left: 2px!important
-  font-weight: 200!important
-
-.brand:hover > .brand-negative,
-.brand:focus > .brand-negative,
-.brand:active > .brand-negative,
-.brand.active > .brand-negative
-  background-color: $black!important
-
-.brand:hover > .brand-positive,
-.brand:focus > .brand-positive,
-.brand:active > .brand-positive,
-.brand.active > .brand-positive
-  color: $black!important
-
-.task-create-form
-  @extend .my-lg-5
-  @extend .my-md-4
-  @extend .my-sm-3
-  @extend .my-3
-
-%task-create-form-section
-  background-color: #f2f2f2ee!important
-  @extend .border-left
-  @extend .border-right
-
-.task-create-form-section-top
-  @extend %task-create-form-section
-  @extend .border-top
-
-.task-create-form-section-middle
-  @extend %task-create-form-section
-
-.task-create-form-section-bottom
-  @extend %task-create-form-section
-  @extend .border-bottom
-
-.task-create-form-section-title
-  @extend .my-2
-  @extend .border-2
-  @extend .border-bottom
-  @extend .border-dark
-  @extend .font-weight-bold

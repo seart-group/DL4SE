@@ -1,0 +1,41 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+input
+  z-index: 2!important
+
+.btn
+  @include button-variant($gray-200, $gray-600, $gray-600, $gray-600, $gray-700)
+  width: calc($input-height / 2)!important
+  height: calc($input-height / 2)!important
+  border-radius: 0!important
+  background-repeat: no-repeat!important
+  background-position: center!important
+  background-size: 65%!important
+  box-shadow: none!important
+  display: block!important
+  float: none!important
+
+.btn-up
+  border: 0!important
+
+  @include bg-chevron-up($gray-600)
+
+  &:hover,
+  &:active,
+  &:focus
+    &:not(:disabled)
+      @include bg-chevron-up($white)
+
+.btn-down
+  border-left: 0!important
+  border-top: 0!important
+  border-right: 0!important
+
+  @include bg-chevron-down($gray-600)
+
+  &:hover,
+  &:active,
+  &:focus
+    &:not(:disabled)
+      @include bg-chevron-down($white)

@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="POST /actuator/shutdown" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/actuator" path="$PROJECT_DIR$/http/Actuator.http" index="6" requestIdentifier="POST /actuator/shutdown" runType="Run single request">
-    <method v="2" />
-  </configuration>
-</component>

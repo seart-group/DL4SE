@@ -29,8 +29,6 @@ export PLATFORM_MAIL_PASS=randomlettersabc  # 16-character generated app passwor
 export SECURITY_USER=dl4se_admin            # Name of the default user
 export SECURITY_PASS=p4sSF0rDeF4u1t         # Password for the default user
 
-export KEYSTORE_PASS=133TH4xx0RP4sS         # Password for your PKCS12 keystore
-
 export JWT_SECRET=JwTsEcReTKey12345         # JWT secret signing key
 ```
 

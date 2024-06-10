@@ -1,34 +1,37 @@
 .custom-control-input:hover:not(:disabled) ~ .custom-control-label::after
-  border-color: $normal-gray
+  border-color: $gray-600!important
 
 .custom-control-input:hover:not(:disabled) ~ .custom-control-label::before
-  border-color: $dark-gray
+  border-color: $gray-800!important
 
 .custom-control-input:active:not(:disabled) ~ .custom-control-label::before
-  border-color: $normal-gray
-  background-color: $normal-gray
+  border-color: $gray-600!important
+  background-color: $gray-600!important
 
 .custom-control-input:focus ~ .custom-control-label::before
-  border-color: $normal-gray
-  box-shadow: 0 0 0 0.2rem $normal-gray-muted !important
+  border-color: $gray-600!important
+  box-shadow: $box-shadow!important
 
 .custom-control-input:checked ~ .custom-control-label::before
-  border-color: $normal-gray
-  background-color: $normal-gray
+  border-color: $gray-600!important
+  background-color: $gray-600!important
 
 .custom-control-input:checked:hover ~ .custom-control-label::before
-  border-color: $dark-gray
-  background-color: $dark-gray
+  border-color: $gray-800!important
+  background-color: $gray-800!important
 
 .custom-control-input:focus:not(:checked) ~ .custom-control-label::before
-  border-color: $normal-gray
+  border-color: $gray-600!important
 
 .custom-control-input:focus:hover:not(:checked) ~ .custom-control-label::before
-  border-color: $dark-gray
+  border-color: $gray-800!important
 
 .custom-control-input-green:active:not(:disabled) ~ .custom-control-label::before
-  border-color: $normal-gray
-  background-color: $normal-gray
+  border-color: $gray-600!important
+  background-color: $gray-600!important
+
+.custom-checkbox > .custom-control-label::before
+  border-radius: 0!important
 
 .custom-checkbox > .custom-control-input:disabled + .custom-control-label
   cursor: not-allowed!important

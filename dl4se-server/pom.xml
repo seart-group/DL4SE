@@ -3,66 +3,51 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>dl4se</artifactId>
-    <groupId>usi.si.seart</groupId>
+    <groupId>ch.usi.si.seart</groupId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>dl4se-server</artifactId>
 
-  <name>dl4se-server</name>
+  <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <springframework.version>2.6.4</springframework.version>
-    <springcloud.version>2021.0.1</springcloud.version>
+    <emailTemplateDirectory>${project.basedir}/src/main/email</emailTemplateDirectory>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${springframework.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${springcloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>usi.si.seart</groupId>
+      <groupId>ch.usi.si.seart</groupId>
       <artifactId>dl4se-model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>usi.si.seart</groupId>
-      <artifactId>dl4se-src2abs</artifactId>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>dl4se-transformer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.usi.si.seart</groupId>
+      <artifactId>dl4se-spring</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
-      <version>0.11.5</version>
+      <version>${jjwt.version}</version>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-impl</artifactId>
-      <version>0.11.5</version>
+      <version>${jjwt.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId>
-      <version>0.11.5</version>
+      <version>${jjwt.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -71,13 +56,12 @@
       <version>1.2.3</version>
     </dependency>
     <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>3.24.4</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -113,10 +97,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jooq</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
     <dependency>
@@ -128,12 +108,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.icegreen</groupId>
-      <artifactId>greenmail-junit5</artifactId>
-      <version>1.6.11</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -141,9 +115,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${springframework.version}</version>
+        <version>${spring-boot.version}</version>
         <configuration>
-          <mainClass>usi.si.seart.DL4SEApplication</mainClass>
+          <mainClass>${project.module.mainClass}</mainClass>
         </configuration>
         <executions>
           <execution>

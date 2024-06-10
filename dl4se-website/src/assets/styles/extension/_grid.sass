@@ -1,0 +1,13 @@
+@each $breakpoint in map-keys($grid-breakpoints)
+  @include media-breakpoint-up($breakpoint)
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints)
+    .d#{$infix}-grid
+      display: grid!important
+
+@each $size, $length in $spacers
+  .gap-#{$size}
+    gap: $length!important
+  .row-gap-#{$size}
+    row-gap: $length!important
+  .column-gap-#{$size}
+    column-gap: $length!important

@@ -1,36 +1,22 @@
 <template>
-  <b-modal
-    :id="id"
-    :title="title"
-    content-class="details-modal-content"
-    footer-class="details-modal-footer"
-    scrollable
-    centered
-    @hidden="reset"
-  >
-    <b-card no-body class="details-modal-card">
+  <b-modal :id="id" :title="title" scrollable centered @hidden="reset">
+    <b-card no-body>
       <b-tabs v-model="activeTab" card @activate-tab="hideTooltip">
-        <b-tab
-          v-for="{ name, value } in formatted"
-          :title="name"
-          :key="name.toLowerCase()"
-          :disabled="!value"
-          title-link-class="details-modal-tab-title"
-        >
+        <b-tab v-for="{ name, value } in formatted" :key="name.toLowerCase()" :title="name" :disabled="!value">
           <b-card-body>
-            <pre class="m-0">{{ value }}</pre>
+            <pre><code class="text-monospace">{{ value }}</code></pre>
           </b-card-body>
         </b-tab>
       </b-tabs>
     </b-card>
     <template #modal-footer>
-      <b-button :id="`${id}-btn`" class="btn-secondary-border-2" @click="copy">
+      <b-button :id="tooltipId" @click="copy">
         <b-icon-clipboard />
       </b-button>
       <b-tooltip
         title="Copied!"
         triggers="click"
-        :target="`${id}-btn`"
+        :target="tooltipId"
         :show.sync="showTooltip"
         @shown="autoHideTooltip"
       />
@@ -44,15 +30,15 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     content: {
       type: [String, Object],
-      required: true
+      required: true,
     },
     formatters: {
       type: Array,
@@ -60,45 +46,50 @@ export default {
         return [
           {
             name: "Identity",
-            formatter: String
-          }
-        ]
-      }
-    }
+            formatter: String,
+          },
+        ];
+      },
+    },
   },
   computed: {
     formatted() {
       return this.formatters.map((item) => {
         return {
           name: item.name,
-          value: item.formatter(this.content)
-        }
-      })
-    }
+          value: item.formatter(this.content),
+        };
+      });
+    },
+    tooltipId() {
+      return `${this.id}___BV_modal_footer_tooltip_`;
+    },
   },
   methods: {
     reset() {
-      this.activeTab = 0
-      this.showTooltip = false
-      this.$emit("reset")
+      this.activeTab = 0;
+      this.showTooltip = false;
+      this.$emit("reset");
     },
     copy() {
-      const idx = this.activeTab
-      const value = this.formatted[idx].value
-      navigator.clipboard.writeText(value).then(() => (this.showTooltip = true))
+      const idx = this.activeTab;
+      const value = this.formatted[idx].value;
+      navigator.clipboard.writeText(value).then(() => (this.showTooltip = true));
     },
     hideTooltip() {
-      this.showTooltip = false
+      this.showTooltip = false;
     },
     autoHideTooltip() {
-      setTimeout(this.hideTooltip, 2000)
-    }
+      setTimeout(this.hideTooltip, 2000);
+    },
   },
   data() {
     return {
       activeTab: 0,
-      showTooltip: false
-    }
-  }
-}
+      showTooltip: false,
+    };
+  },
+};
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/details-modal.sass" />

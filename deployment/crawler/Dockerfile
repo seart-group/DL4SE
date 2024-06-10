@@ -1,20 +1,37 @@
-FROM maven:3.8.4-jdk-11-slim AS build
+FROM maven:3.9.7-eclipse-temurin-11-alpine AS build
 
 COPY ./pom.xml /pom.xml
+COPY ./dl4se-analyzer /dl4se-analyzer
 COPY ./dl4se-crawler /dl4se-crawler
 COPY ./dl4se-model /dl4se-model
-COPY ./dl4se-server /dl4se-server
-COPY ./dl4se-src2abs /dl4se-src2abs
+COPY ./dl4se-spring /dl4se-spring
 
-RUN mvn -e --no-transfer-progress clean package -pl dl4se-crawler -am -DskipTests
+RUN mvn -e \
+        --no-transfer-progress \
+        package \
+        -Pcrawler \
+        -am -DskipTests
 
-FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+FROM eclipse-temurin:11.0.23_9-jre-alpine
 
 COPY --from=build /dl4se-crawler/target/dl4se-crawler-*.jar /crawler.jar
 
-COPY ./deployment/crawler/entrypoint.sh ./
-RUN chmod 777 ./entrypoint.sh
+RUN apk update --quiet && \
+    apk add --no-cache \
+            --quiet \
+            git \
+            libstdc++ \
+            openssl
 
-RUN apk update && apk add git
+RUN openssl s_client -showcerts -connect seart-ghs.si.usi.ch:443 </dev/null 2>/dev/null | \
+    openssl x509 -outform PEM > /tmp/seart-ghs.si.usi.ch.pem
 
-ENTRYPOINT ["/entrypoint.sh"]
+RUN keytool \
+    -import \
+    -alias seart-ghs.si.usi.ch \
+    -file /tmp/seart-ghs.si.usi.ch.pem \
+    -keystore $JAVA_HOME/lib/security/cacerts \
+    -storepass changeit \
+    -noprompt
+
+ENTRYPOINT java $JAVA_OPTS -jar crawler.jar

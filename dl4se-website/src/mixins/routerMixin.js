@@ -1,4 +1,4 @@
-import bootstrapMixin from "@/mixins/bootstrapMixin"
+import bootstrapMixin from "@/mixins/bootstrapMixin";
 
 export default {
   mixins: [bootstrapMixin],
@@ -6,18 +6,15 @@ export default {
     redirectAndToast(location) {
       return (title, message, variant) => {
         this.$router.push(location).then(() => {
-          this.appendToast(title, message, variant)
-        })
-      }
+          this.appendToast(title, message, variant);
+        });
+      };
     },
     redirectHomeAndToast(title, message, variant) {
-      this.redirectAndToast({ name: "home" })(title, message, variant)
-    },
-    redirectLoginAndToast(title, message, variant) {
-      this.redirectAndToast({ name: "login" })(title, message, variant)
+      this.redirectAndToast({ name: "home" })(title, message, variant);
     },
     redirectDashboardAndToast(title, message, variant) {
-      this.redirectAndToast({ name: "dashboard" })(title, message, variant)
-    }
-  }
-}
+      this.redirectAndToast({ name: "dashboard" })(title, message, variant);
+    },
+  },
+};
