@@ -24,7 +24,7 @@ services:
 
   dl4se-liquibase:
     container_name: dl4se-liquibase
-    image: liquibase/liquibase:4.23.1-alpine
+    image: liquibase/liquibase:4.28.0-alpine
     command:
       --username=${DATABASE_USER}
       --password=${DATABASE_PASS}
