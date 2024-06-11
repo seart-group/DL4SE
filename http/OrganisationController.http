@@ -1,0 +1,5 @@
+### GET /organisation
+GET localhost:8080/api/organisation?name=university+of+california
+
+### GET /organisation/{domain}
+GET localhost:8080/api/organisation/berkeley.edu

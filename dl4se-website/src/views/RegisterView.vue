@@ -19,6 +19,7 @@
               :state="v$.form.email.$dirty ? !v$.form.email.$invalid : null"
               placeholder="example@email.com"
               autofocus
+              @blur="autofillOrganisation"
             />
           </b-form-group>
         </b-form-row>
@@ -77,10 +78,10 @@
                 name="organisation"
                 type="text"
                 v-model.trim="form.organisation"
-                server="http://universities.hipolabs.com/search"
+                :server="organisationsURL"
                 query-param="name"
                 :debounce-time="250"
-                :server-params="{ limit: 10 }"
+                :server-params="{ size: 5 }"
                 :response-mapper="responseMapper"
                 :disabled="submitted"
                 :state="v$.form.organisation.$dirty ? !v$.form.organisation.$invalid : null"
@@ -116,12 +117,13 @@ import useVuelidate from "@vuelidate/core";
 import { email, required, sameAs } from "@vuelidate/validators";
 import { password } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
+import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormAutoComplete from "@/components/FormAutoComplete";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
-  mixins: [routerMixin, bootstrapMixin],
+  mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
     BFormSubmit,
@@ -129,6 +131,17 @@ export default {
   methods: {
     responseMapper(json) {
       return json.map((item) => item.name);
+    },
+    async autofillOrganisation() {
+      const validator = this.v$.form.email;
+      const dirty = validator.$dirty;
+      const valid = !validator.$invalid;
+      if (!dirty || !valid) return;
+      const email = validator.$model;
+      const [_, domain] = email.split("@");
+      const organisation = await this.$http.get(`/organisation/${domain}`).then(({ data }) => data?.name);
+      if (!organisation) return;
+      this.form.organisation = organisation;
     },
     async register() {
       this.submitted = true;

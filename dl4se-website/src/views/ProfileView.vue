@@ -96,10 +96,10 @@
                         <b-form-auto-complete
                           type="text"
                           v-model.trim="form.organisation"
-                          server="http://universities.hipolabs.com/search"
+                          :server="organisationsURL"
                           query-param="name"
                           :debounce-time="250"
-                          :server-params="{ limit: 10 }"
+                          :server-params="{ size: 5 }"
                           :response-mapper="responseMapper"
                           :state="!v$.form.organisation.$invalid"
                           class="mb-3"
@@ -125,16 +125,17 @@
 <script>
 import getRandomName from "namesgenerator";
 import useVuelidate from "@vuelidate/core";
-import { email, required, sameAs } from "@vuelidate/validators";
+import { email, required } from "@vuelidate/validators";
 import { uid } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
+import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormSubmit from "@/components/FormSubmit";
 import BIconIdenticon from "@/components/IconIdenticon";
 import BFormAutoComplete from "@/components/FormAutoComplete.vue";
 
 export default {
-  mixins: [routerMixin, bootstrapMixin],
+  mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
     BFormSubmit,

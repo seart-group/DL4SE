@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GET /organisation" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/organisation" path="$PROJECT_DIR$/http/OrganisationController.http" requestIdentifier="GET /organisation" runType="Run single request">
+    <method v="2" />
+  </configuration>
+</component>
