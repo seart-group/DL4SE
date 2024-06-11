@@ -19,6 +19,7 @@
               :state="v$.form.email.$dirty ? !v$.form.email.$invalid : null"
               placeholder="example@email.com"
               autofocus
+              @blur="autofillOrganisation"
             />
           </b-form-group>
         </b-form-row>
@@ -130,6 +131,15 @@ export default {
   methods: {
     responseMapper(json) {
       return json.map((item) => item.name);
+    },
+    async autofillOrganisation() {
+      const validator = this.v$.form.email;
+      const dirty = validator.$dirty;
+      const valid = !validator.$invalid;
+      if (!dirty || !valid) return;
+      const email = validator.$model;
+      const [_, domain] = email.split("@");
+      this.form.organisation = await this.$http.get(`/organisation/${domain}`).then(({ data }) => data?.name);
     },
     async register() {
       this.submitted = true;
