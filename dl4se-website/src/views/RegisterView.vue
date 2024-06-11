@@ -139,7 +139,9 @@ export default {
       if (!dirty || !valid) return;
       const email = validator.$model;
       const [_, domain] = email.split("@");
-      this.form.organisation = await this.$http.get(`/organisation/${domain}`).then(({ data }) => data?.name);
+      const organisation = await this.$http.get(`/organisation/${domain}`).then(({ data }) => data?.name);
+      if (!organisation) return;
+      this.form.organisation = organisation;
     },
     async register() {
       this.submitted = true;
