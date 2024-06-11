@@ -58,6 +58,7 @@ public class SecurityConfig {
                 .antMatchers(
                         "/",
                         "/organisation",
+                        "/organisation/*",
                         "/user/login",
                         "/user/register",
                         "/user/verify",

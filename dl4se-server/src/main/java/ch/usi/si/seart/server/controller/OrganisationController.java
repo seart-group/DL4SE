@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +31,12 @@ public class OrganisationController {
         int limit = pageable.getPageSize();
         JsonNode response = universityDomainsListClient.search(name, limit);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{domain}")
+    public ResponseEntity<?> organisations(@PathVariable String domain) {
+        JsonNode response = universityDomainsListClient.search(domain);
+        JsonNode result = response.get(0);
+        return ResponseEntity.ok(result);
     }
 }

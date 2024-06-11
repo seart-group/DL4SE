@@ -10,5 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UniversityDomainsListClient {
 
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    JsonNode search(@RequestParam("domain") String domain);
+
+    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     JsonNode search(@RequestParam("name") String name, @RequestParam("limit") Integer limit);
 }
