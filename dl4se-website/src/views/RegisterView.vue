@@ -77,10 +77,10 @@
                 name="organisation"
                 type="text"
                 v-model.trim="form.organisation"
-                server="http://universities.hipolabs.com/search"
+                :server="organisationsURL"
                 query-param="name"
                 :debounce-time="250"
-                :server-params="{ limit: 10 }"
+                :server-params="{ size: 10 }"
                 :response-mapper="responseMapper"
                 :disabled="submitted"
                 :state="v$.form.organisation.$dirty ? !v$.form.organisation.$invalid : null"
@@ -125,6 +125,11 @@ export default {
   components: {
     BFormAutoComplete,
     BFormSubmit,
+  },
+  computed: {
+    organisationsURL() {
+      return `${process.env.VUE_APP_API_BASE_URL}/organisation`;
+    },
   },
   methods: {
     responseMapper(json) {

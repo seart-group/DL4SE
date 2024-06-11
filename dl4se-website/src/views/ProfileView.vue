@@ -96,10 +96,10 @@
                         <b-form-auto-complete
                           type="text"
                           v-model.trim="form.organisation"
-                          server="http://universities.hipolabs.com/search"
+                          :server="organisationsURL"
                           query-param="name"
                           :debounce-time="250"
-                          :server-params="{ limit: 10 }"
+                          :server-params="{ size: 10 }"
                           :response-mapper="responseMapper"
                           :state="!v$.form.organisation.$invalid"
                           class="mb-3"
@@ -125,7 +125,7 @@
 <script>
 import getRandomName from "namesgenerator";
 import useVuelidate from "@vuelidate/core";
-import { email, required, sameAs } from "@vuelidate/validators";
+import { email, required } from "@vuelidate/validators";
 import { uid } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
@@ -155,6 +155,9 @@ export default {
       const invalid = this.v$.form.organisation.$invalid;
       const changed = this.form.organisation !== this.user.organisation;
       return !invalid && changed;
+    },
+    organisationsURL() {
+      return `${process.env.VUE_APP_API_BASE_URL}/organisation`;
     },
   },
   methods: {
