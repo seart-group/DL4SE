@@ -128,13 +128,14 @@ import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { uid } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
+import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormSubmit from "@/components/FormSubmit";
 import BIconIdenticon from "@/components/IconIdenticon";
 import BFormAutoComplete from "@/components/FormAutoComplete.vue";
 
 export default {
-  mixins: [routerMixin, bootstrapMixin],
+  mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
     BFormSubmit,
@@ -155,9 +156,6 @@ export default {
       const invalid = this.v$.form.organisation.$invalid;
       const changed = this.form.organisation !== this.user.organisation;
       return !invalid && changed;
-    },
-    organisationsURL() {
-      return `${process.env.VUE_APP_API_BASE_URL}/organisation`;
     },
   },
   methods: {

@@ -116,20 +116,16 @@ import useVuelidate from "@vuelidate/core";
 import { email, required, sameAs } from "@vuelidate/validators";
 import { password } from "@/validators";
 import routerMixin from "@/mixins/routerMixin";
+import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormAutoComplete from "@/components/FormAutoComplete";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
-  mixins: [routerMixin, bootstrapMixin],
+  mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
     BFormSubmit,
-  },
-  computed: {
-    organisationsURL() {
-      return `${process.env.VUE_APP_API_BASE_URL}/organisation`;
-    },
   },
   methods: {
     responseMapper(json) {
