@@ -101,9 +101,14 @@ export default {
       default: true,
     },
   },
-  watch: {
-    input() {
-      this.$emit("input", this.input);
+  computed: {
+    input: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit("input", value);
+      },
     },
   },
   mounted() {
@@ -128,11 +133,6 @@ export default {
   },
   beforeDestroy() {
     Autocomplete.getInstance(this.$el).dispose();
-  },
-  data() {
-    return {
-      input: this.value,
-    };
   },
 };
 </script>
