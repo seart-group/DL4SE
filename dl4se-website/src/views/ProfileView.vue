@@ -99,7 +99,7 @@
                           :server="organisationsURL"
                           query-param="name"
                           :debounce-time="250"
-                          :server-params="{ size: 10 }"
+                          :server-params="{ size: 5 }"
                           :response-mapper="responseMapper"
                           :state="!v$.form.organisation.$invalid"
                           class="mb-3"

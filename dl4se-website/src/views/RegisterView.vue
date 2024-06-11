@@ -80,7 +80,7 @@
                 :server="organisationsURL"
                 query-param="name"
                 :debounce-time="250"
-                :server-params="{ size: 10 }"
+                :server-params="{ size: 5 }"
                 :response-mapper="responseMapper"
                 :disabled="submitted"
                 :state="v$.form.organisation.$dirty ? !v$.form.organisation.$invalid : null"
