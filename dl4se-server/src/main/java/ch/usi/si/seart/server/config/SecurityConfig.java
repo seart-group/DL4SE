@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .hasRole("ADMIN")
                 .antMatchers(
                         "/",
+                        "/organisation",
                         "/user/login",
                         "/user/register",
                         "/user/verify",
