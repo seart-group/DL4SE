@@ -87,7 +87,7 @@ services:
       SERVER_SECURITY_USER: ${SERVER_SECURITY_USER}
       SERVER_SECURITY_PASS: ${SERVER_SECURITY_PASS}
       PLATFORM_JWT_SECRET: GeNeR4TeR4nd0mSeCrEt4nDp4StEhErE
-      WEBSITE_URL: http://localhost:7031
+      PLATFORM_WEBSITE_BASEURL: http://localhost:7031
     volumes:
       - ./logs:/logs
       - server-tmp:/tmp
