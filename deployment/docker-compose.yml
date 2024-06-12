@@ -27,14 +27,10 @@ services:
     image: liquibase/liquibase:4.28.0-alpine
     environment:
       TZ: UTC
-      DATABASE_NAME: dl4se
-      DATABASE_USER: dl4se_admin
-      DATABASE_PASS: Lugano2023
-      DATABASE_PORT: 5432
     command: >
-      --username=$DATABASE_USER
-      --password=$DATABASE_PASS
-      --url=jdbc:postgresql://dl4se-db:$DATABASE_PORT/$DATABASE_NAME
+      --username=dl4se_admin
+      --password=Lugano2023
+      --url=jdbc:postgresql://dl4se-db:5432/dl4se
       --changeLogFile=changelog.xml
       update
     volumes:
