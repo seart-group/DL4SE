@@ -11,9 +11,9 @@ services:
     networks: [ default ]
     environment:
       TZ: UTC
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: dl4se
+      POSTGRES_USER: dl4se_admin
+      POSTGRES_PASSWORD: Lugano2023
     restart: always
     healthcheck:
       test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
@@ -25,10 +25,16 @@ services:
   dl4se-liquibase:
     container_name: dl4se-liquibase
     image: liquibase/liquibase:4.28.0-alpine
-    command:
-      --username=${DATABASE_USER}
-      --password=${DATABASE_PASS}
-      --url=jdbc:postgresql://dl4se-db:${DATABASE_PORT}/${DATABASE_NAME}
+    environment:
+      TZ: UTC
+      DATABASE_NAME: dl4se
+      DATABASE_USER: dl4se_admin
+      DATABASE_PASS: Lugano2023
+      DATABASE_PORT: 5432
+    command: >
+      --username=$DATABASE_USER
+      --password=$DATABASE_PASS
+      --url=jdbc:postgresql://dl4se-db:$DATABASE_PORT/$DATABASE_NAME
       --changeLogFile=changelog.xml
       update
     volumes:
@@ -47,12 +53,7 @@ services:
       dockerfile: deployment/crawler/Dockerfile
     networks: [ default ]
     environment:
-      LIQUIBASE_HOST: dl4se-liquibase
-      DATABASE_HOST: dl4se-db
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASS: ${DATABASE_PASS}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dl4se-db:5432/dl4se
       JAVA_OPTS: >
         -Dcrawler.languages.Java=java
         -Dcrawler.languages.Python=py
@@ -77,11 +78,7 @@ services:
     networks:
       - default
     environment:
-      DATABASE_HOST: dl4se-db
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASS: ${DATABASE_PASS}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dl4se-db:5432/dl4se
       PLATFORM_WEBSITE_BASEURL: http://localhost:7031
     volumes:
       - ./logs:/logs
