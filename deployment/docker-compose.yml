@@ -16,7 +16,7 @@ services:
       POSTGRES_PASSWORD: Lugano2023
     restart: always
     healthcheck:
-      test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
+      test: pg_isready -U dl4se_admin -d dl4se
       start_period: 5s
       interval: 10s
       timeout: 5s
