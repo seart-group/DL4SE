@@ -2,13 +2,13 @@
   <article aria-labelledby="about">
     <h1 id="about" class="d-none">About</h1>
     <section aria-labelledby="description">
-      <h2 id="description">What is the SEART dataset hub?</h2>
+      <h2 id="description">What is the SEART Data Hub?</h2>
       <p>
-        Our platform allows researchers to easily create large-scale datasets that can be used to either run studies on
-        mining software repositories or to train deep learning models to automate software engineering tasks. Use our
-        forms to define the characteristics of the dataset you would like to build. The question mark icons in the forms
-        guide you by providing explanations about the different filters you can use as well as processing operations
-        that you can apply.
+        Our platform allows researchers to easily create large-scale datasets that can be used to either run empirical
+        studies or to train Deep Learning models to automate Software Engineering tasks. Use our forms to define the
+        characteristics of the dataset you would like to build. The question mark icons in the forms guide you by
+        providing explanations about the different filters you can use as well as processing operations that you can
+        apply.
       </p>
     </section>
     <section aria-labelledby="how-does-it-work">
