@@ -18,8 +18,7 @@ import java.time.Duration;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtProperties {
 
-    private static final int MIN_LENGTH = 32;
-    private static final String DEFAULT = RandomStringUtils.random(MIN_LENGTH, true, true);
+    private static final String DEFAULT = RandomStringUtils.random(128, true, true);
 
     @NotBlank
     String secret;
