@@ -5,6 +5,16 @@
         <option name="name" value="spring.mail.enabled" />
         <option name="value" value="false" />
       </param>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="spring.mail.username" />
+        <option name="value" value="${SPRING_MAIL_USERNAME}" />
+      </param>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="spring.mail.password" />
+        <option name="value" value="${SPRING_MAIL_PASSWORD}" />
+      </param>
     </additionalParameters>
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/.env" />

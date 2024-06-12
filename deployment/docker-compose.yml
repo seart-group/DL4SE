@@ -82,8 +82,6 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
-      SERVER_MAIL_ADDR: ${SERVER_MAIL_ADDR}
-      SERVER_MAIL_PASS: ${SERVER_MAIL_PASS}
       PLATFORM_WEBSITE_BASEURL: http://localhost:7031
     volumes:
       - ./logs:/logs
