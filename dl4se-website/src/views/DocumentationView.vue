@@ -22,8 +22,19 @@
       <b-table-simple stacked="md" borderless small>
         <b-tbody>
           <b-tr>
+            <b-td><code>path</code></b-td>
+            <b-td>
+              The path of the file relative to the project repository root. At the function granularity, this value
+              corresponds to the file from which the function was extracted.
+            </b-td>
+          </b-tr>
+          <b-tr>
+            <b-td><code>language_name</code></b-td>
+            <b-td>The programming language of the instance.</b-td>
+          </b-tr>
+          <b-tr>
             <b-td><code>content</code></b-td>
-            <b-td>The raw or processed source code of an instance.</b-td>
+            <b-td>The raw source code of an instance.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>content_hash</code></b-td>
@@ -59,21 +70,15 @@
             </b-td>
           </b-tr>
           <b-tr>
-            <b-td><code>is_parsed</code></b-td>
-            <b-td>
-              Whether the <code>file</code> instance was successfully parsed. If a <code>file</code> is not parsable,
-              this means that we did not manage to extract the <code>functions</code> from it. Thus, we cannot have
-              unparsable instances in the function-level dataset. For unparsable instances we do not compute specific
-              information (e.g., the token counts).
-            </b-td>
+            <b-td><code>contains_error</code></b-td>
+            <b-td>Whether the parser encountered syntax errors while processing the instance.</b-td>
           </b-tr>
           <b-tr>
             <b-td><code>boilerplate_type</code></b-td>
             <b-td>
-              Whether the <code>function</code> instance is one of following boilerplate types: constructor, getter,
-              setter, builder, printer (i.e., <code>toString</code>), equality comparator (i.e., <code>equals</code>)
-              and hash value computer (i.e., <code>hashCode</code>). The identification of these functions is done by
-              analyzing their name.
+              Specific to <code>function</code> instances, this attribute indicates the type of boilerplate that the
+              function represents. This information is inferred from the function's name, and types may vary depending
+              on the programming language.
             </b-td>
           </b-tr>
         </b-tbody>
@@ -85,21 +90,22 @@
         Certain studies/models may benefit from information such as the AST-representation of source code, which is why
         we chose to offer the option of including an Abstract Syntax Tree (<code>AST</code>) representation of each
         exported instance in Extensible Markup Language (XML) format. The inclusion of this information within the
-        dataset will increase its size drastically.
+        dataset <em>will drastically increase its size</em>.
       </p>
       <p>
         Alternatively, we also provide the Symbolic Expression (<code>S-Expression</code>) representation of the AST.
         This format is more compact as compared to XML, but it is also omits certain information such as the row/column
         positions of nodes in the source code. This is a more fitting format for studies/models that benefit from
         knowing the structure of the AST, without requiring exact positional information. The inclusion of this
-        information within the dataset will increase its size, but not as drastically as XML.
+        information within the dataset <em>will increase its size</em>, but not as drastically as XML.
       </p>
       <p>
-        Finally, we provide the option to include the tag and semantic version of the <code>tree-sitter</code> binding
-        with was used to mine the information for each instance. Given that the binding and its grammars change over
-        time, this information can be useful for reproducibility purposes. Furthermore, it can be used for diagnostic
-        purposes, should the user encounter any issues with the generated dataset. Given that this information is
-        included on a per-instance basis, it will slightly increase the size of the dataset.
+        Finally, we provide the option to include the commit SHA and semantic version tag of the
+        <code>tree-sitter</code> binding release which was used to mine the information for each instance. Given that
+        the binding and its grammars change over time, this information can be useful for reproducibility purposes.
+        Furthermore, it can be used for diagnostic purposes, should the user encounter any issues with the generated
+        dataset. Since this information is also included on a per-instance basis, it will slightly increase the size of
+        the dataset.
       </p>
     </section>
     <section aria-labelledby="repository">
@@ -150,8 +156,8 @@
           <b-tr>
             <b-td><em>Near-Clones</em></b-td>
             <b-td>
-              Those that in spite of small differences in <code>content</code>, posses the same
-              <code>ast</code> structure.
+              Those that in spite of small differences in <code>content</code>, posses the same <code>ast</code>
+              structure.
             </b-td>
           </b-tr>
         </b-tbody>
