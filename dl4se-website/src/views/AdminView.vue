@@ -24,7 +24,7 @@
               <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
             </template>
             <template #cell(registered)="row">
-              <b-abbreviation :value="row.value.toISOString()" :formatter="(iso) => iso.split('T')[0]" />
+              <span v-b-tooltip="row.value.toISOString()">{{ row.value.toISOString().split("T")[0] }}</span>
             </template>
             <template #cell(details)="row">
               <div class="d-inline-flex gap-2">
@@ -179,7 +179,6 @@ import { required } from "@vuelidate/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import formatterMixin from "@/mixins/formatterMixin";
 import routerMixin from "@/mixins/routerMixin";
-import BAbbreviation from "@/components/Abbreviation";
 import BClearableInput from "@/components/ClearableInput";
 import BContentArea from "@/components/ContentArea";
 import BDialogModal from "@/components/DialogModal";
@@ -188,7 +187,6 @@ import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
   components: {
-    BAbbreviation,
     BClearableInput,
     BContentArea,
     BDialogModal,
