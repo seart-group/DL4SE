@@ -22,19 +22,16 @@
             <template #default>
               <p class="text-justify">
                 The platform is host to
-                <strong v-b-tooltip="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</strong>
+                <b-abbr :title="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</b-abbr>
                 functions, sourced from
-                <strong v-b-tooltip="count.files.toLocaleString()">{{ formatNatural(count.files) }}</strong>
+                <b-abbr :title="count.files.toLocaleString()">{{ formatNatural(count.files) }}</b-abbr>
                 files, originating from
-                <strong v-b-tooltip="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</strong>
-                repositories. In total, we have mined
-                <strong>{{ formatBytes(code.size) }}</strong> of source code, and analysed over
-                <strong v-b-tooltip="code.lines.toLocaleString()">{{ formatNatural(code.lines) }}</strong> lines of
-                code. The platform currently has <strong>{{ count.users ? count.users : "no" }}</strong> registered
-                users, and since its inception <strong>{{ count.tasks }}</strong>
-                {{ count.tasks === 1 ? "dataset has" : "datasets have" }}
-                been constructed. This amounts to roughly
-                <strong>{{ formatBytes(tasks) }}</strong> in compressed file size.
+                <b-abbr :title="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</b-abbr>
+                repositories. In total, we have mined {{ formatBytes(code.size) }} of source code, and analysed over
+                <b-abbr :title="code.lines.toLocaleString()">{{ formatNatural(code.lines) }}</b-abbr> lines. The
+                platform currently has {{ count.users ? count.users : "no" }} registered users, and since its inception
+                {{ count.tasks }} {{ count.tasks === 1 ? "dataset has" : "datasets have" }} been constructed. This
+                amounts to roughly {{ formatBytes(tasks) }} in compressed file size.
               </p>
             </template>
           </b-skeleton-wrapper>
@@ -59,10 +56,14 @@
 
 <script>
 import formatterMixin from "@/mixins/formatterMixin";
+import BAbbr from "@/components/Abbr";
 import BBarChart from "@/components/BarChart";
 
 export default {
-  components: { BBarChart },
+  components: {
+    BAbbr,
+    BBarChart,
+  },
   mixins: [formatterMixin],
   methods: {
     async apiCall(endpoint) {
