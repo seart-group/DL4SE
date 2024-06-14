@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GET /statistics/files" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/statistics" path="$PROJECT_DIR$/http/StatisticsController.http" index="3" requestIdentifier="GET /statistics/files" runType="Run single request">
+  <configuration default="false" name="GET /statistics/files" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" folderName="/statistics" path="$PROJECT_DIR$/http/StatisticsController.http" index="5" requestIdentifier="GET /statistics/files" runType="Run single request">
     <method v="2" />
   </configuration>
 </component>

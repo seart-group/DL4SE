@@ -1,5 +1,8 @@
-### GET /statistics/code
-GET localhost:8080/api/statistics/code
+### GET /statistics/code/size
+GET localhost:8080/api/statistics/code/size
+
+### GET /statistics/code/lines
+GET localhost:8080/api/statistics/code/lines
 
 ### GET /statistics/users
 GET localhost:8080/api/statistics/users
