@@ -14,9 +14,9 @@
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
 
-                <b-skeleton width="33%" class="d-lg-none d-md-block d-none" />
-                <b-skeleton width="45%" class="d-xl-none d-lg-block d-none" />
-                <b-skeleton width="05%" class="d-xl-block d-md-none" />
+                <b-skeleton width="95%" class="d-lg-none d-md-block d-none" />
+                <b-skeleton width="90%" class="d-xl-none d-lg-block d-none" />
+                <b-skeleton width="45%" class="d-xl-block d-md-none" />
               </div>
             </template>
             <template #default>
@@ -28,10 +28,13 @@
                 files, originating from
                 <strong v-b-tooltip="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</strong>
                 repositories. In total, we have mined
-                <strong>{{ formatBytes(size.code) }}</strong> of source code. The platform currently has
-                <strong>{{ count.users }}</strong> registered users, and since its inception
-                <strong>{{ count.tasks }}</strong> datasets have been constructed. This amounts to roughly
-                <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
+                <strong>{{ formatBytes(code.size) }}</strong> of source code, and analysed over
+                <strong v-b-tooltip="code.lines.toLocaleString()">{{ formatNatural(code.lines) }}</strong> lines of
+                code. The platform currently has <strong>{{ count.users ? count.users : "no" }}</strong> registered
+                users, and since its inception <strong>{{ count.tasks }}</strong>
+                {{ count.tasks === 1 ? "dataset has" : "datasets have" }}
+                been constructed. This amounts to roughly
+                <strong>{{ formatBytes(tasks) }}</strong> in compressed file size.
               </p>
             </template>
           </b-skeleton-wrapper>
@@ -81,7 +84,10 @@ export default {
       return this.apiCall("/statistics/tasks");
     },
     async totalCodeSize() {
-      return this.apiCall("/statistics/code");
+      return this.apiCall("/statistics/code/size");
+    },
+    async totalCodeLines() {
+      return this.apiCall("/statistics/code/lines");
     },
     async totalTasksSize() {
       return this.apiCall("/statistics/tasks/size");
@@ -104,20 +110,34 @@ export default {
       this.totalFuncs(),
       this.totalTasks(),
       this.totalCodeSize(),
+      this.totalCodeLines(),
       this.totalTasksSize(),
     ])
-      .then(([totalUsers, totalRepos, totalFiles, totalFunctions, totalTasks, totalCodeSize, totalTaskSize]) => {
-        this.count.users = totalUsers;
-        this.count.repos = totalRepos;
-        this.count.files = totalFiles;
-        this.count.funcs = totalFunctions;
-        this.count.tasks = totalTasks;
+      .then(
+        ([
+          totalUsers,
+          totalRepos,
+          totalFiles,
+          totalFunctions,
+          totalTasks,
+          totalCodeSize,
+          totalCodeLines,
+          totalTaskSize,
+        ]) => {
+          this.count.users = totalUsers;
+          this.count.repos = totalRepos;
+          this.count.files = totalFiles;
+          this.count.funcs = totalFunctions;
+          this.count.tasks = totalTasks;
 
-        this.size.code = totalCodeSize;
-        this.size.tasks = totalTaskSize;
+          this.code.size = totalCodeSize;
+          this.code.lines = totalCodeLines;
 
-        this.loading = false;
-      })
+          this.tasks = totalTaskSize;
+
+          this.loading = false;
+        },
+      )
       .catch(() => {
         // TODO 03.11.22: Migrate this to a router guard?
         this.$router.replace({ name: "home" });
@@ -133,10 +153,11 @@ export default {
         funcs: undefined,
         tasks: undefined,
       },
-      size: {
-        code: undefined,
-        tasks: undefined,
+      code: {
+        size: undefined,
+        lines: undefined,
       },
+      tasks: undefined,
     };
   },
 };
