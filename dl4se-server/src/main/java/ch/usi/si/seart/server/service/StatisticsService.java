@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 public interface StatisticsService {
 
     Long codeSize();
+    Long codeLines();
     Long countUsers();
     Long countGitRepos();
     Long countFiles();
@@ -62,6 +63,11 @@ public interface StatisticsService {
         @Override
         public Long codeSize() {
             return codeRepository.size();
+        }
+
+        @Override
+        public Long codeLines() {
+            return codeRepository.lines();
         }
 
         @Override
