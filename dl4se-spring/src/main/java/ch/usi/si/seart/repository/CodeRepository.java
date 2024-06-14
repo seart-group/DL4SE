@@ -13,4 +13,7 @@ public interface CodeRepository extends
 {
     @Query(value = "SELECT size FROM total_code_size_in_bytes", nativeQuery = true)
     Long size();
+
+    @Query(value = "SELECT lines FROM total_code_lines", nativeQuery = true)
+    Long lines();
 }

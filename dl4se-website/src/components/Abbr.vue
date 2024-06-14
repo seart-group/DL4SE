@@ -1,22 +1,16 @@
 <script>
 export default {
-  name: "b-abbreviation",
+  name: "b-abbr",
   functional: true,
   props: {
-    value: {
-      type: undefined,
+    title: {
+      type: String,
       required: true,
     },
-    formatter: {
-      type: Function,
-      default(value) {
-        return value;
-      },
-    },
   },
-  render(createElement, { props, data }) {
+  render(createElement, { props, data, children }) {
     return createElement(
-      "span",
+      "abbr",
       {
         attrs: data.attrs,
         class: data.staticClass,
@@ -25,7 +19,7 @@ export default {
           {
             name: "b-tooltip",
             rawName: "v-b-tooltip.html",
-            value: props.value,
+            value: props.title,
             modifiers: {
               html: true,
             },
@@ -33,8 +27,10 @@ export default {
           ...(data.directives ?? []),
         ],
       },
-      props.formatter(props.value),
+      children,
     );
   },
 };
 </script>
+
+<style scoped lang="sass" src="@/assets/styles/component/abbr.sass" />

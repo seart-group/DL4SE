@@ -65,6 +65,7 @@ public class SecurityConfig {
                         "/user/verify/resend",
                         "/user/password/*",
                         "/statistics/*",
+                        "/statistics/code/*",
                         "/statistics/tasks/*",
                         "/statistics/languages/*",
                         "/task/*/download")

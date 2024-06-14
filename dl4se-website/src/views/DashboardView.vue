@@ -31,12 +31,13 @@
               </b-button>
             </template>
             <template #cell(uuid)="row">
-              <b-abbreviation
+              <b-abbr
                 v-if="!$screen.md"
-                :value="row.value"
-                :formatter="(val) => val.split('-')[0]"
+                :title="`<span class='text-monospace'>${row.value}</span>`"
                 class="text-monospace"
-              />
+              >
+                {{ row.value.split("-")[0] }}
+              </b-abbr>
               <span v-else class="text-monospace">{{ row.value }}</span>
             </template>
             <template #cell(status)="row">
@@ -191,7 +192,7 @@
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import formatterMixin from "@/mixins/formatterMixin";
 import routerMixin from "@/mixins/routerMixin";
-import BAbbreviation from "@/components/Abbreviation";
+import BAbbr from "@/components/Abbr";
 import BClearableInput from "@/components/ClearableInput";
 import BDetailsModal from "@/components/DetailsModal";
 import BDialogModal from "@/components/DialogModal";
@@ -203,7 +204,7 @@ import BPaginatedTable from "@/components/PaginatedTable";
 
 export default {
   components: {
-    BAbbreviation,
+    BAbbr,
     BClearableInput,
     BDetailsModal,
     BDialogModal,

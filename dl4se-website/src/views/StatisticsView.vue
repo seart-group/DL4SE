@@ -14,24 +14,24 @@
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
 
-                <b-skeleton width="33%" class="d-lg-none d-md-block d-none" />
-                <b-skeleton width="45%" class="d-xl-none d-lg-block d-none" />
-                <b-skeleton width="05%" class="d-xl-block d-md-none" />
+                <b-skeleton width="95%" class="d-lg-none d-md-block d-none" />
+                <b-skeleton width="90%" class="d-xl-none d-lg-block d-none" />
+                <b-skeleton width="45%" class="d-xl-block d-md-none" />
               </div>
             </template>
             <template #default>
               <p class="text-justify">
                 The platform is host to
-                <strong v-b-tooltip="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</strong>
+                <b-abbr :title="count.funcs.toLocaleString()">{{ formatNatural(count.funcs) }}</b-abbr>
                 functions, sourced from
-                <strong v-b-tooltip="count.files.toLocaleString()">{{ formatNatural(count.files) }}</strong>
+                <b-abbr :title="count.files.toLocaleString()">{{ formatNatural(count.files) }}</b-abbr>
                 files, originating from
-                <strong v-b-tooltip="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</strong>
-                repositories. In total, we have mined
-                <strong>{{ formatBytes(size.code) }}</strong> of source code. The platform currently has
-                <strong>{{ count.users }}</strong> registered users, and since its inception
-                <strong>{{ count.tasks }}</strong> datasets have been constructed. This amounts to roughly
-                <strong>{{ formatBytes(size.tasks) }}</strong> in file size.
+                <b-abbr :title="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</b-abbr>
+                repositories. In total, we have mined {{ formatBytes(code.size) }} of source code, and analysed over
+                <b-abbr :title="code.lines.toLocaleString()">{{ formatNatural(code.lines) }}</b-abbr> lines. The
+                platform currently has {{ count.users ? count.users : "no" }} registered users, and since its inception
+                {{ count.tasks }} {{ count.tasks === 1 ? "dataset has" : "datasets have" }} been constructed. This
+                amounts to roughly {{ formatBytes(tasks) }} in compressed file size.
               </p>
             </template>
           </b-skeleton-wrapper>
@@ -56,10 +56,14 @@
 
 <script>
 import formatterMixin from "@/mixins/formatterMixin";
+import BAbbr from "@/components/Abbr";
 import BBarChart from "@/components/BarChart";
 
 export default {
-  components: { BBarChart },
+  components: {
+    BAbbr,
+    BBarChart,
+  },
   mixins: [formatterMixin],
   methods: {
     async apiCall(endpoint) {
@@ -81,7 +85,10 @@ export default {
       return this.apiCall("/statistics/tasks");
     },
     async totalCodeSize() {
-      return this.apiCall("/statistics/code");
+      return this.apiCall("/statistics/code/size");
+    },
+    async totalCodeLines() {
+      return this.apiCall("/statistics/code/lines");
     },
     async totalTasksSize() {
       return this.apiCall("/statistics/tasks/size");
@@ -104,20 +111,34 @@ export default {
       this.totalFuncs(),
       this.totalTasks(),
       this.totalCodeSize(),
+      this.totalCodeLines(),
       this.totalTasksSize(),
     ])
-      .then(([totalUsers, totalRepos, totalFiles, totalFunctions, totalTasks, totalCodeSize, totalTaskSize]) => {
-        this.count.users = totalUsers;
-        this.count.repos = totalRepos;
-        this.count.files = totalFiles;
-        this.count.funcs = totalFunctions;
-        this.count.tasks = totalTasks;
+      .then(
+        ([
+          totalUsers,
+          totalRepos,
+          totalFiles,
+          totalFunctions,
+          totalTasks,
+          totalCodeSize,
+          totalCodeLines,
+          totalTaskSize,
+        ]) => {
+          this.count.users = totalUsers;
+          this.count.repos = totalRepos;
+          this.count.files = totalFiles;
+          this.count.funcs = totalFunctions;
+          this.count.tasks = totalTasks;
 
-        this.size.code = totalCodeSize;
-        this.size.tasks = totalTaskSize;
+          this.code.size = totalCodeSize;
+          this.code.lines = totalCodeLines;
 
-        this.loading = false;
-      })
+          this.tasks = totalTaskSize;
+
+          this.loading = false;
+        },
+      )
       .catch(() => {
         // TODO 03.11.22: Migrate this to a router guard?
         this.$router.replace({ name: "home" });
@@ -133,10 +154,11 @@ export default {
         funcs: undefined,
         tasks: undefined,
       },
-      size: {
-        code: undefined,
-        tasks: undefined,
+      code: {
+        size: undefined,
+        lines: undefined,
       },
+      tasks: undefined,
     };
   },
 };
