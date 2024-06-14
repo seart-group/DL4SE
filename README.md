@@ -10,6 +10,7 @@ This project contains several modules:
 - `dl4se-model`: A module containing domain model classes used for mapping the relational database structure to the
   programming environment;
 - `dl4se-analyzer`: A module containing implementations of code analysis operations running on `tree-sitter`;
+- `dl4se-transformer`: A module containing implementations of code transformation operations running on `tree-sitter`;
 - `dl4se-crawler`: A standalone crawler application that we use to mine source code from GitHub repositories indexed by
   [GitHub Search](https://seart-ghs.si.usi.ch/);
 - `dl4se-server`: A Spring Boot server application that acts as our platform back-end;
