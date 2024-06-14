@@ -23,6 +23,9 @@
             <template #cell(uid)="row">
               <b-icon-identicon :identifier="row.item.uid" :scale="1.35" /> {{ row.value }}
             </template>
+            <template #cell(organisation)="row">
+              <span class="text-nowrap">{{ row.value }}</span>
+            </template>
             <template #cell(registered)="row">
               <span v-b-tooltip="row.value.toISOString()">{{ row.value.toISOString().split("T")[0] }}</span>
             </template>
