@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/seart-group/dl4se.git"
   },
+  "bugs": {
+    "url": "https://github.com/seart-group/dl4se/issues"
+  },
   "license": "MIT",
   "homepage": "https://seart-dl4se.si.usi.ch",
   "scripts": {
