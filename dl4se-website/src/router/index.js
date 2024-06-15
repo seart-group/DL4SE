@@ -138,6 +138,10 @@ const routes = [
     },
   },
   {
+    path: "/docs",
+    redirect: "/documentation",
+  },
+  {
     path: "/documentation",
     name: "documentation",
     component: DocumentationView,
