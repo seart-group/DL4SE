@@ -6,20 +6,26 @@
           <b-logo />
         </template>
         <template #nav-items-left>
-          <b-nav-item :to="{ name: 'home' }" :active="isOnPage('home')">Home</b-nav-item>
-          <b-nav-item :to="{ name: 'stats' }" :active="isOnPage('stats')" :disabled="!connected">Statistics</b-nav-item>
-          <b-nav-item :to="{ name: 'docs' }" :active="isOnPage('docs')">Documentation</b-nav-item>
-          <b-nav-item :to="{ name: 'about' }" :active="isOnPage('about')">About</b-nav-item>
+          <b-nav-item
+            v-for="navItem in navItems.left"
+            :to="{ name: navItem.name }"
+            :disabled="navItem.disabled"
+            :key="navItem.name"
+          >
+            {{ toTitle(navItem.name) }}
+          </b-nav-item>
         </template>
         <template #nav-items-right>
           <template v-if="$store.getters.getToken">
-            <b-nav-item :to="{ name: 'profile' }" :active="isOnPage('profile')" :disabled="!connected">
-              Profile
+            <b-nav-item
+              v-for="navItem in navItems.right"
+              :to="{ name: navItem.name }"
+              :disabled="navItem.disabled"
+              :key="navItem.name"
+            >
+              {{ toTitle(navItem.name) }}
             </b-nav-item>
-            <b-nav-item :to="{ name: 'dashboard' }" :active="isOnPage('dashboard')" :disabled="!connected">
-              Dashboard
-            </b-nav-item>
-            <b-nav-item @click="showLogOutModal" :disabled="!connected">Log Out</b-nav-item>
+            <b-nav-item @click="showLogOutModal">Log Out</b-nav-item>
           </template>
           <template v-else>
             <b-nav-item
@@ -56,13 +62,48 @@
 <script>
 import { useHead } from "@unhead/vue";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import formatterMixin from "@/mixins/formatterMixin";
 import BLogo from "@/components/Logo";
 import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
   components: { BLogo, BSmartNavbar },
-  mixins: [bootstrapMixin],
+  mixins: [bootstrapMixin, formatterMixin],
   computed: {
+    navItems: {
+      get() {
+        return {
+          left: [
+            {
+              name: "home",
+              disabled: false,
+            },
+            {
+              name: "statistics",
+              disabled: !this.connected,
+            },
+            {
+              name: "documentation",
+              disabled: false,
+            },
+            {
+              name: "about",
+              disabled: false,
+            },
+          ],
+          right: [
+            {
+              name: "profile",
+              disabled: !this.connected,
+            },
+            {
+              name: "dashboard",
+              disabled: !this.connected,
+            },
+          ],
+        };
+      },
+    },
     currentPage() {
       return this.$route.name;
     },

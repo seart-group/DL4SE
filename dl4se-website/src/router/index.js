@@ -1,21 +1,22 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "@/axios";
-import HomeView from "@/views/HomeView";
-import LogInView from "@/views/LogInView";
-import DashboardView from "@/views/DashboardView";
-import ProfileView from "@/views/ProfileView";
-import RegisterView from "@/views/RegisterView";
-import VerifyView from "@/views/VerifyView";
-import NotFoundView from "@/views/NotFoundView";
-import CodeTaskView from "@/views/CodeTaskView";
-import DownloadView from "@/views/DownloadView";
-import AdminView from "@/views/AdminView";
-import StatisticsView from "@/views/StatisticsView";
-import AboutView from "@/views/AboutView";
-import DocumentationView from "@/views/DocumentationView";
-import ForgotPasswordView from "@/views/ForgotPasswordView";
-import ResetPasswordView from "@/views/ResetPasswordView";
+
+const HomeView = () => import("@/views/HomeView");
+const LogInView = () => import("@/views/LogInView");
+const DashboardView = () => import("@/views/DashboardView");
+const ProfileView = () => import("@/views/ProfileView");
+const RegisterView = () => import("@/views/RegisterView");
+const VerifyView = () => import("@/views/VerifyView");
+const NotFoundView = () => import("@/views/NotFoundView");
+const CodeTaskView = () => import("@/views/CodeTaskView");
+const DownloadView = () => import("@/views/DownloadView");
+const AdminView = () => import("@/views/AdminView");
+const StatisticsView = () => import("@/views/StatisticsView");
+const AboutView = () => import("@/views/AboutView");
+const DocumentationView = () => import("@/views/DocumentationView");
+const ForgotPasswordView = () => import("@/views/ForgotPasswordView");
+const ResetPasswordView = () => import("@/views/ResetPasswordView");
 
 Vue.use(VueRouter);
 
@@ -122,7 +123,11 @@ const routes = [
   },
   {
     path: "/stats",
-    name: "stats",
+    redirect: "/statistics",
+  },
+  {
+    path: "/statistics",
+    name: "statistics",
     component: StatisticsView,
     meta: {
       public: true,
@@ -138,7 +143,11 @@ const routes = [
   },
   {
     path: "/docs",
-    name: "docs",
+    redirect: "/documentation",
+  },
+  {
+    path: "/documentation",
+    name: "documentation",
     component: DocumentationView,
     meta: {
       public: true,
