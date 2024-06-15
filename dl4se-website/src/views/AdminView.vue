@@ -176,7 +176,7 @@
 
 <script>
 import axios from "@/axios";
-import { ref } from "@vue/composition-api";
+import { ref } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
