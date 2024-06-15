@@ -122,8 +122,8 @@ const routes = [
     },
   },
   {
-    path: "/stats",
-    name: "stats",
+    path: "/statistics",
+    name: "statistics",
     component: StatisticsView,
     meta: {
       public: true,
