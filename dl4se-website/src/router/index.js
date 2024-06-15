@@ -122,6 +122,10 @@ const routes = [
     },
   },
   {
+    path: "/stats",
+    redirect: "/statistics",
+  },
+  {
     path: "/statistics",
     name: "statistics",
     component: StatisticsView,
