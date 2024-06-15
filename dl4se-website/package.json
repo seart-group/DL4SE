@@ -12,6 +12,7 @@
     "url": "git+https://github.com/seart-group/dl4se.git"
   },
   "license": "MIT",
+  "homepage": "https://seart-dl4se.si.usi.ch",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
