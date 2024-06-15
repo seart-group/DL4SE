@@ -93,5 +93,10 @@ export default {
   data() {
     return { failed: true };
   },
+  head() {
+    return {
+      title: "Verify Your Email Address",
+    };
+  },
 };
 </script>

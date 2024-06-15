@@ -20,6 +20,11 @@ export default {
       return this.scroll.y > 100;
     },
   },
+  head() {
+    return {
+      title: "Documentation",
+    };
+  },
 };
 </script>
 

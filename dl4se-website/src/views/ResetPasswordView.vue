@@ -159,6 +159,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Reset Password",
+    };
+  },
 };
 </script>
 

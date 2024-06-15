@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { useHead } from "@unhead/vue";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BLogo from "@/components/Logo";
 import BSmartNavbar from "@/components/SmartNavbar";
@@ -93,6 +94,11 @@ export default {
         "The server is currently unreachable. Please try accessing the site later.",
         "danger",
       );
+    });
+  },
+  setup() {
+    useHead({
+      titleTemplate: (title) => `Data Hub${title ? " | " + title : ""}`,
     });
   },
   data() {

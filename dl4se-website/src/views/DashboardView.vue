@@ -442,6 +442,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Dashboard",
+    };
+  },
 };
 </script>
 

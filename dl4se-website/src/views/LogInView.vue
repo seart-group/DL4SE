@@ -147,6 +147,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Log In",
+    };
+  },
 };
 </script>
 
