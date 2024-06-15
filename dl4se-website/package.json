@@ -7,6 +7,10 @@
     "email": "ozren.dabic@usi.ch",
     "url": "https://dabico.github.io"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seart-group/dl4se.git"
+  },
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
