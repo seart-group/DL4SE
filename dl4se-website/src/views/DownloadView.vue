@@ -80,5 +80,10 @@ export default {
       show: false,
     };
   },
+  head() {
+    return {
+      title: `Download [${this.uuid}]`,
+    };
+  },
 };
 </script>

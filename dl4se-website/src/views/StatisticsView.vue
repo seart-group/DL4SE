@@ -161,5 +161,10 @@ export default {
       tasks: undefined,
     };
   },
+  head() {
+    return {
+      title: "Statistics",
+    };
+  },
 };
 </script>

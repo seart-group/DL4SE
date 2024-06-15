@@ -120,6 +120,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Forgot Password",
+    };
+  },
 };
 </script>
 

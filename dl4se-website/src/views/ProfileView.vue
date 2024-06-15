@@ -340,6 +340,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Profile",
+    };
+  },
 };
 </script>
 

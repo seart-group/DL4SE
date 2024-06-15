@@ -479,6 +479,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "Create Code Dataset",
+    };
+  },
 };
 </script>
 
