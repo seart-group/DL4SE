@@ -74,7 +74,7 @@
         <b-form-group class="col-12 col-md-auto">
           <template #label>
             Granularity
-            <b-documentation-link page="docs" section="#granularity" tabindex="-1" target="_blank" />
+            <b-documentation-link page="documentation" section="#granularity" tabindex="-1" target="_blank" />
           </template>
           <b-form-radio-group
             id="type-radio"
@@ -87,7 +87,7 @@
         <b-form-group class="col-12 col-md">
           <template #label>
             Metadata
-            <b-documentation-link page="docs" section="#meta" tabindex="-1" target="_blank" />
+            <b-documentation-link page="documentation" section="#meta" tabindex="-1" target="_blank" />
           </template>
           <b-form-checkbox id="sex-checkbox" v-model="task.processing.include_symbolic_expression">
             Pair each instance with its Symbolic Expression representation
@@ -185,7 +185,7 @@
             <b-form-group class="col-12">
               <template #label>
                 Exclude
-                <b-documentation-link page="docs" section="#exclusion" tabindex="-1" target="_blank" />
+                <b-documentation-link page="documentation" section="#exclusion" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="test-code-checkbox" v-model="task.query.exclude_test">Test code</b-checkbox>
               <b-checkbox
@@ -205,7 +205,12 @@
             <b-form-group class="col-12 col-sm-auto">
               <template #label>
                 Ignore
-                <b-documentation-link page="docs" section="#duplicates-and-clones" tabindex="-1" target="_blank" />
+                <b-documentation-link
+                  page="documentation"
+                  section="#duplicates-and-clones"
+                  tabindex="-1"
+                  target="_blank"
+                />
               </template>
               <b-checkbox id="duplicates-checkbox" v-model="task.query.exclude_duplicates">Duplicates</b-checkbox>
               <b-checkbox id="clones-checkbox" v-model="task.query.exclude_identical">Near-clones</b-checkbox>
@@ -213,7 +218,7 @@
             <b-form-group class="col-12 col-sm">
               <template #label>
                 Remove
-                <b-documentation-link page="docs" section="#processing" tabindex="-1" target="_blank" />
+                <b-documentation-link page="documentation" section="#processing" tabindex="-1" target="_blank" />
               </template>
               <b-checkbox id="comments-checkbox" v-model="task.processing.remove_regular_comments">
                 Regular comments

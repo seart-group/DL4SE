@@ -138,8 +138,8 @@ const routes = [
     },
   },
   {
-    path: "/docs",
-    name: "docs",
+    path: "/documentation",
+    name: "documentation",
     component: DocumentationView,
     meta: {
       public: true,
