@@ -68,5 +68,17 @@
     "eslint-plugin-vue": "^9.26.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.3.2"
-  }
+  },
+  "keywords": [
+    "DL4SE",
+    "deep learning",
+    "software engineering",
+    "deep learning for software engineering",
+    "empirical software engineering",
+    "mining software repositories",
+    "mining source code",
+    "dataset generation",
+    "training datasets",
+    "research"
+  ]
 }
