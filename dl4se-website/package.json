@@ -2,12 +2,21 @@
   "name": "dl4se-website",
   "version": "1.0.0",
   "private": true,
+  "description": "Building Training Datasets for Deep Learning Models in Software Engineering and Empirical Software Engineering Research",
   "author": {
     "name": "Ozren Dabić",
-    "email": "dabico@usi.ch",
-    "url": "https://dabico.github.io/"
+    "email": "ozren.dabic@usi.ch",
+    "url": "https://dabico.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seart-group/dl4se.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seart-group/dl4se/issues"
   },
   "license": "MIT",
+  "homepage": "https://seart-dl4se.si.usi.ch",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -18,48 +27,58 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@vue/composition-api": "^1.7.0",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "aos": "^2.3.4",
     "autoprefixer": "^10.4.19",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.23.1",
     "bootstrap5-autocomplete": "^1.1.26",
     "chart.js": "^3.9.1",
     "chroma-js": "^2.4.2",
-    "core-js": "^3.37.0",
+    "core-js": "^3.37.1",
     "crypto-js": "^4.2.0",
     "identicon.js": "^2.3.3",
     "lodash": "^4.17.21",
     "namesgenerator": "^0.0.1",
     "sass": "~1.64.2",
     "sass-loader": "^13.3.3",
-    "vue": "^2.6.14",
-    "vue-axios": "^3.4.1",
+    "vue": "^2.7.16",
+    "vue-axios": "^3.5.2",
     "vue-chartjs": "^4.1.2",
-    "vue-frag": "^1.4.1",
-    "vue-router": "^3.5.1",
+    "vue-frag": "^1.4.3",
+    "vue-router": "^3.6.5",
     "vue-screen": "^1.5.6",
     "vue-scrollto": "^2.20.0",
     "vuex": "^3.6.2",
     "vuex-persist": "^3.1.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^8.0.3",
+    "@babel/core": "^7.24.7",
+    "@babel/eslint-parser": "^7.24.7",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-plugin-router": "~5.0.8",
+    "@vue/cli-plugin-vuex": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-vue": "^9.26.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "2.8.3",
-    "vue-template-compiler": "^2.6.14"
-  }
+    "prettier": "^3.3.2"
+  },
+  "keywords": [
+    "DL4SE",
+    "deep learning",
+    "software engineering",
+    "deep learning for software engineering",
+    "empirical software engineering",
+    "mining software repositories",
+    "mining source code",
+    "dataset generation",
+    "training datasets",
+    "research"
+  ]
 }
