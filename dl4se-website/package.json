@@ -2,6 +2,7 @@
   "name": "dl4se-website",
   "version": "1.0.0",
   "private": true,
+  "description": "Building Training Datasets for Deep Learning Models in Software Engineering and Empirical Software Engineering Research",
   "author": {
     "name": "Ozren Dabić",
     "email": "ozren.dabic@usi.ch",
