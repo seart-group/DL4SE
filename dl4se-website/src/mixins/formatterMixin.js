@@ -1,3 +1,5 @@
+import { startCase } from "lodash";
+
 export default {
   methods: {
     format(value, decimals = 2, k = 1000, units = ["", "K", "M", "B", "T"]) {
@@ -22,7 +24,7 @@ export default {
       return this.format(value, 2, 1024, ["B", "KB", "MB", "GB", "TB", "PB"]);
     },
     toTitle(value) {
-      return this.$_.startCase(this.$_.lowerCase(this.$_.defaultTo(value, "???")));
+      return startCase(value?.toLowerCase() ?? "???");
     },
   },
 };
