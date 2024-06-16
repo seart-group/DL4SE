@@ -18,7 +18,7 @@ export default {
     },
     sticky: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   render(createElement, { props, data }) {
