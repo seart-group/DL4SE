@@ -15,7 +15,7 @@ import _ from "lodash";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import "aos/dist/aos.css";
 import "@/assets/styles/style.sass";
-import "@/registerServiceWorker";
+import "@/sw";
 
 Vue.config.productionTip = false;
 
