@@ -138,7 +138,7 @@ export default {
       const valid = !validator.$invalid;
       if (!dirty || !valid) return;
       const email = validator.$model;
-      const [_, domain] = email.split("@");
+      const [, domain] = email.split("@");
       const organisation = await this.$http.get(`/organisation/${domain}`).then(({ data }) => data?.name);
       if (!organisation) return;
       this.form.organisation = organisation;
