@@ -11,7 +11,6 @@ import VueAxios from "vue-axios";
 import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
 import { UnheadPlugin as VueUnhead } from "@unhead/vue/vue2";
-import _ from "lodash";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import "aos/dist/aos.css";
 import "@/assets/styles/style.sass";
@@ -27,8 +26,6 @@ Vue.use(VueScreen, "bootstrap");
 Vue.use(VueScrollTo);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
-
-Vue.prototype.$_ = _;
 
 Vue.component("fragment", Fragment);
 
