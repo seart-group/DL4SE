@@ -45,6 +45,10 @@
           </b-nav-item>
         </template>
       </b-smart-navbar>
+      <b-alert :show="updateExists" variant="dark" class="d-flex align-items-center bg-light border-0 column-gap-1">
+        An update is available,
+        <b-button variant="link" class="border-0 p-0" @click="refreshApp">click here!</b-button>
+      </b-alert>
     </header>
     <main>
       <router-view :connected="connected" :logged-in="loggedIn" class="router-view" />
@@ -63,12 +67,13 @@
 import { useHead } from "@unhead/vue";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import formatterMixin from "@/mixins/formatterMixin";
+import swMixin from "@/mixins/swMixin";
 import BLogo from "@/components/Logo";
 import BSmartNavbar from "@/components/SmartNavbar";
 
 export default {
   components: { BLogo, BSmartNavbar },
-  mixins: [bootstrapMixin, formatterMixin],
+  mixins: [bootstrapMixin, formatterMixin, swMixin],
   computed: {
     navItems: {
       get() {
