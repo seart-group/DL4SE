@@ -1,5 +1,11 @@
+import bootstrapMixin from "@/mixins/bootstrapMixin";
+
 export default {
+  mixins: [bootstrapMixin],
   methods: {
+    registrationFailed(event) {
+      this.appendToast("Service worker registration failed", event.detail, "danger");
+    },
     updateAvailable(event) {
       this.registration = event.detail;
       this.updateExists = true;
@@ -11,6 +17,7 @@ export default {
     },
   },
   created() {
+    document.addEventListener("swError", this.registrationFailed, { once: true });
     document.addEventListener("swUpdated", this.updateAvailable, { once: true });
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (this.refreshing) return;
