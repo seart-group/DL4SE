@@ -6,8 +6,8 @@
 }
 
 :root {
-  --nav-link-color: rgba(0, 0, 0, .5);
-  --nav-link-hover-color: rgba(0, 0, 0, .7);
+  --nav-link-color: rgba(0, 0, 0, 0.5);
+  --nav-link-hover-color: rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -17,41 +17,41 @@
 }
 
 #alert-noscript {
-  max-width: 576px!important;
+  max-width: 576px !important;
 }
 
 a[target="_blank"] {
-  cursor: alias!important;
+  cursor: alias !important;
 }
 
 .d-grid {
-  display: grid!important;
+  display: grid !important;
 }
 
 .row-gap-2 {
-  row-gap: 0.5rem!important;
+  row-gap: 0.5rem !important;
 }
 
 .column-gap-3 {
-  column-gap: 1rem!important;
+  column-gap: 1rem !important;
 }
 
 .logo-box {
-  color: var(--light)!important;
-  background-color: var(--nav-link-color)!important;
+  color: var(--light) !important;
+  background-color: var(--nav-link-color) !important;
   padding-left: 0.5rem !important;
   padding-right: 0.125rem !important;
   margin-right: 0.125rem !important;
 }
 
 .logo-text {
-  color: var(--nav-link-color)!important;
+  color: var(--nav-link-color) !important;
 }
 
 .logo:hover .logo-box {
-  background-color: var(--nav-link-hover-color)!important;
+  background-color: var(--nav-link-hover-color) !important;
 }
 
 .logo:hover .logo-text {
-  color: var(--nav-link-hover-color)!important;
+  color: var(--nav-link-hover-color) !important;
 }
