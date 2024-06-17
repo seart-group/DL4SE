@@ -27,7 +27,7 @@
                 <b-abbr :title="count.files.toLocaleString()">{{ formatNatural(count.files) }}</b-abbr>
                 files, originating from
                 <b-abbr :title="count.repos.toLocaleString()">{{ formatNatural(count.repos) }}</b-abbr>
-                repositories. In total, we have mined {{ formatBytes(code.size) }} of source code, and analysed over
+                repositories. In total, we have mined {{ formatBytes(code.size) }} of source code, and analysed
                 <b-abbr :title="code.lines.toLocaleString()">{{ formatNatural(code.lines) }}</b-abbr> lines. The
                 platform currently has {{ count.users ? count.users : "no" }} registered users, and since its inception
                 {{ count.tasks }} {{ count.tasks === 1 ? "dataset has" : "datasets have" }} been constructed. This
