@@ -107,6 +107,12 @@ export default {
               </b-tr>
               <b-tr>
                 <b-td>
+                  <code>contains_non_ascii</code>
+                </b-td>
+                <b-td>Whether the instance source code contains non-ASCII characters.</b-td>
+              </b-tr>
+              <b-tr>
+                <b-td>
                   <code>boilerplate_type</code>
                 </b-td>
                 <b-td>
