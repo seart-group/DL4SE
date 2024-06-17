@@ -14,9 +14,9 @@
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
                 <b-skeleton width="100%" class="d-md-none d-lg-none" />
 
-                <b-skeleton width="95%" class="d-lg-none d-md-block d-none" />
+                <b-skeleton width="85%" class="d-lg-none d-md-block d-none" />
                 <b-skeleton width="90%" class="d-xl-none d-lg-block d-none" />
-                <b-skeleton width="45%" class="d-xl-block d-md-none" />
+                <b-skeleton width="35%" class="d-xl-block d-md-none" />
               </div>
             </template>
             <template #default>
