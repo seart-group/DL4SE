@@ -41,11 +41,11 @@ export default {
         <section aria-labelledby="dataset-creation-time">
           <h2 id="dataset-creation-time">How long does it take to create a dataset?</h2>
           <p>
-            It depends on the size of the dataset and on the amount of requests running on our server. We allow for up
-            to 10 requests to run in parallel. If there are no runners available when you submit your request, it will
-            be queued until a runner is ready. You'll get an email as soon as your dataset is ready! In general, we do
-            not expect the creation of a dataset to take more than 24 hours. The constructed dataset will be provided in
-            compressed <abbr title="JavaScript Object Notation Lines">JSONL</abbr> format.
+            It depends on the size of the dataset and on the amount of requests running on our server. We allow for a
+            limited number of requests to run in parallel. If there are no runners available when you submit your
+            request, it will be queued until a runner is ready. You'll get an email as soon as your dataset is ready! In
+            general, we do not expect the creation of a dataset to take more than 24 hours. The constructed dataset will
+            be provided in compressed <abbr title="JavaScript Object Notation Lines">JSONL</abbr> format.
           </p>
         </section>
         <section aria-labelledby="language-support">
