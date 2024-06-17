@@ -36,14 +36,12 @@ export default {
       },
       [
         createElement(BNavbarBrand, {}, data.scopedSlots["brand"]()),
-        createElement(BNavbarToggle, { props: { target: `${props.id}-collapse` } }, []),
+        createElement(BNavbarToggle, { props: { target: `${data.attrs.id}-collapse` } }, []),
         createElement(
           BCollapse,
           {
-            props: {
-              id: `${props.id}-collapse`,
-              isNav: true,
-            },
+            attrs: { id: `${data.attrs.id}-collapse` },
+            props: { isNav: true },
           },
           [
             createElement(BNavbarNav, {}, data.scopedSlots["nav-items-left"]()),
