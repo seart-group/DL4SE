@@ -11,10 +11,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico" />
     <noscript>
-      <strong>
-        We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please
-        enable it to continue.
-      </strong>
+      <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+            integrity="sha256-+IZRbz1B6ee9mUx/ejmonK+ulIP5A5bLDd6v6NHqXnI="
+            crossorigin="anonymous"
+      />
+      <link rel="stylesheet" href="<%= BASE_URL %>css/main.css" />
+        <header>
+          <nav aria-label="navbar" class="navbar navbar-light navbar-expand bg-light">
+            <a href="https://seart.si.usi.ch" target="_blank" class="navbar-brand logo">
+              <span class="logo-box">SE</span><span class="logo-text">ART</span>
+            </a>
+            <div class="collapse navbar-collapse">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a href="https://github.com/seart-group/dl4se" target="_blank" class="nav-link" tabindex="-1">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="20"
+                         height="20"
+                         viewBox="0 0 16 16"
+                         fill="currentColor"
+                         class="bi bi-github align-text-bottom"
+                    >
+                      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </header>
+      <main class="mx-auto">
+        <div id="alert-noscript"
+             class="alert alert-warning d-inline-flex flex-column flex-sm-row row-gap-2 column-gap-3 rounded-0 m-0"
+             role="alert"
+        >
+          <h1 class="alert-heading d-flex justify-content-center align-items-center m-0">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="1em"
+                 height="1em"
+                 fill="currentColor"
+                 viewBox="0 0 16 16"
+                 class="bi bi-exclamation-triangle-fill"
+            >
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+            </svg>
+            <span class="sr-only">
+              Warning!
+            </span>
+          </h1>
+          <p class="text-justify m-0">
+            JavaScript is currently disabled in your browser. <%= htmlWebpackPlugin.options.title %> relies on it to
+            function correctly. In order to continue, please enable JavaScript and reload the page.
+          </p>
+        </div>
+      </main>
     </noscript>
   </head>
   <body class="min-vh-100 mw-100 d-flex flex-column justify-content-between">
