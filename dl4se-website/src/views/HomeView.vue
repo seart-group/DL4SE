@@ -31,7 +31,7 @@
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
             <b-text-carousel>
-              <b-text-carousel-slide>
+              <b-text-carousel-slide content-class="text-justify">
                 <template #title>Simple Dataset Construction</template>
                 <template #content>
                   Our platform allows you to easily create large-scale datasets that can be used to either run MSR
@@ -39,7 +39,7 @@
                   dataset you would like to build.
                 </template>
               </b-text-carousel-slide>
-              <b-text-carousel-slide>
+              <b-text-carousel-slide content-class="text-justify">
                 <template #title>Continuously Up-To-Date</template>
                 <template #content>
                   Our crawlers work around the clock to ensure that you are served data that is in line with the source.
@@ -47,7 +47,7 @@
                   are working on integrating additional languages and features.
                 </template>
               </b-text-carousel-slide>
-              <b-text-carousel-slide>
+              <b-text-carousel-slide content-class="text-justify">
                 <template #title>Free &amp; Open-Source</template>
                 <template #content>
                   Register for free today and get instant access to all the dataset construction features of our

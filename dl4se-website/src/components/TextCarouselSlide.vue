@@ -13,6 +13,10 @@ export default {
     BCardTitle,
     BCardText,
   },
+  props: {
+    titleClass: String,
+    contentClass: String,
+  },
   render(createElement, { props, data }) {
     return createElement(BCarouselSlide, {
       props: props,
@@ -25,8 +29,8 @@ export default {
           createElement(BCard, { props: { "no-body": true } }, [
             createElement(BCardHeader),
             createElement(BCardBody, {}, [
-              createElement(BCardTitle, {}, data.scopedSlots["title"]()),
-              createElement(BCardText, {}, data.scopedSlots["content"]()),
+              createElement(BCardTitle, { staticClass: props.titleClass }, data.scopedSlots["title"]()),
+              createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
             ]),
             createElement(BCardFooter),
           ]),
