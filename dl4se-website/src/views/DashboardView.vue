@@ -41,7 +41,7 @@
               <span v-else class="text-monospace">{{ row.value }}</span>
             </template>
             <template #cell(status)="row">
-              <b-icon :icon="statusToSquareIcon(row.value)" v-b-tooltip="toTitle(row.value)" font-scale="1.25" />
+              <b-icon :icon="statusToSquareIcon(row.value)" v-b-tooltip="startCase(row.value)" font-scale="1.25" />
             </template>
             <template #cell(submitted)="row">
               <div class="d-inline-flex align-items-center">
@@ -66,7 +66,7 @@
                   <b-icon-dash-lg shift-v="-1" />
                   <component
                     :is="statusToCalendarIcon(row.item.status)"
-                    v-b-tooltip.html="`${toTitle(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
+                    v-b-tooltip.html="`${startCase(row.item.status)} at:<br />${row.value.finished.toISOString()}`"
                     font-scale="1.35"
                   />
                 </template>
@@ -189,7 +189,6 @@
 </template>
 
 <script>
-import { indexOf, startCase } from "lodash";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import formatterMixin from "@/mixins/formatterMixin";
 import routerMixin from "@/mixins/routerMixin";
@@ -235,14 +234,14 @@ export default {
         })
         .sort(([key1, value1], [key2, value2]) => {
           const order = ["boolean", "number", "string", "object"];
-          const type1 = indexOf(order, typeof value1);
-          const type2 = indexOf(order, typeof value2);
+          const type1 = order.indexOf(typeof value1);
+          const type2 = order.indexOf(typeof value2);
           if (type1 < type2) return 1;
           if (type1 > type2) return -1;
           else return key2.localeCompare(key1);
         })
         .map(([key, value]) => {
-          const label = startCase(key);
+          const label = this.startCase(key);
           switch (typeof value) {
             case "boolean":
               return `- ${label}`;

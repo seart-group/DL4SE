@@ -12,7 +12,7 @@
             :disabled="navItem.disabled"
             :key="navItem.name"
           >
-            {{ toTitle(navItem.name) }}
+            {{ startCase(navItem.name) }}
           </b-nav-item>
         </template>
         <template #nav-items-right>
@@ -23,7 +23,7 @@
               :disabled="navItem.disabled"
               :key="navItem.name"
             >
-              {{ toTitle(navItem.name) }}
+              {{ startCase(navItem.name) }}
             </b-nav-item>
             <b-nav-item @click="showLogOutModal">Log Out</b-nav-item>
           </template>

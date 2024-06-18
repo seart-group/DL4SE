@@ -36,7 +36,10 @@
                   v-b-tooltip="`Email ${row.item.verified ? 'Verified' : 'Unverified'}`"
                   scale="1.35"
                 />
-                <b-iconstack v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + toTitle(row.item.role)" scale="1.35">
+                <b-iconstack
+                  v-b-tooltip="(row.item.enabled ? '' : 'Disabled ') + startCase(row.item.role)"
+                  scale="1.35"
+                >
                   <b-icon
                     :icon="row.item.role === 'ADMIN' ? 'person-plus-fill' : 'person-fill'"
                     :shift-h="row.item.role === 'ADMIN' ? 2 : 0"

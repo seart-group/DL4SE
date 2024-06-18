@@ -1,4 +1,4 @@
-import { startCase } from "lodash";
+import startCase from "lodash-es/startCase";
 
 export default {
   methods: {
@@ -23,7 +23,7 @@ export default {
     formatBytes(value) {
       return this.format(value, 2, 1024, ["B", "KB", "MB", "GB", "TB", "PB"]);
     },
-    toTitle(value) {
+    startCase(value) {
       return startCase(value?.toLowerCase() ?? "???");
     },
   },
