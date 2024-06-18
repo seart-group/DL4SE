@@ -6,8 +6,8 @@ import App from "@/App";
 import router from "@/router";
 import store from "@/store";
 import axios from "@/axios";
-import directives from "@/directives";
 import unhead from "@/unhead";
+import { vAos } from "@/directives";
 import VueAxios from "vue-axios";
 import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
@@ -31,7 +31,7 @@ Vue.use(BootstrapVueIcons);
 Vue.component("fragment", Fragment);
 
 Vue.prototype.$AOS = AOS;
-Vue.directive("aos", directives.vAos);
+Vue.directive("aos", vAos);
 
 new Vue({
   router,

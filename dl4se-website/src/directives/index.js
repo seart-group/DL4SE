@@ -1,3 +1,1 @@
-import vAos from "./v-aos";
-
-export default { vAos };
+export { default as vAos } from "./v-aos";
