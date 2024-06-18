@@ -7,6 +7,7 @@ import router from "@/router";
 import store from "@/store";
 import axios from "@/axios";
 import unhead from "@/unhead";
+import { VAos } from "@/directives";
 import VueAxios from "vue-axios";
 import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
@@ -30,21 +31,7 @@ Vue.use(BootstrapVueIcons);
 Vue.component("fragment", Fragment);
 
 Vue.prototype.$AOS = AOS;
-Vue.directive("aos", (el, binding) => {
-  const config = binding.value;
-  const modifiers = binding.modifiers;
-
-  el.setAttribute("data-aos", config.animation);
-
-  el.setAttribute("data-aos-offset", `${config.offset ?? 120}`);
-  el.setAttribute("data-aos-delay", `${config.delay ?? 0}`);
-  el.setAttribute("data-aos-duration", `${config.duration ?? 400}`);
-  el.setAttribute("data-aos-easing", config.easing || "ease");
-  el.setAttribute("data-aos-anchor-placement", config.easing || "top-bottom");
-
-  el.setAttribute("data-aos-once", `${!!modifiers.once}`);
-  el.setAttribute("data-aos-mirror", `${!!modifiers.mirror}`);
-});
+Vue.directive("aos", VAos);
 
 new Vue({
   router,
