@@ -1,4 +1,4 @@
-import { startCase } from "lodash/string";
+import startCase from "lodash-es/startCase";
 
 export default {
   methods: {

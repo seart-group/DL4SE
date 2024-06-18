@@ -1,4 +1,4 @@
-import { words } from "lodash/string";
+import words from "lodash-es/words";
 
 export default {
   methods: {
