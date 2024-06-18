@@ -1,1 +1,1 @@
-export { default as VAos } from "./v-aos";
+export * from "./v-aos";

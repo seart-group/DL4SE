@@ -1,4 +1,4 @@
-export default (el, binding) => {
+export const VAos = (el, binding) => {
   const config = binding.value || {};
   const modifiers = binding.modifiers || {};
   Object.assign(el.dataset, {
