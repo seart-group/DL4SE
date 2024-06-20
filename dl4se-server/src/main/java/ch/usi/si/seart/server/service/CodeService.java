@@ -1,6 +1,8 @@
 package ch.usi.si.seart.server.service;
 
+import ch.usi.si.seart.exception.CodeNotFoundException;
 import ch.usi.si.seart.model.code.Code;
+import ch.usi.si.seart.model.code.Code_;
 import ch.usi.si.seart.repository.CodeRepository;
 import ch.usi.si.seart.service.DatasetService;
 import lombok.AccessLevel;
@@ -23,6 +25,11 @@ public interface CodeService extends DatasetService<Code> {
     class CodeServiceImpl implements CodeService {
 
         CodeRepository codeRepository;
+
+        @Override
+        public Code getWithId(Long id) {
+            return codeRepository.findById(id).orElseThrow(() -> new CodeNotFoundException(Code_.id, id));
+        }
 
         @Override
         @Async
