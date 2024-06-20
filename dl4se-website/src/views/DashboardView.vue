@@ -12,13 +12,13 @@
           <b-paginated-table
             :id="taskTable.id"
             :fields="taskTable.fields"
-            :controls="['modal', 'filters']"
+            :controls="['code', 'filters']"
             :primary-key="taskTable.fields[0].key"
             :total-items="taskTable.totalItems"
             :provider="taskProvider"
             :sticky-header="tableHeight"
           >
-            <template #controls(modal)>
+            <template #controls(code)>
               <b-button :to="{ name: 'code' }" block class="btn-controls">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
@@ -201,9 +201,11 @@ import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
 import BIconCalendarPlay from "@/components/IconCalendarPlay";
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
 import BPaginatedTable from "@/components/PaginatedTable";
+import BContentArea from "@/components/ContentArea.vue";
 
 export default {
   components: {
+    BContentArea,
     BAbbr,
     BClearableInput,
     BDetailsModal,
