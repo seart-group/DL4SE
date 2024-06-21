@@ -1,6 +1,9 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
+.tabs ::v-deep ul[role="tablist"]
+  gap: 10px!important
+
 .tab-pane::v-deep
   pre
     border: 1px solid $gray-300!important
