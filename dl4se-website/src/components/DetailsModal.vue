@@ -1,7 +1,7 @@
 <template>
   <b-modal :id="id" :title="title" scrollable centered @hidden="reset">
     <b-card no-body>
-      <b-tabs v-model="activeTab" align="center" card @activate-tab="hideTooltip">
+      <b-tabs v-model="activeTab" :align="tabsAlign" card @activate-tab="hideTooltip">
         <b-tab v-for="{ name, value } in formatted" :key="name.toLowerCase()" :title="name" :disabled="!value">
           <b-preformatted-code>{{ value }}</b-preformatted-code>
         </b-tab>
@@ -40,6 +40,10 @@ export default {
     content: {
       type: [String, Object],
       required: true,
+    },
+    tabsAlign: {
+      type: String,
+      default: null,
     },
     formatters: {
       type: Array,
