@@ -162,6 +162,7 @@
       :content="detailsModal.content"
       :formatters="detailsModal.formatters"
       :tabs-align="!$screen.md ? 'center' : 'left'"
+      :footer-button-block="!$screen.md"
       @reset="
         detailsModal.title = '';
         detailsModal.content = {};
