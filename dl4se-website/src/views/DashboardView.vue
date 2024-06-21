@@ -161,6 +161,7 @@
       :title="detailsModal.title"
       :content="detailsModal.content"
       :formatters="detailsModal.formatters"
+      :tabs-align="!$screen.md ? 'center' : 'left'"
       @reset="
         detailsModal.title = '';
         detailsModal.content = {};
