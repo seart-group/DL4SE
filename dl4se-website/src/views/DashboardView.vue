@@ -323,7 +323,7 @@ export default {
         formatters: [
           {
             name: "JSON",
-            formatter: (item) => JSON.stringify(item, null, 2),
+            formatter: this.formatObjectAsJson,
           },
           {
             name: "Text",

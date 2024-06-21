@@ -23,6 +23,9 @@ export default {
     formatBytes(value) {
       return this.format(value, 2, 1024, ["B", "KB", "MB", "GB", "TB", "PB"]);
     },
+    formatObjectAsJson(item) {
+      return JSON.stringify(item, null, 2);
+    },
     formatObjectAsTextList(item) {
       return Object.entries(item)
         .filter(([, value]) => {
