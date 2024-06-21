@@ -368,7 +368,7 @@ export default {
             formatter: (item) => JSON.stringify(item, null, 2),
           },
           {
-            name: "Plaintext",
+            name: "Text",
             formatter: this.plaintextFormatter,
           },
         ],
