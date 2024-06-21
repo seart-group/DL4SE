@@ -1,8 +1,9 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-pre
-  margin: 0!important
+.tab-pane::v-deep
+  pre
+    border: 1px solid $gray-300!important
 
 ::v-deep
   .modal-body > *

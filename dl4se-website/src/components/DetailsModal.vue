@@ -3,7 +3,7 @@
     <b-card no-body>
       <b-tabs v-model="activeTab" card @activate-tab="hideTooltip">
         <b-tab v-for="{ name, value } in formatted" :key="name.toLowerCase()" :title="name" :disabled="!value">
-          <pre><code class="text-monospace">{{ value }}</code></pre>
+          <b-preformatted-code>{{ value }}</b-preformatted-code>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -23,8 +23,11 @@
 </template>
 
 <script>
+import BPreformattedCode from "@/components/PreformattedCode";
+
 export default {
   name: "b-details-modal",
+  components: { BPreformattedCode },
   props: {
     id: {
       type: String,
