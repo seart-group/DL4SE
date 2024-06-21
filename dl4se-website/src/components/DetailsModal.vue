@@ -3,9 +3,7 @@
     <b-card no-body>
       <b-tabs v-model="activeTab" card @activate-tab="hideTooltip">
         <b-tab v-for="{ name, value } in formatted" :key="name.toLowerCase()" :title="name" :disabled="!value">
-          <b-card-body>
-            <pre><code class="text-monospace">{{ value }}</code></pre>
-          </b-card-body>
+          <pre><code class="text-monospace">{{ value }}</code></pre>
         </b-tab>
       </b-tabs>
     </b-card>
