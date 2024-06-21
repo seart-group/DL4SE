@@ -8,7 +8,7 @@
       </b-tabs>
     </b-card>
     <template #modal-footer>
-      <b-button :id="tooltipId" @click="copy">
+      <b-button :id="tooltipId" :block="footerButtonBlock" @click="copy">
         <b-icon-clipboard />
       </b-button>
       <b-tooltip
@@ -44,6 +44,10 @@ export default {
     tabsAlign: {
       type: String,
       default: null,
+    },
+    footerButtonBlock: {
+      type: Boolean,
+      default: false,
     },
     formatters: {
       type: Array,
