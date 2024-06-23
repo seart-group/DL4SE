@@ -1,5 +1,18 @@
 import startCase from "lodash-es/startCase";
 
+const xmlFormatting = `
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:strip-space elements="*"/>
+  <xsl:template match="para[content-style][not(text())]">
+    <xsl:value-of select="normalize-space(.)"/>
+  </xsl:template>
+  <xsl:template match="node()|@*">
+    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>
+  </xsl:template>
+  <xsl:output omit-xml-declaration="no" indent="yes"/>
+</xsl:stylesheet>
+`;
+
 export default {
   methods: {
     format(value, decimals = 2, k = 1000, units = ["", "K", "M", "B", "T"]) {
@@ -67,6 +80,14 @@ export default {
           }
         })
         .join("\n");
+    },
+    formatXML(value) {
+      const xml = new DOMParser().parseFromString(value, "application/xml");
+      const xslt = new DOMParser().parseFromString(xmlFormatting, "application/xml");
+      const processor = new XSLTProcessor();
+      processor.importStylesheet(xslt);
+      const document = processor.transformToDocument(xml);
+      return new XMLSerializer().serializeToString(document);
     },
     startCase(value) {
       return startCase(value?.toLowerCase() ?? "???");
