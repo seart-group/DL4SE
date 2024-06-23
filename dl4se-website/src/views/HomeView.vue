@@ -4,15 +4,10 @@
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding">
-              <span class="negative">SE</span>
-              <span class="positive">ART</span>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row align-h="center">
-          <b-col cols="auto">
-            <div v-aos.once="{ animation: 'fade', duration: 1000, delay: 1000 }" class="tagline">Data Hub</div>
+            <h1 v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding">
+              <span class="negative">DATA</span>
+              <span class="positive">HUB</span>
+            </h1>
           </b-col>
         </b-row>
         <b-row align-h="center">
