@@ -10,6 +10,7 @@ const RegisterView = () => import("@/views/RegisterView");
 const VerifyView = () => import("@/views/VerifyView");
 const NotFoundView = () => import("@/views/NotFoundView");
 const CodeTaskView = () => import("@/views/CodeTaskView");
+const CodeInstanceView = () => import("@/views/CodeInstanceView");
 const DownloadView = () => import("@/views/DownloadView");
 const AdminView = () => import("@/views/AdminView");
 const StatisticsView = () => import("@/views/StatisticsView");
@@ -99,6 +100,17 @@ const routes = [
     name: "code",
     component: CodeTaskView,
     props: true,
+    meta: {
+      public: false,
+    },
+  },
+  {
+    path: "/code/instance/:id",
+    name: "instance",
+    component: CodeInstanceView,
+    props: (route) => {
+      return { ...route.params, ...{ id: Number.parseInt(route.params.id, 10) || undefined } };
+    },
     meta: {
       public: false,
     },
