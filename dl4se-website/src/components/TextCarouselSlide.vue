@@ -26,7 +26,8 @@ export default {
         return headings.includes(value);
       },
     },
-    contentClass: String,
+    bodyClass: String,
+    bodyTag: String,
   },
   render(createElement, { props, data }) {
     return createElement(BCarouselSlide, {
@@ -44,7 +45,11 @@ export default {
                 { props: { titleTag: props.titleTag }, staticClass: props.titleClass },
                 data.scopedSlots["title"](),
               ),
-              createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
+              createElement(
+                BCardText,
+                { props: { bodyTag: props.bodyTag }, staticClass: props.bodyClass },
+                data.scopedSlots["body"](),
+              ),
             ]),
           ]),
         ],
