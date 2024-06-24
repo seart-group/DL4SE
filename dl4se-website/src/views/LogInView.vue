@@ -4,11 +4,14 @@
     <b-container>
       <b-form @submit.prevent.stop="login" novalidate>
         <b-form-row>
-          <b-form-group label-for="email">
-            <template #label>
-              Email
-              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
-            </template>
+          <div role="group" class="form-group">
+            <div class="d-flex justify-content-between">
+              <label for="email">
+                Email
+                <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
+              </label>
+              <b-link :to="{ name: 'register' }">Don't have an account?</b-link>
+            </div>
             <b-form-input
               id="email"
               name="email"
@@ -20,14 +23,17 @@
               placeholder="example@email.com"
               autofocus
             />
-          </b-form-group>
+          </div>
         </b-form-row>
         <b-form-row>
-          <b-form-group label-for="password">
-            <template #label>
-              Password
-              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
-            </template>
+          <div role="group" class="form-group">
+            <div class="d-flex justify-content-between">
+              <label for="password">
+                Password
+                <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
+              </label>
+              <b-link :to="{ name: 'forgot' }">Forgot your password?</b-link>
+            </div>
             <b-form-input
               id="password"
               name="password"
@@ -37,7 +43,7 @@
               :disabled="submitted"
               :state="v$.form.password.$dirty ? !v$.form.password.$invalid : null"
             />
-          </b-form-group>
+          </div>
         </b-form-row>
         <b-form-row>
           <b-form-group>
@@ -45,11 +51,6 @@
               <b-icon-asterisk font-scale="0.35" class="text-danger" />
               Required fields
             </b-form-text>
-          </b-form-group>
-        </b-form-row>
-        <b-form-row>
-          <b-form-group>
-            <b-link :to="{ name: 'forgot' }">Forgotten password?</b-link>
           </b-form-group>
         </b-form-row>
         <b-form-row>
