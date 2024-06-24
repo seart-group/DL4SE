@@ -42,34 +42,20 @@
         </b-row>
       </b-container>
     </section>
-    <transition name="fade">
-      <b-back-to-top target="#home" :offset="-225" v-show="showBackToTop" />
-    </transition>
   </div>
 </template>
 
 <script>
 import bootstrapMixin from "@/mixins/bootstrapMixin";
-import scrollMixin from "@/mixins/scrollMixin";
-import BBackToTop from "@/components/BackToTop";
 import BTextCarousel from "@/components/TextCarousel";
 import BTextCarouselSlide from "@/components/TextCarouselSlide";
 
 export default {
-  components: {
-    BBackToTop,
-    BTextCarousel,
-    BTextCarouselSlide,
-  },
-  mixins: [bootstrapMixin, scrollMixin],
+  components: { BTextCarousel, BTextCarouselSlide },
+  mixins: [bootstrapMixin],
   props: {
     connected: Boolean,
     loggedIn: Boolean,
-  },
-  computed: {
-    showBackToTop() {
-      return this.scroll.y > 100;
-    },
   },
 };
 </script>
