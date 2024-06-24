@@ -15,6 +15,17 @@ export default {
   },
   props: {
     titleClass: String,
+    titleTag: {
+      type: String,
+      default: "h1",
+      validator: function (value) {
+        const headings = Array(6)
+          .fill(1)
+          .map((x, y) => x + y)
+          .map((x) => `h${x}`);
+        return headings.includes(value);
+      },
+    },
     contentClass: String,
   },
   render(createElement, { props, data }) {
@@ -28,7 +39,11 @@ export default {
         img: () => [
           createElement(BCard, { props: { noBody: true } }, [
             createElement(BCardBody, {}, [
-              createElement(BCardTitle, { staticClass: props.titleClass }, data.scopedSlots["title"]()),
+              createElement(
+                BCardTitle,
+                { props: { titleTag: props.titleTag }, staticClass: props.titleClass },
+                data.scopedSlots["title"](),
+              ),
               createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
             ]),
           ]),
