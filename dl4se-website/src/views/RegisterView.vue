@@ -95,7 +95,7 @@
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-form-text text-variant="dark" class="text-left">
+            <b-form-text text-variant="dark">
               <b-icon-asterisk font-scale="0.35" class="text-danger" />
               Required fields
             </b-form-text>
