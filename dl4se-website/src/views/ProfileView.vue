@@ -91,7 +91,7 @@
                 <b-form @submit.stop.prevent="updateOrganisation">
                   <b-form-row>
                     <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
-                    <div role="group" class="col">
+                    <div role="group" class="form-group col">
                       <div class="position-relative">
                         <b-form-auto-complete
                           type="text"
@@ -102,7 +102,6 @@
                           :server-params="{ size: 5 }"
                           :response-mapper="responseMapper"
                           :state="!v$.form.organisation.$invalid"
-                          class="mb-3"
                         />
                       </div>
                     </div>

@@ -67,7 +67,7 @@
         </b-form-row>
         <b-form-row>
           <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
-          <div role="group">
+          <div role="group" class="form-group">
             <label for="organisation" class="d-block">
               Organisation
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
