@@ -29,10 +29,9 @@
               Password
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
-            <b-form-input
+            <b-form-input-password
               id="password"
               name="password"
-              type="password"
               autocomplete="new-password"
               v-model.trim="form.password"
               :disabled="submitted"
@@ -50,10 +49,9 @@
               Confirm Password
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
-            <b-form-input
+            <b-form-input-password
               id="confirm"
               name="confirm"
-              type="password"
               autocomplete="new-password"
               v-model.trim="form.confirm"
               :disabled="submitted"
@@ -67,7 +65,7 @@
         </b-form-row>
         <b-form-row>
           <!-- FIXME: We have to do this manually because the inner group div can not be customized -->
-          <div role="group">
+          <div role="group" class="form-group">
             <label for="organisation" class="d-block">
               Organisation
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
@@ -95,7 +93,7 @@
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-form-text class="text-left">
+            <b-form-text text-variant="dark">
               <b-icon-asterisk font-scale="0.35" class="text-danger" />
               Required fields
             </b-form-text>
@@ -120,12 +118,14 @@ import routerMixin from "@/mixins/routerMixin";
 import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormAutoComplete from "@/components/FormAutoComplete";
+import BFormInputPassword from "@/components/FormInputPassword";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
+    BFormInputPassword,
     BFormSubmit,
   },
   methods: {

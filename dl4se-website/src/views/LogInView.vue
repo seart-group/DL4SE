@@ -4,11 +4,14 @@
     <b-container>
       <b-form @submit.prevent.stop="login" novalidate>
         <b-form-row>
-          <b-form-group label-for="email">
-            <template #label>
-              Email
-              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
-            </template>
+          <div role="group" class="form-group">
+            <div class="d-flex justify-content-between">
+              <label for="email">
+                Email
+                <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
+              </label>
+              <b-link :to="{ name: 'register' }">Don't have an account?</b-link>
+            </div>
             <b-form-input
               id="email"
               name="email"
@@ -20,36 +23,33 @@
               placeholder="example@email.com"
               autofocus
             />
-          </b-form-group>
+          </div>
         </b-form-row>
         <b-form-row>
-          <b-form-group label-for="password">
-            <template #label>
-              Password
-              <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
-            </template>
-            <b-form-input
+          <div role="group" class="form-group">
+            <div class="d-flex justify-content-between">
+              <label for="password">
+                Password
+                <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
+              </label>
+              <b-link :to="{ name: 'forgot' }">Forgot your password?</b-link>
+            </div>
+            <b-form-input-password
               id="password"
               name="password"
-              type="password"
               autocomplete="current-password"
               v-model.trim="form.password"
               :disabled="submitted"
               :state="v$.form.password.$dirty ? !v$.form.password.$invalid : null"
             />
-          </b-form-group>
+          </div>
         </b-form-row>
         <b-form-row>
           <b-form-group>
-            <b-form-text class="text-left">
+            <b-form-text text-variant="dark">
               <b-icon-asterisk font-scale="0.35" class="text-danger" />
               Required fields
             </b-form-text>
-          </b-form-group>
-        </b-form-row>
-        <b-form-row>
-          <b-form-group>
-            <b-link :to="{ name: 'forgot' }">Forgotten password?</b-link>
           </b-form-group>
         </b-form-row>
         <b-form-row>
@@ -68,11 +68,12 @@ import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { password } from "@/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFormInputPassword from "@/components/FormInputPassword";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [bootstrapMixin],
-  components: { BFormSubmit },
+  components: { BFormInputPassword, BFormSubmit },
   computed: {
     target() {
       return this.$route.query.target || "home";

@@ -66,6 +66,7 @@ export default {
       const status = err.response.status;
       switch (status) {
         case 403:
+          this.failed = true;
           break;
         case 404:
           this.redirectHomeAndToast(
@@ -91,7 +92,7 @@ export default {
     await this.verifyToken();
   },
   data() {
-    return { failed: true };
+    return { failed: false };
   },
   head() {
     return {
