@@ -40,6 +40,11 @@
             </b-text-carousel>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col class="text-center">
+            <b-link :to="{ name: 'code' }">Create Your First Dataset!</b-link>
+          </b-col>
+        </b-row>
       </b-container>
     </section>
   </div>
