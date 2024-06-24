@@ -27,12 +27,10 @@ export default {
       scopedSlots: {
         img: () => [
           createElement(BCard, { props: { "no-body": true } }, [
-            createElement(BCardHeader),
             createElement(BCardBody, {}, [
               createElement(BCardTitle, { staticClass: props.titleClass }, data.scopedSlots["title"]()),
               createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
             ]),
-            createElement(BCardFooter),
           ]),
         ],
       },
