@@ -1,28 +1,15 @@
 <template>
   <div id="home" class="d-flex flex-column justify-content-between">
-    <section id="logo" v-if="!loggedIn">
+    <section>
       <b-container>
         <b-row align-h="center">
           <b-col cols="auto">
-            <h1 v-aos.once="{ animation: 'fade', duration: 1000 }" class="branding">
+            <h1 class="branding">
               <span class="negative">DATA</span>
               <span class="positive">HUB</span>
             </h1>
           </b-col>
         </b-row>
-        <b-row align-h="center">
-          <b-col cols="auto">
-            <b-link v-scroll-to="'#summary'" v-aos.once="{ animation: 'fade', duration: 1000, delay: 2500 }">
-              <b-icon-chevron-double-down />
-              Scroll For More Info
-              <b-icon-chevron-double-down />
-            </b-link>
-          </b-col>
-        </b-row>
-      </b-container>
-    </section>
-    <section id="summary">
-      <b-container>
         <b-row align-h="center">
           <b-col lg="6" md="9" cols="12">
             <b-text-carousel>
@@ -51,15 +38,6 @@
                 </template>
               </b-text-carousel-slide>
             </b-text-carousel>
-          </b-col>
-        </b-row>
-        <b-row align-h="center">
-          <b-col cols="auto">
-            <b-link :to="{ name: 'dashboard' }" :disabled="!connected">
-              <b-icon-chevron-double-right />
-              Get Started
-              <b-icon-chevron-double-right />
-            </b-link>
           </b-col>
         </b-row>
       </b-container>
