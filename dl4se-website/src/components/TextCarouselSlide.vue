@@ -26,7 +26,7 @@ export default {
       on: data.on,
       scopedSlots: {
         img: () => [
-          createElement(BCard, { props: { "no-body": true } }, [
+          createElement(BCard, { props: { noBody: true } }, [
             createElement(BCardBody, {}, [
               createElement(BCardTitle, { staticClass: props.titleClass }, data.scopedSlots["title"]()),
               createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
