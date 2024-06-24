@@ -29,25 +29,25 @@
               <b-text-carousel-slide content-class="text-justify">
                 <template #title>Simple Dataset Construction</template>
                 <template #content>
-                  Our platform allows you to easily create large-scale datasets that can be used to either run MSR
-                  studies or to train DL models to automate SE tasks. Use our forms to define the characteristics of the
-                  dataset you would like to build.
+                  Our platform enables you to effortlessly create large-scale datasets for running MSR studies or
+                  training DL models to automate SE tasks. Simply use our forms to specify the characteristics of the
+                  dataset you want to build.
                 </template>
               </b-text-carousel-slide>
               <b-text-carousel-slide content-class="text-justify">
                 <template #title>Continuously Up-To-Date</template>
                 <template #content>
-                  Our crawlers work around the clock to ensure that you are served data that is in line with the source.
-                  We currently only mine Java and Python source code from open source repositories hosted on GitHub. We
-                  are working on integrating additional languages and features.
+                  Our crawlers work continuously to provide data aligned with the source. We currently mine Java and
+                  Python source code from open-source repositories on GitHub. We are working on adding more languages
+                  and features.
                 </template>
               </b-text-carousel-slide>
               <b-text-carousel-slide content-class="text-justify">
                 <template #title>Free &amp; Open-Source</template>
                 <template #content>
-                  Register for free today and get instant access to all the dataset construction features of our
-                  platform. The entire project is also open-source. You can view the source code or suggest improvements
-                  on the project <a href="https://github.com/seart-group/DL4SE" target="_blank">GitHub page</a>.
+                  Register for free today to instantly access all our dataset construction features. The entire project
+                  is also open-source. View the source code or suggest improvements on the project's
+                  <a href="https://github.com/seart-group/DL4SE" target="_blank">GitHub page</a>.
                 </template>
               </b-text-carousel-slide>
             </b-text-carousel>
