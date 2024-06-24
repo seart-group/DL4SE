@@ -29,10 +29,9 @@
               Password
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
-            <b-form-input
+            <b-form-input-password
               id="password"
               name="password"
-              type="password"
               autocomplete="new-password"
               v-model.trim="form.password"
               :disabled="submitted"
@@ -50,10 +49,9 @@
               Confirm Password
               <b-icon-asterisk font-scale="0.35" shift-v="16" class="text-danger" />
             </template>
-            <b-form-input
+            <b-form-input-password
               id="confirm"
               name="confirm"
-              type="password"
               autocomplete="new-password"
               v-model.trim="form.confirm"
               :disabled="submitted"
@@ -120,12 +118,14 @@ import routerMixin from "@/mixins/routerMixin";
 import organisationsMixin from "@/mixins/organisationsMixin";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
 import BFormAutoComplete from "@/components/FormAutoComplete";
+import BFormInputPassword from "@/components/FormInputPassword";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [routerMixin, organisationsMixin, bootstrapMixin],
   components: {
     BFormAutoComplete,
+    BFormInputPassword,
     BFormSubmit,
   },
   methods: {
