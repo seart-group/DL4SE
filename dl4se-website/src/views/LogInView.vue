@@ -34,10 +34,9 @@
               </label>
               <b-link :to="{ name: 'forgot' }">Forgot your password?</b-link>
             </div>
-            <b-form-input
+            <b-form-input-password
               id="password"
               name="password"
-              type="password"
               autocomplete="current-password"
               v-model.trim="form.password"
               :disabled="submitted"
@@ -69,11 +68,12 @@ import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { password } from "@/validators";
 import bootstrapMixin from "@/mixins/bootstrapMixin";
+import BFormInputPassword from "@/components/FormInputPassword";
 import BFormSubmit from "@/components/FormSubmit";
 
 export default {
   mixins: [bootstrapMixin],
-  components: { BFormSubmit },
+  components: { BFormInputPassword, BFormSubmit },
   computed: {
     target() {
       return this.$route.query.target || "home";
