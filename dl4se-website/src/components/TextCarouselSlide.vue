@@ -15,7 +15,19 @@ export default {
   },
   props: {
     titleClass: String,
-    contentClass: String,
+    titleTag: {
+      type: String,
+      default: "h1",
+      validator: function (value) {
+        const headings = Array(6)
+          .fill(1)
+          .map((x, y) => x + y)
+          .map((x) => `h${x}`);
+        return headings.includes(value);
+      },
+    },
+    bodyClass: String,
+    bodyTag: String,
   },
   render(createElement, { props, data }) {
     return createElement(BCarouselSlide, {
@@ -26,13 +38,19 @@ export default {
       on: data.on,
       scopedSlots: {
         img: () => [
-          createElement(BCard, { props: { "no-body": true } }, [
-            createElement(BCardHeader),
+          createElement(BCard, { props: { noBody: true } }, [
             createElement(BCardBody, {}, [
-              createElement(BCardTitle, { staticClass: props.titleClass }, data.scopedSlots["title"]()),
-              createElement(BCardText, { staticClass: props.contentClass }, data.scopedSlots["content"]()),
+              createElement(
+                BCardTitle,
+                { props: { titleTag: props.titleTag }, staticClass: props.titleClass },
+                data.scopedSlots["title"](),
+              ),
+              createElement(
+                BCardText,
+                { props: { bodyTag: props.bodyTag }, staticClass: props.bodyClass },
+                data.scopedSlots["body"](),
+              ),
             ]),
-            createElement(BCardFooter),
           ]),
         ],
       },

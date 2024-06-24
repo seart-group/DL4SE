@@ -5,27 +5,20 @@ section
   flex-direction: column!important
   justify-content: center!important
 
-  &#logo
-    min-height: 90vh!important
-  &#summary
-    min-height: 82vh!important
-
 .branding
-  font-size: clamp(6rem, 24vw, 8rem)!important
+  margin: 0!important
+  font-size: calc(3rem + 3vw)!important
 
   .negative
+    $padding-large: map-get($spacers, 4)
+    $padding-small: map-get($spacers, 2)
+    padding-left: calc($padding-large + 0.5vw)!important
+    padding-right: $padding-small!important
     color: $white!important
     background-color: $black!important
-    padding-left: clamp(2rem, 8vw, 4rem)!important
-    padding-right: clamp(0.5rem, 2vw, 1rem)!important
 
   .positive
     color: $black!important
-    padding-left: clamp(0.25rem, 1vw, 0.5rem)!important
-    font-weight: 200!important
-
-.tagline
-  font-size: clamp(1rem, 4.25vw, 1.5rem)!important
 
 .carousel
   ::v-deep
