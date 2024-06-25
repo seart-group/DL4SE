@@ -10,6 +10,7 @@ const RegisterView = () => import("@/views/RegisterView");
 const VerifyView = () => import("@/views/VerifyView");
 const NotFoundView = () => import("@/views/NotFoundView");
 const CodeTaskView = () => import("@/views/CodeTaskView");
+const CodeSearchView = () => import("@/views/CodeSearchView");
 const CodeInstanceView = () => import("@/views/CodeInstanceView");
 const DownloadView = () => import("@/views/DownloadView");
 const AdminView = () => import("@/views/AdminView");
@@ -91,6 +92,14 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: ProfileView,
+    meta: {
+      public: false,
+    },
+  },
+  {
+    path: "/code/search",
+    name: "search",
+    component: CodeSearchView,
     meta: {
       public: false,
     },
