@@ -39,6 +39,7 @@
     "chroma-js": "^2.4.2",
     "core-js": "^3.37.1",
     "crypto-js": "^4.2.0",
+    "highlight.js": "^11.9.0",
     "identicon.js": "^2.3.3",
     "lodash-es": "^4.17.21",
     "namesgenerator": "^0.0.1",
