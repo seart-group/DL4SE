@@ -24,6 +24,7 @@ Vue.use(VueUnhead);
 Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bootstrap");
 Vue.use(VueScrollTo);
+Vue.use(VueHighlight);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
