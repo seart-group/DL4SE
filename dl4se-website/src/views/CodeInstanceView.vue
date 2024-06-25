@@ -90,10 +90,10 @@
                 </b-table-simple>
               </b-tab>
               <b-tab title="Source">
-                <b-preformatted-code>{{ code.content }}</b-preformatted-code>
+                <b-highlighted-code :language="language" :code="code.content" />
               </b-tab>
               <b-tab title="AST">
-                <b-preformatted-code>{{ formatXML(code.ast) }}</b-preformatted-code>
+                <b-highlighted-code language="xml" :code="formatXML(code.ast)" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -105,13 +105,13 @@
 
 <script>
 import BAbbr from "@/components/Abbr";
-import BPreformattedCode from "@/components/PreformattedCode";
+import BHighlightedCode from "@/components/HighlightedCode";
 import formatterMixin from "@/mixins/formatterMixin";
 
 const base = "https://github.com";
 
 export default {
-  components: { BAbbr, BPreformattedCode },
+  components: { BAbbr, BHighlightedCode },
   mixins: [formatterMixin],
   props: {
     id: {
@@ -143,6 +143,9 @@ export default {
     },
     repoFileURL() {
       return `${this.repoTreeURL}/${this.filePath}`;
+    },
+    language() {
+      return this.code.language_name.toLowerCase();
     },
   },
   beforeMount() {
