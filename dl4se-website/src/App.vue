@@ -102,6 +102,10 @@ export default {
               disabled: !this.connected,
             },
             {
+              name: "search",
+              disabled: !this.connected,
+            },
+            {
               name: "dashboard",
               disabled: !this.connected,
             },
