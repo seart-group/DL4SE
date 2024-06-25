@@ -9,10 +9,12 @@ import unhead from "@/unhead";
 import VueAxios from "vue-axios";
 import VueScreen from "vue-screen";
 import VueScrollTo from "vue-scrollto";
+import VueHighlight from "@highlightjs/vue-plugin";
 import { UnheadPlugin as VueUnhead } from "@unhead/vue/vue2";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import "@/assets/styles/style.sass";
 import "@/sw";
+import "@/hljs";
 
 Vue.config.productionTip = false;
 
@@ -22,6 +24,7 @@ Vue.use(VueUnhead);
 Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bootstrap");
 Vue.use(VueScrollTo);
+Vue.use(VueHighlight);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 

@@ -1,0 +1,21 @@
+@import "@/assets/styles/variables"
+@import "@/assets/styles/mixins"
+
+@import "highlight.js/styles/github.css"
+
+.tab-pane
+  $td-height: 50px
+  padding: 0!important
+  ::v-deep pre
+    $pre-height: $td-height * 10
+    height: $pre-height+10px!important
+    @include media-breakpoint-up(md)
+      height: $pre-height!important
+  tr
+    td
+      height: $td-height!important
+      white-space: nowrap!important
+    &:first-child
+      td
+        border-top: 0!important
+

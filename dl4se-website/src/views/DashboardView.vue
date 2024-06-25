@@ -12,13 +12,13 @@
           <b-paginated-table
             :id="taskTable.id"
             :fields="taskTable.fields"
-            :controls="['modal', 'filters']"
+            :controls="['code', 'filters']"
             :primary-key="taskTable.fields[0].key"
             :total-items="taskTable.totalItems"
             :provider="taskProvider"
             :sticky-header="tableHeight"
           >
-            <template #controls(modal)>
+            <template #controls(code)>
               <b-button :to="{ name: 'code' }" block class="btn-controls">
                 <b-icon-plus class="align-middle" font-scale="1.5" />
                 <span class="align-middle">Create New Dataset</span>
@@ -161,6 +161,8 @@
       :title="detailsModal.title"
       :content="detailsModal.content"
       :formatters="detailsModal.formatters"
+      :tabs-align="!$screen.md ? 'center' : 'left'"
+      :footer-button-block="!$screen.md"
       @reset="
         detailsModal.title = '';
         detailsModal.content = {};
@@ -201,9 +203,11 @@ import BIconCalendarExclamation from "@/components/IconCalendarExclamation";
 import BIconCalendarPlay from "@/components/IconCalendarPlay";
 import BIconCalendarQuestion from "@/components/IconCalendarQuestion";
 import BPaginatedTable from "@/components/PaginatedTable";
+import BContentArea from "@/components/ContentArea.vue";
 
 export default {
   components: {
+    BContentArea,
     BAbbr,
     BClearableInput,
     BDetailsModal,
@@ -221,48 +225,6 @@ export default {
     },
   },
   methods: {
-    plaintextFormatter(item) {
-      return Object.entries(item)
-        .filter(([, value]) => {
-          switch (typeof value) {
-            case "string":
-            case "object":
-              return value?.length;
-            default:
-              return Boolean(value);
-          }
-        })
-        .sort(([key1, value1], [key2, value2]) => {
-          const order = ["boolean", "number", "string", "object"];
-          const type1 = order.indexOf(typeof value1);
-          const type2 = order.indexOf(typeof value2);
-          if (type1 < type2) return 1;
-          if (type1 > type2) return -1;
-          else return key2.localeCompare(key1);
-        })
-        .map(([key, value]) => {
-          const label = this.startCase(key);
-          switch (typeof value) {
-            case "boolean":
-              return `- ${label}`;
-            case "object":
-              if (value instanceof Array) {
-                const array = value.map((v) => `  - ${v}`).join("\n");
-                return `- ${label}:\n${array}`;
-              } else {
-                const object = this.plaintextFormatter(value);
-                const indented = object
-                  .split("\n")
-                  .map((line) => `  ${line}`)
-                  .join("\n");
-                return `- ${label}:\n${indented}`;
-              }
-            default:
-              return `- ${label}: ${value}`;
-          }
-        })
-        .join("\n");
-    },
     statusToSquareIcon(status) {
       switch (status) {
         case "QUEUED":
@@ -363,11 +325,11 @@ export default {
         formatters: [
           {
             name: "JSON",
-            formatter: (item) => JSON.stringify(item, null, 2),
+            formatter: this.formatObjectAsJson,
           },
           {
-            name: "Plaintext",
-            formatter: this.plaintextFormatter,
+            name: "Text",
+            formatter: this.formatObjectAsTextList,
           },
         ],
       },

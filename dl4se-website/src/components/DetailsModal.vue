@@ -1,16 +1,14 @@
 <template>
   <b-modal :id="id" :title="title" scrollable centered @hidden="reset">
     <b-card no-body>
-      <b-tabs v-model="activeTab" card @activate-tab="hideTooltip">
+      <b-tabs v-model="activeTab" :align="tabsAlign" card @activate-tab="hideTooltip">
         <b-tab v-for="{ name, value } in formatted" :key="name.toLowerCase()" :title="name" :disabled="!value">
-          <b-card-body>
-            <pre><code class="text-monospace">{{ value }}</code></pre>
-          </b-card-body>
+          <b-highlighted-code :language="name.toLowerCase()" :code="value" />
         </b-tab>
       </b-tabs>
     </b-card>
     <template #modal-footer>
-      <b-button :id="tooltipId" @click="copy">
+      <b-button :id="tooltipId" :block="footerButtonBlock" @click="copy">
         <b-icon-clipboard />
       </b-button>
       <b-tooltip
@@ -25,8 +23,11 @@
 </template>
 
 <script>
+import BHighlightedCode from "@/components/HighlightedCode";
+
 export default {
   name: "b-details-modal",
+  components: { BHighlightedCode },
   props: {
     id: {
       type: String,
@@ -39,6 +40,14 @@ export default {
     content: {
       type: [String, Object],
       required: true,
+    },
+    tabsAlign: {
+      type: String,
+      default: null,
+    },
+    footerButtonBlock: {
+      type: Boolean,
+      default: false,
     },
     formatters: {
       type: Array,

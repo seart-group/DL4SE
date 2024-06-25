@@ -1,10 +1,13 @@
 @import "@/assets/styles/variables"
 @import "@/assets/styles/mixins"
 
-pre
-  margin: 0!important
+.tab-pane
+  padding: 0!important
 
 ::v-deep
+  code
+    padding: map-get($spacers, 3)!important
+
   .modal-body > *
     border-radius: 0!important
   .modal-content
