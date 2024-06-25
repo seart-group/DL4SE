@@ -10,6 +10,7 @@
             v-for="navItem in navItems.left"
             :to="{ name: navItem.name }"
             :disabled="navItem.disabled"
+            :active="isOnPage(navItem.name)"
             :key="navItem.name"
           >
             {{ startCase(navItem.name) }}
@@ -21,6 +22,7 @@
               v-for="navItem in navItems.right"
               :to="{ name: navItem.name }"
               :disabled="navItem.disabled"
+              :active="isOnPage(navItem.name)"
               :key="navItem.name"
             >
               {{ startCase(navItem.name) }}
