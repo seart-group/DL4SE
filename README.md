@@ -35,6 +35,15 @@ This section will detail the necessary actions for setting up and running the pr
 
 ## FAQ
 
+### How do you implement language-specific analysis heuristics?
+
+Heuristics used to identify test code in Java and Python can be found
+[here](dl4se-analyzer/src/main/java/ch/usi/si/seart/analyzer/predicate/path/JavaTestFilePredicate.java) and
+[here](dl4se-analyzer/src/main/java/ch/usi/si/seart/analyzer/predicate/path/PythonTestFilePredicate.java).
+Heuristics used to identify boilerplate code can be found
+[here](dl4se-analyzer/src/main/java/ch/usi/si/seart/analyzer/enumerate/JavaBoilerplateEnumerator.java) and
+[here](dl4se-analyzer/src/main/java/ch/usi/si/seart/analyzer/enumerate/PythonBoilerplateEnumerator.java) respectively.
+
 ### How can I request a feature or ask a question?
 
 If you have ideas for a feature you would like to see implemented or if you have any questions, we encourage you to
